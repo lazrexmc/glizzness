@@ -129,12 +129,20 @@ python post_loan_payments.py --post
 **In Wave:** categorize each "WEENIEWAGON-INTERNET" bank withdrawal →
 "Weenie Wagon Loan Clearing" (one click each — clears the anchor).
 
-**Journal entry structure (per payment):**
+**Journal entry structure (two Wave transactions per payment):**
 ```
-CR  Weenie Wagon Loan Clearing   $77.07   anchor — nets to $0 against bank withdrawal
-    DR  The First Weenie Wagon   $XX.XX   principal (reduces loan balance)
-    DR  Interest Expense          $X.XX   interest cost
+Tx1 — Interest expense
+  CR  Weenie Wagon Loan Clearing   $X.XX   anchor WITHDRAWAL → nets to $0 against bank import
+      DR  Interest Expense          $X.XX
+
+Tx2 — Principal payment (reduces loan liability)
+  DR  The First Weenie Wagon       $XX.XX  anchor DEPOSIT (deposit-into-loan = pay down balance)
+      CR  Weenie Wagon Loan Clearing $XX.XX → nets to $0 against bank import
 ```
+
+Wave's `moneyTransactionCreate` does not allow liability accounts as line items.
+The workaround is to anchor Tx2 on the liability itself with `direction: DEPOSIT`
+(Wave treats deposit-into-loan as the payment direction: DR liability, CR clearing).
 
 > Cutoff: payments through 2025-05-12 were entered manually. Script only
 > processes payments on or after 2025-05-13.

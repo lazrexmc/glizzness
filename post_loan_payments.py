@@ -218,9 +218,10 @@ def review_entries(conn: sqlite3.Connection) -> None:
         clr_name  = ACCOUNT_NAMES.get(WAVE_ACCOUNTS.get("clearing"),     "Weenie Wagon Loan Clearing")
         note_name = ACCOUNT_NAMES.get(WAVE_ACCOUNTS.get("note_payable"), "The First Weenie Wagon")
         int_name  = ACCOUNT_NAMES.get(WAVE_ACCOUNTS.get("interest"),     "Interest Expense")
-        print(f"    CR  {clr_name:<35} ${amount:>8.2f}  loan payment withdrawal")
-        print(f"    DR  {note_name:<35} ${principal:>8.2f}  principal")
-        print(f"    DR  {int_name:<35} ${interest:>8.2f}  interest")
+        print(f"    Tx1 (interest):   CR {clr_name} (anchor WITHDRAWAL ${interest:.2f})")
+        print(f"                      DR {int_name} ${interest:.2f}")
+        print(f"    Tx2 (principal):  DR {note_name} (anchor WITHDRAWAL ${principal:.2f})")
+        print(f"                      CR {clr_name} ${principal:.2f}")
 
 
 # ── Status ────────────────────────────────────────────────────────────────────
@@ -274,60 +275,106 @@ def wave_gql(query: str, variables: dict) -> dict:
 
 def post_entry(conn: sqlite3.Connection, payment_date: str,
                amount: float, principal: float, interest: float) -> bool:
+    """
+    Wave's moneyTransactionCreate does not allow liability accounts as line items.
+    Split into two transactions:
+      1. Interest:   Weenie Wagon Loan Clearing (WITHDRAWAL) → Interest Expense (DEBIT)
+      2. Principal:  The First Weenie Wagon liability (WITHDRAWAL) → Loan Clearing (CREDIT)
+    Clearing account nets to $0: bank import DR $77.07, API CR $interest + CR $principal.
+    """
 
-    anchor = {
-        "accountId": WAVE_ACCOUNTS["clearing"],
-        "amount":    f"{amount:.2f}",
-        "direction": "WITHDRAWAL",
-    }
-    line_items = [
-        {
-            "accountId":   WAVE_ACCOUNTS["note_payable"],
-            "amount":      f"{principal:.2f}",
-            "balance":     "DEBIT",
-            "description": "Principal",
-        },
-        {
-            "accountId":   WAVE_ACCOUNTS["interest"],
-            "amount":      f"{interest:.2f}",
-            "balance":     "DEBIT",
-            "description": "Interest",
-        },
-    ]
-
-    result = wave_gql(CREATE_TRANSACTION, {
+    # ── Transaction 1: Interest expense ──────────────────────────────────────
+    # Skip if already posted (externalId collision means Wave already has it).
+    r1 = wave_gql(CREATE_TRANSACTION, {
         "input": {
             "businessId":  WAVE_BUSINESS_ID,
-            "externalId":  f"weenie-loan-{payment_date}",
+            "externalId":  f"weenie-interest-{payment_date}",
             "date":        payment_date,
-            "description": f"Weenie Wagon Loan Payment {payment_date}",
-            "anchor":      anchor,
-            "lineItems":   line_items,
+            "description": f"Weenie Wagon Loan Interest {payment_date}",
+            "anchor": {
+                "accountId": WAVE_ACCOUNTS["clearing"],
+                "amount":    f"{interest:.2f}",
+                "direction": "WITHDRAWAL",
+            },
+            "lineItems": [{
+                "accountId":   WAVE_ACCOUNTS["interest"],
+                "amount":      f"{interest:.2f}",
+                "balance":     "DEBIT",
+                "description": "Loan interest",
+            }],
         }
     })
+    gql1 = (r1.get("data") or {}).get("moneyTransactionCreate", {})
+    interest_wave_id = (gql1.get("transaction") or {}).get("id", "")
+    if gql1.get("didSucceed"):
+        print(f"    [interest ok] ${interest:.2f}  {interest_wave_id}")
+    else:
+        errors = gql1.get("inputErrors") or r1.get("errors") or []
+        # externalId already exists → interest was posted in a prior run; extract the id
+        already = any(
+            (e.get("code") or "").upper() in ("DUPLICATE", "ALREADY_EXISTS")
+            or "already" in (e.get("message") or "").lower()
+            or "duplicate" in (e.get("message") or "").lower()
+            for e in errors
+        )
+        if already:
+            print(f"    [interest already posted] ${interest:.2f} (skipping)")
+        else:
+            err_msg = f"interest tx: {json.dumps(errors)[:260]}"
+            conn.execute(
+                "UPDATE loan_journal_entries SET status='error', error_msg=? WHERE payment_date=?",
+                (err_msg, payment_date),
+            )
+            conn.commit()
+            print(f"    [error-interest] {err_msg}")
+            return False
 
-    gql = (result.get("data") or {}).get("moneyTransactionCreate", {})
-
-    if gql.get("didSucceed"):
-        wave_id = (gql.get("transaction") or {}).get("id", "")
-        conn.execute("""
-            UPDATE loan_journal_entries
-            SET status = 'posted', wave_entry_id = ?, posted_at = ?
-            WHERE payment_date = ?
-        """, (wave_id, datetime.now(timezone.utc).isoformat(), payment_date))
+    # ── Transaction 2: Principal (reduce liability) ───────────────────────────
+    # Anchor on the LIABILITY with DEPOSIT direction.
+    # Wave treats DEPOSIT-into-loan as the payment direction:
+    #   DEPOSIT → DR liability (reduces balance), WITHDRAWAL → CR liability (draws more).
+    # The CREDIT line item on the clearing asset offsets the bank import DR.
+    r2 = wave_gql(CREATE_TRANSACTION, {
+        "input": {
+            "businessId":  WAVE_BUSINESS_ID,
+            "externalId":  f"weenie-principal-{payment_date}",
+            "date":        payment_date,
+            "description": f"Weenie Wagon Loan Principal {payment_date}",
+            "anchor": {
+                "accountId": WAVE_ACCOUNTS["note_payable"],
+                "amount":    f"{principal:.2f}",
+                "direction": "DEPOSIT",
+            },
+            "lineItems": [{
+                "accountId":   WAVE_ACCOUNTS["clearing"],
+                "amount":      f"{principal:.2f}",
+                "balance":     "CREDIT",
+                "description": "Loan principal",
+            }],
+        }
+    })
+    gql2 = (r2.get("data") or {}).get("moneyTransactionCreate", {})
+    if not gql2.get("didSucceed"):
+        errors  = gql2.get("inputErrors") or r2.get("errors") or []
+        err_msg = f"principal tx: {json.dumps(errors)[:260]}"
+        conn.execute(
+            "UPDATE loan_journal_entries SET status='error', error_msg=? WHERE payment_date=?",
+            (err_msg, payment_date),
+        )
         conn.commit()
-        print(f"    [posted] {wave_id}")
-        return True
+        print(f"    [error-principal] {err_msg}")
+        return False
+    principal_wave_id = (gql2.get("transaction") or {}).get("id", "")
+    print(f"    [principal ok] ${principal:.2f}  {principal_wave_id}")
 
-    errors = gql.get("inputErrors") or result.get("errors") or []
-    err_msg = json.dumps(errors)[:300]
+    wave_ids = f"int:{interest_wave_id}|pri:{principal_wave_id}"
     conn.execute("""
-        UPDATE loan_journal_entries SET status = 'error', error_msg = ?
+        UPDATE loan_journal_entries
+        SET status = 'posted', wave_entry_id = ?, posted_at = ?
         WHERE payment_date = ?
-    """, (err_msg, payment_date))
+    """, (wave_ids, datetime.now(timezone.utc).isoformat(), payment_date))
     conn.commit()
-    print(f"    [error] {err_msg}")
-    return False
+    return True
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -386,7 +433,7 @@ def main() -> None:
         to_post = conn.execute("""
             SELECT payment_date, amount, principal, interest
             FROM loan_journal_entries
-            WHERE status = 'staged'
+            WHERE status IN ('staged', 'error')
             ORDER BY payment_date
         """).fetchall()
 
