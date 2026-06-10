@@ -1,0 +1,29 @@
+# Databases — contain financial data
+*.db
+*.sqlite
+*.sqlite3
+
+# Wave CSV exports — contain transaction data
+*.csv
+
+# Secrets / env files
+.env
+*.env
+run_daily.ps1
+
+# Images / binary assets
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

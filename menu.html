@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glizzness Menu</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f5ea7d;
+      margin: 0;
+      padding: 0;
+      background: #dbd02e;
+    }
+    .page {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 36px;
+      background: #0e0d0a;
+      border: 1px solid #ffd700;
+      box-shadow: 0 24px 80px rgba(255, 215, 0, 0.15);
+    }
+    .hero {
+      position: relative;
+      background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://img1.wsimg.com/isteam/ip/497e556f-3792-4a3b-9974-7c66f4dc888a/GlizBanner.jpg');
+      background-size: cover;
+      background-position: center top;
+      border-radius: 28px;
+      padding: 122px 54px;
+      color: #fff;
+      border: 2px solid #ffd700;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 320px;
+      margin-bottom: 36px;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: 3rem;
+      letter-spacing: -0.03em;
+      color: #ffd700;
+      text-transform: uppercase;
+    }
+    .hero .tagline {
+      margin: 16px 0 0;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.94);
+      line-height: 1.8;
+    }
+    .hero .brand-foot {
+      margin-top: 22px;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.74);
+    }
+    .section {
+      margin-bottom: 36px;
+    }
+    .section-header {
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.22);
+    }
+    .section-header h2 {
+      margin: 0 0 6px;
+      font-size: 2rem;
+      color: #ffd700;
+      letter-spacing: -0.02em;
+    }
+    .section-header p {
+      margin: 0;
+      color: #e8dd92;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .menu-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      border-radius: 22px;
+      padding: 28px;
+      background: #121110;
+      color: #f2e89b;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+    .menu-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      color: #ffd700;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .price {
+      color: #ffd700;
+      font-weight: 800;
+      font-size: 1.2rem;
+      white-space: nowrap;
+    }
+    .menu-card .desc {
+      margin: 0 0 16px;
+      color: #e9df99;
+      line-height: 1.75;
+      font-size: 0.97rem;
+    }
+    .add-ons {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .add-on {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(255, 215, 0, 0.07);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      font-size: 0.88rem;
+    }
+    .add-on-label {
+      color: #e8dd92;
+    }
+    .add-on-price {
+      color: #ffd700;
+      font-weight: 700;
+    }
+    .footer {
+      margin-top: 34px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 215, 0, 0.12);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
+      .page {
+        padding: 16px;
+        border-left: none;
+        border-right: none;
+      }
+      .hero {
+        padding: 60px 18px 28px;
+        border-radius: 16px;
+      }
+      .hero h1 { font-size: 2rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-card { padding: 20px 16px; }
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      .page { box-shadow: none; margin: 0; border: none; }
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="hero">
+      <div>
+        <h1>Glizzness Menu</h1>
+        <p class="tagline">Columbia's finest hot dog restaurant serving our very own version, the glizzy.</p>
+        <p class="brand-foot">www.glizzness.com • Fresh flavors, bold Columbia style.</p>
+      </div>
+    </header>
+
+    <!-- GLIZZY SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Glizzy</h2>
+        <p>Our original version of the classic 1/4 lb all beef dog.</p>
+      </div>
+      <div class="menu-grid">
+
+        <article class="menu-card">
+          <h3>Original <span class="price">$5.00</span></h3>
+          <p class="desc">Classic Americano topped with your favorites.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Chili Dog <span class="price">+$2.00</span></h3>
+          <p class="desc">Our house made bean-free chili poured over your Glizzy, topped with secret recipe cheese sauce and finished with crispy onions.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Hoggin' Dog <span class="price">+$2.00</span></h3>
+          <p class="desc">Our slow roasted pulled pork sourced locally from Patchwork Family Farms is served on top of a Glizzy, then we drizzle it with our own tangy bbq mustard.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Cheesy Glizzy <span class="price">+$1.00</span></h3>
+          <p class="desc">Top your Glizzy with our house made cheese sauce.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- NOT-A-GLIZZY SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Not-a-Glizzy</h2>
+        <p>Awesome items, just not as awesome as a Glizzy.</p>
+      </div>
+      <div class="menu-grid">
+
+        <article class="menu-card">
+          <h3>Walking Nachos <span class="price">$5.00</span></h3>
+          <p class="desc">Build-your-own nachos. We pile tortilla chips high, cover them in queso, then you can add any of our cold toppings from the side bar to finish off perfection.</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add chili</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add pulled pork</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <h3>Pulled Pork Sandwich <span class="price">$7.00</span></h3>
+          <p class="desc">Our Hoggin' Dog without the dog and more pulled pork! Our slow roasted pulled pork, sourced locally from Patchwork Family Farms, is piled high in the bun, then we drizzle it with our own tangy bbq mustard.</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add cheese sauce</span>
+              <span class="add-on-price">+$1.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <h3>Apple Sausage <span class="price">$6.00</span></h3>
+          <p class="desc">One of our favorites from Patchwork Family Farms, this brat is infused with apples — it's like fall on a bun!</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add chili</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add pulled pork</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add cheese sauce</span>
+              <span class="add-on-price">+$1.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <h3>Nothing Burger <span class="price">$5.00</span></h3>
+          <p class="desc">aka a hamburger — just our plain 1/4 lb beef patty topped with nothing.</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add chili</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add pulled pork</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <h3>Cheeseburger <span class="price">$6.00</span></h3>
+          <p class="desc">Our 1/4 lb beef patty topped with our house made cheese sauce and cooked onions.</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add chili</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add pulled pork</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <h3>Double Cheeseburger <span class="price">$9.00</span></h3>
+          <p class="desc">Two 1/4 lb beef patties topped with our house made cheese sauce and cooked onions.</p>
+          <div class="add-ons">
+            <div class="add-on">
+              <span class="add-on-label">Add chili</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+            <div class="add-on">
+              <span class="add-on-label">Add pulled pork</span>
+              <span class="add-on-price">+$2.00</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- VEGETARIAN SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Vegetarian</h2>
+        <p>Our other options.</p>
+      </div>
+      <div class="menu-grid">
+
+        <article class="menu-card">
+          <h3>Jackfruit <span class="price">$7.00</span></h3>
+          <p class="desc">Jackfruit, seasoned and roasted to perfection, served on our bun.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Elote — Street Corn <span class="price">$6.00</span></h3>
+          <p class="desc">Traditional Mexican street food! Roasted and seasoned corn, off the cob, piled on a bed of tortilla chips.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SIDES & DRINKS SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Sides &amp; Drinks</h2>
+        <p>Sides vary often and may sell out — just ask us what we have! Gotta have somethin' to wash it down with.</p>
+      </div>
+      <div class="menu-grid">
+
+        <article class="menu-card">
+          <h3>Bag-o-Chips <span class="price">$1.00</span></h3>
+          <p class="desc">Your choice — selections vary.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Bottled Beverages <span class="price">$2.00</span></h3>
+          <p class="desc">Various flavors, just ask.</p>
+        </article>
+
+        <article class="menu-card">
+          <h3>Water <span class="price">$1.00</span></h3>
+          <p class="desc">Bottled.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>www.glizzness.com • Fresh flavors, bold Columbia style.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
