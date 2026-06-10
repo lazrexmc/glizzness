@@ -42,7 +42,7 @@ DB_PATH = "glizzness.db"
 QUERY_ACCOUNTS = """
 query ($businessId: ID!) {
   business(id: $businessId) {
-    accounts {
+    accounts(page: 1, pageSize: 200) {
       edges {
         node {
           id

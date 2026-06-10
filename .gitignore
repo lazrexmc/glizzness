@@ -1,5 +1,8 @@
 # Databases — contain financial data
 *.db
+*.db-journal
+*.db-wal
+*.db-shm
 *.sqlite
 *.sqlite3
 

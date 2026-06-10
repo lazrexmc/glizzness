@@ -1,4 +1,17 @@
-# Glizzness Square → Wave Reconciliation — Setup Guide
+# Glizzness — Accounting Automation Setup Guide
+
+## Scripts overview
+
+| Script | Purpose |
+|--------|---------|
+| `sync_square.py` | Download Square payouts / payments / orders into DB |
+| `post_to_wave.py` | Build, review, and post Square sales journal entries to Wave |
+| `sync_wave.py` | Sync Wave chart of accounts; import Wave CSV exports |
+| `post_loan_payments.py` | Post Weenie Wagon loan payment splits to Wave |
+| `post_sams_correction.py` | Post annual Sam's Club sales tax correction to Wave |
+| `check_variances.py` | Verify all Square payouts balance to $0 |
+
+---
 
 ## Step 1: Install Python dependencies
 
@@ -6,9 +19,9 @@
 pip install requests
 ```
 
-## Step 2: Set environment variables
+---
 
-Open PowerShell and run (paste your actual tokens):
+## Step 2: Set environment variables
 
 ```powershell
 $env:SQUARE_TOKEN     = "your_square_production_access_token"
@@ -20,27 +33,25 @@ $env:WAVE_BUSINESS_ID = "your_wave_business_id"
 **Wave token**: Wave → Settings → Developer → Manage API tokens
 **Wave Business ID**: Wave → Settings → Business — copy the ID from the URL
 
-## Step 3: Find your Wave account IDs
+---
 
-```powershell
-python reconcile.py --list-accounts
-```
+## Step 3: Wave account IDs
 
-This prints all accounts in your Wave chart of accounts.
-Find these 7 accounts and note their IDs:
+Run `python sync_wave.py --sync-accounts` to pull the chart of accounts into the DB.
 
-| Env Var                      | Account to find in Wave                      |
-|------------------------------|----------------------------------------------|
-| WAVE_CLEARING_ACCOUNT_ID     | Square Settlements Clearing (Other ST Asset) |
-| WAVE_BANK_ACCOUNT_ID         | Checking account (Square deposit bank)       |
-| WAVE_SALES_REVENUE_ID        | Sales (Income)                               |
-| WAVE_TIPS_INCOME_ID          | Tips Income (create if missing)              |
-| WAVE_PROCESSING_FEES_ID      | Payment Processing Fees (Expense)            |
-| WAVE_SALES_TAX_ID            | Sales Tax (Liability / Tax Payable)          |
-| WAVE_SALES_RETURNS_ID        | Sales Returns & Allowances (create if missing) |
-| WAVE_DISCOUNTS_ID            | Sales Discounts & Comps (create if missing)  |
+### Square sales automation
 
-Set them in PowerShell:
+| Env Var | Account |
+|---------|---------|
+| `WAVE_CLEARING_ACCOUNT_ID` | Square Settlements Clearing (Other ST Asset) |
+| `WAVE_BANK_ACCOUNT_ID` | Checking (529) |
+| `WAVE_SALES_REVENUE_ID` | Food & Beverage Sales |
+| `WAVE_TIPS_INCOME_ID` | Tips Collected |
+| `WAVE_PROCESSING_FEES_ID` | Merchant Account Fees |
+| `WAVE_SALES_TAX_ID` | Columbia Sales Tax |
+| `WAVE_SALES_RETURNS_ID` | Sales Returns & Allowances |
+| `WAVE_DISCOUNTS_ID` | Customer Discounts |
+
 ```powershell
 $env:WAVE_CLEARING_ACCOUNT_ID = "QWNjb3VudDoyNTUxMzY3NzMwMTA4MzQ1MjgzO0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
 $env:WAVE_BANK_ACCOUNT_ID     = "QWNjb3VudDo..."
@@ -52,70 +63,152 @@ $env:WAVE_SALES_RETURNS_ID    = "QWNjb3VudDo..."
 $env:WAVE_DISCOUNTS_ID        = "QWNjb3VudDo..."
 ```
 
-## Step 4: Test with one day
+### Weenie Wagon loan automation
+
+| Env Var | Account |
+|---------|---------|
+| `WAVE_WEENIE_CLEARING_ID` | Weenie Wagon Loan Clearing (Other ST Asset) |
+| `WAVE_WEENIE_NOTE_PAYABLE_ID` | The First Weenie Wagon (Long-Term Liability) |
+| `WAVE_INTEREST_EXPENSE_ID` | Interest Expense |
 
 ```powershell
-python reconcile.py 2025-10-22
+$env:WAVE_WEENIE_CLEARING_ID     = "QWNjb3VudDoyNTUxODg3MzUwNTQ0MjQ3MTY1O0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
+$env:WAVE_WEENIE_NOTE_PAYABLE_ID = "QWNjb3VudDoyMjQ1OTQzNTUwNTk4NDkxMDUwO0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
+$env:WAVE_INTEREST_EXPENSE_ID    = "QWNjb3VudDoyMjQ1OTU4OTUxMzAyNjM4MjMwO0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
 ```
-
-Check Wave to confirm the journal entry was created correctly before running the backfill.
-
-## Step 5: Backfill all of 2025
-
-```powershell
-python reconcile.py 2025-01-01 2025-12-31
-```
-
-The script is safe to re-run — payouts already in the database with a Wave entry are skipped.
-
-## Step 6: Schedule daily (Windows Task Scheduler)
-
-Create a file `run_daily.ps1` in this folder:
-
-```powershell
-$env:SQUARE_TOKEN     = "your_token_here"
-$env:WAVE_TOKEN       = "your_token_here"
-$env:WAVE_BUSINESS_ID = "your_id_here"
-# ... all WAVE_ACCOUNT env vars ...
-
-cd "C:\Users\lance\OneDrive\Desktop\MidMoConsultant\James Jason Trinton Johnson\Glizzness"
-python reconcile.py
-```
-
-Then in Task Scheduler:
-- Action: `powershell.exe -File "C:\...\run_daily.ps1"`
-- Trigger: Daily at 9:00 AM
-- (Square deposits for the previous day will be visible by then)
 
 ---
 
-## Journal Entry Structure (per payout)
+## Square sales — daily workflow
 
+**One-time setup per new bank deposit:**
+1. In Wave bank feed: change "SQUARE INC SQ######" category → "Square Settlements Clearing"
+2. Run the post script (see below)
+
+**New day's payout:**
+```powershell
+python sync_square.py                              # sync latest from Square
+python post_to_wave.py --build <date>              # compute entry
+python post_to_wave.py --review <date>             # verify
+python post_to_wave.py --post <date>               # post to Wave
 ```
-DR  Square Settlements Clearing   $XXX.XX   ← anchor (nets to $0 against bank import)
-DR  Processing Fees Expense        $X.XX    ← Square's cut
-DR  Discounts & Comps              $X.XX    ← (only if discounts exist)
-DR  Sales Returns                  $X.XX    ← (only if refunds exist)
-    CR  Sales Revenue              $XXX.XX  ← Gross sales
-    CR  Tips Income                 $XX.XX  ← (only if tips > $0)
-    CR  Sales Tax Payable           $XX.XX  ← (only if tax > $0)
+
+**Backfill a date range:**
+```powershell
+python sync_square.py 2025-01-01 2025-12-31
+python post_to_wave.py --build 2025-01-01 2025-12-31
+python post_to_wave.py --post  2025-01-01 2025-12-31
 ```
 
-One entry per Square payout (not per calendar day).
-Multiple payouts on the same day = multiple entries (normal — POS vs Invoice batching).
+**Journal entry structure (per payout):**
+```
+DR  Square Settlements Clearing   $XXX.XX   anchor — nets to $0 against bank import
+DR  Merchant Account Fees          $X.XX    Square processing fee
+DR  Customer Discounts             $X.XX    (only if discounts)
+DR  Sales Returns                  $X.XX    (only if refunds)
+    CR  Food & Beverage Sales      $XXX.XX  gross pre-discount revenue
+    CR  Tips Collected              $XX.XX  (only if tips > $0)
+    CR  Columbia Sales Tax          $XX.XX  (only if tax > $0)
+```
 
-## Daily Workflow (clearing account approach)
+---
 
-For each "SQUARE INC SQ######" that appears in Wave bank feed:
-1. Click the transaction → change category from "Uncategorized Income" to "Square Settlements Clearing"
-2. Run `python post_to_wave.py --build <date> && python post_to_wave.py --post <date>`
+## Weenie Wagon loan — workflow
 
-The API entry debits the clearing account; your bank-import categorization credits it → net $0 in clearing. The full sales split lives in the API journal entry.
+Loan: $77.07/week auto-drafted from Checking (529). Each payment splits into
+principal (reduces The First Weenie Wagon liability) and interest (Interest Expense).
 
-## Sync Wave transactions to DB
+**First time / new CSV from lender:**
+```powershell
+python post_loan_payments.py --import "Weenie Wagon Transactions 6.9.26.csv"
+python post_loan_payments.py --build
+python post_loan_payments.py --review
+python post_loan_payments.py --post
+```
+
+**In Wave:** categorize each "WEENIEWAGON-INTERNET" bank withdrawal →
+"Weenie Wagon Loan Clearing" (one click each — clears the anchor).
+
+**Journal entry structure (per payment):**
+```
+CR  Weenie Wagon Loan Clearing   $77.07   anchor — nets to $0 against bank withdrawal
+    DR  The First Weenie Wagon   $XX.XX   principal (reduces loan balance)
+    DR  Interest Expense          $X.XX   interest cost
+```
+
+> Cutoff: payments through 2025-05-12 were entered manually. Script only
+> processes payments on or after 2025-05-13.
+
+---
+
+## Sam's Club annual tax correction
+
+Sam's charges Missouri food sales tax (5.975%) on purchases even though
+Glizzness is tax-exempt. Run once per year after pulling the annual total
+from Sam's Club purchase history website.
 
 ```powershell
-python sync_wave.py          # download all Wave transactions → glizzness.db
-python sync_wave.py --status # row counts and date range
-python sync_wave.py --list 2025-10   # browse October 2025
+# Preview (no changes)
+python post_sams_correction.py --preview <sams_total> <year>
+
+# Post to Wave
+python post_sams_correction.py --post <sams_total> <year>
+```
+
+Example: `python post_sams_correction.py --post 16193.60 2025`
+
+**Journal entry:**
+```
+DR  SamsTax2 - 5.975%     $XXX.XX   reduces sales tax liability
+    CR  COGS - Food/Bev   $XXX.XX   removes tax from cost of goods
+```
+
+Entry date is always 12/31 of the year being corrected.
+
+---
+
+## Wave data sync
+
+```powershell
+python sync_wave.py --sync-accounts              # refresh chart of accounts
+python sync_wave.py --import-csv "file.csv"      # import Wave transaction export
+python sync_wave.py --status                     # row counts / date ranges
+python sync_wave.py --list 2025-10               # browse transactions
+```
+
+**To export from Wave:** Accounting → Transactions → Export → set date range → Download CSV
+
+---
+
+## Schedule daily (Windows Task Scheduler)
+
+Create `run_daily.ps1` in this folder (gitignored — safe for tokens):
+
+```powershell
+$env:SQUARE_TOKEN             = "..."
+$env:WAVE_TOKEN               = "..."
+$env:WAVE_BUSINESS_ID         = "..."
+$env:WAVE_CLEARING_ACCOUNT_ID = "..."
+# ... remaining WAVE_ vars ...
+
+Set-Location "C:\Users\lance\OneDrive\Desktop\MidMoConsultant\James Jason Trinton Johnson\Glizzness"
+python sync_square.py
+python post_to_wave.py --build
+python post_to_wave.py --post
+```
+
+Task Scheduler: Action = `powershell.exe -File "C:\...\run_daily.ps1"` | Trigger = Daily 9:00 AM
+
+---
+
+## New machine setup
+
+```powershell
+git clone https://github.com/lazrexmc/glizzness
+cd glizzness
+pip install requests
+# set all $env: vars listed in Step 3
+python sync_square.py 2023-01-01 2026-12-31     # rebuild Square DB
+python sync_wave.py --sync-accounts              # rebuild Wave accounts
+# import Wave CSVs for each year
 ```
