@@ -552,6 +552,23 @@ def main() -> None:
             print("[error] Set WAVE_TOKEN and WAVE_BUSINESS_ID env vars first.")
             sys.exit(1)
 
+        # Pre-flight: surface any entries already in Wave so the user can't
+        # accidentally duplicate them. Wave would reject on externalId anyway,
+        # but this gives a clear, early warning instead of an API error.
+        already_posted = conn.execute("""
+            SELECT payout_id, arrival_date, payout_net_cents, posted_at
+            FROM journal_entries
+            WHERE arrival_date BETWEEN ? AND ? AND status = 'posted'
+            ORDER BY arrival_date
+        """, (begin_date, end_date)).fetchall()
+
+        if already_posted:
+            print(f"\n  [!] {len(already_posted)} entr{'y' if len(already_posted)==1 else 'ies'} "
+                  f"in this range already posted to Wave:")
+            for pid, arr_date, net, posted_at in already_posted:
+                ts = (posted_at or "")[:10]
+                print(f"      {arr_date}  ${net/100:>8.2f}  (posted {ts})  {pid[:16]}")
+
         to_post = conn.execute("""
             SELECT payout_id, arrival_date, payout_net_cents
             FROM journal_entries
@@ -559,8 +576,21 @@ def main() -> None:
             ORDER BY arrival_date
         """, (begin_date, end_date)).fetchall()
 
-        print(f"\nPosting {len(to_post)} staged entr{'y' if len(to_post) == 1 else 'ies'} "
-              f"to Wave ({begin_date} → {end_date})...")
+        if not to_post:
+            if already_posted:
+                print(f"\n  All entries in this range are already in Wave. Nothing to do.")
+            else:
+                print(f"\n  No staged entries in range {begin_date} to {end_date}.")
+                print(f"  Run --build first, or check --status.")
+            conn.close()
+            return
+
+        if already_posted:
+            print(f"\n  Proceeding with {len(to_post)} staged "
+                  f"entr{'y' if len(to_post)==1 else 'ies'}...")
+        else:
+            print(f"\nPosting {len(to_post)} staged entr{'y' if len(to_post) == 1 else 'ies'} "
+                  f"to Wave ({begin_date} to {end_date})...")
 
         posted = errors = 0
         for pid, arr_date, net in to_post:
