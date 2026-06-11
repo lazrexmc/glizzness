@@ -6,15 +6,22 @@ Wave's public API does not support reading transactions — it is write-only
 for accounting entries. Transactions must be imported from Wave's CSV export.
 
 Commands:
-  python sync_wave.py --sync-accounts          # pull chart of accounts from Wave API
-  python sync_wave.py --import-csv <file.csv>  # import a Wave transactions CSV export
-  python sync_wave.py --status                 # row counts / date ranges in DB
-  python sync_wave.py --list [prefix] [N]      # browse imported transactions
-                                               # prefix: "2025", "2025-10", "2026-06-08"
+  python sync_wave.py --sync-accounts                    # pull chart of accounts from Wave API
+  python sync_wave.py --import-csv <file.csv>            # import Wave CSV (warns if already imported)
+  python sync_wave.py --import-csv <file.csv> --replace  # drop existing rows for this file, re-import fresh
+  python sync_wave.py --import-csv <file.csv> --preview  # dry-run: show counts without writing
+  python sync_wave.py --status                           # row counts / date ranges in DB
+  python sync_wave.py --list [prefix] [N]                # browse imported transactions
+                                                         # prefix: "2025", "2025-10", "2026-06-08"
 
 How to get the Wave CSV:
   Wave → Accounting → Transactions → Export (top right) → Transactions CSV
   Then: python sync_wave.py --import-csv "transactions.csv"
+
+Re-importing after corrections:
+  When you correct/add entries in Wave and re-export the CSV, use --replace to get a clean slate.
+  The script will flag "soft conflicts" (same date/description/account, different amount) so you
+  can see what changed before committing.
 """
 
 import os
@@ -191,55 +198,72 @@ def _looks_like_date(val: str) -> bool:
     return bool(re.match(r"^\d{4}-\d{2}-\d{2}$", val.strip()))
 
 
-def import_csv(conn: sqlite3.Connection, csv_path: str) -> int:
+def import_csv(conn: sqlite3.Connection, csv_path: str,
+               replace: bool = False, preview: bool = False) -> int:
     """
-    Import Wave 'Account Transactions' CSV export.
+    Import a Wave 'Account Transactions' CSV export.
 
-    Wave's CSV format:
-      Row 1:  "Account Transactions"  (title — skip)
-      Row 2:  Business name           (skip)
-      Row 3:  Date range              (skip)
-      Row 4:  Report type             (skip)
-      Row 5:  Column headers: ACCOUNT NUMBER, DATE, DESCRIPTION,
-                              DEBIT (In Business Currency),
-                              CREDIT (In Business Currency),
-                              BALANCE (In Business Currency)
-      Then data rows — account name rows have the account name in the DATE
-      column with no actual date; transaction rows have YYYY-MM-DD in DATE.
+    replace=True  drop all rows from this source file first, then re-import fresh.
+                  Use after correcting entries in Wave UI and re-exporting the CSV.
+    preview=True  show what would happen without writing anything to the DB.
+
+    Soft conflicts are rows where date/description/account match an existing row but
+    the amounts differ — these indicate corrections made in Wave since the last import.
+    On a normal import they are flagged but NOT applied. Use --replace to apply them.
+
+    Wave CSV format:
+      Row 1-4: metadata (title, business name, date range, report type) — skipped
+      Row 5:   column headers
+      Remaining: data rows, with inline account-name rows (date column holds account name)
     """
     if not os.path.exists(csv_path):
         print(f"  [error] File not found: {csv_path}")
         return 0
 
-    now    = datetime.now(timezone.utc).isoformat()
     source = os.path.basename(csv_path)
+    now    = datetime.now(timezone.utc).isoformat()
+
+    # ── Pre-flight ────────────────────────────────────────────────────────────
+    existing_count = conn.execute(
+        "SELECT COUNT(*) FROM wave_transactions WHERE source_file = ?", (source,)
+    ).fetchone()[0]
+
+    if replace and preview:
+        print(f"  [preview] Would clear {existing_count} existing rows from '{source}' and re-import.")
+    elif replace:
+        if existing_count:
+            conn.execute("DELETE FROM wave_transactions WHERE source_file = ?", (source,))
+            conn.commit()
+            print(f"  [replace] Cleared {existing_count} existing rows from '{source}'.")
+    elif preview:
+        print(f"  [preview] Dry run — no changes will be written.")
+        if existing_count:
+            print(f"  [preview] '{source}' already has {existing_count} rows in DB.")
+    elif existing_count:
+        print(f"  [!] '{source}' already imported ({existing_count} rows in DB).")
+        print(f"      Exact duplicates skipped; corrections (same row, different amount) flagged.")
+        print(f"      Use --replace to do a clean re-import that applies corrections.")
+
+    # ── Parse CSV ─────────────────────────────────────────────────────────────
     inserted = skipped = 0
+    soft_conflicts = []
     current_account = ""
 
     with open(csv_path, newline="", encoding="utf-8-sig") as f:
-        # Skip 4 metadata rows, then read real header
-        for _ in range(4):
+        for _ in range(4):   # skip 4 metadata rows
             f.readline()
 
         reader = csv.DictReader(f)
-
-        # Map actual column names (case/space insensitive) to keys we use
         raw_headers = reader.fieldnames or []
         col = {}
         for h in raw_headers:
             hl = h.lower().strip()
-            if hl == "account number":
-                col["acct_num"] = h
-            elif hl == "date":
-                col["date"] = h
-            elif hl == "description":
-                col["desc"] = h
-            elif "debit" in hl:
-                col["debit"] = h
-            elif "credit" in hl:
-                col["credit"] = h
-            elif "balance" in hl:
-                col["balance"] = h
+            if hl == "account number":  col["acct_num"] = h
+            elif hl == "date":          col["date"]     = h
+            elif hl == "description":   col["desc"]     = h
+            elif "debit"   in hl:       col["debit"]    = h
+            elif "credit"  in hl:       col["credit"]   = h
+            elif "balance" in hl:       col["balance"]  = h
 
         missing = [k for k in ("date", "desc", "debit", "credit") if k not in col]
         if missing:
@@ -249,50 +273,79 @@ def import_csv(conn: sqlite3.Connection, csv_path: str) -> int:
 
         for row in reader:
             acct_num    = (row.get(col.get("acct_num", "")) or "").strip()
-            date_cell   = (row.get(col.get("date", ""))     or "").strip()
-            description = (row.get(col.get("desc", ""))     or "").strip()
-            debit       = _parse_amount(row.get(col.get("debit",    "")) or "")
-            credit      = _parse_amount(row.get(col.get("credit",   "")) or "")
-            balance     = _parse_amount(row.get(col.get("balance",  "")) or "")
+            date_cell   = (row.get(col.get("date",     "")) or "").strip()
+            description = (row.get(col.get("desc",     "")) or "").strip()
+            debit       = _parse_amount(row.get(col.get("debit",   "")) or "")
+            credit      = _parse_amount(row.get(col.get("credit",  "")) or "")
+            balance     = _parse_amount(row.get(col.get("balance", "")) or "")
 
-            # Account name row: DATE column holds account name, not a real date
+            # Account name row: date column holds account name, not a real date
             if date_cell and not _looks_like_date(date_cell):
                 current_account = date_cell
                 continue
-
-            # Skip non-transaction rows (Starting Balance, totals, blanks)
             if not _looks_like_date(date_cell):
                 continue
             if acct_num.lower() in ("starting balance", "ending balance", "total"):
                 continue
 
-            txn_date = date_cell
-
+            txn_date  = date_cell
             net       = credit - debit
             direction = "CREDIT" if credit > 0 else "DEBIT"
             row_key   = f"{txn_date}|{description}|{current_account}|{debit:.2f}|{credit:.2f}"
 
+            # Exact duplicate
             if conn.execute(
                 "SELECT 1 FROM wave_transactions WHERE row_key = ?", (row_key,)
             ).fetchone():
                 skipped += 1
                 continue
 
-            conn.execute("""
-                INSERT INTO wave_transactions
-                    (row_key, txn_date, description, account_name,
-                     debit, credit, balance, direction, net_amount,
-                     imported_at, source_file)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)
-            """, (
-                row_key, txn_date, description, current_account,
-                debit, credit, balance, direction, net,
-                now, source,
-            ))
+            # Soft conflict: same date/description/account but different amount
+            # (only meaningful when NOT replacing, since replace cleared old rows)
+            if not replace and existing_count:
+                old = conn.execute("""
+                    SELECT debit, credit FROM wave_transactions
+                    WHERE txn_date = ? AND description = ? AND account_name = ?
+                      AND source_file = ?
+                    LIMIT 1
+                """, (txn_date, description, current_account, source)).fetchone()
+                if old:
+                    soft_conflicts.append((txn_date, current_account, description,
+                                           old[0], old[1], debit, credit))
+
+            if not preview:
+                conn.execute("""
+                    INSERT INTO wave_transactions
+                        (row_key, txn_date, description, account_name,
+                         debit, credit, balance, direction, net_amount,
+                         imported_at, source_file)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?)
+                """, (
+                    row_key, txn_date, description, current_account,
+                    debit, credit, balance, direction, net,
+                    now, source,
+                ))
             inserted += 1
 
-    conn.commit()
-    print(f"  Imported {inserted} rows, skipped {skipped} duplicates  ({source})")
+    if not preview:
+        conn.commit()
+
+    # ── Summary ───────────────────────────────────────────────────────────────
+    verb = "Would import" if preview else "Imported"
+    print(f"  {verb} {inserted} rows, skipped {skipped} exact duplicates  ({source})")
+
+    if soft_conflicts:
+        print(f"\n  [!] {len(soft_conflicts)} soft conflict(s) — same date/description/account, "
+              f"different amount:")
+        for (dt, acct, desc, old_dr, old_cr, new_dr, new_cr) in soft_conflicts[:8]:
+            print(f"      {dt}  {acct[:34]:<34}  {desc[:35]}")
+            print(f"        was:  DR=${old_dr:>9.2f}  CR=${old_cr:>9.2f}")
+            print(f"        now:  DR=${new_dr:>9.2f}  CR=${new_cr:>9.2f}")
+        if len(soft_conflicts) > 8:
+            print(f"      ... and {len(soft_conflicts) - 8} more")
+        print(f"\n  Old rows KEPT — corrections NOT yet applied.")
+        print(f"  To apply:  python sync_wave.py --import-csv \"{csv_path}\" --replace")
+
     return inserted
 
 
@@ -379,7 +432,9 @@ def main() -> None:
         if len(args) < 2:
             print("[error] Provide CSV path: python sync_wave.py --import-csv transactions.csv")
             sys.exit(1)
-        import_csv(conn, args[1])
+        replace = "--replace" in args
+        preview = "--preview" in args
+        import_csv(conn, args[1], replace=replace, preview=preview)
         conn.close()
         return
 

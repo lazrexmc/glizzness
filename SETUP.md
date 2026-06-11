@@ -178,13 +178,22 @@ Entry date is always 12/31 of the year being corrected.
 ## Wave data sync
 
 ```powershell
-python sync_wave.py --sync-accounts              # refresh chart of accounts
-python sync_wave.py --import-csv "file.csv"      # import Wave transaction export
-python sync_wave.py --status                     # row counts / date ranges
-python sync_wave.py --list 2025-10               # browse transactions
+python sync_wave.py --sync-accounts                         # refresh chart of accounts
+python sync_wave.py --import-csv "file.csv"                 # import Wave CSV (warns if already imported)
+python sync_wave.py --import-csv "file.csv" --preview       # dry-run: show counts without writing
+python sync_wave.py --import-csv "file.csv" --replace       # clean re-import (use after corrections)
+python sync_wave.py --status                                # row counts / date ranges
+python sync_wave.py --list 2025-10                          # browse transactions
 ```
 
 **To export from Wave:** Accounting → Transactions → Export → set date range → Download CSV
+
+**After making corrections in Wave** (journal entries, depreciation, cash infusions, etc.):
+1. Re-export the affected year's CSV from Wave
+2. Run `--import-csv "file.csv" --preview` to see what changed (soft conflicts = corrections)
+3. Run `--import-csv "file.csv" --replace` to apply the corrections cleanly
+
+`--replace` drops all rows from that source file and re-imports fresh. Safe to run repeatedly.
 
 ---
 
