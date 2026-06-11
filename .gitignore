@@ -15,6 +15,10 @@
 run_daily.ps1
 run_daily.log
 
+# Personal / sensitive documents — NEVER commit
+*.pdf
+Sales/
+
 # Images / binary assets
 *.png
 *.jpg
