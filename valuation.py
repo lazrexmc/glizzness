@@ -484,35 +484,37 @@ def report_balance_sheet(bs, loan_actual):
 def report_valuation(sde, rev, years, total_assets, total_liab, net_book, equipment_net, loan_actual):
     section("VALUATION  (three methods)")
 
-    # Use best available year --prioritize most recent full year
-    # If we have 2025 as a full year, use that; 2026 is partial
-    full_years = [yr for yr in years if int(yr) < date.today().year]
-    val_year = full_years[-1] if full_years else years[-1]
+    today      = date.today()
+    current_yr = str(today.year)
 
-    sde_val   = sde.get(val_year, 0)
-    rev_val   = rev.get(val_year, 0)
-    is_partial = val_year == str(date.today().year)
+    # Primary basis: most recent full year
+    full_years = [yr for yr in years if int(yr) < today.year]
+    val_year   = full_years[-1] if full_years else years[-1]
+    sde_val    = sde.get(val_year, 0)
+    rev_val    = rev.get(val_year, 0)
 
-    print(f"\n  Basis year: {val_year}"
-          + (" (partial year -- annualized)" if is_partial else ""))
-    print(f"  SDE  {val_year}: {d(sde_val)}")
-    print(f"  Revenue {val_year}: {d(rev_val)}")
-    print()
-
-    # If basis year is partial, annualize
-    if is_partial:
-        today = date.today()
+    # Current-year trend annualization (if partial-year data exists)
+    has_trend   = current_yr in sde and current_yr != val_year
+    sde_trend   = rev_trend = 0.0
+    elapsed_days = ann_factor = 0
+    if has_trend:
         elapsed_days = (today - date(today.year, 1, 1)).days + 1
-        factor = 365 / elapsed_days
-        sde_val_ann = sde_val * factor
-        rev_val_ann = rev_val * factor
-        print(f"  Annualized SDE:    {d(sde_val_ann)}  ({elapsed_days} days x {factor:.2f})")
-        print(f"  Annualized Revenue:{d(rev_val_ann)}")
-    else:
-        sde_val_ann = sde_val
-        rev_val_ann = rev_val
+        ann_factor   = 365 / elapsed_days
+        sde_trend    = sde.get(current_yr, 0) * ann_factor
+        rev_trend    = rev.get(current_yr, 0) * ann_factor
 
+    print(f"\n  Basis year: {val_year}  (most recent full year)")
+    print(f"  SDE  {val_year}:     {d(sde_val)}")
+    print(f"  Revenue {val_year}: {d(rev_val)}")
+    if has_trend:
+        print(f"\n  {current_yr} YTD ({elapsed_days} days, annualized x{ann_factor:.2f}):")
+        print(f"  SDE  {current_yr} annualized:    {d(sde_trend)}")
+        print(f"  Revenue {current_yr} annualized: {d(rev_trend)}")
     print()
+
+    floor = equipment_net - loan_actual
+
+    # ── Method 1: SDE Multiple ────────────────────────────────────────────────
     hr("-")
     print("  METHOD 1 -- SDE Multiple  (most common for owner-operated businesses)")
     hr("-")
@@ -520,61 +522,74 @@ def report_valuation(sde, rev, years, total_assets, total_liab, net_book, equipm
     print("  Lower end: owner-dependent, single truck.")
     print("  Upper end: established brand, strong repeat customer base, documented systems.")
     print()
-    for multiple in (1.5, 2.0, 2.5):
-        v = sde_val_ann * multiple
-        print(f"  {multiple:.1f}x  SDE:  {d(sde_val_ann)}  =  {d(v, 14)}")
+    if sde_val > 0:
+        print(f"  Basis ({val_year}):")
+        for m in (1.5, 2.0, 2.5):
+            print(f"  {m:.1f}x  SDE:  {d(sde_val)}  =  {d(sde_val * m, 14)}")
+    else:
+        print(f"  [!] {val_year} SDE is negative -- SDE multiple does not apply for basis year.")
+    if has_trend and sde_trend > 0:
+        print(f"\n  Trend ({current_yr} annualized):")
+        for m in (1.5, 2.0, 2.5):
+            print(f"  {m:.1f}x  SDE:  {d(sde_trend)}  =  {d(sde_trend * m, 14)}")
 
-    if sde_val_ann <= 0:
-        print()
-        print("  [!] SDE is zero or negative -- SDE multiple does not apply.")
-        print("      This may reflect incomplete Wave expense data or a loss year.")
-
+    # ── Method 2: Revenue Multiple ────────────────────────────────────────────
     print()
     hr("-")
     print("  METHOD 2 -- Revenue Multiple  (quick sanity check)")
     hr("-")
     print("  Food service revenue multiples typically 0.25x - 0.45x.")
     print()
-    for multiple in (0.25, 0.35, 0.45):
-        v = rev_val_ann * multiple
-        print(f"  {multiple:.2f}x  Revenue:  {d(rev_val_ann)}  =  {d(v, 14)}")
+    print(f"  Basis ({val_year}):")
+    for m in (0.25, 0.35, 0.45):
+        print(f"  {m:.2f}x  Revenue:  {d(rev_val)}  =  {d(rev_val * m, 14)}")
+    if has_trend:
+        print(f"\n  Trend ({current_yr} annualized):")
+        for m in (0.25, 0.35, 0.45):
+            print(f"  {m:.2f}x  Revenue:  {d(rev_trend)}  =  {d(rev_trend * m, 14)}")
 
+    # ── Method 3: Asset-Based ─────────────────────────────────────────────────
     print()
     hr("-")
     print("  METHOD 3 -- Asset-Based  (floor / liquidation value)")
     hr("-")
-    fmv_note = "Book value shown; consult equipment appraiser for fair market value."
     print(f"  Equipment net book value:  {d(equipment_net, 14)}")
     print(f"  Less: Loan balance:       {d(-loan_actual, 14)}")
-    floor = equipment_net - loan_actual
     print(f"  Net tangible value:        {d(floor, 14)}")
     print()
-    print(f"  {fmv_note}")
+    print("  Book value shown; consult equipment appraiser for fair market value.")
     print()
 
+    # ── Summary Range ─────────────────────────────────────────────────────────
     hr("=")
     print("  VALUATION RANGE SUMMARY")
     hr("=")
-    lo = min(
-        sde_val_ann * 1.5 if sde_val_ann > 0 else float('inf'),
-        rev_val_ann * 0.25,
-        floor,
-    )
-    hi = max(
-        sde_val_ann * 2.5 if sde_val_ann > 0 else 0,
-        rev_val_ann * 0.45,
-        floor,
-    )
-    mid = (lo + hi) / 2
 
-    if lo < float('inf') and lo > 0:
-        print(f"  Low  (asset floor / 0.25x rev):  {d(lo, 14)}")
-        print(f"  Mid  (2.0x SDE / 0.35x rev):     {d(mid, 14)}")
-        print(f"  High (2.5x SDE / 0.45x rev):     {d(hi, 14)}")
-    else:
-        print(f"  Low  (0.25x revenue):  {d(rev_val_ann*0.25, 14)}")
-        print(f"  Mid  (0.35x revenue):  {d(rev_val_ann*0.35, 14)}")
-        print(f"  High (asset floor):    {d(floor, 14)}")
+    def _range(sde_n, rev_n, label):
+        lo = min(
+            sde_n * 1.5 if sde_n > 0 else float('inf'),
+            rev_n * 0.25,
+            floor,
+        )
+        hi  = max(sde_n * 2.5 if sde_n > 0 else 0, rev_n * 0.45, floor)
+        mid = (lo + hi) / 2
+        print(f"  {label}:")
+        if lo < float('inf') and lo > 0:
+            print(f"  Low  (asset floor / 0.25x rev):  {d(lo, 14)}")
+            print(f"  Mid  (2.0x SDE / 0.35x rev):     {d(mid, 14)}")
+            print(f"  High (2.5x SDE / 0.45x rev):     {d(hi, 14)}")
+        else:
+            print(f"  Low  (0.25x revenue):  {d(rev_n * 0.25, 14)}")
+            print(f"  Mid  (0.35x revenue):  {d(rev_n * 0.35, 14)}")
+            print(f"  High (asset floor):    {d(floor, 14)}")
+
+    _range(sde_val, rev_val, f"{val_year} actual")
+    if has_trend:
+        print()
+        _range(sde_trend, rev_trend, f"{current_yr} annualized trend")
+        print()
+        print("  Trend values are projections based on YTD performance.")
+        print("  Actual annual results may vary with seasonality.")
     hr("=")
 
 
@@ -587,12 +602,11 @@ def report_data_quality(flags):
         print("  No data quality issues detected.")
     print()
     print("  General notes:")
-    print("  * Valuation improves significantly once all 185 bank imports in Wave")
-    print("    are categorized (Square Settlements Clearing) and CSVs re-exported.")
-    print("  * 2023-2024 revenue accuracy depends on Wave CSV completeness.")
-    print("  * Owner meals, personal expenses mixed into business may understate margins.")
+    print("  * 2023-2024 revenue is from Wave CSV only; may exclude unreported cash sales.")
+    print("  * Owner meals or personal expenses run through the business understate margins.")
     print("  * Equipment FMV should be assessed by an appraiser, not book value.")
     print("  * Intangibles (brand, location rights, customer loyalty) not captured here.")
+    print("  * Re-export Wave CSVs after any corrections and run --replace to refresh.")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
