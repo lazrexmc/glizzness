@@ -27,6 +27,9 @@ __pycache__/
 .venv/
 venv/
 
+# Chat logs — contain financial figures and business context
+CHATLOG.md
+
 # OS
 .DS_Store
 Thumbs.db
