@@ -52,7 +52,7 @@ def get_square_by_year(conn):
                SUM(fees_cents)        / 100.0        fees,
                SUM(payout_net_cents)  / 100.0        net
         FROM journal_entries
-        WHERE status = 'posted'
+        WHERE status IN ('posted', 'staged', 'built')
         GROUP BY yr
         ORDER BY yr
     """).fetchall()
@@ -252,17 +252,19 @@ def get_data_quality(conn):
         if (amt or 0) > 100:
             flags.append(f"  {yr}: Uncategorized Expense ${amt:,.2f} -- review and categorize in Wave")
 
-    # Years with Square data
-    sq_years = conn.execute(
+    # Years where Square was never synced at all (not just unposted)
+    posted_years = {r[0] for r in conn.execute(
         "SELECT DISTINCT substr(arrival_date,1,4) FROM journal_entries WHERE status='posted'"
-    ).fetchall()
-    sq_year_set = {r[0] for r in sq_years}
+    ).fetchall()}
+    payout_years = {r[0] for r in conn.execute(
+        "SELECT DISTINCT substr(arrival_date,1,4) FROM payouts"
+    ).fetchall()}
 
     wave_years = conn.execute(
         "SELECT DISTINCT substr(txn_date,1,4) FROM wave_transactions"
     ).fetchall()
     for (yr,) in wave_years:
-        if yr not in sq_year_set:
+        if yr not in posted_years and yr not in payout_years:
             flags.append(f"  {yr}: No Square data -- revenue pulled from Wave CSV only")
 
     return flags
