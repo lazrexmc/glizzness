@@ -13,6 +13,7 @@
 .env
 *.env
 run_daily.ps1
+run_daily.log
 
 # Images / binary assets
 *.png

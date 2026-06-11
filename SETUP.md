@@ -200,22 +200,39 @@ python sync_wave.py --list 2025-10                          # browse transaction
 
 ## Schedule daily (Windows Task Scheduler)
 
-Create `run_daily.ps1` in this folder (gitignored — safe for tokens):
+`run_daily.ps1` is pre-built in this folder (gitignored — safe for tokens).
+All Wave account IDs are pre-filled. You only need to set three secrets.
 
-```powershell
-$env:SQUARE_TOKEN             = "..."
-$env:WAVE_TOKEN               = "..."
-$env:WAVE_BUSINESS_ID         = "..."
-$env:WAVE_CLEARING_ACCOUNT_ID = "..."
-# ... remaining WAVE_ vars ...
+**First-time setup:**
 
-Set-Location "C:\Users\lance\OneDrive\Desktop\MidMoConsultant\James Jason Trinton Johnson\Glizzness"
-python sync_square.py
-python post_to_wave.py --build
-python post_to_wave.py --post
-```
+1. Open `run_daily.ps1` and replace the three placeholders near the top:
+   ```
+   YOUR_SQUARE_PRODUCTION_TOKEN_HERE
+   YOUR_WAVE_API_TOKEN_HERE
+   YOUR_WAVE_BUSINESS_ID_HERE
+   ```
+   Square token: Square Developer Dashboard -> your app -> Production -> Access Token
+   Wave token: Wave -> Settings -> Developer -> Manage API tokens
+   Wave Business ID: Wave -> Settings -> Business -> copy ID from URL
 
-Task Scheduler: Action = `powershell.exe -File "C:\...\run_daily.ps1"` | Trigger = Daily 9:00 AM
+2. Create the Task Scheduler task:
+   - Open Task Scheduler -> Create Basic Task
+   - Name: `Glizzness Daily Accounting`
+   - Trigger: Daily, 9:00 AM
+   - Action: Start a Program
+     - Program: `powershell.exe`
+     - Arguments: `-NonInteractive -File "C:\Users\lance\OneDrive\Desktop\MidMoConsultant\James Jason Trinton Johnson\Glizzness\run_daily.ps1"`
+
+**What it does each run:**
+1. Syncs latest Square payouts into glizzness.db
+2. Builds the journal entry for today's payout date
+3. Posts to Wave (duplicate guard prevents double-posting if re-run)
+
+**Log file:** `run_daily.log` in this folder (gitignored). Check it if the task
+fails — each step is timestamped with an `[ERROR]` tag on failure.
+
+**If refunds start occurring:** create a "Sales Returns & Allowances" account
+in Wave, then set `WAVE_SALES_RETURNS_ID` in `run_daily.ps1`.
 
 ---
 
