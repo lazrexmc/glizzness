@@ -252,11 +252,14 @@ python valuation.py --year 2024  # force a specific basis year
 - P&L Summary (Revenue, COGS, Gross Profit, EBITDA, SDE add-backs)
 - Balance Sheet (assets, equipment net book value, loan balance)
 - Valuation: Method 1 SDE Multiple, Method 2 Revenue Multiple, Method 3 Asset-Based
-- Data Completeness flags (uncategorized income/expense, missing Square years)
+- Data Completeness flags (uncategorized income/expense; years with no Square sync at all — closed years with synced payouts are not flagged)
 
-**Note:** Re-export and re-import Wave CSVs after categorizing bank imports to get
-accurate expense/COGS data. Until then, $56K+ sits in Uncategorized Income (2025)
-and $29K+ in Uncategorized Income (2026), which understates margins.
+**Keeping numbers current:** whenever you add journal entries, depreciation, or
+corrections in Wave, re-export the affected year's CSV and run:
+```powershell
+python sync_wave.py --import-csv "The Glizzness, LLC Account Transactions 2025.csv" --replace
+```
+Then re-run `python valuation.py` to refresh the report.
 
 ---
 
