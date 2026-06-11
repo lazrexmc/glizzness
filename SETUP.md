@@ -10,6 +10,7 @@
 | `post_loan_payments.py` | Post Weenie Wagon loan payment splits to Wave |
 | `post_sams_correction.py` | Post annual Sam's Club sales tax correction to Wave |
 | `check_variances.py` | Verify all Square payouts balance to $0 |
+| `valuation.py` | Business valuation report (SDE, Revenue, Asset-Based methods) |
 
 ---
 
@@ -215,6 +216,30 @@ python post_to_wave.py --post
 ```
 
 Task Scheduler: Action = `powershell.exe -File "C:\...\run_daily.ps1"` | Trigger = Daily 9:00 AM
+
+---
+
+## Business valuation
+
+Run the valuation report at any time to get a snapshot of the business value
+based on current DB data. No API calls — reads only from glizzness.db.
+
+```powershell
+python valuation.py              # summary report (basis: most recent full year)
+python valuation.py --detail     # same but with extra breakdown (reserved)
+python valuation.py --year 2024  # force a specific basis year
+```
+
+**Output sections:**
+- Revenue (Square preferred for 2025+, Wave CSV for 2023-2024)
+- P&L Summary (Revenue, COGS, Gross Profit, EBITDA, SDE add-backs)
+- Balance Sheet (assets, equipment net book value, loan balance)
+- Valuation: Method 1 SDE Multiple, Method 2 Revenue Multiple, Method 3 Asset-Based
+- Data Completeness flags (uncategorized income/expense, missing Square years)
+
+**Note:** Re-export and re-import Wave CSVs after categorizing bank imports to get
+accurate expense/COGS data. Until then, $56K+ sits in Uncategorized Income (2025)
+and $29K+ in Uncategorized Income (2026), which understates margins.
 
 ---
 
