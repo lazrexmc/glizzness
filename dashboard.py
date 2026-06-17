@@ -49,8 +49,7 @@ try:
     from db import get_dashboard_status, get_variances
     from sync import (
         sync_square, build_wave_entries, post_to_wave,
-        build_loan_entries, post_loan_payments, close_year,
-        import_wave_csv,
+        post_single_loan_payment, close_year, import_wave_csv,
     )
     modules_ok = True
 except Exception as e:
@@ -65,6 +64,8 @@ if "status" not in st.session_state:
     st.session_state.status = None
 if "status_error" not in st.session_state:
     st.session_state.status_error = None
+if "loan_form_open" not in st.session_state:
+    st.session_state.loan_form_open = False
 
 # ── Load / refresh status ─────────────────────────────────────────────────────
 
@@ -211,8 +212,8 @@ with b3:
     wave_btn = st.button("Post to Wave", use_container_width=True,
                          help="Post staged journal entries to Wave")
 with b4:
-    loan_btn = st.button("Post Loans", use_container_width=True,
-                         help="Build and post staged loan payment entries to Wave")
+    loan_btn = st.button("Log Loan", use_container_width=True,
+                         help="Enter a loan payment from your bank statement and post to Wave")
 with b5:
     full_btn = st.button("Full Sync", type="primary", use_container_width=True,
                          help="Run all four steps in sequence")
@@ -225,6 +226,34 @@ with bx2:
     if st.button("Clear Log", use_container_width=True):
         st.session_state.run_log = []
         st.rerun()
+
+# ── Loan payment entry form ────────────────────────────────────────────────────
+# Rendered here so it appears above the log; handlers are below after _run().
+
+loan_form_visible  = st.session_state.loan_form_open
+send_loan_btn      = False
+cancel_loan_btn    = False
+loan_date_val      = date.today()
+loan_principal_val = 0.0
+loan_interest_val  = 0.0
+loan_total_val     = 0.0
+
+if loan_form_visible:
+    with st.container(border=True):
+        st.subheader("Log Loan Payment")
+        lf1, lf2, lf3 = st.columns(3)
+        loan_date_val      = lf1.date_input("Payment date", value=date.today(), key="lf_date")
+        loan_principal_val = lf2.number_input("Principal ($)", min_value=0.0, step=0.01,
+                                               format="%.2f", key="lf_principal")
+        loan_interest_val  = lf3.number_input("Interest ($)", min_value=0.0, step=0.01,
+                                               format="%.2f", key="lf_interest")
+        loan_total_val = round(float(loan_principal_val) + float(loan_interest_val), 2)
+        if loan_total_val > 0:
+            st.caption(f"Total: **${loan_total_val:.2f}**")
+        lfa, lfb = st.columns([1, 5])
+        send_loan_btn   = lfa.button("Send to Wave", type="primary",
+                                      disabled=(loan_total_val <= 0), key="lf_send")
+        cancel_loan_btn = lfb.button("Cancel", key="lf_cancel")
 
 # ── Log helper ─────────────────────────────────────────────────────────────────
 
@@ -275,10 +304,22 @@ if wave_btn:
     ran_any = True
 
 if loan_btn:
-    with st.spinner("Processing loan payments..."):
-        _run("Build Loan Entries", build_loan_entries)
-        _run("Post Loan Payments", post_loan_payments)
-    ran_any = True
+    st.session_state.loan_form_open = True
+    st.rerun()
+
+if loan_form_visible and cancel_loan_btn:
+    st.session_state.loan_form_open = False
+    st.rerun()
+
+if loan_form_visible and send_loan_btn and loan_total_val > 0:
+    with st.spinner("Posting loan payment to Wave..."):
+        _run("Post Loan Payment", post_single_loan_payment,
+             payment_date=loan_date_val.strftime("%Y-%m-%d"),
+             principal=float(loan_principal_val),
+             interest=float(loan_interest_val))
+    st.session_state.loan_form_open = False
+    st.session_state.status = None
+    st.rerun()
 
 if full_btn:
     with st.spinner("Running full sync..."):
@@ -288,8 +329,6 @@ if full_btn:
         _run("Build Wave Entries", build_wave_entries)
         _run("Post to Wave", post_to_wave,
              begin_date=wave_post_begin.strftime("%Y-%m-%d"))
-        _run("Build Loan Entries", build_loan_entries)
-        _run("Post Loan Payments", post_loan_payments)
     ran_any = True
 
 if wave_import_btn and wave_csv_file is not None:

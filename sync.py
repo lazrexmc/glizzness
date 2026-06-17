@@ -837,6 +837,105 @@ def post_loan_payments(log: Callable = print) -> dict:
     return {"posted": posted, "errors": errors}
 
 
+# ── Post a single loan payment (manual entry) ─────────────────────────────────
+
+def post_single_loan_payment(payment_date: str, principal: float, interest: float,
+                              log: Callable = print) -> dict:
+    """Record one loan payment and immediately post two Wave transactions.
+
+    The caller provides the date, principal, and interest read from the bank
+    statement. This upserts into loan_payments and loan_journal_entries for
+    the audit trail, then calls Wave.
+    """
+    if not _get_secret("WAVE_TOKEN") or not _get_secret("WAVE_BUSINESS_ID"):
+        raise RuntimeError("WAVE_TOKEN and WAVE_BUSINESS_ID must be set")
+
+    amount = round(principal + interest, 2)
+    sb     = get_client()
+    accts  = _loan_accounts()
+    biz    = _get_secret("WAVE_BUSINESS_ID")
+    now    = datetime.now(timezone.utc).isoformat()
+
+    # Guard: don't silently re-post
+    ex = (
+        sb.table("loan_journal_entries")
+        .select("status")
+        .eq("payment_date", payment_date)
+        .execute()
+    )
+    if ex.data and ex.data[0].get("status") == "posted":
+        raise ValueError(
+            f"{payment_date} is already posted to Wave. "
+            "Delete it in Wave and remove the Supabase row first if you need to re-enter it."
+        )
+
+    # Audit trail
+    sb.table("loan_payments").upsert({
+        "payment_date": payment_date,
+        "amount":       amount,
+        "principal":    principal,
+        "interest":     interest,
+    }).execute()
+    sb.table("loan_journal_entries").upsert({
+        "payment_date": payment_date,
+        "status":       "staged",
+        "amount":       amount,
+        "principal":    principal,
+        "interest":     interest,
+        "built_at":     now,
+    }).execute()
+
+    log(f"  {payment_date}: ${amount:.2f}  (principal ${principal:.2f} + interest ${interest:.2f})")
+
+    # Transaction 1 — Interest expense
+    r1   = _wave_gql({"input": {
+        "businessId":  biz,
+        "externalId":  f"weenie-interest-{payment_date}",
+        "date":        payment_date,
+        "description": f"Weenie Wagon Loan Interest {payment_date}",
+        "anchor":      {"accountId": accts["clearing"], "amount": f"{interest:.2f}", "direction": "WITHDRAWAL"},
+        "lineItems":   [{"accountId": accts["interest"], "amount": f"{interest:.2f}", "balance": "DEBIT", "description": "Loan interest"}],
+    }}, log)
+    gql1   = (r1.get("data") or {}).get("moneyTransactionCreate", {})
+    int_id = (gql1.get("transaction") or {}).get("id", "")
+    if not gql1.get("didSucceed"):
+        errs = gql1.get("inputErrors") or r1.get("errors") or []
+        if not _already_posted(errs):
+            err = f"interest tx failed: {json.dumps(errs)[:200]}"
+            sb.table("loan_journal_entries").update({"status": "error", "error_msg": err}).eq("payment_date", payment_date).execute()
+            raise RuntimeError(err)
+        log(f"  [interest already in Wave]")
+
+    # Transaction 2 — Principal (reduces liability)
+    r2     = _wave_gql({"input": {
+        "businessId":  biz,
+        "externalId":  f"weenie-principal-{payment_date}",
+        "date":        payment_date,
+        "description": f"Weenie Wagon Loan Principal {payment_date}",
+        "anchor":      {"accountId": accts["note_payable"], "amount": f"{principal:.2f}", "direction": "DEPOSIT"},
+        "lineItems":   [{"accountId": accts["clearing"], "amount": f"{principal:.2f}", "balance": "CREDIT", "description": "Loan principal"}],
+    }}, log)
+    gql2   = (r2.get("data") or {}).get("moneyTransactionCreate", {})
+    pri_id = (gql2.get("transaction") or {}).get("id", "")
+    if not gql2.get("didSucceed"):
+        errs = gql2.get("inputErrors") or r2.get("errors") or []
+        if not _already_posted(errs):
+            err = f"principal tx failed: {json.dumps(errs)[:200]}"
+            sb.table("loan_journal_entries").update({"status": "error", "error_msg": err}).eq("payment_date", payment_date).execute()
+            raise RuntimeError(err)
+        log(f"  [principal already in Wave]")
+
+    sb.table("loan_journal_entries").update({
+        "status":        "posted",
+        "wave_entry_id": f"int:{int_id}|pri:{pri_id}",
+        "posted_at":     now,
+        "error_msg":     None,
+    }).eq("payment_date", payment_date).execute()
+
+    log(f"  ✓ Posted ${amount:.2f} to Wave")
+    return {"posted": 1, "payment_date": payment_date, "amount": amount}
+
+
 # ── Close a calendar year ──────────────────────────────────────────────────────
 
 def close_year(year: int, log: Callable = print) -> dict:
