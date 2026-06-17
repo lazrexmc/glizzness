@@ -1,19 +1,59 @@
 # ProjectContext.md — Glizzness Accounting Automation
+## LLM Handoff Document
 
-> **For LLMs:** Read this file at the start of any new session to get full context.
-> Also read SETUP.md for detailed workflow docs and env var reference.
+> **Start here.** Read this entire file before touching any code. It contains
+> hard-won business logic, critical gotchas, and incident history that are not
+> obvious from the code alone. The companion file `SETUP.md` has step-by-step
+> workflow instructions and CLI command reference.
 
 ---
 
-## What This Is
+## Project Overview
 
-Python-based accounting automation for **The Glizzness LLC** — a food truck
-operated by James T. Johnson in Columbia, MO. The system pulls Square POS data,
-computes double-entry journal entries, and posts them to Wave Accounting
-(cloud bookkeeping app). It also tracks weekly Weenie Wagon loan payments.
+**Business:** The Glizzness LLC — a food truck operated by James Jason Trinton Johnson
+("Trint") in Columbia, MO. He runs it solo.
 
-**Owner / contacts:** James Jason Trinton Johnson (operator), Lance McCarter
-(consultant, developer). GitHub user: lazrex.
+**Consultant/Developer:** Lance McCarter (`lazrex` on GitHub).
+
+**What this system does:** Pulls Square POS payout data into a cloud database,
+computes double-entry journal entries, and posts them to Wave Accounting via
+GraphQL API. Eliminates the need to manually split every "SQUARE INC SQ######"
+bank deposit in Wave. Also tracks weekly Weenie Wagon truck loan payments.
+
+**GitHub:** https://github.com/lazrexmc/glizzness (branch: `master`)
+
+**Live dashboard:** Deployed on Streamlit Community Cloud (share.streamlit.io).
+Trint uses it from anywhere. Password-protected (shared `APP_PASSWORD` secret).
+
+---
+
+## Current Status (as of 2026-06-17)
+
+- Square sync: **working** — syncs payouts/entries/payments/orders into Supabase
+- Wave posting: **working** — posts staged journal entries to Wave via GraphQL
+- Loan payments: **working** — manual single-payment entry form in dashboard
+- Financial Reports: **working** — Annual P&L, monthly bar chart, key metrics, expense breakdown
+- Streamlit Cloud: **live and deployed** at share.streamlit.io (lazrexmc/glizzness)
+- 2022–2024 books: **closed** — status='closed' in DB, hard date floor in code
+- Known open issue: 2024-11-11 payout has status='error' (UNBALANCED, $42.26 gap) — investigate separately
+
+---
+
+## Architecture: Two Parallel Systems
+
+### 1. CLI scripts (SQLite `glizzness.db`, local only)
+`sync_square.py`, `post_to_wave.py`, `post_loan_payments.py`, `sync_wave.py`,
+`check_variances.py`, `valuation.py`, `post_sams_correction.py`
+
+Use these for ad-hoc CLI operations, historical backfills, and the Sam's Club
+tax correction. They all read/write `glizzness.db` (SQLite, gitignored).
+
+### 2. Dashboard modules (Supabase Postgres, cloud)
+`db.py` — Supabase client + status/variance/financial queries  
+`sync.py` — all sync/post/import functions (Supabase-backed)  
+`dashboard.py` — Streamlit UI  
+
+These are what Streamlit Community Cloud runs. No local SQLite needed.
 
 ---
 
@@ -21,162 +61,238 @@ computes double-entry journal entries, and posts them to Wave Accounting
 
 ```
 Square POS API
-    ↓  sync_square.py (CLI) / sync.py:sync_square() (dashboard)
-Supabase (Postgres)       ←→ glizzness.db (SQLite, local CLI only)
-    ↓  post_to_wave.py (CLI) / sync.py:build_wave_entries() + post_to_wave()
-Wave Accounting (GraphQL API)
+    ↓  sync_square.py (CLI)  OR  sync.py:sync_square() (dashboard)
+Supabase (Postgres)  ←→  glizzness.db (SQLite, local CLI only)
+    ↓  sync.py:build_wave_entries() then post_to_wave()
+Wave Accounting (GraphQL API — write-only for transactions)
+
+Wave Accounting (CSV export — only way to read transaction history)
+    ↓  dashboard "Import Wave Transactions CSV" button
+    ↓  sync.py:import_wave_csv()
+Supabase: wave_transactions table
 ```
 
 ```
-Lender CSV (amortization)
-    ↓  post_loan_payments.py --import (CLI) / manual Supabase upsert
-Supabase: loan_payments table
-    ↓  sync.py:build_loan_entries() + post_loan_payments()
-Wave Accounting (two transactions per payment)
+Bank statement (Trint looks up payment date + principal + interest)
+    ↓  dashboard "Log Loan" button → entry form
+    ↓  sync.py:post_single_loan_payment()
+Supabase: loan_payments + loan_journal_entries
+    ↓  two Wave transactions (interest + principal)
+Wave Accounting
 ```
 
 ---
 
-## Architecture: Two Parallel Systems
+## Database Schema (12 tables, Supabase Postgres)
 
-### 1. CLI scripts (SQLite, original)
-`sync_square.py`, `post_to_wave.py`, `post_loan_payments.py`, `check_variances.py`
-— still work standalone with `glizzness.db`. Use these for ad-hoc CLI operations.
-
-### 2. Dashboard modules (Supabase, cloud)
-`db.py` — status queries + variance check  
-`sync.py` — all sync/post logic using Supabase  
-`dashboard.py` — Streamlit UI  
-These are what Streamlit Community Cloud runs. No local file system needed.
-
----
-
-## Database Schema (12 tables)
-
-| Table | Key | Purpose |
-|-------|-----|---------|
+| Table | PK | Purpose |
+|---|---|---|
 | `payouts` | `payout_id` TEXT | Square payout header (one per bank deposit) |
 | `payout_entries` | `entry_id` TEXT | Line items inside a payout (CHARGE/REFUND/DEPOSIT_FEE) |
 | `payments` | `payment_id` TEXT | Square payment detail |
-| `orders` | `order_id` TEXT | Square order (has tax/discount totals) |
-| `journal_entries` | `payout_id` TEXT | Wave entry staged/posted per payout |
+| `orders` | `order_id` TEXT | Square order (tax/discount totals) |
+| `journal_entries` | `payout_id` TEXT | Wave entry per payout — status: staged/posted/closed/error |
 | `journal_entry_lines` | `id` SERIAL | DR/CR lines for each journal entry |
-| `wave_posts` | `payout_id` TEXT | Legacy post tracker (superseded by journal_entries.status) |
+| `wave_posts` | `payout_id` TEXT | Legacy tracker (superseded by journal_entries.status) |
 | `wave_accounts` | `account_id` TEXT | Wave chart of accounts cache |
-| `wave_transactions` | `row_key` TEXT | Wave CSV import rows |
-| `loan_payments` | `payment_date` TEXT | Weenie Wagon amortization schedule |
-| `loan_journal_entries` | `payment_date` TEXT | Loan payment staged/posted entries |
+| `wave_transactions` | `row_key` TEXT | Wave CSV import rows (debit/credit per account) |
+| `loan_payments` | `payment_date` TEXT | Weenie Wagon payment records |
+| `loan_journal_entries` | `payment_date` TEXT | Loan entries — status: staged/posted/error |
 | `sync_log` | `id` SERIAL | Audit log of each Square sync run |
 
-Schema file: `supabase_schema.sql`
+Schema DDL: `supabase_schema.sql`
+
+**Supabase notes:**
+- URL: `https://ikhcbncnaojrndilmnnd.supabase.co`
+- Access: `service_role` key only — RLS enabled, no policies → anon key blocked
+- Default row limit: 1000 rows. Always paginate large fetches.
+  `db.py:_fetch_all_rows()` handles pagination. For `.in_()` calls, batch ≤150 IDs.
+- Upsert uses ON CONFLICT on PK. Duplicate PKs in the same batch cause errors —
+  deduplicate before upserting (Square API sometimes returns duplicate payout IDs
+  when paginating wide date ranges).
 
 ---
 
 ## Key Business Logic
 
 ### Square sales journal entry (per payout)
-Built in `sync.py:build_wave_entries()` and `post_to_wave.py:build_entries()`:
+
+Built by `sync.py:build_wave_entries()` and `post_to_wave.py:build_entries()`:
 
 ```
 DR  Square Settlements Clearing   payout_net_cents    ← anchor (DEPOSIT direction in Wave)
 DR  Merchant Account Fees         fees_cents
 DR  Customer Discounts            discounts_cents      ← only if > 0
 DR  Sales Returns                 returns_cents        ← only if > 0
-    CR  Food & Beverage Sales     gross_sales_cents    ← sale - tax + disc (pre-discount revenue)
+    CR  Food & Beverage Sales     gross_sales_cents
     CR  Tips Collected            tips_cents           ← only if > 0
     CR  Columbia Sales Tax        taxes_cents          ← only if > 0
 ```
 
-Entry type math:
+**Payout entry type math** (each `payout_entry` record contributes to the totals):
 - **CHARGE**: `gross_sales += sale_cents - tax_cents + disc_cents`
-  (discount added back so CR Sales = pre-discount; DR Discounts = reduction)
+  (discount is added BACK to gross_sales so CR Sales = pre-discount revenue,
+  DR Discounts = the reduction. This keeps Wave P&L correct.)
 - **REFUND**: `returns += abs(e_gross)`
-- **DEPOSIT_FEE**: `fees += abs(e_gross)` (Square instant-deposit fee, fee_cents=0)
-- All types: `fees += e_fee`
+- **DEPOSIT_FEE**: `fees += abs(e_gross)` — this is Square's instant-deposit fee.
+  Note: for DEPOSIT_FEE, `fee_cents = 0` and `gross_cents` is negative. Use
+  `abs(gross_cents)` as the fee amount — DO NOT use `fee_cents`.
+- All types: `fees += e_fee` (regular processing fee)
 
-Balance check: `abs(total_DR - total_CR) <= 1` (1-cent rounding allowed)
+Balance check: `abs(total_DR - total_CR) <= 1` (1-cent rounding tolerance)
 
-Wave `externalId`: `{payout_id}:clr` — prevents duplicate posting on re-run
+Wave `externalId`: `{payout_id}:clr` — prevents double-posting on re-run.
+If Wave returns `ALREADY_EXISTS` or `DUPLICATE`, treat it as success.
 
-### Loan payments (Weenie Wagon, $77.07/week)
-Two Wave transactions per payment date (Wave doesn't allow liability in line items):
+### Clearing account pattern
 
-**Tx1 — Interest:**
-- Anchor: Weenie Wagon Loan Clearing, WITHDRAWAL, $interest
-- Line: Interest Expense, DEBIT, $interest
+The Wave public API cannot read or categorize existing bank imports. The solution:
+"Square Settlements Clearing" (Other Short-Term Asset) is the API anchor.
+- API posts a DEPOSIT (DR) to the clearing account
+- Trint's manual bank categorization CREDITs clearing (one click per deposit)
+- Net result: clearing account = $0, revenue accounts properly populated
 
-**Tx2 — Principal:**
-- Anchor: The First Weenie Wagon (liability), DEPOSIT, $principal
-  (`DEPOSIT` into a liability = DR liability = reduces balance)
-- Line: Weenie Wagon Loan Clearing, CREDIT, $principal
+### Loan payments (Weenie Wagon, ~$77.07/week)
+
+Wave's `moneyTransactionCreate` cannot use a liability account as a line item.
+Workaround: two transactions per payment date.
+
+**Tx1 — Interest expense:**
+```
+Anchor: Weenie Wagon Loan Clearing  WITHDRAWAL  $interest
+Line:   Interest Expense            DEBIT        $interest
+```
+
+**Tx2 — Principal reduction:**
+```
+Anchor: The First Weenie Wagon (liability)  DEPOSIT   $principal
+Line:   Weenie Wagon Loan Clearing          CREDIT     $principal
+```
+`DEPOSIT` into a liability account = DR liability = reduces balance. This is
+the only way to post a liability payment through the Wave API.
 
 `externalId`s: `weenie-interest-{date}` and `weenie-principal-{date}`  
-Cutoff: payments **after** 2025-05-12 (prior entered manually in Wave)  
-`wave_entry_id` stored as `int:{wave_id}|pri:{wave_id}`
+Stored in `loan_journal_entries.wave_entry_id` as `int:{wave_id}|pri:{wave_id}`
+
+**Cutoff:** Payments on or before `2025-05-12` were entered manually in Wave.
+All dashboard/script code skips payments on or before this date.
+
+**Current workflow (dashboard):** Trint looks up the bank statement, sees the
+payment date and the split (e.g., $65.38 principal / $11.69 interest), enters
+it in the "Log Loan" form, clicks "Send to Wave." The form prevents re-posting
+the same date.
+
+---
+
+## Closed-Year Protection (CRITICAL — read carefully)
+
+**History:** In a prior session, the assistant told the user to "click Post to Wave"
+after building entries. This caused 345 staged entries — including 2022–2024 closed
+books — to be posted to Wave as duplicates. User deleted them manually.
+
+**Two-layer protection added:**
+
+1. **DB status = 'closed'**: `sync.py:close_year(year)` sets all journal entries for
+   that year to status='closed'. `build_wave_entries()` skips both 'posted' AND
+   'closed' entries. If only 'posted' is skipped, a Close Year run followed by
+   Full Sync would rebuild and re-stage all those entries.
+
+2. **Hard date floor in `post_to_wave()`**: `CLOSED_YEAR_CUTOFF = "2025-01-01"` —
+   the function refuses to post any entry with `arrival_date < 2025-01-01` regardless
+   of status. This is a code-level safety net that can't be bypassed from the UI.
+
+**Rule:** Never tell the user to click "Post to Wave" without confirming which date
+range they intend to post and that it doesn't include closed years.
+
+**Current state:** 2022, 2023, 2024 are all marked closed in the DB.
 
 ---
 
 ## Wave API Notes
 
-- GraphQL endpoint: `https://gql.waveapps.com/graphql/public`
-- Auth: `Bearer {WAVE_TOKEN}` header
-- Mutation: `moneyTransactionCreate` — one call per journal entry
+- Endpoint: `https://gql.waveapps.com/graphql/public`
+- Auth: `Authorization: Bearer {WAVE_TOKEN}`
+- Mutation: `moneyTransactionCreate` — one call per payout
 - Amounts: dollar strings `f"{cents / 100:.2f}"`
-- `externalId` deduplication: Wave rejects duplicate externalIds with
-  `ALREADY_EXISTS` / `DUPLICATE` error code — scripts treat this as success
-- Anchor account is NOT included in lineItems — it auto-balances
-- Anchor direction: DEBIT on an asset = `"DEPOSIT"`, CREDIT on an asset = `"WITHDRAWAL"`
+- `externalId`: Wave deduplicates on this field. `ALREADY_EXISTS`/`DUPLICATE` = success.
+- Anchor account is NOT included in `lineItems` — it auto-balances.
+- Direction on anchor: `DEPOSIT` = DR (increase asset / decrease liability),
+  `WITHDRAWAL` = CR (decrease asset)
+- **Wave API is write-only for transactions.** `business.transactions` does not
+  exist on the public API. Transaction history is only available via CSV export
+  from Wave → Accounting → Transactions → Export.
+- Wave GraphQL introspection: `introspect_wave.py` (CLI tool for exploring schema)
 
 ---
 
 ## Square API Notes
 
 - Base URL: `https://connect.squareup.com/v2`
-- Auth: `Bearer {SQUARE_TOKEN}` + `Square-Version: 2025-01-23`
-- **Payout date quirk:** Square filters `/v2/payouts` by `created_at`, not `arrival_date`.
-  Workaround: fetch with 7-day wider window, filter by `arrival_date` in Python.
+- Auth: `Authorization: Bearer {SQUARE_TOKEN}` + `Square-Version: 2025-01-23`
 - Money: all amounts in **cents** (integers) — stored as cents in DB
+- **Date filter quirk:** `/v2/payouts` filters by `created_at` in the API, but the
+  useful date is `arrival_date` (when money actually arrived in bank). Workaround:
+  fetch with a 7-day wider API window, filter by `arrival_date` in Python.
 - Only PAID/SENT payouts stored; only COMPLETED payments stored
 - Payout entries endpoint: `GET /v2/payouts/{id}/payout-entries`
+- **Duplicate payout IDs:** Square sometimes returns the same payout ID in multiple
+  pages when fetching a wide date range. Deduplicate by `payout_id` before upsert.
 
 ---
 
-## Supabase Notes
+## Dashboard Features (current state)
 
-- URL: `https://ikhcbncnaojrndilmnnd.supabase.co`
-- Access: service_role key only (set as `SUPABASE_SERVICE_KEY` env var or Streamlit secret)
-- RLS: enabled on all tables, no policies → anon/authenticated keys blocked entirely
-- Pagination: default limit 1000 rows. `db.py:_fetch_all_rows()` paginates.
-- Upsert: `supabase.table(t).upsert(records).execute()` — uses PK on conflict
-- In-filter URL limit: batch at ≤150 IDs per `.in_()` call
+### Status cards (top of page)
+Four cards: Square (last payout date, staleness), Entries (unbuilt/errors),
+Wave (staged/posted), Loan (unposted/errors). Auto-loads on page open; ↻ Refresh reloads.
+
+### Expander controls
+1. **Square sync date range** — begin/end dates for Sync Square button
+2. **Wave post date** — minimum date for Post to Wave (hard min: 2025-01-01)
+3. **⚠ Close a Year** — select year + confirmation checkbox → marks all entries 'closed'
+4. **Import Wave Transactions CSV** — file uploader → calls `sync.py:import_wave_csv()`
+
+### Action buttons
+- **Sync Square** — pulls Square payouts/entries/payments/orders into Supabase
+- **Build Entries** — computes Wave journal entries from Square data (no Wave API calls)
+- **Post to Wave** — posts staged entries to Wave (respects wave post date picker)
+- **Log Loan** — opens the loan payment entry form
+- **Full Sync** — runs Sync Square → Build Entries → Post to Wave in sequence
+- **Check Variances** — verifies payout totals match entry totals (shows table if any found)
+
+### Loan payment form
+Opened by "Log Loan" button. Fields: payment date, principal ($), interest ($).
+Shows calculated total. "Send to Wave" calls `post_single_loan_payment()`.
+Guards against double-posting the same date (raises ValueError if already posted).
+
+### Financial Reports (bottom expander)
+1. **Annual P&L table** — years as columns, rows: Gross Sales, Discounts, Returns,
+   Net Sales, Sales Tax Collected, Tips Collected, Processing Fees, Loan Interest,
+   Net to Bank, # Payouts
+2. **Monthly revenue bar chart** — current year, Gross Sales by month
+3. **Key metrics** — Avg Monthly, Annualized, Tip Rate, Processing Fee Rate
+4. **Operating Expenses table** — rows: Loan Interest (from loan_journal_entries),
+   + each Wave expense account (from wave_transactions × wave_accounts.type_value).
+   Only shows if data is available; prompts to import Wave CSV otherwise.
 
 ---
 
-## Environment Variables / Secrets
+## Wave CSV Import
 
-All secrets read by `_get_secret(name)` helper in `db.py` and `sync.py`:
-tries `st.secrets[name]` first (Streamlit runtime), falls back to `os.environ`.
+Since Wave API is write-only, `wave_transactions` is populated by periodic CSV exports.
 
-| Variable | Used by |
-|----------|---------|
-| `SUPABASE_SERVICE_KEY` | db.py, sync.py |
-| `SQUARE_TOKEN` | sync.py:sync_square |
-| `WAVE_TOKEN` | sync.py:post_to_wave, post_loan_payments |
-| `WAVE_BUSINESS_ID` | sync.py:post_to_wave, post_loan_payments |
-| `WAVE_CLEARING_ACCOUNT_ID` | sync.py:build_wave_entries, post_to_wave |
-| `WAVE_BANK_ACCOUNT_ID` | sync.py (included in accounts dict, not currently used in entries) |
-| `WAVE_SALES_REVENUE_ID` | sync.py:build_wave_entries |
-| `WAVE_TIPS_INCOME_ID` | sync.py:build_wave_entries |
-| `WAVE_PROCESSING_FEES_ID` | sync.py:build_wave_entries |
-| `WAVE_SALES_TAX_ID` | sync.py:build_wave_entries |
-| `WAVE_SALES_RETURNS_ID` | sync.py:build_wave_entries |
-| `WAVE_DISCOUNTS_ID` | sync.py:build_wave_entries |
-| `WAVE_WEENIE_CLEARING_ID` | sync.py:post_loan_payments |
-| `WAVE_WEENIE_NOTE_PAYABLE_ID` | sync.py:post_loan_payments |
-| `WAVE_INTEREST_EXPENSE_ID` | sync.py:post_loan_payments |
-| `APP_PASSWORD` | dashboard.py (shared login) |
+**Wave export:** Accounting → Transactions → Export → Transactions CSV  
+**Dashboard:** Import Wave Transactions CSV expander → upload → Import to Supabase
 
-Actual Wave account ID values (base64 strings) are in `SETUP.md` and `run_daily.ps1`.
+`sync.py:import_wave_csv()` parses the Wave CSV format:
+- Skips 4 metadata rows at top
+- Handles account-name section headers (non-data rows with no amounts)
+- Row key: `date|description|account|debit|credit`
+- "Replace" checkbox drops rows from that source file and re-imports clean
+
+The financial reports Operating Expenses section reads from `wave_transactions`
+filtered to expense-type accounts (via `wave_accounts.type_value ILIKE '%expense%'`).
+To get expense categories showing in the dashboard, import a Wave CSV.
 
 ---
 
@@ -184,69 +300,145 @@ Actual Wave account ID values (base64 strings) are in `SETUP.md` and `run_daily.
 
 | File | Status | Notes |
 |------|--------|-------|
-| `sync_square.py` | Active CLI | SQLite, standalone |
-| `post_to_wave.py` | Active CLI | SQLite, standalone |
-| `post_loan_payments.py` | Active CLI | SQLite, standalone; import CSV with --import |
-| `check_variances.py` | Active CLI | SQLite read-only, ~20 lines |
-| `sync_wave.py` | Active CLI | Syncs Wave chart of accounts, imports CSV |
-| `post_sams_correction.py` | Active CLI | Annual Sam's Club sales tax correction |
-| `valuation.py` | Active CLI | Business valuation report (SDE/Revenue/Asset) |
-| `db.py` | Dashboard | Supabase client + status queries |
-| `sync.py` | Dashboard | Supabase-backed sync functions |
-| `dashboard.py` | Dashboard | Streamlit UI |
-| `migrate_to_supabase.py` | Done (one-time) | SQLite → Supabase migration, ~54K rows |
-| `supabase_schema.sql` | Done (one-time) | Postgres schema, run in Supabase SQL Editor |
-| `requirements.txt` | Streamlit Cloud | streamlit, supabase, requests |
-| `.streamlit/secrets.toml` | Local dev | Gitignored — template with blank values |
-| `.streamlit/config.toml` | Tracked | Dark theme config |
-| `SETUP.md` | Docs | Detailed workflow + env var reference |
-| `ProjectContext.md` | Docs (this file) | LLM handoff context |
-| `run_daily.ps1` | Gitignored | Task Scheduler script with live tokens |
-| `glizzness.db` | Gitignored | Local SQLite database |
+| `sync_square.py` | Active CLI | SQLite, standalone Square sync |
+| `post_to_wave.py` | Active CLI | SQLite, standalone Wave post |
+| `post_loan_payments.py` | Active CLI | SQLite, standalone loan posts |
+| `check_variances.py` | Active CLI | SQLite read-only variance check |
+| `sync_wave.py` | Active CLI | Sync Wave accounts; import CSV |
+| `post_sams_correction.py` | Active CLI | Annual Sam's Club tax correction |
+| `valuation.py` | Active CLI | Business valuation report |
+| `reset_entry.py` | Utility CLI | Reset a specific entry status |
+| `reset_errors.py` | Utility CLI | Batch reset error entries |
+| `debug_date.py` | Utility CLI | Date/payout debugging |
+| `db.py` | Dashboard module | Supabase client + status/variance/financials queries |
+| `sync.py` | Dashboard module | All Supabase sync/post/import functions |
+| `dashboard.py` | Dashboard UI | Streamlit app — the main interface |
+| `migrate_to_supabase.py` | Done (one-time) | SQLite → Supabase migration (54K rows) |
+| `supabase_schema.sql` | Done (one-time) | Postgres schema DDL |
+| `delete_wave_overpost.py` | Emergency tool | Deletes Wave transactions by payout ID + marks closed |
+| `requirements.txt` | Streamlit Cloud | `streamlit`, `supabase`, `requests` |
+| `.streamlit/secrets.toml` | Local dev only | **GITIGNORED — NEVER COMMIT** |
+| `.streamlit/config.toml` | Tracked | Dark theme |
+| `SETUP.md` | Docs | Workflow reference + CLI command cheatsheet |
+| `ProjectContext.md` | Docs | This file — LLM handoff |
+| `run_daily.ps1` | **Gitignored** | Task Scheduler script with live tokens |
+| `glizzness.db` | **Gitignored** | Local SQLite database |
+| `Sales/` | **Gitignored** | PDF sales reports |
 
 ---
 
-## Deployment Status (as of 2026-06-17)
+## Environment Variables / Secrets
 
-- [x] Supabase schema created
-- [x] All ~54,773 rows migrated from SQLite to Supabase
-- [x] RLS enabled, service_role-only access
-- [x] `db.py`, `sync.py`, `dashboard.py` written
-- [x] `requirements.txt` created
-- [x] `.streamlit/secrets.toml` template created (gitignored)
-- [ ] Fill actual API token values into `.streamlit/secrets.toml`
-- [ ] Test dashboard locally (`streamlit run dashboard.py`)
-- [ ] Deploy to Streamlit Community Cloud
-- [ ] Set secrets in Streamlit Cloud app settings
-- [ ] Share URL with James
+Read by `_get_secret(name)` in `db.py` and `sync.py`:
+tries `st.secrets[name]` first (Streamlit), falls back to `os.environ`.
+
+| Variable | Used by |
+|---|---|
+| `APP_PASSWORD` | dashboard.py — shared login password |
+| `SUPABASE_SERVICE_KEY` | db.py, sync.py |
+| `SQUARE_TOKEN` | sync.py:sync_square |
+| `WAVE_TOKEN` | sync.py:post_to_wave, post_single_loan_payment |
+| `WAVE_BUSINESS_ID` | sync.py:post_to_wave, post_single_loan_payment |
+| `WAVE_CLEARING_ACCOUNT_ID` | sync.py:build_wave_entries — "Square Settlements Clearing" |
+| `WAVE_BANK_ACCOUNT_ID` | sync.py accounts dict |
+| `WAVE_SALES_REVENUE_ID` | sync.py — "Food & Beverage Sales" |
+| `WAVE_TIPS_INCOME_ID` | sync.py — "Tips Collected" |
+| `WAVE_PROCESSING_FEES_ID` | sync.py — "Merchant Account Fees" |
+| `WAVE_SALES_TAX_ID` | sync.py — "Columbia Sales Tax" |
+| `WAVE_SALES_RETURNS_ID` | sync.py — "Sales Returns & Allowances" |
+| `WAVE_DISCOUNTS_ID` | sync.py — "Customer Discounts" |
+| `WAVE_WEENIE_CLEARING_ID` | sync.py — "Weenie Wagon Loan Clearing" |
+| `WAVE_WEENIE_NOTE_PAYABLE_ID` | sync.py — "The First Weenie Wagon" (liability) |
+| `WAVE_INTEREST_EXPENSE_ID` | sync.py — "Interest Expense" |
+
+The actual base64 Wave account ID values are in `.streamlit/secrets.toml` (local)
+and in Streamlit Cloud app settings. They are NOT stored in tracked files.
 
 ---
 
-## Known Gotchas
+## Critical Gotchas (read before writing any code)
 
-1. **Square `created_at` vs `arrival_date`:** Always fetch with a 7-day wider window;
-   filter to `arrival_date` in Python.
+### 1. Closed years — NEVER post 2022–2024
+The 2022, 2023, 2024 books are finalized and closed. Do not post, re-build,
+or modify journal entries for these years. Two safeguards are in place (see
+"Closed-Year Protection" section above). If you see "345 to post to wave"
+after a sync, do NOT tell the user to click "Post to Wave" — first check the
+date distribution of staged entries.
 
-2. **Wave `moneyTransactionCreate` liability restriction:** Can't use a liability account
-   as a line item. Weenie Wagon principal reduction requires the liability as the ANCHOR
-   with `direction: DEPOSIT` (which debits the liability = reduces balance).
+### 2. DEPOSIT_FEE entries use `gross_cents`, not `fee_cents`
+For payout entries with `type = "DEPOSIT_FEE"`: `fee_cents = 0` and
+`gross_cents` is a negative dollar amount representing Square's instant-deposit
+fee. Use `abs(gross_cents)` as the fee. Using `fee_cents` gives $0.
 
-3. **DEPOSIT_FEE entries:** `gross_cents` is negative, `fee_cents` is 0. Treat
-   `abs(gross_cents)` as a fee. DO NOT use `fee_cents` for this type.
+### 3. Discounts restore gross revenue
+`gross_sales += sale_cents - tax_cents + disc_cents` — discount is added BACK
+so that CR Food Sales = pre-discount revenue and DR Customer Discounts = the
+reduction. This is intentional GAAP treatment. Do not "simplify" this.
 
-4. **Discounts restore gross revenue:** `gross_sales += sale_cents - tax_cents + disc_cents`
-   so that CR Food Sales = pre-discount revenue, and DR Discounts = the reduction.
-   This gives Wave correct revenue figures for P&L.
+### 4. Wave liability restriction
+`moneyTransactionCreate` cannot include a liability account as a line item.
+Weenie Wagon principal reduction uses the liability as the ANCHOR with
+`direction: DEPOSIT` (DR liability = reduces balance). This is the only valid
+pattern.
 
-5. **Supabase 1000-row default limit:** Always paginate large table fetches.
-   `_fetch_all_rows()` in `db.py` handles this. For `.in_()` calls, batch at ≤150 IDs.
+### 5. Square `created_at` vs `arrival_date`
+Square's `/v2/payouts` API accepts `begin_time`/`end_time` which filters on
+`created_at`, not `arrival_date`. Always fetch with a 7-day wider window and
+filter to `arrival_date` in Python.
 
-6. **Wave externalId collision = idempotent:** If a posting fails partway through and
-   is re-run, Wave rejects the duplicate externalId with `ALREADY_EXISTS`. The scripts
-   treat this as success (entry was already posted in a prior run).
+### 6. Supabase 1000-row default limit
+Any query returning more than 1000 rows will be silently truncated. Always use
+`.range(offset, offset + 999)` pagination for large tables. `db.py:_fetch_all_rows()`
+handles this. For `.in_()` calls with many IDs, batch ≤150 per call.
 
-7. **Loan cutoff:** Payments on or before 2025-05-12 were entered manually in Wave.
-   Both `post_loan_payments.py` and `sync.py:build_loan_entries` skip these.
+### 7. Wave externalId = idempotent
+If posting fails mid-batch and is re-run, Wave returns `ALREADY_EXISTS` for
+already-posted entries. All posting code treats this as success (already done).
 
-8. **Supabase client singleton:** `db.py` caches the client in `_client`. If secrets
-   change mid-run (rare), restart the Streamlit app to reset.
+### 8. Loan cutoff date
+`MANUAL_LOAN_CUTOFF = "2025-05-12"` — payments on or before this date were
+entered manually in Wave and must never be processed by the scripts. All loan
+code uses `.gt("payment_date", MANUAL_LOAN_CUTOFF)`.
+
+### 9. build_wave_entries must skip 'closed' AND 'posted'
+Only skipping 'posted' will cause the function to rebuild all closed-year entries
+on the next run, creating thousands of queries and a connection drop. The skip
+condition is: `status in ("posted", "closed")`.
+
+### 10. wave_transactions debit/credit are dollars, not cents
+The `wave_transactions` table stores amounts as floats (dollars) matching the
+Wave CSV export format. The `journal_entries` amounts are in INTEGER CENTS.
+Never mix them without conversion.
+
+---
+
+## Known Open Issues
+
+- **2024-11-11 UNBALANCED entry**: `arrival_date = 2024-11-11`, status='error',
+  DR=$1,676.22, CR=$1,633.96, $42.26 gap. Needs investigation. Since 2024 is a
+  closed year, this entry is isolated and not affecting current operations.
+  Do not modify it without a clear reason.
+
+---
+
+## Normal Weekly Workflow (Trint's perspective)
+
+1. Open the Streamlit dashboard URL in any browser
+2. Look at the four status cards
+3. If Square is stale → **Sync Square**
+4. If Entries shows unbuilt → **Build Entries**
+5. If Wave shows staged → **Post to Wave**
+6. If Loan shows unposted → **Log Loan**, enter principal + interest from bank statement
+7. Periodically: export Wave CSV, upload via "Import Wave Transactions CSV"
+
+Or just hit **Full Sync** (runs steps 3–5 automatically).
+
+---
+
+## Development Workflow (Lance's perspective)
+
+- Edit on local machine: `streamlit run dashboard.py` (requires `.streamlit/secrets.toml`)
+- `git push` to `master` → Streamlit Cloud auto-redeploys within ~60 seconds
+- If Streamlit Cloud shows a stale version: reboot the app in the Streamlit Cloud dashboard
+- CLI scripts still work with `glizzness.db` (SQLite) for ad-hoc work
+- `run_daily.ps1` runs via Windows Task Scheduler at 9 AM daily (CLI path, SQLite)
