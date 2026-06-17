@@ -71,7 +71,7 @@ if "loan_form_open" not in st.session_state:
 
 top_col1, top_col2 = st.columns([6, 1])
 with top_col2:
-    refresh_btn = st.button("↻ Refresh", use_container_width=True)
+    refresh_btn = st.button("↻ Refresh", width='stretch')
 
 if st.session_state.status is None or refresh_btn:
     if modules_ok:
@@ -203,27 +203,27 @@ st.subheader("Actions")
 b1, b2, b3, b4, b5 = st.columns(5)
 
 with b1:
-    sq_btn = st.button("Sync Square", use_container_width=True,
+    sq_btn = st.button("Sync Square", width='stretch',
                        help="Pull latest Square payouts, entries, payments, and orders into Supabase")
 with b2:
-    build_btn = st.button("Build Entries", use_container_width=True,
+    build_btn = st.button("Build Entries", width='stretch',
                           help="Compute Wave journal entries from Square data (no API calls to Wave)")
 with b3:
-    wave_btn = st.button("Post to Wave", use_container_width=True,
+    wave_btn = st.button("Post to Wave", width='stretch',
                          help="Post staged journal entries to Wave")
 with b4:
-    loan_btn = st.button("Log Loan", use_container_width=True,
+    loan_btn = st.button("Log Loan", width='stretch',
                          help="Enter a loan payment from your bank statement and post to Wave")
 with b5:
-    full_btn = st.button("Full Sync", type="primary", use_container_width=True,
+    full_btn = st.button("Full Sync", type="primary", width='stretch',
                          help="Run all four steps in sequence")
 
 bx1, bx2 = st.columns([2, 3])
 with bx1:
-    var_btn = st.button("Check Variances", use_container_width=True,
+    var_btn = st.button("Check Variances", width='stretch',
                         help="Verify payout amounts match entry totals")
 with bx2:
-    if st.button("Clear Log", use_container_width=True):
+    if st.button("Clear Log", width='stretch'):
         st.session_state.run_log = []
         st.rerun()
 
@@ -393,4 +393,4 @@ if status and status.get("sync_log"):
             "Payments": row.get("payments_found", 0),
             "Orders":   row.get("orders_found", 0),
         })
-    st.dataframe(history_rows, use_container_width=True, hide_index=True)
+    st.dataframe(history_rows, width='stretch', hide_index=True)
