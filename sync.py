@@ -584,10 +584,23 @@ def build_wave_entries(begin_date: str = None, end_date: str = None,
 
 # ── Post Wave journal entries ──────────────────────────────────────────────────
 
-def post_to_wave(log: Callable = print) -> dict:
-    """Post staged journal entries to Wave. Skips already-posted (by externalId)."""
+CLOSED_YEAR_CUTOFF = "2025-01-01"  # entries before this date must never be posted via API
+
+
+def post_to_wave(begin_date: str = None, log: Callable = print) -> dict:
+    """Post staged journal entries to Wave. Skips already-posted (by externalId).
+
+    begin_date: only post entries on or after this date (default: CLOSED_YEAR_CUTOFF).
+    2022-2024 books are closed — passing an earlier date is blocked by the cutoff floor.
+    """
     if not _get_secret("WAVE_TOKEN") or not _get_secret("WAVE_BUSINESS_ID"):
         raise RuntimeError("WAVE_TOKEN and WAVE_BUSINESS_ID must be set")
+
+    # Hard floor: never post closed-year transactions regardless of what the caller passes.
+    effective_begin = begin_date or CLOSED_YEAR_CUTOFF
+    if effective_begin < CLOSED_YEAR_CUTOFF:
+        effective_begin = CLOSED_YEAR_CUTOFF
+        log(f"  [guard] begin_date raised to {CLOSED_YEAR_CUTOFF} (closed-year floor)")
 
     sb    = get_client()
     accts = _wave_accounts()
@@ -597,11 +610,12 @@ def post_to_wave(log: Callable = print) -> dict:
         sb.table("journal_entries")
         .select("payout_id,arrival_date,payout_net_cents")
         .in_("status", ["staged", "error"])
+        .gte("arrival_date", effective_begin)
         .order("arrival_date")
         .execute()
     )
     to_post = staged_r.data or []
-    log(f"  Posting {len(to_post)} journal entr{'y' if len(to_post) == 1 else 'ies'} to Wave...")
+    log(f"  Posting {len(to_post)} journal entr{'y' if len(to_post) == 1 else 'ies'} to Wave (from {effective_begin})...")
 
     posted = errors = 0
 
@@ -818,3 +832,30 @@ def post_loan_payments(log: Callable = print) -> dict:
 
     log(f"  Loan post complete — posted: {posted}  errors: {errors}")
     return {"posted": posted, "errors": errors}
+
+
+# ── Close a calendar year ──────────────────────────────────────────────────────
+
+def close_year(year: int, log: Callable = print) -> dict:
+    """Mark all journal_entries for a calendar year as 'closed'.
+
+    Closed entries are excluded from post_to_wave() queries and can never be
+    posted again. Call this after a year's books are finalized in Wave.
+    The hard floor in post_to_wave() (CLOSED_YEAR_CUTOFF) only covers years
+    before 2025; closing later years via this function extends that protection.
+    """
+    sb = get_client()
+    year_begin = f"{year}-01-01"
+    next_begin = f"{year + 1}-01-01"
+
+    r = (
+        sb.table("journal_entries")
+        .update({"status": "closed", "error_msg": f"Closed {year}"})
+        .gte("arrival_date", year_begin)
+        .lt("arrival_date", next_begin)
+        .neq("status", "closed")
+        .execute()
+    )
+    count = len(r.data or [])
+    log(f"  {year}: {count} entr{'y' if count == 1 else 'ies'} marked closed")
+    return {"closed": count, "year": year}

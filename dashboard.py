@@ -49,7 +49,7 @@ try:
     from db import get_dashboard_status, get_variances
     from sync import (
         sync_square, build_wave_entries, post_to_wave,
-        build_loan_entries, post_loan_payments,
+        build_loan_entries, post_loan_payments, close_year,
     )
     modules_ok = True
 except Exception as e:
@@ -155,6 +155,29 @@ with st.expander("Square sync date range (default: current year to today)"):
     sync_begin = dr1.date_input("Begin date", value=date(date.today().year, 1, 1))
     sync_end   = dr2.date_input("End date",   value=date.today())
 
+with st.expander("Wave post date (only post entries on or after this date)"):
+    wave_post_begin = st.date_input(
+        "Post entries from",
+        value=date(2025, 1, 1),
+        min_value=date(2025, 1, 1),
+        help="Cannot go before 2025-01-01 — earlier years are closed books.",
+    )
+
+with st.expander("⚠ Close a Year"):
+    st.warning(
+        "Marking a year closed sets all its journal entries to **closed** status. "
+        "They will never be posted to Wave again. Use this after finalizing a year's books."
+    )
+    close_year_options = list(range(2022, date.today().year + 1))
+    close_year_val  = st.selectbox("Year to close", options=close_year_options,
+                                    index=None, placeholder="Select year…")
+    confirm_close   = st.checkbox("I understand this is permanent and cannot be undone")
+    close_yr_btn    = st.button(
+        f"Close {close_year_val}" if close_year_val else "Close Year",
+        disabled=not (close_year_val and confirm_close),
+        type="secondary",
+    )
+
 # ── Action buttons ─────────────────────────────────────────────────────────────
 
 st.subheader("Actions")
@@ -229,7 +252,8 @@ if build_btn:
 
 if wave_btn:
     with st.spinner("Posting to Wave..."):
-        _run("Post to Wave", post_to_wave)
+        _run("Post to Wave", post_to_wave,
+             begin_date=wave_post_begin.strftime("%Y-%m-%d"))
     ran_any = True
 
 if loan_btn:
@@ -244,9 +268,15 @@ if full_btn:
              begin_date=sync_begin.strftime("%Y-%m-%d"),
              end_date=sync_end.strftime("%Y-%m-%d"))
         _run("Build Wave Entries", build_wave_entries)
-        _run("Post to Wave", post_to_wave)
+        _run("Post to Wave", post_to_wave,
+             begin_date=wave_post_begin.strftime("%Y-%m-%d"))
         _run("Build Loan Entries", build_loan_entries)
         _run("Post Loan Payments", post_loan_payments)
+    ran_any = True
+
+if close_yr_btn and close_year_val and confirm_close:
+    with st.spinner(f"Closing year {close_year_val}..."):
+        _run(f"Close Year {close_year_val}", close_year, year=int(close_year_val))
     ran_any = True
 
 if var_btn:
