@@ -6,8 +6,11 @@ The original CLI scripts (sync_square.py, post_to_wave.py, etc.) still work
 unchanged with the local SQLite database.
 """
 
+import csv
+import io
 import os
 import json
+import re
 import time
 import requests
 from datetime import date, datetime, timedelta, timezone
@@ -859,3 +862,105 @@ def close_year(year: int, log: Callable = print) -> dict:
     count = len(r.data or [])
     log(f"  {year}: {count} entr{'y' if count == 1 else 'ies'} marked closed")
     return {"closed": count, "year": year}
+
+
+# ── Import Wave CSV ────────────────────────────────────────────────────────────
+
+def import_wave_csv(file_content: str, source_name: str,
+                    replace: bool = False, log: Callable = print) -> dict:
+    """Parse a Wave CSV export and upsert rows into Supabase wave_transactions.
+
+    Wave → Accounting → Transactions → Export → Transactions CSV.
+    replace=True deletes all existing rows for this source_file before inserting,
+    which applies any corrections made in Wave since the last import.
+    row_key = date|description|account|debit|credit — exact duplicates are no-ops.
+    """
+    sb  = get_client()
+    now = datetime.now(timezone.utc).isoformat()
+
+    existing_r = (
+        sb.table("wave_transactions")
+        .select("row_key", count="exact")
+        .eq("source_file", source_name)
+        .execute()
+    )
+    existing_count = existing_r.count or 0
+
+    if replace and existing_count:
+        sb.table("wave_transactions").delete().eq("source_file", source_name).execute()
+        log(f"  Cleared {existing_count} existing row(s) for '{source_name}'")
+    elif existing_count:
+        log(f"  '{source_name}' already has {existing_count} row(s) — exact duplicates will be skipped")
+
+    # ── Parse CSV ──────────────────────────────────────────────────────────────
+    # Wave CSV format: 4 metadata rows, then a header row, then data rows.
+    # Account-name section header rows have a non-date value in the date column.
+
+    f = io.StringIO(file_content)
+    for _ in range(4):
+        f.readline()
+
+    reader = csv.DictReader(f)
+    headers = reader.fieldnames or []
+    col: dict = {}
+    for h in headers:
+        hl = h.lower().strip()
+        if hl == "date":           col["date"]    = h
+        elif hl == "description":  col["desc"]    = h
+        elif "debit"   in hl:      col["debit"]   = h
+        elif "credit"  in hl:      col["credit"]  = h
+        elif "balance" in hl:      col["balance"] = h
+
+    missing = [k for k in ("date", "desc", "debit", "credit") if k not in col]
+    if missing:
+        raise ValueError(f"Cannot map CSV columns {missing}. Found headers: {headers}")
+
+    def _amt(val: str) -> float:
+        v = (val or "").strip().replace(",", "").replace("$", "").replace("(", "-").replace(")", "")
+        try:
+            return float(v)
+        except ValueError:
+            return 0.0
+
+    _is_date = re.compile(r"^\d{4}-\d{2}-\d{2}$").match
+
+    current_account = ""
+    rows: list = []
+
+    for row in reader:
+        date_cell   = (row.get(col["date"])   or "").strip()
+        description = (row.get(col["desc"])   or "").strip()
+        debit       = _amt(row.get(col["debit"],   ""))
+        credit      = _amt(row.get(col["credit"],  ""))
+        balance     = _amt(row.get(col.get("balance", ""), ""))
+
+        if date_cell and not _is_date(date_cell):
+            current_account = date_cell
+            continue
+        if not _is_date(date_cell):
+            continue
+        if description.lower() in ("starting balance", "ending balance", "total"):
+            continue
+
+        row_key = f"{date_cell}|{description}|{current_account}|{debit:.2f}|{credit:.2f}"
+        rows.append({
+            "row_key":      row_key,
+            "txn_date":     date_cell,
+            "description":  description,
+            "account_name": current_account,
+            "debit":        debit,
+            "credit":       credit,
+            "balance":      balance,
+            "direction":    "CREDIT" if credit > 0 else "DEBIT",
+            "net_amount":   credit - debit,
+            "imported_at":  now,
+            "source_file":  source_name,
+        })
+
+    if not rows:
+        log("  No data rows found in CSV")
+        return {"upserted": 0, "source": source_name}
+
+    _upsert(sb, "wave_transactions", rows)
+    log(f"  Upserted {len(rows)} row(s) from '{source_name}' into wave_transactions")
+    return {"upserted": len(rows), "source": source_name}

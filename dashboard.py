@@ -50,6 +50,7 @@ try:
     from sync import (
         sync_square, build_wave_entries, post_to_wave,
         build_loan_entries, post_loan_payments, close_year,
+        import_wave_csv,
     )
     modules_ok = True
 except Exception as e:
@@ -178,6 +179,23 @@ with st.expander("⚠ Close a Year"):
         type="secondary",
     )
 
+with st.expander("Import Wave Transactions CSV"):
+    st.caption(
+        "Wave → Accounting → Transactions → Export → Transactions CSV  "
+        "— upload here to keep the wave_transactions table in sync."
+    )
+    wave_csv_file   = st.file_uploader("Wave CSV", type=["csv"], label_visibility="collapsed")
+    wave_csv_replace = st.checkbox(
+        "Replace existing rows for this file (use after correcting entries in Wave)",
+        key="wave_csv_replace",
+    )
+    wave_import_btn = st.button(
+        "Import to Supabase",
+        disabled=wave_csv_file is None,
+        type="primary",
+        key="wave_import_btn",
+    )
+
 # ── Action buttons ─────────────────────────────────────────────────────────────
 
 st.subheader("Actions")
@@ -272,6 +290,15 @@ if full_btn:
              begin_date=wave_post_begin.strftime("%Y-%m-%d"))
         _run("Build Loan Entries", build_loan_entries)
         _run("Post Loan Payments", post_loan_payments)
+    ran_any = True
+
+if wave_import_btn and wave_csv_file is not None:
+    with st.spinner(f"Importing {wave_csv_file.name}..."):
+        content = wave_csv_file.read().decode("utf-8-sig")
+        _run("Import Wave CSV", import_wave_csv,
+             file_content=content,
+             source_name=wave_csv_file.name,
+             replace=wave_csv_replace)
     ran_any = True
 
 if close_yr_btn and close_year_val and confirm_close:
