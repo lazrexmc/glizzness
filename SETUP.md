@@ -263,14 +263,86 @@ Then re-run `python valuation.py` to refresh the report.
 
 ---
 
+## Streamlit Dashboard (cloud-accessible)
+
+A browser-based dashboard that shows sync status and provides buttons to run each
+step — accessible from any machine (phone, James's computer, etc.).
+
+**Files:**
+| File | Purpose |
+|------|---------|
+| `dashboard.py` | Streamlit UI — status cards, action buttons, run log |
+| `db.py` | Supabase client, status queries, variance check |
+| `sync.py` | Supabase-backed versions of all sync/post functions |
+| `requirements.txt` | Python dependencies for Streamlit Cloud |
+| `.streamlit/secrets.toml` | Local dev secrets (gitignored — never commit) |
+| `.streamlit/config.toml` | Theme (tracked in git) |
+
+**Run locally:**
+```powershell
+pip install streamlit supabase requests
+streamlit run dashboard.py
+```
+
+**Deploy to Streamlit Community Cloud:**
+1. Push repo to GitHub (already set up at github.com/lazrexmc/glizzness)
+2. Go to share.streamlit.io → New app → select repo/branch → `dashboard.py`
+3. In "Advanced settings → Secrets", paste the full contents of `.streamlit/secrets.toml`
+4. Replace all placeholder values with real API keys/tokens
+5. Share the app URL with James
+
+**Secrets required (Streamlit Cloud → App Settings → Secrets):**
+```toml
+APP_PASSWORD = "a shared password for Lance and James"
+SUPABASE_SERVICE_KEY = "..."
+SQUARE_TOKEN = "..."
+WAVE_TOKEN = "..."
+WAVE_BUSINESS_ID = "..."
+WAVE_CLEARING_ACCOUNT_ID = "..."
+WAVE_BANK_ACCOUNT_ID = "..."
+WAVE_SALES_REVENUE_ID = "..."
+WAVE_TIPS_INCOME_ID = "..."
+WAVE_PROCESSING_FEES_ID = "..."
+WAVE_SALES_TAX_ID = "..."
+WAVE_SALES_RETURNS_ID = "..."
+WAVE_DISCOUNTS_ID = "..."
+WAVE_WEENIE_CLEARING_ID = "..."
+WAVE_WEENIE_NOTE_PAYABLE_ID = "..."
+WAVE_INTEREST_EXPENSE_ID = "..."
+```
+
+**Dashboard workflow (normal weekly use):**
+1. Open dashboard URL in browser
+2. Check the four status cards — Square, Entries, Wave, Loan
+3. If Square is stale → click **Sync Square**
+4. If Entries shows unbuilt → click **Build Entries**
+5. If Wave shows staged → click **Post to Wave**
+6. If Loan shows unposted → click **Post Loans**
+7. Or click **Full Sync** to run all four in one shot
+
+---
+
+## Supabase (hosted database)
+
+All scripts can still use the local `glizzness.db` (SQLite) for CLI use.
+The dashboard uses Supabase (Postgres) so it runs without a local database file.
+
+- **Project URL:** `https://ikhcbncnaojrndilmnnd.supabase.co`
+- **Schema:** `supabase_schema.sql` — run once in Supabase SQL Editor
+- **Migration:** `migrate_to_supabase.py` — one-time SQLite → Supabase copy (done)
+- **Access:** service_role key only; RLS enabled with no policies (anon key blocked)
+
+---
+
 ## New machine setup
 
 ```powershell
 git clone https://github.com/lazrexmc/glizzness
 cd glizzness
-pip install requests
+pip install requests supabase streamlit
 # set all $env: vars listed in Step 3
 python sync_square.py 2023-01-01 2026-12-31     # rebuild Square DB
 python sync_wave.py --sync-accounts              # rebuild Wave accounts
 # import Wave CSVs for each year
+# or just open the Streamlit dashboard URL — no local setup needed
 ```

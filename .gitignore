@@ -15,6 +15,9 @@
 run_daily.ps1
 run_daily.log
 
+# Streamlit secrets — NEVER commit
+.streamlit/secrets.toml
+
 # Personal / sensitive documents — NEVER commit
 *.pdf
 Sales/
