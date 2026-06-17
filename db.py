@@ -151,7 +151,64 @@ def get_financials() -> dict:
                 bucket[key][k] += (row.get(k) or 0)
             bucket[key]["count"] += 1
 
-    return {"by_year": by_year, "by_month": by_month}
+    # ── Loan interest by year ─────────────────────────────────────────────────
+    lje_r = (
+        sb.table("loan_journal_entries")
+        .select("payment_date,interest")
+        .eq("status", "posted")
+        .execute()
+    )
+    loan_int_by_yr: dict = {}
+    for row in (lje_r.data or []):
+        yr = (row.get("payment_date") or "")[:4]
+        if yr:
+            loan_int_by_yr[yr] = round(
+                loan_int_by_yr.get(yr, 0.0) + float(row.get("interest") or 0), 2
+            )
+
+    # ── Wave operating expenses by account and year ───────────────────────────
+    acc_r = sb.table("wave_accounts").select("name,type_value,is_archived").execute()
+    exp_names = {
+        r["name"] for r in (acc_r.data or [])
+        if "expense" in (r.get("type_value") or "").lower()
+        and not r.get("is_archived")
+    }
+
+    wave_expenses: dict = {}  # {account_name: {year: total_debit}}
+    if exp_names:
+        exp_list = sorted(exp_names)
+        for i in range(0, len(exp_list), 50):
+            batch = exp_list[i:i + 50]
+            offset = 0
+            while True:
+                wt_r = (
+                    sb.table("wave_transactions")
+                    .select("txn_date,account_name,debit")
+                    .in_("account_name", batch)
+                    .gt("debit", 0)
+                    .range(offset, offset + 999)
+                    .execute()
+                )
+                rows2 = wt_r.data or []
+                for row in rows2:
+                    yr   = (row.get("txn_date") or "")[:4]
+                    acct = row.get("account_name") or "Other"
+                    amt  = float(row.get("debit") or 0)
+                    if yr and amt > 0:
+                        wave_expenses.setdefault(acct, {})
+                        wave_expenses[acct][yr] = round(
+                            wave_expenses[acct].get(yr, 0.0) + amt, 2
+                        )
+                if len(rows2) < 1000:
+                    break
+                offset += 1000
+
+    return {
+        "by_year":        by_year,
+        "by_month":       by_month,
+        "loan_int_by_yr": loan_int_by_yr,
+        "wave_expenses":  wave_expenses,
+    }
 
 
 def get_variances() -> list:

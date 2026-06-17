@@ -416,6 +416,9 @@ with st.expander("📊 Financial Reports"):
         if not by_year:
             st.info("No posted entries found — sync and post Square data first.")
         else:
+            loan_int   = fin.get("loan_int_by_yr", {})
+            wave_exp   = fin.get("wave_expenses", {})
+
             # ── Annual P&L ────────────────────────────────────────────────────
             st.subheader("Annual Summary")
 
@@ -429,6 +432,7 @@ with st.expander("📊 Financial Reports"):
                 dis = b["discounts_cents"]
                 ret = b["returns_cents"]
                 lbl = f"{yr} YTD" if yr == curr_yr else yr
+                li  = loan_int.get(yr, 0.0)
                 tbl[lbl] = {
                     "Gross Sales":          _d(gs),
                     "Discounts":            _neg(dis),
@@ -437,6 +441,7 @@ with st.expander("📊 Financial Reports"):
                     "Sales Tax Collected":  _d(b["taxes_cents"]),
                     "Tips Collected":       _d(b["tips_cents"]),
                     "Processing Fees":      _neg(b["fees_cents"]),
+                    "Loan Interest":        f"(${li:,.0f})" if li else "—",
                     "Net to Bank":          _d(b["payout_net_cents"]),
                     "# Payouts":            str(b["count"]),
                 }
@@ -478,3 +483,52 @@ with st.expander("📊 Financial Reports"):
                 km2.metric("Annualized Revenue",  f"${annualized:,.0f}")
                 km3.metric("Tip Rate",             f"{tip_rate:.1f}%")
                 km4.metric("Processing Fee Rate",  f"{fee_rate:.1f}%")
+
+            # ── Operating expenses ────────────────────────────────────────────
+            st.subheader("Operating Expenses")
+
+            all_exp_yrs = sorted(
+                {yr for accts in wave_exp.values() for yr in accts}
+                | set(loan_int.keys())
+            )
+
+            if not all_exp_yrs:
+                st.caption(
+                    "No expense data yet — import a Wave transactions CSV to see "
+                    "operating expenses by category."
+                )
+            else:
+                def _yr_lbl(yr): return f"{yr} YTD" if yr == curr_yr else yr
+
+                yr_labels = {yr: _yr_lbl(yr) for yr in all_exp_yrs}
+                exp_rows  = {}
+                yr_totals = {yr: 0.0 for yr in all_exp_yrs}
+
+                if loan_int:
+                    row = {}
+                    for yr in all_exp_yrs:
+                        amt = loan_int.get(yr, 0.0)
+                        row[yr_labels[yr]] = f"${amt:,.0f}" if amt else "—"
+                        yr_totals[yr] += amt
+                    exp_rows["Loan Interest"] = row
+
+                for acct in sorted(wave_exp):
+                    row = {}
+                    for yr in all_exp_yrs:
+                        amt = wave_exp[acct].get(yr, 0.0)
+                        row[yr_labels[yr]] = f"${amt:,.0f}" if amt else "—"
+                        yr_totals[yr] += amt
+                    exp_rows[acct] = row
+
+                exp_rows["TOTAL"] = {
+                    yr_labels[yr]: f"${v:,.0f}" for yr, v in yr_totals.items()
+                }
+
+                exp_df = pd.DataFrame(exp_rows).T
+                exp_df.index.name = "Category"
+                st.dataframe(exp_df, width='stretch')
+
+                if not wave_exp:
+                    st.caption(
+                        "Import a Wave transactions CSV to add operating expense categories."
+                    )
