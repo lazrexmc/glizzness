@@ -408,8 +408,8 @@ def build_wave_entries(begin_date: str = None, end_date: str = None,
     payouts = payouts_r.data or []
 
     je_r = sb.table("journal_entries").select("payout_id,status").execute()
-    posted_pids = {r["payout_id"] for r in (je_r.data or []) if r.get("status") == "posted"}
-    to_build = [p for p in payouts if p["payout_id"] not in posted_pids]
+    skip_pids = {r["payout_id"] for r in (je_r.data or []) if r.get("status") in ("posted", "closed")}
+    to_build = [p for p in payouts if p["payout_id"] not in skip_pids]
 
     log(f"  Building entries for {len(to_build)} payout(s) (of {len(payouts)} in range)...")
     if not to_build:
