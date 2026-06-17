@@ -261,8 +261,8 @@ def sync_square(begin_date: str = None, end_date: str = None,
 
     log(f"Square sync: {begin_date} → {end_date}")
 
-    # 1. Payouts
-    payouts = _fetch_payouts_sq(begin_date, end_date, log)
+    # 1. Payouts — deduplicate by id (Square can return the same payout on multiple pages)
+    payouts = list({p["id"]: p for p in _fetch_payouts_sq(begin_date, end_date, log)}.values())
     if payouts:
         _upsert(sb, "payouts", [_payout_rec(p) for p in payouts])
 
@@ -289,11 +289,11 @@ def sync_square(begin_date: str = None, end_date: str = None,
         _upsert(sb, "payout_entries", entry_buf)
     log(f"  → {total_entries} payout entr{'y' if total_entries == 1 else 'ies'}")
 
-    # 3. Payments — date-range pull (more efficient than per-ID)
+    # 3. Payments — date-range pull, deduplicated
     pay_begin = (
         datetime.strptime(begin_date, "%Y-%m-%d").date() - timedelta(days=8)
     ).strftime("%Y-%m-%d")
-    payments = _fetch_payments_sq(pay_begin, end_date, log)
+    payments = list({p["id"]: p for p in _fetch_payments_sq(pay_begin, end_date, log)}.values())
     if payments:
         _upsert(sb, "payments", [_payment_rec(p) for p in payments])
 
