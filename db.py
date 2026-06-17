@@ -78,7 +78,10 @@ def get_dashboard_status() -> dict:
     errors  = status_counts.get("error", 0)
 
     # ── Loan ────────────────────────────────────────────────────────────────
-    lp_r  = sb.table("loan_payments").select("payment_date").execute()
+    # Only count payments after the manual-entry cutoff — pre-cutoff payments
+    # were entered directly in Wave and will never have journal_entries rows.
+    LOAN_CUTOFF = "2025-05-12"
+    lp_r  = sb.table("loan_payments").select("payment_date").gt("payment_date", LOAN_CUTOFF).execute()
     lje_r = sb.table("loan_journal_entries").select("payment_date,status").execute()
     loan_dates  = {r["payment_date"] for r in (lp_r.data or [])}
     lje_posted  = {r["payment_date"] for r in (lje_r.data or []) if r.get("status") == "posted"}
