@@ -119,6 +119,41 @@ def get_dashboard_status() -> dict:
     }
 
 
+def get_financials() -> dict:
+    """Aggregate posted/closed journal_entries by year and month for reports."""
+    sb = get_client()
+    r = (
+        sb.table("journal_entries")
+        .select(
+            "arrival_date,gross_sales_cents,tips_cents,taxes_cents,"
+            "discounts_cents,returns_cents,fees_cents,payout_net_cents"
+        )
+        .in_("status", ["posted", "closed"])
+        .order("arrival_date")
+        .execute()
+    )
+    rows = r.data or []
+
+    by_year  = {}
+    by_month = {}
+    KEYS = ("gross_sales_cents", "tips_cents", "taxes_cents",
+            "discounts_cents", "returns_cents", "fees_cents", "payout_net_cents")
+
+    for row in rows:
+        arr = row.get("arrival_date") or ""
+        if len(arr) < 7:
+            continue
+        for bucket, key in [(by_year, arr[:4]), (by_month, arr[:7])]:
+            if key not in bucket:
+                bucket[key] = {k: 0 for k in KEYS}
+                bucket[key]["count"] = 0
+            for k in KEYS:
+                bucket[key][k] += (row.get(k) or 0)
+            bucket[key]["count"] += 1
+
+    return {"by_year": by_year, "by_month": by_month}
+
+
 def get_variances() -> list:
     """Return payouts where |payout_amount - sum(entry net)| > 5 cents."""
     sb = get_client()

@@ -46,7 +46,7 @@ st.caption("The Glizzness LLC — Square → Wave sync status and controls")
 # ── Import sync modules (after secrets are available) ─────────────────────────
 
 try:
-    from db import get_dashboard_status, get_variances
+    from db import get_dashboard_status, get_variances, get_financials
     from sync import (
         sync_square, build_wave_entries, post_to_wave,
         post_single_loan_payment, close_year, import_wave_csv,
@@ -66,6 +66,8 @@ if "status_error" not in st.session_state:
     st.session_state.status_error = None
 if "loan_form_open" not in st.session_state:
     st.session_state.loan_form_open = False
+if "financials" not in st.session_state:
+    st.session_state.financials = None
 
 # ── Load / refresh status ─────────────────────────────────────────────────────
 
@@ -77,7 +79,8 @@ if st.session_state.status is None or refresh_btn:
     if modules_ok:
         with st.spinner("Loading status..."):
             try:
-                st.session_state.status = get_dashboard_status()
+                st.session_state.status     = get_dashboard_status()
+                st.session_state.financials = get_financials()
                 st.session_state.status_error = None
             except Exception as e:
                 st.session_state.status_error = str(e)
@@ -366,9 +369,10 @@ if var_btn:
         else:
             st.success("All payouts balance perfectly — no variances found.")
 
-# Force status refresh after any action
+# Force status + financials refresh after any action
 if ran_any:
-    st.session_state.status = None
+    st.session_state.status     = None
+    st.session_state.financials = None
 
 # ── Run log display ────────────────────────────────────────────────────────────
 
@@ -394,3 +398,83 @@ if status and status.get("sync_log"):
             "Orders":   row.get("orders_found", 0),
         })
     st.dataframe(history_rows, width='stretch', hide_index=True)
+
+# ── Financial Reports ──────────────────────────────────────────────────────────
+
+st.divider()
+with st.expander("📊 Financial Reports"):
+    fin = st.session_state.financials
+    if fin is None:
+        st.info("Click ↻ Refresh to load reports.")
+    else:
+        import pandas as pd
+
+        by_year  = fin["by_year"]
+        by_month = fin["by_month"]
+        curr_yr  = str(date.today().year)
+
+        if not by_year:
+            st.info("No posted entries found — sync and post Square data first.")
+        else:
+            # ── Annual P&L ────────────────────────────────────────────────────
+            st.subheader("Annual Summary")
+
+            def _d(c):  return f"${c/100:,.0f}"
+            def _neg(c): return f"(${c/100:,.0f})" if c else "—"
+
+            tbl = {}
+            for yr in sorted(by_year.keys()):
+                b   = by_year[yr]
+                gs  = b["gross_sales_cents"]
+                dis = b["discounts_cents"]
+                ret = b["returns_cents"]
+                lbl = f"{yr} YTD" if yr == curr_yr else yr
+                tbl[lbl] = {
+                    "Gross Sales":          _d(gs),
+                    "Discounts":            _neg(dis),
+                    "Returns":              _neg(ret),
+                    "Net Sales":            _d(gs - dis - ret),
+                    "Sales Tax Collected":  _d(b["taxes_cents"]),
+                    "Tips Collected":       _d(b["tips_cents"]),
+                    "Processing Fees":      _neg(b["fees_cents"]),
+                    "Net to Bank":          _d(b["payout_net_cents"]),
+                    "# Payouts":            str(b["count"]),
+                }
+
+            st.dataframe(pd.DataFrame(tbl), width='stretch')
+            st.caption(
+                "Sales Tax Collected is a pass-through liability remitted to the state — "
+                "not business income or expense."
+            )
+
+            # ── Monthly revenue chart ─────────────────────────────────────────
+            st.subheader(f"{curr_yr} Monthly Revenue")
+            MO = {"01":"Jan","02":"Feb","03":"Mar","04":"Apr","05":"May","06":"Jun",
+                  "07":"Jul","08":"Aug","09":"Sep","10":"Oct","11":"Nov","12":"Dec"}
+            curr_months = {k: v for k, v in by_month.items() if k[:4] == curr_yr}
+            if curr_months:
+                chart_df = pd.DataFrame({
+                    "Gross Sales ($)": {
+                        MO.get(k[5:], k[5:]): curr_months[k]["gross_sales_cents"] / 100
+                        for k in sorted(curr_months)
+                    }
+                })
+                st.bar_chart(chart_df)
+            else:
+                st.info(f"No {curr_yr} data yet.")
+
+            # ── Key metrics ───────────────────────────────────────────────────
+            st.subheader(f"{curr_yr} at a Glance")
+            cy = by_year.get(curr_yr, {})
+            if cy:
+                n_mo       = max(len(curr_months), 1)
+                avg_mo     = (cy["gross_sales_cents"] / 100) / n_mo
+                annualized = avg_mo * 12
+                tip_rate   = cy["tips_cents"] / max(cy["gross_sales_cents"], 1) * 100
+                fee_rate   = cy["fees_cents"] / max(cy["gross_sales_cents"], 1) * 100
+
+                km1, km2, km3, km4 = st.columns(4)
+                km1.metric("Avg Monthly Revenue", f"${avg_mo:,.0f}")
+                km2.metric("Annualized Revenue",  f"${annualized:,.0f}")
+                km3.metric("Tip Rate",             f"{tip_rate:.1f}%")
+                km4.metric("Processing Fee Rate",  f"{fee_rate:.1f}%")
