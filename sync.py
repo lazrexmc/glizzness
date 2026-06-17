@@ -412,15 +412,26 @@ def build_wave_entries(begin_date: str = None, end_date: str = None,
     if not to_build:
         return {"built": 0, "warned": 0, "skipped": len(payouts)}
 
-    # Batch-fetch payout entries for all payouts to build
+    # Batch-fetch payout entries for all payouts to build (paginated — Supabase caps at 1000/call)
     to_build_ids = [p["payout_id"] for p in to_build]
     all_raw_entries = []
-    for i in range(0, len(to_build_ids), 100):
-        batch = to_build_ids[i:i + 100]
-        r = sb.table("payout_entries").select(
-            "payout_id,type,gross_cents,fee_cents,net_cents,payment_id"
-        ).in_("payout_id", batch).execute()
-        all_raw_entries.extend(r.data or [])
+    PAGE = 1000
+    for i in range(0, len(to_build_ids), 50):
+        batch = to_build_ids[i:i + 50]
+        offset = 0
+        while True:
+            r = (
+                sb.table("payout_entries")
+                .select("payout_id,type,gross_cents,fee_cents,net_cents,payment_id")
+                .in_("payout_id", batch)
+                .range(offset, offset + PAGE - 1)
+                .execute()
+            )
+            chunk = r.data or []
+            all_raw_entries.extend(chunk)
+            if len(chunk) < PAGE:
+                break
+            offset += PAGE
 
     entries_by_payout: dict = {}
     all_pay_ids: set = set()
@@ -429,26 +440,47 @@ def build_wave_entries(begin_date: str = None, end_date: str = None,
         if e.get("payment_id"):
             all_pay_ids.add(e["payment_id"])
 
-    # Batch-fetch payments
+    # Batch-fetch payments (paginated)
     payments_map: dict = {}
-    for i in range(0, len(list(all_pay_ids)), 150):
-        batch = list(all_pay_ids)[i:i + 150]
-        r = sb.table("payments").select(
-            "payment_id,amount_cents,tip_cents,order_id"
-        ).in_("payment_id", batch).execute()
-        for row in (r.data or []):
-            payments_map[row["payment_id"]] = row
+    pay_id_list = list(all_pay_ids)
+    for i in range(0, len(pay_id_list), 150):
+        batch = pay_id_list[i:i + 150]
+        offset = 0
+        while True:
+            r = (
+                sb.table("payments")
+                .select("payment_id,amount_cents,tip_cents,order_id")
+                .in_("payment_id", batch)
+                .range(offset, offset + PAGE - 1)
+                .execute()
+            )
+            chunk = r.data or []
+            for row in chunk:
+                payments_map[row["payment_id"]] = row
+            if len(chunk) < PAGE:
+                break
+            offset += PAGE
 
-    # Batch-fetch orders
+    # Batch-fetch orders (paginated)
     all_order_ids = list({p["order_id"] for p in payments_map.values() if p.get("order_id")})
     orders_map: dict = {}
     for i in range(0, len(all_order_ids), 150):
         batch = all_order_ids[i:i + 150]
-        r = sb.table("orders").select(
-            "order_id,total_tax_cents,total_discount_cents"
-        ).in_("order_id", batch).execute()
-        for row in (r.data or []):
-            orders_map[row["order_id"]] = row
+        offset = 0
+        while True:
+            r = (
+                sb.table("orders")
+                .select("order_id,total_tax_cents,total_discount_cents")
+                .in_("order_id", batch)
+                .range(offset, offset + PAGE - 1)
+                .execute()
+            )
+            chunk = r.data or []
+            for row in chunk:
+                orders_map[row["order_id"]] = row
+            if len(chunk) < PAGE:
+                break
+            offset += PAGE
 
     built = warned = 0
     now = datetime.now(timezone.utc).isoformat()
