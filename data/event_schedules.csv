@@ -1,9 +1,9 @@
 id,event_id,month,display_text,recurrence_text,year_specific
 1,1,,"Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)","Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)",true
-2,2,3,Mar 5-8 (2026); Mar 4-7 (2027),,true
+2,2,3,Mar 5-8 (2026),,true
 3,3,4,Spring 2026 (food-truck registration to Mar 15),,true
 4,4,4,Apr 26 (rain date May 3); 12-6pm,,true
-5,5,5,Mid-May (May 13-16),,true
+5,5,5,May 13-16 (2026),,true
 6,6,5,Mid-May (2027),,false
 7,7,5,Late May - early June (May 29-Jun 6),,true
 8,8,5,"May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2","May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2",true
@@ -12,14 +12,14 @@ id,event_id,month,display_text,recurrence_text,year_specific
 11,11,6,Fourth weekend of June,,false
 12,12,6,Jun 27 - Jul 5 (centered on Jul 4),,true
 13,13,7,Jul 21-25,,true
-14,14,7,Late July / early August (verify),,false
+14,14,7,Jul 31 - Aug 8 (2026),,true
 15,15,8,Aug 4-9,,true
 16,16,8,Aug 7-8,,true
 17,17,8,Aug 13-23,,true
 18,18,8,Aug 13-23,,true
-19,19,8,Mid-late August (unverified),,false
+19,19,8,Aug 13-23 (2026),,true
 20,20,8,Aug 28 - Sep 7 (ends Labor Day),,true
-21,21,9,Labor Day weekend (4 days),,false
+21,21,9,Sep 1-4 (2026),,true
 22,22,9,Saturday (Sep 12),,true
 23,23,9,Sep 18-20 (2026),,true
 24,24,9,Sep 26 (10a-5p),,true
@@ -30,7 +30,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 29,29,10,All weekends in October,All weekends in October,false
 30,30,10,Oct 10-11 (9a-5p both days),,true
 31,31,10,Oct 16-25,,true
-32,32,12,First Friday of December (6-8pm),,false
+32,32,12,"First Friday Dec (Dec 4, 2026), 6-8pm",,true
 33,33,9,N/A,,false
 34,34,8,Aug 28-30,,true
 35,35,9,Sep 18-19,,true
@@ -130,7 +130,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 129,129,7,Jul 17-18 (2026),,true
 130,130,8,Aug 14-15 (2026),,true
 131,131,6,Jun 11-12 (2026),,true
-132,132,7,Late July (verify 2026),,true
+132,132,7,Late July 2026 (TBD),,true
 133,133,5,"Apr 18-19, 25-26 & May 3-4 (2026)",,true
 134,134,10,Oct 3 (2026),,true
 135,135,7,Jul 4,,true
@@ -143,12 +143,12 @@ id,event_id,month,display_text,recurrence_text,year_specific
 142,142,9,Sep 10-12 (2026),,true
 143,143,8,Aug 24-29 (2026),,true
 144,144,8,Aug 20-22 (2026),,true
-145,145,9,September (biennial; verify),,false
+145,145,9,Last full weekend September (biennial; verify 2026 occurrence),,false
 146,146,9,Sep 19 (2026); 3rd Sat Sep,Sep 19 (2026); 3rd Sat Sep,false
 147,147,10,Oct 3-5 (2026),,true
 148,148,7,Jul 7-12 (2026),,true
 149,149,6,Jun 11-13 (2026),,true
-150,150,9,Sep 12,,true
+150,150,9,Sep 12 (2026),,true
 151,151,7,Jul 29 - Aug 1 (2026),,true
 152,152,5,May 27-30 (2026),,true
 153,153,9,Sep 8-12 (2026),,true
@@ -161,7 +161,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 160,160,9,Sep 10-12 (2026),,true
 161,161,7,Jul 14-18 (2026),,true
 162,162,9,Early September (2026),,false
-163,163,9,Sep 24-26,,true
+163,163,9,Sep 24-26 (2026),,true
 164,164,9,Late September (2026),,false
 165,165,7,Jul 25-26 (2026),,true
 166,166,8,August (2026),,false
@@ -169,7 +169,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 168,168,7,Jul 23-27 (2026),,true
 169,169,5,May 6-9 (2026),,true
 170,170,8,Aug 5-8 (2026),,true
-171,171,9,Sep 7,,true
+171,171,9,"Early September 2026 (Saturday, TBD)",,true
 172,172,6,Jun 5-7 (2026),,true
 173,173,7,Jul 30 - Aug 1 (2026),,true
 174,174,8,Aug 8-9 (2026),,true
@@ -186,7 +186,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 185,185,6,Jun 1-6 (2026),,true
 186,186,9,Sep 17-19 (2026),,true
 187,187,10,Mid-October (Saturday) 2026,,false
-188,188,5,May 1,,true
+188,188,5,May 2026 (TBD; ~May 1),,true
 189,189,7,July (2026),,false
 190,190,,July (2026),,false
 191,191,10,Oct 18-19 (2026),,true
@@ -213,8 +213,8 @@ id,event_id,month,display_text,recurrence_text,year_specific
 212,212,9,Sep 29 - Oct 3 (2026),,true
 213,213,5,May 9 (2026),,true
 214,214,7,Jul 31 - Aug 1,,true
-215,215,8,3rd week Aug (verify),,false
-216,216,8,4th week Aug (verify),,false
+215,215,8,Mid-to-late August 2026 (TBD; 10-day fair),,true
+216,216,8,Late August (verify 2026 occurrence),,true
 217,217,5,First Saturday May (2026),,false
 218,218,8,August (2026),,false
 219,219,8,"Aug 27-31 (2026, Labor Day wknd)",,true
@@ -228,7 +228,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 227,227,5,May 23 (2026),,true
 228,228,6,Jun 20-21 (2026),,true
 229,229,7,Jul 9-19 (2026),,true
-230,230,9,Sat after Labor Day (verify),,false
+230,230,9,Sep 12 (2026),,true
 231,231,4,Apr 18 (2026),,true
 232,232,9,Sep 18-20 (2026),,true
 233,233,,"First Friday monthly, May-Oct","First Friday monthly, May-Oct",false
@@ -236,16 +236,16 @@ id,event_id,month,display_text,recurrence_text,year_specific
 235,235,9,Sep 26-27 (2026),,true
 236,236,5,May 16 (2026),,true
 237,237,6,Jun 14 (2026),,true
-238,238,6,Jun 3-6 (2026),,true
-239,239,9,Sep 19 (2026),,true
-240,240,10,First Thursday Oct (4-day),,false
+238,238,6,Jun 4-6 (2026),,true
+239,239,9,Sep 17-20 (2026),,true
+240,240,10,Oct 1-4 (2026),,true
 241,241,6,Jun 18-21 (2026),,true
 242,242,9,Sep 11-13 (2026),,true
-243,243,6,Jun 19-20 (2026),,true
-244,244,7,Jul 13-14 (2026),,true
-245,245,8,First week of August (2026),,false
+243,243,6,Jun 20 (2026),,true
+244,244,7,Jul 9-14 (2026),,true
+245,245,8,Late July / early August 2026 (TBD),,true
 246,246,9,Sep 4-7 (2026),,true
-247,247,8,Aug 7-9 (2026),,true
+247,247,8,Aug 6-17 (2026),,true
 248,248,5,May 21-30 (2026),,true
 249,249,7,Jul 11-18 (2026),,true
 250,250,12,Dec 4-5 (2026),,true
@@ -255,42 +255,42 @@ id,event_id,month,display_text,recurrence_text,year_specific
 254,254,7,Jul 14-18 (2026),,true
 255,255,8,Aug 28-30 (2026),,true
 256,256,6,Jun 25-28 (2026),,true
-257,257,9,Early September (verify),,false
-258,258,8,Summer (verify 2026),,true
+257,257,8,Aug 23-24 (2026),,true
+258,258,7,Jul 29 - Aug 2 (2026),,true
 259,259,7,Jul 25 - Aug 1 (2026),,true
-260,260,8,Late August (2026),,false
+260,260,8,Late August 2026 (TBD),,true
 261,261,6,Jun 24-28 (2026),,true
-262,262,6,2nd weekend June (2026),,false
-263,263,9,Last Saturday September (2026),Last Saturday September (2026),false
+262,262,6,Jun 12-14 (2026),,true
+263,263,9,Sep 26 (2026),,true
 264,264,8,Aug 20-30 (2026),,true
 265,265,10,Oct 2-4 (2026),,true
-266,266,4,Apr-May (Fest-a-Ville Apr 22-25),,true
+266,266,4,Fest-a-Ville Apr 23 - May 1 (2026),,true
 267,267,7,Jul 18 (2026),,true
-268,268,10,Oct 8-11 (2026),,true
-269,269,,Summer Friday nights (RiverStage),,false
+268,268,10,Oct 3-11 (2026); booths Oct 8-11,,true
+269,269,6,"Summer Friday nights (RiverStage); 2026 dates Jun 5, Jun 19, Jul 4",,true
 270,270,9,Sep 10-13 (2026),,true
 271,271,9,Labor Day weekend (2026),,false
 272,272,10,Oct 1-3 (2026),,true
-273,273,10,First full week of October,,false
-274,274,5,May (2026),,false
+273,273,10,First full week of October 2026,,true
+274,274,5,May 29-30 (2026),,true
 275,275,8,Aug 28-30 (2026),,true
 276,276,9,Sep 25-26 (2026),,true
 277,277,6,Jun 17-20 (2026),,true
 278,278,5,May 8-9 (2026),,true
 279,279,10,Oct 9-10 (2026),,true
 280,280,9,Sep 26 (2026),,true
-281,281,10,Oct 16+ (2026),,true
-282,282,6,~Jun 26 (2026),,true
+281,281,10,Oct 16-25 (2026),,true
+282,282,6,Late June 2026 (around July 4),,true
 283,283,6,Jun 6 (2026),,true
 284,284,7,Jul 16-18 (2026),,true
 285,285,9,Sep 15-19 (2026),,true
-286,286,9,Sep 11-13 (2026),,true
+286,286,9,Early-mid September 2026 (TBD; 2025 was Sep 5-7),,true
 287,287,7,Jul 14-18 (2026),,true
-288,288,6,First weekend June (2026),,false
+288,288,6,Jun 6-7 (2026),,true
 289,289,5,May 22-24 (2026),,true
 290,290,9,Sep 12 (2026),,true
-291,291,6,3rd weekend June (2026),,false
-292,292,9,4th weekend September (2026),,false
+291,291,6,Jun 19-21 (2026),,true
+292,292,9,Sep 24-26 (2026),,true
 293,293,8,Aug 5-9 (2026),,true
 294,294,5,May 15-17 (2026),,true
 295,295,9,Sep 25-27 (2026),,true
@@ -340,7 +340,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 339,339,9,Sep 19-20 (2026),,true
 340,340,5,May 23-24 (2026),,true
 341,341,5,May 1-2 (2026),,true
-342,342,8,Aug 29-30 (2026),,true
+342,342,8,Aug 29-30 (2026); street party Aug 26,,true
 343,343,9,Sep 12-13 (2026),,true
 344,344,9,Sep 26 (2026),,true
-345,345,10,"2nd Sat Oct (Oct 10, 2026)","2nd Sat Oct (Oct 10, 2026)",false
+345,345,10,Oct 10 (2026),,true

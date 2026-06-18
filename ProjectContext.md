@@ -462,9 +462,13 @@ static web map. Distinct from the accounting automation but lives in the same re
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
 - `vending_circuit_etl.py` — Phase 2 transform (flat CSV → `data/markets.csv` + `data/events.csv`)
 - `vending_circuit_geocode.py` — Phase 3 geocode + schedule parse (→ fills lat/lng, `data/event_schedules.csv`)
-- `data/markets.csv` (17), `data/events.csv` (127), `data/event_schedules.csv` (127)
+- `data/markets.csv` (31), `data/events.csv` (345), `data/event_schedules.csv` (345)
+- `vending_circuit_gen_sql.py` — generates `supabase_vending_data.sql` from `data/`
+- `vending_circuit_gen_md.py` — regenerates `VendingCircuit.md` from the CSV
+- `confirm_updates.py` — re-runnable patcher holding the 2026-06-18 per-event confirmation
+  research (133 records: 2026 dates + food-vendor application + contact, keyed by name+city)
 - `supabase_vending_schema.sql` — DDL + `vending_published_events` gate view + public-read RLS
-- `supabase_vending_data.sql` — generated INSERTs (17 + 127 + 127)
+- `supabase_vending_data.sql` — generated INSERTs (31 markets + 345 events + 345 schedules)
 - `vending-map/` — static Leaflet map (index.html / app.js / config.js / README.md) with **zoom-based
   marker clustering** (Leaflet.markercluster: dots group/scatter by zoom; replaced the old two-tier
   hub→event→back model); filters by month / food-truck-fit / trip-type / **county**, plus a
@@ -484,6 +488,13 @@ in parallel trips the web-search rate limiter (9 concurrent failed; sequential s
 
 **Run the map:** open `vending-map/index.html` (anon key already in `config.js`), or host the
 `vending-map/` folder on GitHub Pages / Netlify. See `vending-map/README.md`.
+
+**Confirmation status (2026-06-18):** every backfilled lightweight lead was researched event-by-event
+and the amber "verify before relying" badge cleared where it's a real, dated food-vending event —
+`needs_confirmation` is down from 133 to **3** (Walk Back in Time, Clarkton Purple Hull Pea, Deutsch
+Country Days, all honestly held for unverifiable 2026 dates). Weak outside-food-truck fits (e.g.
+St. James Court Art Show bans hot dogs; nonprofit-run food at West Side Nut Club / Frog Follies) are
+cleared but show an amber food dot via notes. See CHATLOG Session 7.
 
 **Keep data fresh (manual, no scheduler):**
 - `python freshness_report.py` — offline punch-list (needs_confirmation / partial / past-year /
