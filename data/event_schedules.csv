@@ -316,3 +316,14 @@ id,event_id,month,display_text,recurrence_text,year_specific
 315,315,3,Mar 14 (2026),,true
 316,316,7,Jul 1-4 (2026),,true
 317,317,7,Jul 23-27 (2026),,true
+318,318,2,Grand Parade Feb 14 (2026); season Jan-Feb,,true
+319,319,10,Oct 9-10 (2026),,true
+320,320,10,Oct 11 (2026),,true
+321,321,8,Aug 29-30 (2026),,true
+322,322,9,Sep 5-7 (2026),,true
+323,323,8,Aug 14-16 (2026),,true
+324,324,9,Sep 18-20 (2026),,true
+325,325,10,October (verify 2026),,true
+326,326,9,Sep 18-20 (2026),,true
+327,327,7,Jul 10 (2026),,true
+328,328,,Verify date (2026),,false
