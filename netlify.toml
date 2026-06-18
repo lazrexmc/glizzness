@@ -1,0 +1,13 @@
+# Netlify config for the Vending Circuit map (https://festivals.glizzness.com).
+# Publish dir = vending-map/ (static Leaflet app). The map reads its DATA live from
+# Supabase, so commits that only touch data/docs (VendingCircuit.csv, data/*.csv,
+# supabase_*.sql, *.md, the ETL scripts) do NOT need a redeploy — only changes under
+# vending-map/ do.
+#
+# COST CONTROL: the `ignore` command runs before each build. If it exits 0 the build is
+# SKIPPED; if it exits non-zero the build proceeds. `git diff --quiet ... vending-map/`
+# exits 0 when vending-map/ is unchanged → skip the deploy and save build minutes.
+[build]
+  publish = "vending-map"
+  command = ""
+  ignore = "git diff --quiet HEAD^ HEAD -- vending-map/"
