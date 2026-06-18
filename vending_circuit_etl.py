@@ -141,6 +141,19 @@ reg(15,"AR","Mountain View","Batesville")
 reg(16,"AR","Jonesboro","Paragould")
 # West Kentucky interior -> Evansville/Tri-State hub (KY region)
 reg(31,"KY","Paducah","Benton","Murray","Princeton","Madisonville")
+# --- Batch 2 ---
+# Southern Indiana interior -> Indy / Louisville / Evansville hubs (nearest)
+reg(27,"IN","Bloomington")
+reg(30,"IN","Mitchell","Bedford")
+reg(31,"IN","Jasper","Vincennes")
+# SE Nebraska interior -> Omaha / Lincoln hubs (nearest)
+reg(9,"NE","Nebraska City","Falls City","Auburn")
+reg(10,"NE","Beatrice","Syracuse")
+# SE Kansas interior -> Springfield/Joplin (4) / Tulsa (13) hubs (nearest)
+reg(4,"KS","Pittsburg","Fort Scott","Iola")
+reg(13,"KS","Independence","Coffeyville")
+# West Tennessee interior -> Memphis hub
+reg(16,"TN","Paris","Humboldt","Martin","Jackson","Union City","Dyersburg")
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)

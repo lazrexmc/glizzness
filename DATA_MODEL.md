@@ -1,7 +1,7 @@
 # Vending Circuit — Data Model & Normalization Spec (LOCKED)
 
 > **Task 1 deliverable.** This is the contract the ETL/geocode/load phases build against.
-> Source of truth today: `VendingCircuit.csv` (380 rows, flat). Target: a normalized
+> Source of truth today: `VendingCircuit.csv` (403 rows, flat). Target: a normalized
 > relational model in Supabase Postgres feeding a clustered map UI.
 
 ---
@@ -13,7 +13,7 @@ verified passes, so there is no "unverified candidate" tier left to badge. Locke
 
 | Bucket | Rule | UI behavior |
 |---|---|---|
-| **Publish** | `verification_status IN (verified, partial)` AND `food_truck_friendly <> excluded` AND `lat/lng` present | Shown on map — this IS the `vending_published_events` gate view (377 rows) |
+| **Publish** | `verification_status IN (verified, partial)` AND `food_truck_friendly <> excluded` AND `lat/lng` present | Shown on map — this IS the `vending_published_events` gate view (400 rows) |
 | **Flagged subset** | published rows where `needs_confirmation = true` (this includes every `partial` row) | Shown with a "verify before relying" badge |
 | **Hide by default** | `verification_status IN (defunct, excluded)` | Kept in DB for the record; filtered out of default map view, reachable via a toggle |
 | **Quarantine (not published)** | missing `lat/lng` or `market_id` | Excluded by the gate view until fixed |
@@ -244,11 +244,13 @@ to **NW Arkansas**.
     unverifiable 2026 dates). Reproducible from `confirm_updates.py` (133 records).
   - **Interior gap-fill, batch 1 (2026-06-18)** — off-corridor counties inside the footprint:
     S. Illinois (+12), S. Iowa (+6), NE Oklahoma (+5), N/NE Arkansas (+6), West Kentucky (+6) =
-    **+35 lightweight leads** via `add_gap_events.py`. Batch 2 (S. Indiana, SE Nebraska, SE Kansas,
-    West Tennessee) deferred per the reassess gate.
+    **+35 lightweight leads** via `add_gap_events.py`.
+  - **Interior gap-fill, batch 2 (2026-06-18)** — final 4 regions: S. Indiana (+6), SE Nebraska (+6),
+    SE Kansas (+5), West Tennessee (+6) = **+23 lightweight leads**. Interior gap-fill now complete
+    (all 9 regions across the footprint).
 
-> **Current totals (2026-06-18):** **380 events / 377 published / 31 hubs**; 0 unmapped, 0 missing
-> coords; `needs_confirmation` = 38 (3 prior holds + 35 new gap-fill leads). The live default map
+> **Current totals (2026-06-18):** **403 events / 400 published / 31 hubs**; 0 unmapped, 0 missing
+> coords; `needs_confirmation` = 61 (3 prior holds + 58 gap-fill leads). The live default map
 > count is lower than 377 because the date-aware "past events" and "music fests" toggles hide some
 > rows by default (toggleable on).
 

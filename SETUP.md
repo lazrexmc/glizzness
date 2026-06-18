@@ -351,9 +351,9 @@ python sync_wave.py --sync-accounts              # rebuild Wave accounts
 
 ## Vending Circuit (food-truck event map)
 
-A separate sub-project: a researched, fact-checked list of 380 events (377 published; Missouri covered
+A separate sub-project: a researched, fact-checked list of 403 events (400 published; Missouri covered
 statewide via a county-by-county sweep, plus regional metros incl. Indianapolis, the I-70/I-74/Louisville-Evansville
-corridors, and an interior off-corridor gap-fill across S. IL / S. IA / NE OK / N-NE AR / W. KY; 31 market hubs) where
+corridors, and a completed interior off-corridor gap-fill across S. IL/IN, S. IA, SE NE, SE KS, NE OK, N-NE AR, W. KY, W. TN; 31 market hubs) where
 The Glizzness could vend, normalized into Supabase and shown on a static clustered map. Full detail in
 `ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`; running history in `CHATLOG.md` (local).
 
@@ -378,8 +378,8 @@ batches: `add_gap_events.py` (idempotent lightweight-lead appender) and `confirm
 1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS, the
    anon grant, and the `last_verified` column).
 2. Run `supabase_vending_data.sql` (idempotent: `truncate … restart identity cascade` then inserts
-   31 markets / 380 events / 380 schedules).
-3. Validate: `select count(*) from vending_published_events;`  → expect **377**.
+   31 markets / 403 events / 403 schedules).
+3. Validate: `select count(*) from vending_published_events;`  → expect **400**.
 
 `supabase_vending_data.sql` is **idempotent** — re-run it alone anytime to refresh the data (no
 need to re-run the schema unless table structure changed). Regenerate it after editing data with

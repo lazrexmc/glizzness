@@ -178,6 +178,31 @@ C[("Benton","KY")] = (36.8567,-88.3503)
 C[("Murray","KY")] = (36.6103,-88.3148)
 C[("Princeton","KY")] = (37.1095,-87.8819)
 C[("Madisonville","KY")] = (37.3281,-87.4989)
+# Batch 2: Southern Indiana interior
+C[("Bloomington","IN")] = (39.1653,-86.5264)
+C[("Mitchell","IN")] = (38.7325,-86.4733)
+C[("Bedford","IN")] = (38.8611,-86.4872)
+C[("Jasper","IN")] = (38.3914,-86.9311)
+C[("Vincennes","IN")] = (38.6773,-87.5286)
+# Batch 2: SE Nebraska interior
+C[("Nebraska City","NE")] = (40.6772,-95.8591)
+C[("Beatrice","NE")] = (40.2681,-96.7470)
+C[("Falls City","NE")] = (40.0611,-95.6022)
+C[("Syracuse","NE")] = (40.6586,-96.1872)
+C[("Auburn","NE")] = (40.3928,-95.8389)
+# Batch 2: SE Kansas interior
+C[("Pittsburg","KS")] = (37.4109,-94.7050)
+C[("Independence","KS")] = (37.2242,-95.7083)
+C[("Coffeyville","KS")] = (37.0373,-95.6164)
+C[("Fort Scott","KS")] = (37.8398,-94.7077)
+C[("Iola","KS")] = (37.9248,-95.4002)
+# Batch 2: West Tennessee interior
+C[("Paris","TN")] = (36.3020,-88.3267)
+C[("Humboldt","TN")] = (35.8198,-88.9159)
+C[("Martin","TN")] = (36.3434,-88.8503)
+C[("Jackson","TN")] = (35.6145,-88.8139)
+C[("Union City","TN")] = (36.4243,-89.0570)
+C[("Dyersburg","TN")] = (36.0345,-89.3859)
 
 # fix the two sentinel typos defensively
 C[("Hartsburg","MO")] = (38.7039,-92.3088)

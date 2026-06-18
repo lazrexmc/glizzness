@@ -97,6 +97,60 @@ NEW = [
      "Region's largest 3-day outdoor music fest (~40k), free: food trucks, vendors, beer garden. West KY fill."),
     ("Hopkins County Fair", "Madisonville", "KY", "Hopkins", 270, "July", "Jul 31 - Aug 8 (2026)",
      "Hopkins County Fair, Madisonville: livestock, carnival, fair food (taking food-vendor applications). West KY fill."),
+
+    # ===== Batch 2: Southern Indiana interior =====
+    ("Mitchell Persimmon Festival", "Mitchell", "IN", "Lawrence", 340, "September", "Sep 19-26 (2026)",
+     "79th Persimmon Festival, downtown Mitchell + Spring Mill State Park: carnival, food stalls, persimmon pudding contest, music. S. Indiana fill."),
+    ("Jasper Strassenfest", "Jasper", "IN", "Dubois", 300, "July", "Jul 30 - Aug 2 (2026)",
+     "German heritage festival, downtown Jasper: 3 stages, polka, authentic German food, carnival, hot-air balloons. S. Indiana fill."),
+    ("Knox County Watermelon Festival", "Vincennes", "IN", "Knox", 270, "August", "Aug 7-8 (2026)",
+     "Downtown Vincennes (Patrick Henry Square): fair food, vendors, entertainment (vendor apps open). S. Indiana fill."),
+    ("4th Street Festival of the Arts & Crafts", "Bloomington", "IN", "Monroe", 330, "September", "Sep 5-6 (2026)",
+     "50th Fourth Street arts & crafts festival, Bloomington (Labor Day weekend): artists, food vendors. S. Indiana fill."),
+    ("Monroe County Fair", "Bloomington", "IN", "Monroe", 330, "July", "July 2026 (TBD)",
+     "Monroe County Fair, Bloomington: livestock, exhibits, carnival, fair food. S. Indiana fill."),
+    ("Lawrence County Fair", "Bedford", "IN", "Lawrence", 340, "July", "Jul 11-18 (2026)",
+     "Lawrence County 4-H Fair, Bedford: rodeo, demo derby, rides, food vendors. S. Indiana fill."),
+
+    # ===== Batch 2: SE Nebraska interior =====
+    ("AppleJack Festival", "Nebraska City", "NE", "Otoe", 250, "September", "Sep 18-20 & 26-27 (2026)",
+     "Iconic fall harvest festival at Arbor Day Farm, Nebraska City (~80k): apples, parades, carnival, food; craft/food vendor info. SE Nebraska fill."),
+    ("Homestead Days", "Beatrice", "NE", "Gage", 290, "June", "Mid-June 2026 (TBD; 2025 was Jun 19-22)",
+     "Community homesteading-heritage festival, Beatrice: parade, Ribfest, car shows, live entertainment. SE Nebraska fill."),
+    ("Gage County Fair", "Beatrice", "NE", "Gage", 290, "July", "Jul 22-26 (2026)",
+     "Gage County Fair, Beatrice: carnival, ag exhibits, food/products vendors (info@gagecountyfair.com / 402-223-3247). SE Nebraska fill."),
+    ("Otoe County Fair", "Syracuse", "NE", "Otoe", 270, "July", "Jul 31 - Aug 3 (2026)",
+     "Otoe County Fair, Syracuse: carnival, 4-H/open class, nightly entertainment, food stands. SE Nebraska fill."),
+    ("Nemaha County Fair", "Auburn", "NE", "Nemaha", 270, "August", "Aug 9-12 (2026)",
+     "Nemaha County Fair, Auburn: 4-H/FFA, grandstand, beer garden, fair food (commercial vendor info: 402-297-7091). SE Nebraska fill."),
+    ("Cobblestone Festival", "Falls City", "NE", "Richardson", 230, "June", "June 2026 (TBD)",
+     "Cobblestone Festival, Falls City: parade, carnival, street vendors, activities. SE Nebraska fill."),
+
+    # ===== Batch 2: SE Kansas interior =====
+    ("Little Balkans Days", "Pittsburg", "KS", "Crawford", 200, "September", "Labor Day weekend (Sep 4-7, 2026)",
+     "Little Balkans heritage festival, Pittsburg (Labor Day wknd): arts/crafts/antiques, food, live music. SE Kansas fill."),
+    ("Neewollah", "Independence", "KS", "Montgomery", 240, "October", "Late October 2026 (9 days)",
+     "Kansas's largest annual festival, Independence: 9-day extravaganza, 30+ food vendors, carnival, parades, musical. SE Kansas fill."),
+    ("Inter-State Fair & Rodeo", "Coffeyville", "KS", "Montgomery", 230, "August", "Aug 9-15 (2026)",
+     "119th Inter-State Fair & Rodeo, Coffeyville: PRCA rodeo, carnival, concessions ($850 full food), livestock. SE Kansas fill."),
+    ("Fort Scott Good Ol' Days", "Fort Scott", "KS", "Bourbon", 170, "June", "Jun 5-6 (2026)",
+     "45th Good Ol' Days, downtown Fort Scott: craft vendors, food trucks, concerts, largest parade in Bourbon Co. SE Kansas fill."),
+    ("Allen County Fair", "Iola", "KS", "Allen", 200, "August", "August 2026 (TBD)",
+     "Allen County Fair, Iola: 4-H, full food court, carnival rides, concessions/vendors. SE Kansas fill."),
+
+    # ===== Batch 2: West Tennessee interior =====
+    ("World's Biggest Fish Fry", "Paris", "TN", "Henry", 300, "April", "Apr 18-26 (2026)",
+     "World's Biggest Fish Fry, Paris (73rd, last full week of April): parade, carnival, all-you-can-eat catfish, music. West TN fill."),
+    ("West Tennessee Strawberry Festival", "Humboldt", "TN", "Gibson", 330, "May", "May 3-9 (2026)",
+     "88th West TN Strawberry Festival, Humboldt: week-long carnival, two parades, free concerts, food vendors, fireworks. West TN fill."),
+    ("Martin Grassroots Soybean Festival", "Martin", "TN", "Weakley", 300, "September", "Sep 10-12 (2026)",
+     "Grassroots Soybean Festival at Virginia Weldon Park, Martin (replaces the canceled TN Soybean Festival): booth + food-truck vendor apps. West TN fill."),
+    ("Jackson International Food and Art Festival", "Jackson", "TN", "Madison", 330, "September", "Sep 26 (2026)",
+     "Jackson International Food & Art Festival at the fairgrounds: food vendors, arts/crafts, cultural performances (free; vendor info at jifaf.com). West TN fill."),
+    ("Obion County Fair", "Union City", "TN", "Obion", 300, "August", "Aug 24-29 (2026)",
+     "Obion County Fair, Union City (est. 1931): midway, commercial exhibits, concerts, motorsports, fair food. West TN fill."),
+    ("Dyer County Fair", "Dyersburg", "TN", "Dyer", 310, "September", "Sep 7-12 (2026)",
+     "6-day Dyer County Fair, Dyersburg: ag exhibits, competitions, entertainment, fair food. West TN fill."),
 ]
 
 

@@ -450,21 +450,21 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
-A researched master list of **380 events** (377 published) — Missouri covered statewide via a
-county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville corridors, plus an
-interior off-corridor gap-fill across S. IL / S. IA / NE OK / N-NE AR / W. KY (31 market
+A researched master list of **403 events** (400 published) — Missouri covered statewide via a
+county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville corridors, plus a
+completed interior off-corridor gap-fill across S. IL/IN, S. IA, SE NE, SE KS, NE OK, N-NE AR, W. KY, W. TN (31 market
 hubs) — feeds a live Supabase database and a
 static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
 
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — authoritative flat master, 380 events, 16 columns (added `county` + per-row `last_verified`)
+- `VendingCircuit.csv` — authoritative flat master, 403 events, 16 columns (added `county` + per-row `last_verified`)
 - `add_gap_events.py` — idempotent appender for off-corridor interior gap-fill leads (lightweight)
   (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
 - `vending_circuit_etl.py` — Phase 2 transform (flat CSV → `data/markets.csv` + `data/events.csv`)
 - `vending_circuit_geocode.py` — Phase 3 geocode + schedule parse (→ fills lat/lng, `data/event_schedules.csv`)
-- `data/markets.csv` (31), `data/events.csv` (380), `data/event_schedules.csv` (380)
+- `data/markets.csv` (31), `data/events.csv` (403), `data/event_schedules.csv` (403)
 - `vending_circuit_gen_sql.py` — generates `supabase_vending_data.sql` from `data/`
 - `vending_circuit_gen_md.py` — regenerates `VendingCircuit.md` from the CSV
 - `confirm_updates.py` — re-runnable patcher holding the 2026-06-18 per-event confirmation
@@ -491,12 +491,14 @@ in parallel trips the web-search rate limiter (9 concurrent failed; sequential s
 **Run the map:** open `vending-map/index.html` (anon key already in `config.js`), or host the
 `vending-map/` folder on GitHub Pages / Netlify. See `vending-map/README.md`.
 
-**Confirmation status (2026-06-18):** every backfilled lightweight lead was researched event-by-event
+**Confirmation status (2026-06-18):** the original 133 backfilled leads were researched event-by-event
 and the amber "verify before relying" badge cleared where it's a real, dated food-vending event —
-`needs_confirmation` is down from 133 to **3** (Walk Back in Time, Clarkton Purple Hull Pea, Deutsch
-Country Days, all honestly held for unverifiable 2026 dates). Weak outside-food-truck fits (e.g.
-St. James Court Art Show bans hot dogs; nonprofit-run food at West Side Nut Club / Frog Follies) are
-cleared but show an amber food dot via notes. See CHATLOG Session 7.
+that pass took the original backlog from 133 to **3** (Walk Back in Time, Clarkton Purple Hull Pea,
+Deutsch Country Days, all honestly held for unverifiable 2026 dates). Weak outside-food-truck fits
+(e.g. St. James Court Art Show bans hot dogs; nonprofit-run food at West Side Nut Club / Frog Follies)
+are cleared but show an amber food dot via notes. See CHATLOG Session 7. The later interior gap-fill
+(Sessions 8) then added **58 new lightweight amber leads** to confirm later, so the *current* live
+`needs_confirmation` total is **61** (3 holds + 58 gap-fill). Run `freshness_report.py` for the list.
 
 **Keep data fresh (manual, no scheduler):**
 - `python freshness_report.py` — offline punch-list (needs_confirmation / partial / past-year /
