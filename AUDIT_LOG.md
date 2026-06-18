@@ -323,3 +323,30 @@ that is not an acceptable unattended risk profile.
   - Files changed this session beyond docs: VendingCircuit.csv + data/ + supabase_vending_data.sql
     (the +23 gap-fill events), add_gap_events.py, vending_circuit_etl.py, vending_circuit_geocode.py.
     No accounting-pipeline code touched.
+
+- 2026-06-18 (Claude remediation pass — TDD): began fixing the financial findings. Added a
+  pytest suite (`tests/test_accounting.py`, 15 tests; first run RED, then GREEN). Status updates:
+  - **Finding 1 (Critical) — FIXED.** Added `POSTABLE_STATUSES = ("staged",)` + `is_postable()`
+    at `sync.py:25`; both posting queries (`post_to_wave`, `post_loan_payments`) now select
+    `list(POSTABLE_STATUSES)` instead of `["staged","error"]`. `error` rows can no longer be
+    posted; they must be rebuilt (which re-stages only if balanced).
+    BEHAVIOR CHANGE: a transient Wave API failure that left a row `error` no longer auto-retries
+    on the next post run — re-run the build for that date to re-stage it. Intended (safer).
+  - **Finding 4 (High) — PARTIALLY FIXED.** The loan `error`-row posting half is fixed by the same
+    `POSTABLE_STATUSES` change. The float-money half (REAL/DOUBLE loan storage) is still Open — see #11.
+  - **Finding 2 (Critical) — FIXED.** New import-safe `auth.py:auth_gate_decision()` (TDD'd);
+    `dashboard.py` now FAILS CLOSED — no `APP_PASSWORD` => access blocked with an explanatory error,
+    unless an operator sets `GLIZZNESS_ALLOW_INSECURE=1` (env or secret) for local dev.
+  - **Finding 11 (Medium) — MITIGATED.** New `money.py:parse_money_to_cents()` (TDD'd, Decimal,
+    ROUND_HALF_UP, raises on garbage). Wired into all three float parsers (`sync.py` `_amt`,
+    `sync_wave.py` `_parse_amount`, `post_loan_payments.py` `f`) so a malformed cell now RAISES
+    instead of silently becoming $0.00. Return type kept as float dollars to avoid changing stored
+    schemas, so the float-*storage* concern (penny drift, finding #3/#4 money) is NOT yet resolved —
+    that needs a cents/Decimal storage migration validated against the real (gitignored) CSVs + a
+    Wave sandbox. Tracked as Open.
+  - **Findings 3 (High idempotency state machine), 5 (missing-order hard error), 7 (refund split),
+    8 (atomic rebuild) — OPEN / DEFERRED.** These change DB write ordering / require a schema column
+    or RPC and must be verified against live Wave/Square; not safe to do blind. Recommended next
+    pass, with the golden-file fixtures from the test plan.
+  - New/changed files: `tests/test_accounting.py` (new), `money.py` (new), `auth.py` (new),
+    `sync.py`, `sync_wave.py`, `post_loan_payments.py`, `dashboard.py`. Run `pytest tests/`.

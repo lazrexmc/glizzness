@@ -122,11 +122,11 @@ def import_csv(conn: sqlite3.Connection, csv_path: str) -> int:
                 continue
 
             def f(key):
+                # Strict: blank/"0" -> 0.0, malformed -> ValueError (no silent $0.00).
+                # Audit 2026-06-18 #11. Float dollars preserved for the REAL columns.
+                from money import parse_money_to_cents
                 v = (row.get(key) or row.get(" " + key) or "0").strip()
-                try:
-                    return float(v)
-                except ValueError:
-                    return 0.0
+                return parse_money_to_cents(v) / 100.0
 
             if conn.execute(
                 "SELECT 1 FROM loan_payments WHERE payment_date = ?", (payment_date,)

@@ -182,14 +182,10 @@ def sync_accounts(conn: sqlite3.Connection) -> int:
 # Some Wave exports use slightly different column headers — we handle variants.
 
 def _parse_amount(val: str) -> float:
-    """Strip currency symbols, commas, parentheses → float."""
-    if not val or not val.strip():
-        return 0.0
-    v = val.strip().replace(",", "").replace("$", "").replace("(", "-").replace(")", "")
-    try:
-        return float(v)
-    except ValueError:
-        return 0.0
+    """Blank -> 0.0; malformed -> ValueError (no silent $0.00). Audit 2026-06-18 #11.
+    Returns float dollars to preserve existing storage."""
+    from money import parse_money_to_cents
+    return parse_money_to_cents(val) / 100.0
 
 
 def _looks_like_date(val: str) -> bool:

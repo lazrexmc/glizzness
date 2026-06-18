@@ -8,8 +8,11 @@ Secrets (via .streamlit/secrets.toml locally, or Streamlit Cloud secrets):
     WAVE_TOKEN, WAVE_BUSINESS_ID, plus all WAVE_*_ID account vars.
 """
 
+import os
 import streamlit as st
 from datetime import date
+
+from auth import auth_gate_decision
 
 st.set_page_config(
     page_title="Glizzness Dashboard",
@@ -18,15 +21,33 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── Password gate ──────────────────────────────────────────────────────────────
+# ── Password gate (FAILS CLOSED — audit 2026-06-18 finding #2) ──────────────────
+# If no APP_PASSWORD is configured, access is DENIED unless an operator explicitly
+# opts into insecure local dev via GLIZZNESS_ALLOW_INSECURE=1 (env or secret).
 
 APP_PASSWORD = ""
+ALLOW_INSECURE = False
 try:
-    APP_PASSWORD = st.secrets.get("APP_PASSWORD", "")
+    APP_PASSWORD = st.secrets.get("APP_PASSWORD", "") or ""
+    ALLOW_INSECURE = str(st.secrets.get("GLIZZNESS_ALLOW_INSECURE", "")).strip() in ("1", "true", "True")
 except Exception:
     pass
+if not ALLOW_INSECURE:
+    ALLOW_INSECURE = os.environ.get("GLIZZNESS_ALLOW_INSECURE", "").strip() in ("1", "true", "True")
 
-if APP_PASSWORD:
+_gate = auth_gate_decision(APP_PASSWORD, allow_insecure=ALLOW_INSECURE)
+
+if _gate == "blocked":
+    st.title("🌭 Glizzness Dashboard")
+    st.error(
+        "Access denied: no `APP_PASSWORD` is configured. This dashboard controls "
+        "Wave/Square posting and is backed by the Supabase service-role key, so it "
+        "refuses to run without authentication.\n\n"
+        "Set `APP_PASSWORD` in secrets, or (local dev only) set "
+        "`GLIZZNESS_ALLOW_INSECURE=1`."
+    )
+    st.stop()
+elif _gate == "require_password":
     if not st.session_state.get("authenticated"):
         st.title("🌭 Glizzness Dashboard")
         pw = st.text_input("Password", type="password")
@@ -37,6 +58,7 @@ if APP_PASSWORD:
             else:
                 st.error("Incorrect password")
         st.stop()
+# _gate == "open_insecure": explicit local-dev override — no gate.
 
 # ── Header ─────────────────────────────────────────────────────────────────────
 

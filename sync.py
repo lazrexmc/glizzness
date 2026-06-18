@@ -17,10 +17,22 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Callable
 
 from db import get_client
+from money import parse_money_to_cents
 
 SQUARE_BASE        = "https://connect.squareup.com/v2"
 WAVE_GQL           = "https://gql.waveapps.com/graphql/public"
 MANUAL_LOAN_CUTOFF = "2025-05-12"
+
+# Only these journal-entry statuses may be sent to Wave. An `error` row is
+# unbalanced or previously failed and MUST be repaired/rebuilt (back to `staged`)
+# before it can post — it must never be picked up by a posting query.
+# (Audit 2026-06-18, findings #1 & #4.)
+POSTABLE_STATUSES = ("staged",)
+
+
+def is_postable(status: str) -> bool:
+    """True only for statuses safe to send to Wave (never `error`/`posted`)."""
+    return status in POSTABLE_STATUSES
 
 
 # ── Secret / env helper ────────────────────────────────────────────────────────
@@ -612,7 +624,7 @@ def post_to_wave(begin_date: str = None, log: Callable = print) -> dict:
     staged_r = (
         sb.table("journal_entries")
         .select("payout_id,arrival_date,payout_net_cents")
-        .in_("status", ["staged", "error"])
+        .in_("status", list(POSTABLE_STATUSES))
         .gte("arrival_date", effective_begin)
         .order("arrival_date")
         .execute()
@@ -767,7 +779,7 @@ def post_loan_payments(log: Callable = print) -> dict:
     staged_r = (
         sb.table("loan_journal_entries")
         .select("payment_date,amount,principal,interest")
-        .in_("status", ["staged", "error"])
+        .in_("status", list(POSTABLE_STATUSES))
         .order("payment_date")
         .execute()
     )
@@ -1015,11 +1027,9 @@ def import_wave_csv(file_content: str, source_name: str,
         raise ValueError(f"Cannot map CSV columns {missing}. Found headers: {headers}")
 
     def _amt(val: str) -> float:
-        v = (val or "").strip().replace(",", "").replace("$", "").replace("(", "-").replace(")", "")
-        try:
-            return float(v)
-        except ValueError:
-            return 0.0
+        # Strict parse: blank -> 0.0, malformed -> ValueError (no silent $0.00).
+        # Audit 2026-06-18 #11. Returns float dollars to preserve wave_transactions storage.
+        return parse_money_to_cents(val) / 100.0
 
     _is_date = re.compile(r"^\d{4}-\d{2}-\d{2}$").match
 
