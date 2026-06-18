@@ -51,6 +51,25 @@
     .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
     /* event marker dots (clustered) */
     .evt-dot span { display:block; width:14px; height:14px; border-radius:50%; border:1px solid #000; box-shadow:0 0 0 1px rgba(0,0,0,.25); }
+    /* list-view toggle + panel */
+    #list-toggle { cursor:pointer; background:#2a241c; color:var(--ink); border:1px solid #3a342c;
+                   border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
+    #list-toggle.active { background:var(--accent); color:#1a1206; border-color:var(--accent); }
+    #listpanel { position:absolute; top:0; left:0; width:min(330px,85vw); height:100%; background:var(--panel);
+                 border-right:1px solid #000; transform:translateX(-105%); transition:transform .22s ease;
+                 z-index:1150; overflow-y:auto; }
+    #listpanel.open { transform:translateX(0); }
+    .lp-head { position:sticky; top:0; background:var(--panel); padding:11px 14px; border-bottom:1px solid #000;
+               font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px; }
+    #lp-count { color:var(--muted); font-weight:400; font-size:12px; margin-left:auto; }
+    .lp-close { cursor:pointer; color:var(--muted); background:none; border:none; font-size:20px; line-height:1; }
+    .lp-row { display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit;
+              border-bottom:1px solid #2a241c; padding:9px 14px; cursor:pointer; color:var(--ink); }
+    .lp-row:hover { background:#2a241c; }
+    .lp-row .nm { font-size:13px; font-weight:600; display:flex; align-items:center; gap:7px; }
+    .lp-row .sub { color:var(--muted); font-size:11px; margin:2px 0 0 18px; }
+    .lp-dot { width:11px; height:11px; border-radius:50%; border:1px solid #000; flex:none; }
+    .lp-empty { padding:16px 14px; color:var(--muted); font-size:13px; }
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
@@ -60,6 +79,7 @@
       header h1 { font-size:14px; }
       #crumb { font-size:11px; }
       #drawer { width:100%; }
+      #listpanel { width:100%; }
       #filterbar { gap:6px; padding:6px 10px; }
       #filterbar .fb-label { display:none; }
       #filterbar select, #filterbar button { padding:5px 6px; font-size:12px; }
@@ -73,6 +93,7 @@
     <header>
       <span class="dog">🌭</span>
       <h1>The Glizzness — Vending Circuit</h1>
+      <button id="list-toggle" aria-label="List view">☰ List</button>
       <span id="crumb"></span>
     </header>
     <div id="filterbar">
@@ -104,6 +125,11 @@
         <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
         <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Zoom in to scatter, out to group. Pins show the city/area, not exact addresses.</div>
       </div>
+      <aside id="listpanel">
+        <div class="lp-head">Events in view <span id="lp-count"></span>
+          <button class="lp-close" aria-label="Close">×</button></div>
+        <div id="list-body"></div>
+      </aside>
       <aside id="drawer">
         <button class="close" aria-label="Close">×</button>
         <div id="drawer-body"></div>

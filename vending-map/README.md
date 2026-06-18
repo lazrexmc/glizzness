@@ -88,6 +88,10 @@ published, edit the rows in Supabase (or re-run the ETL + reload) — the map re
 - A **filter change** rebuilds the cluster layer from the filtered events and fit-bounds to them.
 
 ## Features
+- **List view** (header **☰ List** button): a left-side panel listing the events currently in the map
+  viewport, sorted by month then name. It updates as you pan/zoom (`map moveend`); each row opens that
+  event's drawer and pans/zooms to its dot — so you can read an area's events instead of clicking dots
+  one by one. Respects the active filters.
 - **Filters** (filter bar): by month, food-truck-friendliness, trip-type, and **county**. Month uses
   `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
   filter keys on `(county, state)` (county names repeat across states) and lists only counties present

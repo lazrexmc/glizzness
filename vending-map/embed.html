@@ -51,6 +51,25 @@
     .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
     /* event marker dots (clustered) */
     .evt-dot span { display:block; width:14px; height:14px; border-radius:50%; border:1px solid #000; box-shadow:0 0 0 1px rgba(0,0,0,.25); }
+    /* list-view toggle + panel */
+    #list-toggle { cursor:pointer; background:#2a241c; color:var(--ink); border:1px solid #3a342c;
+                   border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
+    #list-toggle.active { background:var(--accent); color:#1a1206; border-color:var(--accent); }
+    #listpanel { position:absolute; top:0; left:0; width:min(330px,85vw); height:100%; background:var(--panel);
+                 border-right:1px solid #000; transform:translateX(-105%); transition:transform .22s ease;
+                 z-index:1150; overflow-y:auto; }
+    #listpanel.open { transform:translateX(0); }
+    .lp-head { position:sticky; top:0; background:var(--panel); padding:11px 14px; border-bottom:1px solid #000;
+               font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px; }
+    #lp-count { color:var(--muted); font-weight:400; font-size:12px; margin-left:auto; }
+    .lp-close { cursor:pointer; color:var(--muted); background:none; border:none; font-size:20px; line-height:1; }
+    .lp-row { display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit;
+              border-bottom:1px solid #2a241c; padding:9px 14px; cursor:pointer; color:var(--ink); }
+    .lp-row:hover { background:#2a241c; }
+    .lp-row .nm { font-size:13px; font-weight:600; display:flex; align-items:center; gap:7px; }
+    .lp-row .sub { color:var(--muted); font-size:11px; margin:2px 0 0 18px; }
+    .lp-dot { width:11px; height:11px; border-radius:50%; border:1px solid #000; flex:none; }
+    .lp-empty { padding:16px 14px; color:var(--muted); font-size:13px; }
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
@@ -60,6 +79,7 @@
       header h1 { font-size:14px; }
       #crumb { font-size:11px; }
       #drawer { width:100%; }
+      #listpanel { width:100%; }
       #filterbar { gap:6px; padding:6px 10px; }
       #filterbar .fb-label { display:none; }
       #filterbar select, #filterbar button { padding:5px 6px; font-size:12px; }
@@ -73,6 +93,7 @@
     <header>
       <span class="dog">🌭</span>
       <h1>The Glizzness — Vending Circuit</h1>
+      <button id="list-toggle" aria-label="List view">☰ List</button>
       <span id="crumb"></span>
     </header>
     <div id="filterbar">
@@ -104,6 +125,11 @@
         <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
         <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Zoom in to scatter, out to group. Pins show the city/area, not exact addresses.</div>
       </div>
+      <aside id="listpanel">
+        <div class="lp-head">Events in view <span id="lp-count"></span>
+          <button class="lp-close" aria-label="Close">×</button></div>
+        <div id="list-body"></div>
+      </aside>
       <aside id="drawer">
         <button class="close" aria-label="Close">×</button>
         <div id="drawer-body"></div>
@@ -137,8 +163,12 @@ const statusEl = document.getElementById("status");
 const crumbEl  = document.getElementById("crumb");
 const drawer   = document.getElementById("drawer");
 const drawerBody = document.getElementById("drawer-body");
+const listPanel = document.getElementById("listpanel");
+const listBody  = document.getElementById("list-body");
+const lpCount   = document.getElementById("lp-count");
+let listOpen = false;
 
-let EVENTS = [], monthsByEvent = {};
+let EVENTS = [], monthsByEvent = {}, eventsById = {};
 const FILT = { month: "all", friendly: "all", trip: "all", county: "all", showHidden: false };
 
 const map = L.map("map", { zoomControl: true }).setView([38.7, -92.3], 7);
@@ -219,8 +249,36 @@ function render(fit) {
   clusterGroup.addLayers(markers);
   crumbEl.textContent = `${vis.length} event${vis.length === 1 ? "" : "s"}`;
   if (fit && pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 12 });
+  renderList();   // keep the list panel in sync after a filter change
 }
 const applyFilters = () => render(true);
+
+// ---------- list view: events in the current map viewport ----------
+function renderList() {
+  if (!listOpen) return;
+  const b = map.getBounds();
+  const vis = visibleEvents().filter(e => e.lat != null && b.contains([e.lat, e.lng]));
+  vis.sort((x, y) => {
+    const mx = (monthsByEvent[x.id] || [])[0] || 99, my = (monthsByEvent[y.id] || [])[0] || 99;
+    return mx !== my ? mx - my : x.name.localeCompare(y.name);
+  });
+  lpCount.textContent = `${vis.length} in view`;
+  listBody.innerHTML = vis.length
+    ? vis.map(e => {
+        const when = e.typical_dates || e.month || "";
+        return `<button class="lp-row" data-id="${esc(e.id)}">
+          <div class="nm"><span class="lp-dot" style="background:${friendlyColor(e)}"></span>${esc(e.name)}</div>
+          <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}</div>
+        </button>`;
+      }).join("")
+    : `<div class="lp-empty">No events in this view. Pan or zoom out to see more.</div>`;
+}
+function toggleList(open) {
+  listOpen = open === undefined ? !listOpen : open;
+  listPanel.classList.toggle("open", listOpen);
+  document.getElementById("list-toggle").classList.toggle("active", listOpen);
+  renderList();
+}
 
 // ---------- detail drawer ----------
 const ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
@@ -269,6 +327,19 @@ function openDrawer(e) {
 }
 
 document.querySelector("#drawer .close").addEventListener("click", () => drawer.classList.remove("open"));
+
+// list panel: row click -> pan to the dot + open its drawer; toggle + close buttons
+listBody.addEventListener("click", ev => {
+  const r = ev.target.closest(".lp-row");
+  if (!r) return;
+  const e = eventsById[r.dataset.id];
+  if (!e) return;
+  map.setView([e.lat, e.lng], Math.max(map.getZoom(), 13));
+  openDrawer(e);
+});
+document.getElementById("list-toggle").addEventListener("click", () => toggleList());
+document.querySelector("#listpanel .lp-close").addEventListener("click", () => toggleList(false));
+map.on("moveend", renderList);   // refresh the list as the user pans/zooms
 
 // ---------- filter controls ----------
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -331,6 +402,7 @@ function wireFilters() {
       if (s.month == null) return;
       (monthsByEvent[s.event_id] = monthsByEvent[s.event_id] || []).push(Number(s.month));
     });
+    eventsById = Object.fromEntries(EVENTS.map(e => [String(e.id), e]));
     wireFilters();
     setStatus("");
     render(true);

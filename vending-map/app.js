@@ -12,8 +12,12 @@ const statusEl = document.getElementById("status");
 const crumbEl  = document.getElementById("crumb");
 const drawer   = document.getElementById("drawer");
 const drawerBody = document.getElementById("drawer-body");
+const listPanel = document.getElementById("listpanel");
+const listBody  = document.getElementById("list-body");
+const lpCount   = document.getElementById("lp-count");
+let listOpen = false;
 
-let EVENTS = [], monthsByEvent = {};
+let EVENTS = [], monthsByEvent = {}, eventsById = {};
 const FILT = { month: "all", friendly: "all", trip: "all", county: "all", showHidden: false };
 
 const map = L.map("map", { zoomControl: true }).setView([38.7, -92.3], 7);
@@ -94,8 +98,36 @@ function render(fit) {
   clusterGroup.addLayers(markers);
   crumbEl.textContent = `${vis.length} event${vis.length === 1 ? "" : "s"}`;
   if (fit && pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 12 });
+  renderList();   // keep the list panel in sync after a filter change
 }
 const applyFilters = () => render(true);
+
+// ---------- list view: events in the current map viewport ----------
+function renderList() {
+  if (!listOpen) return;
+  const b = map.getBounds();
+  const vis = visibleEvents().filter(e => e.lat != null && b.contains([e.lat, e.lng]));
+  vis.sort((x, y) => {
+    const mx = (monthsByEvent[x.id] || [])[0] || 99, my = (monthsByEvent[y.id] || [])[0] || 99;
+    return mx !== my ? mx - my : x.name.localeCompare(y.name);
+  });
+  lpCount.textContent = `${vis.length} in view`;
+  listBody.innerHTML = vis.length
+    ? vis.map(e => {
+        const when = e.typical_dates || e.month || "";
+        return `<button class="lp-row" data-id="${esc(e.id)}">
+          <div class="nm"><span class="lp-dot" style="background:${friendlyColor(e)}"></span>${esc(e.name)}</div>
+          <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}</div>
+        </button>`;
+      }).join("")
+    : `<div class="lp-empty">No events in this view. Pan or zoom out to see more.</div>`;
+}
+function toggleList(open) {
+  listOpen = open === undefined ? !listOpen : open;
+  listPanel.classList.toggle("open", listOpen);
+  document.getElementById("list-toggle").classList.toggle("active", listOpen);
+  renderList();
+}
 
 // ---------- detail drawer ----------
 const ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
@@ -144,6 +176,19 @@ function openDrawer(e) {
 }
 
 document.querySelector("#drawer .close").addEventListener("click", () => drawer.classList.remove("open"));
+
+// list panel: row click -> pan to the dot + open its drawer; toggle + close buttons
+listBody.addEventListener("click", ev => {
+  const r = ev.target.closest(".lp-row");
+  if (!r) return;
+  const e = eventsById[r.dataset.id];
+  if (!e) return;
+  map.setView([e.lat, e.lng], Math.max(map.getZoom(), 13));
+  openDrawer(e);
+});
+document.getElementById("list-toggle").addEventListener("click", () => toggleList());
+document.querySelector("#listpanel .lp-close").addEventListener("click", () => toggleList(false));
+map.on("moveend", renderList);   // refresh the list as the user pans/zooms
 
 // ---------- filter controls ----------
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -206,6 +251,7 @@ function wireFilters() {
       if (s.month == null) return;
       (monthsByEvent[s.event_id] = monthsByEvent[s.event_id] || []).push(Number(s.month));
     });
+    eventsById = Object.fromEntries(EVENTS.map(e => [String(e.id), e]));
     wireFilters();
     setStatus("");
     render(true);
