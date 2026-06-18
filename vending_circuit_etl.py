@@ -174,6 +174,7 @@ for i, r in enumerate(deduped, start=1):
         "name": r["event_name"],
         "city": r["city"],
         "state": r["state"],
+        "county": r.get("county", ""),
         "event_type": et,
         "cadence": cad,
         "is_recurring_venue": "true" if venue else "false",

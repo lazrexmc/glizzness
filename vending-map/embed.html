@@ -89,6 +89,7 @@
         <option value="day_trip">Day trip</option>
         <option value="overnight">Overnight</option>
       </select>
+      <select id="f-county" aria-label="County"><option value="all">Any county</option></select>
       <label><input type="checkbox" id="f-hidden" /> Show defunct/excluded</label>
       <button id="f-reset">Reset</button>
     </div>
@@ -137,7 +138,7 @@ const drawerBody = document.getElementById("drawer-body");
 
 let MARKETS = [], EVENTS = [], marketsById = {}, monthsByEvent = {};
 let currentMarket = null;                       // null = Tier 1; else selected market id
-const FILT = { month: "all", friendly: "all", trip: "all", showHidden: false };
+const FILT = { month: "all", friendly: "all", trip: "all", county: "all", showHidden: false };
 
 let marketLayer = L.layerGroup(), eventLayer = L.layerGroup();
 
@@ -167,6 +168,7 @@ function passesFilter(e) {
   if (!FILT.showHidden && isHidden(e)) return false;
   if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
   if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
+  if (FILT.county !== "all" && (e.county || "") + "|" + (e.state || "") !== FILT.county) return false;
   if (FILT.month !== "all") {
     const ms = monthsByEvent[e.id] || [];
     // year-round / recurring events carry no month -> they match any month filter.
@@ -278,9 +280,10 @@ function openDrawer(e) {
     home = `<a class="home" href="${esc(url)}" target="_blank" rel="noopener">Event page ↗</a>`;
   }
 
+  const countyTxt = e.county ? " · " + esc(e.county) + (/city$/i.test(e.county) ? "" : " County") : "";
   drawerBody.innerHTML = `
     <h2>${esc(e.name)}</h2>
-    <div class="loc">${esc(e.city)}, ${esc(e.state)}</div>
+    <div class="loc">${esc(e.city)}, ${esc(e.state)}${countyTxt}</div>
     <div>${typeB}${friendly}${statusB}${verify}</div>
     <dl>${rows.join("")}</dl>
     ${home}`;
@@ -299,6 +302,19 @@ function wireFilters() {
     o.value = String(i); o.textContent = MONTH_NAMES[i];
     monthSel.appendChild(o);
   }
+  // County options: distinct (county, state) present in the data, sorted state-then-county.
+  const countySel = document.getElementById("f-county");
+  const seenCty = new Set();
+  EVENTS.forEach(e => { if (e.county) seenCty.add(e.county + "|" + (e.state || "")); });
+  [...seenCty].sort((a, b) => {
+    const [ca, sa] = a.split("|"), [cb, sb] = b.split("|");
+    return sa === sb ? ca.localeCompare(cb) : sa.localeCompare(sb);
+  }).forEach(key => {
+    const [cty, st] = key.split("|");
+    const o = document.createElement("option");
+    o.value = key; o.textContent = `${cty} (${st})`;
+    countySel.appendChild(o);
+  });
   const bind = (elId, key) => {
     const el = document.getElementById(elId);
     el.addEventListener("change", () => { FILT[key] = el.value; applyFilters(); });
@@ -306,14 +322,16 @@ function wireFilters() {
   bind("f-month", "month");
   bind("f-friendly", "friendly");
   bind("f-trip", "trip");
+  bind("f-county", "county");
   document.getElementById("f-hidden").addEventListener("change", e => {
     FILT.showHidden = e.target.checked; applyFilters();
   });
   document.getElementById("f-reset").addEventListener("click", () => {
-    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.showHidden = false;
+    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all"; FILT.showHidden = false;
     monthSel.value = "all";
     document.getElementById("f-friendly").value = "all";
     document.getElementById("f-trip").value = "all";
+    countySel.value = "all";
     document.getElementById("f-hidden").checked = false;
     showMarkets();
   });

@@ -86,9 +86,11 @@ reload) — the map reflects it on refresh.
 - "← All markets" returns to Tier 1.
 
 ## Phase 6 (built)
-- **Filters** (filter bar): by month, food-truck-friendliness, and trip-type. Month uses
-  `vending_event_schedules.month`; year-round/recurring events (no month) match any month.
-  Filtering recomputes Tier 1 market counts and Tier 2 event pins; markets with zero matches dim.
+- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, and **county**. Month uses
+  `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
+  filter keys on `(county, state)` (county names repeat across states) and lists only counties present
+  in the data, so it stays short. Filtering recomputes Tier 1 market counts and Tier 2 event pins;
+  markets with zero matches dim.
 - **Defunct/excluded toggle:** all events are fetched; defunct + excluded are hidden by default and
   shown (styled red, with a status badge in the drawer) when toggled on.
 - **Mobile polish:** full-width drawer, wrapping filter bar, condensed legend on small screens.

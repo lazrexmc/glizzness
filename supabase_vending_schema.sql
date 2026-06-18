@@ -32,6 +32,7 @@ create table vending_events (
   name              text not null,
   city              text,
   state             text,
+  county            text,          -- county/parish; powers the map's county filter (esp. Missouri)
   event_type        text check (event_type in
       ('state_fair','county_fair','festival','food_truck_rally','farmers_market',
        'oktoberfest','craft_fair','art_fair','music_fest','bbq_fest','balloon_fest',
@@ -65,6 +66,7 @@ create table vending_events (
 create index vending_events_market_idx on vending_events(market_id);
 create index vending_events_trip_idx   on vending_events(trip_type);
 create index vending_events_month_idx  on vending_events(month);
+create index vending_events_county_idx on vending_events(county);
 
 -- ---- schedules (1 event -> many) ----
 create table vending_event_schedules (

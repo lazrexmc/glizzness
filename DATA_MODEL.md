@@ -49,6 +49,7 @@ events are still useful leads, so we publish them with a flag rather than droppi
 | market_id | int FK → markets | **required to publish** |
 | name | text | |
 | city / state | text | |
+| county | text | county/parish; stored per row in `VendingCircuit.csv`, powers the map's county filter (esp. the Missouri sweep) |
 | event_type | enum (text+CHECK) | see §3 |
 | cadence | enum (text+CHECK) | see §3 |
 | is_recurring_venue | bool | true for taprooms/markets/food-truck courts |
