@@ -478,8 +478,11 @@ static web map. Distinct from the accounting automation but lives in the same re
 
 **Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
 `vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view
-`vending_published_events` (342 rows). Public-read RLS on `vending_*` only; accounting tables
-remain anon-blocked. The map reads via the anon key (safe to expose).
+`vending_published_events` (400 rows). Public-read RLS on `vending_*` only; accounting tables
+remain anon-blocked. The map reads via the anon key (safe to expose). NOTE (per 2026-06-18 audit):
+the anon key can read the BASE `vending_*` tables, not just the published view — so defunct/excluded
+rows and vendor-coordinator contact fields are public (all non-sensitive public event data; the map
+fetches base tables on purpose so its defunct/excluded toggle works). See `AUDIT_LOG.md` finding #6.
 
 **How the data was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each
 adversarially fact-checked. Lesson learned: run research workflows **one at a time** — firing many
