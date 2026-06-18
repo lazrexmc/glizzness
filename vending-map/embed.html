@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Glizzness — Vending Circuit Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root { --bg:#16130f; --panel:#1f1b16; --ink:#f5efe6; --muted:#b9ad9b;
+            --accent:#e8a33d; --green:#5bbf6a; --blue:#5aa7e0; --amber:#e0b14a; --red:#d0594f; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+    #app { display: flex; flex-direction: column; height: 100%; }
+    header { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--panel); border-bottom:1px solid #000; z-index:1000; }
+    header h1 { font-size:16px; margin:0; font-weight:700; letter-spacing:.2px; }
+    header .dog { font-size:20px; }
+    #crumb { color:var(--muted); font-size:13px; margin-left:auto; }
+    #back { display:none; cursor:pointer; background:var(--accent); color:#1a1206; border:none;
+            border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
+    #main { flex:1; position:relative; }
+    #map { position:absolute; inset:0; }
+    /* detail drawer */
+    #drawer { position:absolute; top:0; right:0; width:min(380px,90vw); height:100%;
+              background:var(--panel); border-left:1px solid #000; transform:translateX(105%);
+              transition:transform .22s ease; z-index:1200; overflow-y:auto; padding:18px; }
+    #drawer.open { transform:translateX(0); }
+    #drawer .close { float:right; cursor:pointer; color:var(--muted); font-size:22px; line-height:1; border:none; background:none; }
+    #drawer h2 { margin:0 28px 4px 0; font-size:18px; }
+    #drawer .loc { color:var(--muted); font-size:13px; margin-bottom:12px; }
+    .badge { display:inline-block; font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:0 6px 6px 0; }
+    .b-green{background:var(--green);color:#06210b;} .b-blue{background:var(--blue);color:#04223a;}
+    .b-amber{background:var(--amber);color:#2a1e02;} .b-red{background:var(--red);color:#2a0a07;}
+    .b-grey{background:#3a342c;color:var(--muted);}
+    #drawer dl { margin:14px 0 0; font-size:14px; }
+    #drawer dt { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px; margin-top:12px; }
+    #drawer dd { margin:2px 0 0; }
+    #drawer a { color:var(--accent); }
+    #drawer .home { display:inline-block; margin-top:16px; background:var(--accent); color:#1a1206;
+                    text-decoration:none; font-weight:700; padding:9px 14px; border-radius:7px; }
+    .legend { position:absolute; bottom:14px; left:14px; background:var(--panel); border:1px solid #000;
+              border-radius:8px; padding:10px 12px; font-size:12px; z-index:1000; }
+    .legend .row { display:flex; align-items:center; gap:7px; margin:3px 0; }
+    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
+    .leaflet-popup-content { font-size:13px; }
+    #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
+              border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <span class="dog">🌭</span>
+      <h1>The Glizzness — Vending Circuit</h1>
+      <button id="back">← All markets</button>
+      <span id="crumb"></span>
+    </header>
+    <div id="main">
+      <div id="map"></div>
+      <div id="status">Loading…</div>
+      <div class="legend">
+        <div class="row"><span class="dot" style="background:#e8a33d"></span> Market hub (click to open)</div>
+        <div class="row"><span class="dot" style="background:#5bbf6a"></span> Food-truck friendly</div>
+        <div class="row"><span class="dot" style="background:#5aa7e0"></span> Concession friendly</div>
+        <div class="row"><span class="dot" style="background:#e0b14a"></span> Unconfirmed — verify</div>
+        <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Pins show the market area, not exact addresses.</div>
+      </div>
+      <aside id="drawer">
+        <button class="close" aria-label="Close">×</button>
+        <div id="drawer-body"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+// Supabase connection for the public, read-only vending map.
+// The ANON key is safe to expose in a client app: the vending_* tables have
+// public SELECT RLS policies, and the accounting tables have NO policies (stay blocked).
+// Fill in SUPABASE_ANON_KEY from: Supabase dashboard -> Project Settings -> API -> "anon public".
+window.SUPABASE_URL = "https://ikhcbncnaojrndilmnnd.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlraGNibmNuYW9qcm5kaWxtbm5kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MDc5NjYsImV4cCI6MjA5NzI4Mzk2Nn0.pOUaGdf2KA5a26UbR4V5TSkZAzoIEjA4UWKqZvsGOx4";
+
+</script>
+  <script>
+/* The Glizzness — Vending Circuit map (two-tier, lazy render).
+   Tier 1: market hub pins. Tier 2: events of the selected market. Tier 3: detail drawer.
+   Reads Supabase REST with the public anon key (vending_* tables have public-read RLS). */
+
+const URL = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY;
+const HEADERS = { apikey: KEY, Authorization: "Bearer " + KEY };
+
+const statusEl = document.getElementById("status");
+const crumbEl  = document.getElementById("crumb");
+const backBtn  = document.getElementById("back");
+const drawer   = document.getElementById("drawer");
+const drawerBody = document.getElementById("drawer-body");
+
+let MARKETS = [], EVENTS = [], marketsById = {};
+let marketLayer = L.layerGroup(), eventLayer = L.layerGroup();
+
+const map = L.map("map", { zoomControl: true }).setView([39.2, -93.0], 5);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"
+}).addTo(map);
+marketLayer.addTo(map);
+eventLayer.addTo(map);
+
+async function fetchJSON(path) {
+  const res = await fetch(URL + "/rest/v1/" + path, { headers: HEADERS });
+  if (!res.ok) throw new Error(res.status + " " + res.statusText + " — " + (await res.text()));
+  return res.json();
+}
+
+const friendlyColor = f =>
+  f === "explicit_yes" ? "#5bbf6a" : f === "unconfirmed" ? "#e0b14a" : "#5aa7e0";
+
+function setStatus(msg) { statusEl.textContent = msg; statusEl.style.display = msg ? "block" : "none"; }
+
+// ---------- Tier 1: markets ----------
+function showMarkets() {
+  eventLayer.clearLayers();
+  marketLayer.clearLayers();
+  drawer.classList.remove("open");
+  backBtn.style.display = "none";
+  const counts = {};
+  EVENTS.forEach(e => { counts[e.market_id] = (counts[e.market_id] || 0) + 1; });
+
+  const pts = [];
+  MARKETS.forEach(m => {
+    if (m.center_lat == null || m.center_lng == null) return;
+    const n = counts[m.id] || 0;
+    const mk = L.circleMarker([m.center_lat, m.center_lng], {
+      radius: Math.min(10 + n, 26), color: "#7a5a1e", weight: 2,
+      fillColor: "#e8a33d", fillOpacity: 0.9
+    }).bindTooltip(`${esc(m.name)} — ${n} event${n === 1 ? "" : "s"}`, { direction: "top" });
+    mk.on("click", () => selectMarket(m.id));
+    marketLayer.addLayer(mk);
+    pts.push([m.center_lat, m.center_lng]);
+  });
+  if (pts.length) map.fitBounds(pts, { padding: [40, 40] });
+  crumbEl.textContent = `${MARKETS.length} markets · ${EVENTS.length} events`;
+}
+
+// ---------- Tier 2: events in a market ----------
+function selectMarket(id) {
+  const m = marketsById[id];
+  const evs = EVENTS.filter(e => String(e.market_id) === String(id));
+  marketLayer.clearLayers();
+  eventLayer.clearLayers();
+  backBtn.style.display = "inline-block";
+  crumbEl.textContent = `${m.name} · ${evs.length} event${evs.length === 1 ? "" : "s"}`;
+
+  const pts = [];
+  evs.forEach(e => {
+    if (e.lat == null || e.lng == null) return;
+    const mk = L.circleMarker([e.lat, e.lng], {
+      radius: 8, color: "#000", weight: 1,
+      fillColor: friendlyColor(e.food_truck_friendly), fillOpacity: 0.95
+    }).bindTooltip(esc(e.name), { direction: "top" });
+    mk.on("click", () => openDrawer(e));
+    eventLayer.addLayer(mk);
+    pts.push([e.lat, e.lng]);
+  });
+  if (pts.length) map.fitBounds(pts, { padding: [60, 60], maxZoom: 12 });
+  else if (m.center_lat != null) map.setView([m.center_lat, m.center_lng], m.default_zoom || 9);
+}
+
+// ---------- Tier 3: detail drawer ----------
+const ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ESC[c]);
+function badge(text, cls) { return `<span class="badge ${cls}">${esc(text)}</span>`; }
+
+function openDrawer(e) {
+  const friendly = {
+    explicit_yes:  badge("Food-truck friendly", "b-green"),
+    concession_friendly: badge("Concession friendly", "b-blue"),
+    unconfirmed:   badge("Food fit unconfirmed", "b-amber"),
+    excluded:      badge("Not food-truck", "b-red")
+  }[e.food_truck_friendly] || "";
+  const verify = e.needs_confirmation === true || e.needs_confirmation === "true"
+    ? badge("Verify before relying", "b-amber") : "";
+  const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
+
+  const rows = [];
+  const add = (label, val) => { if (val) rows.push(`<dt>${esc(label)}</dt><dd>${esc(val)}</dd>`); };
+  add("When", e.typical_dates || e.month);
+  add("Size / attendance", e.attendance_text);
+  add("Distance from Columbia", e.distance_from_columbia_mi ? e.distance_from_columbia_mi + " mi (" + (e.trip_type || "").replace("_", " ") + ")" : "");
+  add("Apply via", e.application_method);
+  const contact = [e.contact_name, e.contact_email, e.contact_phone].filter(Boolean).join(" · ");
+  add("Contact", contact);
+  add("Fee", e.food_vendor_fee && e.food_vendor_fee !== "Not researched" ? e.food_vendor_fee : "");
+  add("Notes", e.notes);
+
+  let home = "";
+  if (e.homepage_url) {
+    const url = /^https?:\/\//.test(e.homepage_url) ? e.homepage_url : "https://" + e.homepage_url;
+    home = `<a class="home" href="${esc(url)}" target="_blank" rel="noopener">Event page ↗</a>`;
+  }
+
+  drawerBody.innerHTML = `
+    <h2>${esc(e.name)}</h2>
+    <div class="loc">${esc(e.city)}, ${esc(e.state)}</div>
+    <div>${typeB}${friendly}${verify}</div>
+    <dl>${rows.join("")}</dl>
+    ${home}`;
+  drawer.classList.add("open");
+}
+
+document.querySelector("#drawer .close").addEventListener("click", () => drawer.classList.remove("open"));
+backBtn.addEventListener("click", showMarkets);
+
+// ---------- boot ----------
+(async function init() {
+  if (!KEY || KEY.includes("PASTE_YOUR")) {
+    setStatus("⚠ Set SUPABASE_ANON_KEY in config.js to load data."); return;
+  }
+  try {
+    setStatus("Loading…");
+    [MARKETS, EVENTS] = await Promise.all([
+      fetchJSON("vending_markets?select=*&order=id"),
+      fetchJSON("vending_events?select=*&verification_status=in.(verified,partial)&food_truck_friendly=neq.excluded&lat=not.is.null")
+    ]);
+    marketsById = Object.fromEntries(MARKETS.map(m => [String(m.id), m]));
+    setStatus("");
+    showMarkets();
+  } catch (err) {
+    setStatus("Load error: " + err.message);
+    console.error(err);
+  }
+})();
+
+</script>
+</body>
+</html>
