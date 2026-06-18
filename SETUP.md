@@ -378,7 +378,7 @@ need to re-run the schema unless table structure changed). Regenerate it after e
 python freshness_report.py     # offline punch-list: what needs verifying / re-dating
 ```
 ~Once a year (Jan-Mar, when next-year dates publish): trigger a re-date research pass on the
-existing events, bump LAST_VERIFIED in vending_circuit_etl.py, then:
+existing events, set their per-row last_verified date in VendingCircuit.csv, then:
 ```powershell
 python vending_circuit_etl.py
 python vending_circuit_geocode.py

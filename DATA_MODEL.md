@@ -68,7 +68,7 @@ events are still useful leads, so we publish them with a flag rather than droppi
 | primary_source_url | text | provenance |
 | **lat / lng** | double | **required to publish** (geocoded — Task 3); city-level + ring offset (approximate, not exact addresses) |
 | notes | text | caveats, fit warnings |
-| last_verified | date | when the row was last research-verified; powers `freshness_report.py` |
+| last_verified | date | when the row was last research-verified; powers `freshness_report.py`. **Per-row** — stored in `VendingCircuit.csv` (one date per event), not a global constant, so a partial refresh can stamp only the rows it touched. The ETL falls back to `LAST_VERIFIED_DEFAULT` only for rows that leave it blank. |
 
 > Deferred / not yet implemented (add later if needed): `venue_name`, `address` (we geocode at
 > city level, so these are unused for now), `application_url` (folded into `application_method` /
@@ -196,7 +196,7 @@ the event persists, the date shifts each year). Kept fresh by hand, no services:
   `needs_confirmation` rows, `partial` rows, date strings mentioning a recent past year, and
   rows whose `last_verified` is >365 days old. Run it anytime to see what needs attention.
 - **Tier 2 — annual re-date pass** (Jan–Mar, when next-year dates publish): re-research the
-  *existing* events, bump `LAST_VERIFIED` in `vending_circuit_etl.py`, regenerate, reload.
+  *existing* events, set their `last_verified` date in `VendingCircuit.csv` (per row), regenerate, reload.
 - **Tier 3 — periodic re-discovery** (every 1–2 yrs): full new/dead-event hunt.
 
 **Reload is idempotent:** `supabase_vending_data.sql` does `truncate … restart identity cascade`

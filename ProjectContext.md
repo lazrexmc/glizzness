@@ -483,7 +483,7 @@ in parallel trips the web-search rate limiter (9 concurrent failed; sequential s
 **Keep data fresh (manual, no scheduler):**
 - `python freshness_report.py` — offline punch-list (needs_confirmation / partial / past-year /
   `last_verified` >365 days). Run anytime to see what needs attention.
-- ~Annually (Jan–Mar), trigger a re-date research pass on existing events, bump `LAST_VERIFIED`
+- ~Annually (Jan–Mar), trigger a re-date research pass on existing events, set their per-row `last_verified` in `VendingCircuit.csv`
   in `vending_circuit_etl.py`, regenerate (`etl` → `geocode` → `gen_sql`), and reload.
 - Reload is idempotent: re-running `supabase_vending_data.sql` (truncate+insert) fully refreshes
   the DB — no patches. (Note: pins are city-level/approximate by design, not exact addresses.)

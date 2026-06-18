@@ -6,8 +6,10 @@ import csv, os, re
 
 SRC = "VendingCircuit.csv"
 OUTDIR = "data"
-# Date this dataset was last research-verified. Bump when a refresh pass re-checks events.
-LAST_VERIFIED = "2026-06-17"
+# Per-row last_verified now lives in VendingCircuit.csv (one date per event). This default
+# only stamps rows that leave the column blank (e.g. a freshly added event) so a refresh pass
+# can honestly date just the rows it touched. Bump when adding rows in a new pass.
+LAST_VERIFIED_DEFAULT = "2026-06-18"
 os.makedirs(OUTDIR, exist_ok=True)
 
 # ---- 17 market hubs (from DATA_MODEL.md §5) ----
@@ -194,7 +196,7 @@ for i, r in enumerate(deduped, start=1):
         "lat": "",   # Phase 3
         "lng": "",   # Phase 3
         "notes": r["notes"],
-        "last_verified": LAST_VERIFIED,
+        "last_verified": (r.get("last_verified") or "").strip() or LAST_VERIFIED_DEFAULT,
     })
 
 # write markets.csv
