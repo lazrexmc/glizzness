@@ -66,8 +66,9 @@ events are still useful leads, so we publish them with a flag rather than droppi
 | contact_name / contact_email / contact_phone | text | split from the source `contact` field |
 | homepage_url | text | nullable — **drives the conditional UI link** |
 | primary_source_url | text | provenance |
-| **lat / lng** | double | **required to publish** (geocoded — Task 3) |
+| **lat / lng** | double | **required to publish** (geocoded — Task 3); city-level + ring offset (approximate, not exact addresses) |
 | notes | text | caveats, fit warnings |
+| last_verified | date | when the row was last research-verified; powers `freshness_report.py` |
 
 > Deferred / not yet implemented (add later if needed): `venue_name`, `address` (we geocode at
 > city level, so these are unused for now), `application_url` (folded into `application_method` /
@@ -183,3 +184,25 @@ to **NW Arkansas**.
 - [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (17 markets / 127 events / 127 schedules / 124 published)
 - [x] (Task 5) Two-tier Leaflet map (`vending-map/`) — data path verified via anon key
 - [ ] (Task 6) Filters, defunct-toggle, marker clustering, mobile polish
+
+---
+
+## 7. Data freshness (manual, no scheduler)
+
+The dataset is a point-in-time snapshot; what rots is mostly **dates** (events are annual —
+the event persists, the date shifts each year). Kept fresh by hand, no services:
+
+- **Tier 1 — `freshness_report.py`** (local, instant, offline): prints a punch-list —
+  `needs_confirmation` rows, `partial` rows, date strings mentioning a recent past year, and
+  rows whose `last_verified` is >365 days old. Run it anytime to see what needs attention.
+- **Tier 2 — annual re-date pass** (Jan–Mar, when next-year dates publish): re-research the
+  *existing* events, bump `LAST_VERIFIED` in `vending_circuit_etl.py`, regenerate, reload.
+- **Tier 3 — periodic re-discovery** (every 1–2 yrs): full new/dead-event hunt.
+
+**Reload is idempotent:** `supabase_vending_data.sql` does `truncate … restart identity cascade`
+then inserts, so re-running it (after `supabase_vending_schema.sql` exists) fully refreshes the
+data — handles added/removed events, no PK conflicts, no hand-patching.
+
+> Note on positional ids: event `id` is row-order, not a stable natural key, so refreshes use
+> truncate+insert (whole-table replace) rather than per-row upsert. If stable cross-refresh ids
+> are ever needed (e.g., external references to an event), switch `id` to a name+city slug first.

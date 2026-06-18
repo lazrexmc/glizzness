@@ -6,6 +6,8 @@ import csv, os, re
 
 SRC = "VendingCircuit.csv"
 OUTDIR = "data"
+# Date this dataset was last research-verified. Bump when a refresh pass re-checks events.
+LAST_VERIFIED = "2026-06-17"
 os.makedirs(OUTDIR, exist_ok=True)
 
 # ---- 17 market hubs (from DATA_MODEL.md §5) ----
@@ -192,6 +194,7 @@ for i, r in enumerate(deduped, start=1):
         "lat": "",   # Phase 3
         "lng": "",   # Phase 3
         "notes": r["notes"],
+        "last_verified": LAST_VERIFIED,
     })
 
 # write markets.csv

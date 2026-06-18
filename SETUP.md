@@ -363,12 +363,28 @@ python vending_circuit_geocode.py    # fills lat/lng + writes data/event_schedul
 ```
 
 **Reload the database (Supabase SQL Editor):**
-1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS).
-2. Run `supabase_vending_data.sql` (inserts 17 markets / 127 events / 127 schedules).
+1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS, the
+   anon grant, and the `last_verified` column).
+2. Run `supabase_vending_data.sql` (idempotent: `truncate … restart identity cascade` then inserts
+   17 markets / 127 events / 127 schedules).
 3. Validate: `select count(*) from vending_published_events;`  → expect **124**.
 
-To regenerate `supabase_vending_data.sql` after editing the data, re-run the INSERT generator
-(see git history) or re-export the `data/*.csv` files.
+`supabase_vending_data.sql` is **idempotent** — re-run it alone anytime to refresh the data (no
+need to re-run the schema unless table structure changed). Regenerate it after editing data with
+`python vending_circuit_gen_sql.py`.
+
+**Keep the data fresh (manual — no scheduler needed):**
+```powershell
+python freshness_report.py     # offline punch-list: what needs verifying / re-dating
+```
+~Once a year (Jan-Mar, when next-year dates publish): trigger a re-date research pass on the
+existing events, bump LAST_VERIFIED in vending_circuit_etl.py, then:
+```powershell
+python vending_circuit_etl.py
+python vending_circuit_geocode.py
+python vending_circuit_gen_sql.py
+# then re-run supabase_vending_data.sql in the SQL editor
+```
 
 **View the map:**
 ```powershell

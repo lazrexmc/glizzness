@@ -59,7 +59,8 @@ create table vending_events (
   primary_source_url text,
   lat               double precision,
   lng               double precision,
-  notes             text
+  notes             text,
+  last_verified     date            -- when this row was last research-verified (powers freshness_report.py)
 );
 create index vending_events_market_idx on vending_events(market_id);
 create index vending_events_trip_idx   on vending_events(trip_type);

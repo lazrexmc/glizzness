@@ -480,6 +480,14 @@ in parallel trips the web-search rate limiter (9 concurrent failed; sequential s
 **Run the map:** open `vending-map/index.html` (anon key already in `config.js`), or host the
 `vending-map/` folder on GitHub Pages / Netlify. See `vending-map/README.md`.
 
+**Keep data fresh (manual, no scheduler):**
+- `python freshness_report.py` — offline punch-list (needs_confirmation / partial / past-year /
+  `last_verified` >365 days). Run anytime to see what needs attention.
+- ~Annually (Jan–Mar), trigger a re-date research pass on existing events, bump `LAST_VERIFIED`
+  in `vending_circuit_etl.py`, regenerate (`etl` → `geocode` → `gen_sql`), and reload.
+- Reload is idempotent: re-running `supabase_vending_data.sql` (truncate+insert) fully refreshes
+  the DB — no patches. (Note: pins are city-level/approximate by design, not exact addresses.)
+
 **Status / roadmap:**
 - ✅ Phase 1 — publish scope + schema/enums locked (`DATA_MODEL.md`)
 - ✅ Phase 2 — ETL (`vending_circuit_etl.py`; 0 dupes, all mapped, enums normalized)
