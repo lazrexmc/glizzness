@@ -279,3 +279,15 @@ id,event_id,month,display_text,recurrence_text,year_specific
 278,278,5,May 8-9 (2026),,true
 279,279,10,Oct 9-10 (2026),,true
 280,280,9,Sep 26 (2026),,true
+281,281,10,Oct 16+ (2026),,true
+282,282,6,~Jun 26 (2026),,true
+283,283,6,Jun 6 (2026),,true
+284,284,7,Jul 16-18 (2026),,true
+285,285,9,Sep 15-19 (2026),,true
+286,286,9,Sep 11-13 (2026),,true
+287,287,7,Jul 14-18 (2026),,true
+288,288,6,First weekend June (2026),,false
+289,289,5,May 22-24 (2026),,true
+290,290,9,Sep 12 (2026),,true
+291,291,6,3rd weekend June (2026),,false
+292,292,9,4th weekend September (2026),,false

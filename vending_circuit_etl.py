@@ -110,6 +110,15 @@ reg(31,"IL","Mt. Vernon")
 reg(31,"KY","Henderson","Owensboro")
 reg(27,"IN","Columbus")          # Ethnic Expo -> Indy hub
 reg(17,"KY","Bowling Green")     # BG International Festival -> Nashville hub
+# I-40/I-49 corridor (Nashville-Memphis-LittleRock-FtSmith-Fayetteville) -> existing hubs
+reg(16,"TN","Henderson")         # West TN State Fair -> Memphis hub
+reg(16,"AR","West Memphis")      # -> Memphis hub
+reg(14,"AR","Clarksville")       # Johnson Co Peach Fest -> NW Arkansas hub
+reg(15,"AR","Russellville")      # Pope Co Fair -> Central Arkansas hub (Conway already mapped)
+# KC-Topeka-Wichita-Tulsa corridor -> existing hubs (Topeka already in hub 12)
+reg(2,"KS","Lawrence")           # Busker Fest -> KC hub
+reg(12,"KS","Emporia")           # Great American Market -> Central Kansas hub
+reg(11,"KS","El Dorado")         # -> Wichita hub
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)
