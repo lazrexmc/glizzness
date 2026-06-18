@@ -291,3 +291,12 @@ id,event_id,month,display_text,recurrence_text,year_specific
 290,290,9,Sep 12 (2026),,true
 291,291,6,3rd weekend June (2026),,false
 292,292,9,4th weekend September (2026),,false
+293,293,8,Aug 5-9 (2026),,true
+294,294,5,May 15-17 (2026),,true
+295,295,9,Sep 25-27 (2026),,true
+296,296,6,Jun 24-27 (2026),,true
+297,297,6,Jun 11-14 (2026),,true
+298,298,6,Jun 25-27 (2026),,true
+299,299,5,May 29-31 (2026),,true
+300,300,6,Jun 27 (2026),,true
+301,301,,Verify date (2026),,false
