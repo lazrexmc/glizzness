@@ -450,13 +450,13 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
-A researched master list of **337 events** (334 published) — Missouri covered statewide via a
+A researched master list of **340 events** (337 published) — Missouri covered statewide via a
 county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville corridors (31 market
 hubs) — feeds a live Supabase database and a
 static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
 
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — authoritative flat master, 337 events, 16 columns (added `county` + per-row `last_verified`)
+- `VendingCircuit.csv` — authoritative flat master, 340 events, 16 columns (added `county` + per-row `last_verified`)
   (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
@@ -472,7 +472,7 @@ static web map. Distinct from the accounting automation but lives in the same re
 
 **Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
 `vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view
-`vending_published_events` (334 rows). Public-read RLS on `vending_*` only; accounting tables
+`vending_published_events` (337 rows). Public-read RLS on `vending_*` only; accounting tables
 remain anon-blocked. The map reads via the anon key (safe to expose).
 
 **How the data was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each

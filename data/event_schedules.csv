@@ -336,3 +336,6 @@ id,event_id,month,display_text,recurrence_text,year_specific
 335,335,9,Weekends Sep 5 - Oct 18 (2026),Weekends Sep 5 - Oct 18 (2026),true
 336,336,9,Sep 25-26 (2026),,true
 337,337,6,Jun 12 (2026),,true
+338,338,6,Jun 6-7 (2026),,true
+339,339,9,Sep 19-20 (2026),,true
+340,340,5,May 23-24 (2026),,true

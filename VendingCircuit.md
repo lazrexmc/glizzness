@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 337 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 340 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 334 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 337 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -12,24 +12,26 @@
 
 ## Counts
 
-- 🏠 Hometown / mid-MO: **5**
-- 🚗 Day trips (≤150 mi): **152**
+- 🏠 Hometown / mid-MO: **7**
+- 🚗 Day trips (≤150 mi): **153**
 - 🏨 Overnight (>150 mi): **177**
 - ❌ Defunct / excluded (hidden): **3**
 
 ---
 
-## 🏠 Hometown & mid-Missouri (~0 mi)  (5)
+## 🏠 Hometown & mid-Missouri (~0 mi)  (7)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
+| Art in the Park ⚠️ | Columbia, MO | Boone | 0 | June | Jun 6-7 (2026) | — | columbiaartleague.org |
 | Boone County Fair | Columbia, MO | Boone | 0 | July | Jul 21-25 | County fair (booth hrs 5-10pm) | theboonecountyfair.com/vendors |
 | Columbia Area Earth Day Festival | Columbia, MO | Boone | 0 | April | Apr 26 (rain date May 3); 12-6pm | 200+ vendors (35th year) | columbiaearthday.org |
 | Columbia Farmers Market | Columbia, MO | Boone | 0 | Year-round | Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar) | Steady local traffic | columbiafarmersmarket.org/how-to/become-a-vendor |
+| Heritage Festival & Craft Show ⚠️ | Columbia, MO | Boone | 0 | September | Sep 19-20 (2026) | — | como.gov |
 | Living Windows Festival ⚠️ | Columbia, MO | Boone | 0 | December | First Friday of December (6-8pm) | Downtown holiday crowd | discoverthedistrict.com |
 | True/False Film Fest ⚠️ | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026); Mar 4-7 (2027) | Large (downtown crowds) | truefalse.org |
 
-## 🚗 Day trips (≤150 mi)  (152)
+## 🚗 Day trips (≤150 mi)  (153)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -37,6 +39,7 @@
 | Hartsburg Pumpkin Festival | Hartsburg, MO | Boone | 20 | October | Oct 10-11 (9a-5p both days) | 25000-30000+ (150+ craft vendors) | hartsburgpumpkinfest.com/vendor.php |
 | Central Missouri Renaissance Festival | Kingdom City, MO | Callaway | 24 | May | Apr 18-19, 25-26 & May 3-4 (2026) | — | centralmorenfest.net |
 | Centralia Anchor Festival | Centralia, MO | Boone | 24 | May | May 29-31 (2026) | — | centraliamochamber.org |
+| Pedaler's Jamboree ⚠️ | Boonville, MO | Cooper | 25 | May | May 23-24 (2026) | — | pedalersjamboree.com |
 | Sturgeon Summer Days Rodeo | Sturgeon, MO | Boone | 26 | August | Aug 14-15 (2026) | — | summerfest.sturgeon-mo.org |
 | Big Muddy Folk Festival ⚠️ | Boonville, MO | Cooper | 28 | April | Apr 10-11 (2026) | — | bigmuddy.org |
 | Boonville Heritage Days | Boonville, MO | Cooper | 28 | June | Fourth weekend of June | Community festival | goboonville.com/heritage-days-4th-weekend-in-june |
