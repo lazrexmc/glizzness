@@ -18,7 +18,26 @@ const lpCount   = document.getElementById("lp-count");
 let listOpen = false;
 
 let EVENTS = [], monthsByEvent = {}, eventsById = {};
-const FILT = { month: "all", friendly: "all", trip: "all", county: "all", showHidden: false };
+const FILT = { month: "all", friendly: "all", trip: "all", county: "all",
+               showHidden: false, showMusic: false, showPast: false };
+
+// ---------- date awareness (events are annual; "past" means next is next year) ----------
+const NOW = new Date();
+const NOW_M = NOW.getMonth() + 1, NEXT_Y = NOW.getFullYear() + 1;
+const MONTH_FULL = ["", "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+// an annual event has "passed this year" when every month it runs has already gone by.
+function isPastSeason(e) {
+  const ms = monthsByEvent[e.id] || [];
+  if (!ms.length) return false;            // year-round / no month -> always upcoming
+  return Math.max(...ms) < NOW_M;
+}
+// next occurrence label for a passed event: its earliest month, next year.
+function nextReturnLabel(e) {
+  const ms = monthsByEvent[e.id] || [];
+  return ms.length ? "~" + MONTH_FULL[Math.min(...ms)] + " " + NEXT_Y : "";
+}
+const isMusic = e => e.event_type === "music_fest";
 
 const map = L.map("map", { zoomControl: true }).setView([38.7, -92.3], 7);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -58,6 +77,8 @@ const isHidden = e => !isPublished(e);
 function passesFilter(e) {
   if (e.lat == null || e.lng == null) return false;
   if (!FILT.showHidden && isHidden(e)) return false;
+  if (!FILT.showMusic && isMusic(e)) return false;        // music fests off by default
+  if (!FILT.showPast && isPastSeason(e)) return false;    // already-passed-this-year off by default
   if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
   if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
   if (FILT.county !== "all" && (e.county || "") + "|" + (e.state || "") !== FILT.county) return false;
@@ -91,6 +112,7 @@ function render(fit) {
     if (e.lat == null || e.lng == null) return;
     const mk = L.marker([e.lat, e.lng], { icon: dotIcon(friendlyColor(e)) })
       .bindTooltip(esc(e.name), { direction: "top" });
+    if (isPastSeason(e)) mk.setOpacity(0.45);   // dim events whose date already passed this year
     mk.on("click", () => openDrawer(e));
     markers.push(mk);
     pts.push([e.lat, e.lng]);
@@ -115,9 +137,11 @@ function renderList() {
   listBody.innerHTML = vis.length
     ? vis.map(e => {
         const when = e.typical_dates || e.month || "";
-        return `<button class="lp-row" data-id="${esc(e.id)}">
+        const past = isPastSeason(e);
+        const passed = past ? ` · <span class="lp-passed">passed · returns ${esc(nextReturnLabel(e))}</span>` : "";
+        return `<button class="lp-row${past ? " lp-past" : ""}" data-id="${esc(e.id)}">
           <div class="nm"><span class="lp-dot" style="background:${friendlyColor(e)}"></span>${esc(e.name)}</div>
-          <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}</div>
+          <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}${passed}</div>
         </button>`;
       }).join("")
     : `<div class="lp-empty">No events in this view. Pan or zoom out to see more.</div>`;
@@ -146,6 +170,7 @@ function openDrawer(e) {
       ? badge("Excluded — not vending", "b-red") : "";
   const verify = e.needs_confirmation === true || e.needs_confirmation === "true"
     ? badge("Verify before relying", "b-amber") : "";
+  const pastB = isPastSeason(e) ? badge("Passed this year · returns " + nextReturnLabel(e), "b-amber") : "";
   const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
 
   const rows = [];
@@ -169,7 +194,7 @@ function openDrawer(e) {
   drawerBody.innerHTML = `
     <h2>${esc(e.name)}</h2>
     <div class="loc">${esc(e.city)}, ${esc(e.state)}${countyTxt}</div>
-    <div>${typeB}${friendly}${statusB}${verify}</div>
+    <div>${typeB}${friendly}${statusB}${verify}${pastB}</div>
     <dl>${rows.join("")}</dl>
     ${home}`;
   drawer.classList.add("open");
@@ -223,13 +248,22 @@ function wireFilters() {
   document.getElementById("f-hidden").addEventListener("change", e => {
     FILT.showHidden = e.target.checked; applyFilters();
   });
+  document.getElementById("f-music").addEventListener("change", e => {
+    FILT.showMusic = e.target.checked; applyFilters();
+  });
+  document.getElementById("f-past").addEventListener("change", e => {
+    FILT.showPast = e.target.checked; applyFilters();
+  });
   document.getElementById("f-reset").addEventListener("click", () => {
-    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all"; FILT.showHidden = false;
+    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all";
+    FILT.showHidden = false; FILT.showMusic = false; FILT.showPast = false;
     monthSel.value = "all";
     document.getElementById("f-friendly").value = "all";
     document.getElementById("f-trip").value = "all";
     countySel.value = "all";
     document.getElementById("f-hidden").checked = false;
+    document.getElementById("f-music").checked = false;
+    document.getElementById("f-past").checked = false;
     applyFilters();
   });
 }

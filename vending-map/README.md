@@ -96,6 +96,15 @@ published, edit the rows in Supabase (or re-run the ETL + reload) — the map re
   `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
   filter keys on `(county, state)` (county names repeat across states) and lists only counties present
   in the data, so it stays short.
+- **Upcoming-only by default (date awareness):** events are annual, so an event whose months have all
+  already gone by *this calendar year* is treated as "passed this season" and **hidden by default** —
+  users only see things they can still catch. A **Past events** toggle reveals them (dimmed dots, a
+  list note, and a drawer badge *"Passed this year · returns ~[Month] [next year]"* derived from the
+  event's month). This recomputes from the browser date every load — no manual monthly cleanup. Events
+  with no month (year-round/various) always count as upcoming.
+- **Music-fest toggle:** dedicated music festivals (`event_type = 'music_fest'`) are **hidden by
+  default** so they don't flood the map, and shown via the **Music fests** toggle. Food-forward events
+  that merely include music (wine/BBQ/food festivals) keep their real type and stay visible.
 - **Defunct/excluded toggle:** all events are fetched; defunct + excluded are hidden by default and
   shown (styled red, with a status badge in the drawer) when toggled on.
 - **Mobile polish:** full-width drawer, wrapping filter bar, condensed legend on small screens.

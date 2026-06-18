@@ -161,7 +161,9 @@ def event_type(name, notes):
     if "christmas" in n or "holiday market" in n or "living windows" in n or "dickens" in n: return "holiday_market"
     if any(k in n for k in ("brewing","brewery","winery","taproom","boardwalk","marketplace","trucks, taps","vineyard","hold fast","guthrie green")): return "venue"
     if any(k in n for k in ("cherry blossom","czech","latino","fiestas","italian","greek","heritage","cultural")): return "cultural_fest"
-    if "music" in n: return "music_fest"
+    if (any(k in n for k in ("music","blues","jazz","ragtime","bluegrass","reggae","symphony","jamboree"))
+            or re.search(r"folk", n)) and not any(k in n for k in ("wine","barbecue","bbq","food")):
+        return "music_fest"  # dedicated music fests only; food-forward (wine/bbq) keep their type
     return "festival"
 
 VENUE_NAMES = ("hold fast","marketplace at 2500","t&t","boardwalk","marshall brewing","newbo","guthrie green","rose district farmers","crossroads first fridays")
