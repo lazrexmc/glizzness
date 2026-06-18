@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Glizzness — Vending Circuit Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <style>
     :root { --bg:#16130f; --panel:#1f1b16; --ink:#f5efe6; --muted:#b9ad9b;
             --accent:#e8a33d; --green:#5bbf6a; --blue:#5aa7e0; --amber:#e0b14a; --red:#d0594f; }
@@ -15,8 +17,6 @@
     header h1 { font-size:16px; margin:0; font-weight:700; letter-spacing:.2px; }
     header .dog { font-size:20px; }
     #crumb { color:var(--muted); font-size:13px; margin-left:auto; }
-    #back { display:none; cursor:pointer; background:var(--accent); color:#1a1206; border:none;
-            border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
     /* filter bar */
     #filterbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px;
                  padding:8px 14px; background:#1a1712; border-bottom:1px solid #000; z-index:1000; }
@@ -49,6 +49,8 @@
               border-radius:8px; padding:10px 12px; font-size:12px; z-index:1000; }
     .legend .row { display:flex; align-items:center; gap:7px; margin:3px 0; }
     .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
+    /* event marker dots (clustered) */
+    .evt-dot span { display:block; width:14px; height:14px; border-radius:50%; border:1px solid #000; box-shadow:0 0 0 1px rgba(0,0,0,.25); }
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
@@ -71,7 +73,6 @@
     <header>
       <span class="dog">🌭</span>
       <h1>The Glizzness — Vending Circuit</h1>
-      <button id="back">← All markets</button>
       <span id="crumb"></span>
     </header>
     <div id="filterbar">
@@ -97,12 +98,11 @@
       <div id="map"></div>
       <div id="status">Loading…</div>
       <div class="legend">
-        <div class="row"><span class="dot" style="background:#e8a33d"></span> Market hub (click to open)</div>
         <div class="row"><span class="dot" style="background:#5bbf6a"></span> Food-truck friendly</div>
         <div class="row"><span class="dot" style="background:#5aa7e0"></span> Concession friendly</div>
         <div class="row"><span class="dot" style="background:#e0b14a"></span> Unconfirmed — verify</div>
         <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
-        <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Pins show the market area, not exact addresses.</div>
+        <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Zoom in to scatter, out to group. Pins show the city/area, not exact addresses.</div>
       </div>
       <aside id="drawer">
         <button class="close" aria-label="Close">×</button>
@@ -112,6 +112,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>

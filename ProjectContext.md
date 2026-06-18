@@ -464,8 +464,10 @@ static web map. Distinct from the accounting automation but lives in the same re
 - `data/markets.csv` (17), `data/events.csv` (127), `data/event_schedules.csv` (127)
 - `supabase_vending_schema.sql` — DDL + `vending_published_events` gate view + public-read RLS
 - `supabase_vending_data.sql` — generated INSERTs (17 + 127 + 127)
-- `vending-map/` — static Leaflet map (index.html / app.js / config.js / README.md); filters by
-  month / food-truck-fit / trip-type / **county**, plus a defunct-excluded toggle
+- `vending-map/` — static Leaflet map (index.html / app.js / config.js / README.md) with **zoom-based
+  marker clustering** (Leaflet.markercluster: dots group/scatter by zoom; replaced the old two-tier
+  hub→event→back model); filters by month / food-truck-fit / trip-type / **county**, plus a
+  defunct-excluded toggle
 
 **Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
 `vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view

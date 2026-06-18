@@ -195,8 +195,10 @@ to **NW Arkansas**.
 - [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (127 events, 0 dupes, 0 unmapped)
 - [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (127/127 geocoded)
 - [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (17 markets / 127 events / 127 schedules / 124 published)
-- [x] (Task 5) Two-tier Leaflet map (`vending-map/`) — data path verified via anon key
-- [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish (clustering skipped)
+- [x] (Task 5) Leaflet map (`vending-map/`) — data path verified via anon key
+- [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish
+- [x] (Map) **Zoom-based marker clustering** (Leaflet.markercluster) — replaced the two-tier
+  hub→event→back model with colored dots that group/scatter by zoom (2026-06-18)
 - [x] (Cleanup) Per-row `last_verified` + `county` column + `vending_circuit_gen_md.py` (regenerable human view)
 - [~] (MO county sweep) Lightweight capture of plausibly-vendable events, county by county. New rows
   carry `status = "Verified - vending unconfirmed"` (verify badge); details deferred for backfill.
@@ -209,7 +211,7 @@ to **NW Arkansas**.
   - **Batch 4** — rest of state: deep Bootheel (hub 25), far Northwest/St. Joseph (hub 26), and the SW
     corner (Carthage/Joplin into hub 4) → +16 events. **Total now 225 / 222 published, 26 hubs.**
     Missouri is broadly covered; remaining work is detail backfill + occasional infill.
-  - Watch-item: Mid-MO hub at 41 pins; the county filter mitigates, revisit clustering if it grows.
+  - Density is now handled by zoom-based clustering (the old per-hub pin density watch-item is moot).
   - Biggest open item: the `needs_confirmation` backlog (108 lightweight leads) awaiting detail backfill.
 
 ---

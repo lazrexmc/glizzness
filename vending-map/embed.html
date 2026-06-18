@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Glizzness — Vending Circuit Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <style>
     :root { --bg:#16130f; --panel:#1f1b16; --ink:#f5efe6; --muted:#b9ad9b;
             --accent:#e8a33d; --green:#5bbf6a; --blue:#5aa7e0; --amber:#e0b14a; --red:#d0594f; }
@@ -15,8 +17,6 @@
     header h1 { font-size:16px; margin:0; font-weight:700; letter-spacing:.2px; }
     header .dog { font-size:20px; }
     #crumb { color:var(--muted); font-size:13px; margin-left:auto; }
-    #back { display:none; cursor:pointer; background:var(--accent); color:#1a1206; border:none;
-            border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
     /* filter bar */
     #filterbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px;
                  padding:8px 14px; background:#1a1712; border-bottom:1px solid #000; z-index:1000; }
@@ -49,6 +49,8 @@
               border-radius:8px; padding:10px 12px; font-size:12px; z-index:1000; }
     .legend .row { display:flex; align-items:center; gap:7px; margin:3px 0; }
     .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
+    /* event marker dots (clustered) */
+    .evt-dot span { display:block; width:14px; height:14px; border-radius:50%; border:1px solid #000; box-shadow:0 0 0 1px rgba(0,0,0,.25); }
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
@@ -71,7 +73,6 @@
     <header>
       <span class="dog">🌭</span>
       <h1>The Glizzness — Vending Circuit</h1>
-      <button id="back">← All markets</button>
       <span id="crumb"></span>
     </header>
     <div id="filterbar">
@@ -97,12 +98,11 @@
       <div id="map"></div>
       <div id="status">Loading…</div>
       <div class="legend">
-        <div class="row"><span class="dot" style="background:#e8a33d"></span> Market hub (click to open)</div>
         <div class="row"><span class="dot" style="background:#5bbf6a"></span> Food-truck friendly</div>
         <div class="row"><span class="dot" style="background:#5aa7e0"></span> Concession friendly</div>
         <div class="row"><span class="dot" style="background:#e0b14a"></span> Unconfirmed — verify</div>
         <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
-        <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Pins show the market area, not exact addresses.</div>
+        <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Zoom in to scatter, out to group. Pins show the city/area, not exact addresses.</div>
       </div>
       <aside id="drawer">
         <button class="close" aria-label="Close">×</button>
@@ -112,6 +112,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
 // Supabase connection for the public, read-only vending map.
 // The ANON key is safe to expose in a client app: the vending_* tables have
@@ -122,32 +123,36 @@ window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 
 </script>
   <script>
-/* The Glizzness — Vending Circuit map (two-tier, lazy render).
-   Tier 1: market hub pins. Tier 2: events of the selected market. Tier 3: detail drawer.
+/* The Glizzness — Vending Circuit map (zoom-based marker clustering).
+   Every event is a colored dot in a single Leaflet.markercluster layer: dots group
+   into numbered bubbles when zoomed out and scatter into individual dots when zoomed in.
+   Click a bubble to zoom in; click a dot for the detail drawer.
    Reads Supabase REST with the public anon key (vending_* tables have public-read RLS).
-   Phase 6: month / friendliness / trip-type filters + a defunct/excluded toggle. */
+   Filters: month / friendliness / trip-type / county + a defunct/excluded toggle. */
 
 const URL = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY;
 const HEADERS = { apikey: KEY, Authorization: "Bearer " + KEY };
 
 const statusEl = document.getElementById("status");
 const crumbEl  = document.getElementById("crumb");
-const backBtn  = document.getElementById("back");
 const drawer   = document.getElementById("drawer");
 const drawerBody = document.getElementById("drawer-body");
 
-let MARKETS = [], EVENTS = [], marketsById = {}, monthsByEvent = {};
-let currentMarket = null;                       // null = Tier 1; else selected market id
+let EVENTS = [], monthsByEvent = {};
 const FILT = { month: "all", friendly: "all", trip: "all", county: "all", showHidden: false };
 
-let marketLayer = L.layerGroup(), eventLayer = L.layerGroup();
-
-const map = L.map("map", { zoomControl: true }).setView([39.2, -93.0], 5);
+const map = L.map("map", { zoomControl: true }).setView([38.7, -92.3], 7);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
-marketLayer.addTo(map);
-eventLayer.addTo(map);
+
+// one cluster layer for all event dots — groups/scatters by zoom automatically
+const clusterGroup = L.markerClusterGroup({
+  maxClusterRadius: 55,
+  showCoverageOnHover: false,
+  spiderfyOnMaxZoom: true,
+  chunkedLoading: true
+}).addTo(map);
 
 async function fetchJSON(path) {
   const res = await fetch(URL + "/rest/v1/" + path, { headers: HEADERS });
@@ -183,68 +188,33 @@ const friendlyColor = e => {
   const f = e.food_truck_friendly;
   return f === "explicit_yes" ? "#5bbf6a" : f === "unconfirmed" ? "#e0b14a" : "#5aa7e0";
 };
+const dotIcon = color => L.divIcon({
+  className: "evt-dot", iconSize: [16, 16], iconAnchor: [8, 8],
+  html: `<span style="background:${color}"></span>`
+});
 
 function setStatus(msg) { statusEl.textContent = msg; statusEl.style.display = msg ? "block" : "none"; }
 
-// ---------- Tier 1: markets ----------
-function showMarkets() {
-  currentMarket = null;
-  eventLayer.clearLayers();
-  marketLayer.clearLayers();
-  drawer.classList.remove("open");
-  backBtn.style.display = "none";
-
+// ---------- render all visible events into the cluster layer ----------
+function render(fit) {
+  clusterGroup.clearLayers();
   const vis = visibleEvents();
-  const counts = {};
-  vis.forEach(e => { counts[e.market_id] = (counts[e.market_id] || 0) + 1; });
-
-  const pts = [];
-  MARKETS.forEach(m => {
-    if (m.center_lat == null || m.center_lng == null) return;
-    const n = counts[m.id] || 0;
-    const mk = L.circleMarker([m.center_lat, m.center_lng], {
-      radius: n ? Math.min(10 + n, 26) : 8, color: "#7a5a1e", weight: 2,
-      fillColor: n ? "#e8a33d" : "#5a4a2e", fillOpacity: n ? 0.9 : 0.3
-    }).bindTooltip(`${esc(m.name)} — ${n} event${n === 1 ? "" : "s"}`, { direction: "top" });
-    if (n) { mk.on("click", () => selectMarket(m.id)); pts.push([m.center_lat, m.center_lng]); }
-    marketLayer.addLayer(mk);
-  });
-  if (pts.length) map.fitBounds(pts, { padding: [40, 40] });
-  crumbEl.textContent = `${MARKETS.length} markets · ${vis.length} event${vis.length === 1 ? "" : "s"}`;
-}
-
-// ---------- Tier 2: events in a market ----------
-function selectMarket(id) {
-  currentMarket = id;
-  const m = marketsById[id];
-  const evs = visibleEvents().filter(e => String(e.market_id) === String(id));
-  marketLayer.clearLayers();
-  eventLayer.clearLayers();
-  backBtn.style.display = "inline-block";
-  crumbEl.textContent = `${m.name} · ${evs.length} event${evs.length === 1 ? "" : "s"}`;
-
-  const pts = [];
-  evs.forEach(e => {
+  const markers = [], pts = [];
+  vis.forEach(e => {
     if (e.lat == null || e.lng == null) return;
-    const mk = L.circleMarker([e.lat, e.lng], {
-      radius: 8, color: "#000", weight: 1,
-      fillColor: friendlyColor(e), fillOpacity: 0.95
-    }).bindTooltip(esc(e.name), { direction: "top" });
+    const mk = L.marker([e.lat, e.lng], { icon: dotIcon(friendlyColor(e)) })
+      .bindTooltip(esc(e.name), { direction: "top" });
     mk.on("click", () => openDrawer(e));
-    eventLayer.addLayer(mk);
+    markers.push(mk);
     pts.push([e.lat, e.lng]);
   });
-  if (pts.length) map.fitBounds(pts, { padding: [60, 60], maxZoom: 12 });
-  else if (m.center_lat != null) map.setView([m.center_lat, m.center_lng], m.default_zoom || 9);
+  clusterGroup.addLayers(markers);
+  crumbEl.textContent = `${vis.length} event${vis.length === 1 ? "" : "s"}`;
+  if (fit && pts.length) map.fitBounds(pts, { padding: [40, 40], maxZoom: 12 });
 }
+const applyFilters = () => render(true);
 
-// re-render the current tier after a filter change
-function applyFilters() {
-  if (currentMarket != null && marketsById[currentMarket]) selectMarket(currentMarket);
-  else showMarkets();
-}
-
-// ---------- Tier 3: detail drawer ----------
+// ---------- detail drawer ----------
 const ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ESC[c]);
 function badge(text, cls) { return `<span class="badge ${cls}">${esc(text)}</span>`; }
@@ -291,7 +261,6 @@ function openDrawer(e) {
 }
 
 document.querySelector("#drawer .close").addEventListener("click", () => drawer.classList.remove("open"));
-backBtn.addEventListener("click", showMarkets);
 
 // ---------- filter controls ----------
 const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -333,7 +302,7 @@ function wireFilters() {
     document.getElementById("f-trip").value = "all";
     countySel.value = "all";
     document.getElementById("f-hidden").checked = false;
-    showMarkets();
+    applyFilters();
   });
 }
 
@@ -345,12 +314,10 @@ function wireFilters() {
   try {
     setStatus("Loading…");
     let schedules;
-    [MARKETS, EVENTS, schedules] = await Promise.all([
-      fetchJSON("vending_markets?select=*&order=id"),
+    [EVENTS, schedules] = await Promise.all([
       fetchJSON("vending_events?select=*&lat=not.is.null&order=id"),
       fetchJSON("vending_event_schedules?select=event_id,month")
     ]);
-    marketsById = Object.fromEntries(MARKETS.map(m => [String(m.id), m]));
     monthsByEvent = {};
     schedules.forEach(s => {
       if (s.month == null) return;
@@ -358,7 +325,7 @@ function wireFilters() {
     });
     wireFilters();
     setStatus("");
-    showMarkets();
+    render(true);
   } catch (err) {
     setStatus("Load error: " + err.message);
     console.error(err);
