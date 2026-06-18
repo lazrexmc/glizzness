@@ -37,6 +37,10 @@ MARKETS = [
     (19, "Rolla / I-44 Corridor", "Rolla", "MO", 37.9514, -91.7713, 9, 100,     "I-44 corridor: Rolla, St. James, Cuba, Steelville, Salem, Waynesville"),
     (20, "Southeast Missouri", "Cape Girardeau", "MO", 37.3059, -89.5181, 8, 205,"SE Missouri: Cape Girardeau, Farmington, Poplar Bluff, Sikeston, Ste. Genevieve"),
     (21, "South-Central Ozarks", "West Plains", "MO", 36.7281, -91.8524, 8, 150, "South-central Ozarks: West Plains, Ava, Gainesville, Houston, Eminence"),
+    # North + West-central Missouri ring (added in batch 3)
+    (22, "Northeast Missouri", "Hannibal", "MO", 39.7084, -91.3585, 9, 105,     "NE Missouri / Mark Twain river country: Hannibal, Bowling Green, Troy, Paris"),
+    (23, "North-Central Missouri", "Kirksville", "MO", 40.1947, -92.5830, 9, 95, "N-central MO: Kirksville, Macon, Brookfield, Trenton, Chillicothe, Carrollton"),
+    (24, "West-Central Missouri", "Warrensburg", "MO", 38.7628, -93.7360, 9, 85, "W-central MO: Warrensburg, Clinton, Warsaw, Richmond, Butler, Nevada"),
 ]
 
 # ---- city -> market_id (keyed by (city_lower, state)) ----
@@ -44,7 +48,7 @@ CITY_HUB = {}
 def reg(mid, state, *cities):
     for c in cities:
         CITY_HUB[(c.lower(), state)] = mid
-reg(1,"MO","Columbia","Boonville","Hartsburg","Jefferson City","Moberly","Hermann","Sedalia","Hannibal","Mexico","Fulton","Rocheport","Ashland")
+reg(1,"MO","Columbia","Boonville","Hartsburg","Jefferson City","Moberly","Hermann","Sedalia","Mexico","Fulton","Rocheport","Ashland")
 # Mid-MO county sweep batch 1 — additional towns roll up to the Mid-Missouri hub (county field carries the fine grain)
 reg(1,"MO","Centralia","Sturgeon","Auxvasse","Kingdom City","Fayette","New Franklin","Higbee","Huntsville","California","Versailles","Linn","Owensville","Marshall","Montgomery City")
 reg(2,"MO","Kansas City","Independence","Lee's Summit","Parkville","Blue Springs","Liberty","Gladstone")
@@ -73,6 +77,11 @@ reg(18,"MO","Eldon","Camdenton","Laurie","Osage Beach")
 reg(19,"MO","Rolla","St. James","Cuba","Steelville","Salem","Waynesville","Vienna")
 reg(20,"MO","Cape Girardeau","Jackson","Perryville","Sikeston","Farmington","Ste. Genevieve","Fredericktown","Potosi","Ironton","Dexter","Doniphan","Van Buren","Poplar Bluff","Greenville","Marble Hill")
 reg(21,"MO","West Plains","Gainesville","Thayer","Eminence","Ava","Houston")
+# North + West-central Missouri ring (batch 3); Hannibal moves from Mid-MO to NE hub
+reg(22,"MO","Hannibal","Bowling Green","Troy","Paris")
+reg(23,"MO","Kirksville","Brookfield","Trenton","Chillicothe","Carrollton","Macon","Salisbury")
+reg(24,"MO","Warrensburg","Clinton","Warsaw","Richmond","Butler","Nevada")
+reg(4,"MO","Stockton")
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)

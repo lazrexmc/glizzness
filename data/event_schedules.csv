@@ -189,3 +189,22 @@ id,event_id,month,display_text,recurrence_text,year_specific
 188,188,5,May 1,,true
 189,189,7,"Jul 18-19 (2026, verify)",,true
 190,190,,Summer (verify 2026),,true
+191,191,10,Oct 18-19 (2026),,true
+192,192,7,Jul 28 - Aug 1 (2026),,true
+193,193,7,Jul 14-18 (2026),,true
+194,194,7,Jul 6-11 (2026),,true
+195,195,7,Jul 14-18 (2026),,true
+196,196,9,Sep 19 (2026),,true
+197,197,8,Aug 29 - Sep 1 (2026),,true
+198,198,10,Oct 16-17 (2026),,true
+199,199,6,Late June (2026),,false
+200,200,7,Jul 31 - Aug 8 (2026),,true
+201,201,7,July (verify 2026),,true
+202,202,7,July (verify 2026),,true
+203,203,7,Jul 1-4 (2026),,true
+204,204,6,Jun 3-6 (2026),,true
+205,205,6,Jun 26 - Jul 5 (2026),,true
+206,206,5,First weekend May (2026),,false
+207,207,7,Jul 26 - Aug 1 (2026),,true
+208,208,6,Jun 11-13 (2026),,true
+209,209,9,Late Sep (verify 2026),,true

@@ -20,3 +20,6 @@ id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_colum
 19,Rolla / I-44 Corridor,Rolla,MO,37.9514,-91.7713,9,100,"I-44 corridor: Rolla, St. James, Cuba, Steelville, Salem, Waynesville"
 20,Southeast Missouri,Cape Girardeau,MO,37.3059,-89.5181,8,205,"SE Missouri: Cape Girardeau, Farmington, Poplar Bluff, Sikeston, Ste. Genevieve"
 21,South-Central Ozarks,West Plains,MO,36.7281,-91.8524,8,150,"South-central Ozarks: West Plains, Ava, Gainesville, Houston, Eminence"
+22,Northeast Missouri,Hannibal,MO,39.7084,-91.3585,9,105,"NE Missouri / Mark Twain river country: Hannibal, Bowling Green, Troy, Paris"
+23,North-Central Missouri,Kirksville,MO,40.1947,-92.583,9,95,"N-central MO: Kirksville, Macon, Brookfield, Trenton, Chillicothe, Carrollton"
+24,West-Central Missouri,Warrensburg,MO,38.7628,-93.736,9,85,"W-central MO: Warrensburg, Clinton, Warsaw, Richmond, Butler, Nevada"
