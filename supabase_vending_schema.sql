@@ -119,6 +119,9 @@ create policy vending_sched_read     on vending_event_schedules  for select usin
 create policy vending_sources_read   on vending_sources          for select using (true);
 create policy vending_fees_read      on vending_fees             for select using (true);
 
+-- the gate view is the canonical public "published" endpoint; let anon read it
+grant select on vending_published_events to anon, authenticated;
+
 commit;
 
 -- ============================================================
