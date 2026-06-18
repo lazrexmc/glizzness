@@ -1,18 +1,18 @@
-id,name,anchor_city,state,distance_from_columbia_mi,summary
-1,Columbia / Mid-Missouri,Columbia,MO,0,Hometown + mid-MO towns within ~100 mi
-2,Kansas City Metro,Kansas City,MO,125,KC MO+KS metro and suburbs
-3,St. Louis Metro,St. Louis,MO,125,STL MO side + Illinois Metro East
-4,Springfield / Ozarks,Springfield,MO,165,SW Missouri Ozarks incl. Branson/Joplin
-5,Central Illinois,Springfield,IL,140,Springfield IL / Illinois State Fair
-6,Des Moines,Des Moines,IA,200,Des Moines metro
-7,Quad Cities,Davenport,IA,270,Davenport/Bettendorf IA + Moline IL
-8,Cedar Rapids / Iowa City,Cedar Rapids,IA,255,CR + Iowa City corridor
-9,Omaha Metro,Omaha,NE,340,Omaha NE + Council Bluffs IA
-10,Lincoln Area,Lincoln,NE,330,Lincoln + Wilber + Grand Island
-11,Wichita / S-Central Kansas,Wichita,KS,280,"Wichita, Hutchinson, Salina, Derby"
-12,Central Kansas,Junction City,KS,150,Junction City / Manhattan corridor
-13,Tulsa Metro,Tulsa,OK,346,Tulsa + Broken Arrow/Owasso/Bixby/Bartlesville
-14,NW Arkansas,Bentonville,AR,250,Bentonville/Rogers/Springdale/Fayetteville + Fort Smith
-15,Central Arkansas,Little Rock,AR,376,Little Rock / North Little Rock / Conway
-16,Memphis,Memphis,TN,290,Memphis TN + suburbs + Southaven MS
-17,Nashville,Nashville,TN,431,Nashville + Franklin/Hendersonville/Gallatin/Murfreesboro
+id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_columbia_mi,summary
+1,Columbia / Mid-Missouri,Columbia,MO,38.9517,-92.3341,9,0,Hometown + mid-MO towns within ~100 mi
+2,Kansas City Metro,Kansas City,MO,39.0997,-94.5786,10,125,KC MO+KS metro and suburbs
+3,St. Louis Metro,St. Louis,MO,38.627,-90.1994,10,125,STL MO side + Illinois Metro East
+4,Springfield / Ozarks,Springfield,MO,37.209,-93.2923,9,165,SW Missouri Ozarks incl. Branson/Joplin
+5,Central Illinois,Springfield,IL,39.7817,-89.6501,10,140,Springfield IL / Illinois State Fair
+6,Des Moines,Des Moines,IA,41.5868,-93.625,10,200,Des Moines metro
+7,Quad Cities,Davenport,IA,41.5236,-90.5776,10,270,Davenport/Bettendorf IA + Moline IL
+8,Cedar Rapids / Iowa City,Cedar Rapids,IA,41.9779,-91.6656,9,255,CR + Iowa City corridor
+9,Omaha Metro,Omaha,NE,41.2565,-95.9345,10,340,Omaha NE + Council Bluffs IA
+10,Lincoln Area,Lincoln,NE,40.8136,-96.7026,9,330,Lincoln + Wilber + Grand Island
+11,Wichita / S-Central Kansas,Wichita,KS,37.6872,-97.3301,9,280,"Wichita, Hutchinson, Salina, Derby"
+12,Central Kansas,Junction City,KS,39.0286,-96.8314,9,150,Junction City / Manhattan corridor
+13,Tulsa Metro,Tulsa,OK,36.154,-95.9928,10,346,Tulsa + Broken Arrow/Owasso/Bixby/Bartlesville
+14,NW Arkansas,Bentonville,AR,36.3729,-94.2088,9,250,Bentonville/Rogers/Springdale/Fayetteville + Fort Smith
+15,Central Arkansas,Little Rock,AR,34.7465,-92.2896,10,376,Little Rock / North Little Rock / Conway
+16,Memphis,Memphis,TN,35.1495,-90.049,10,290,Memphis TN + suburbs + Southaven MS
+17,Nashville,Nashville,TN,36.1627,-86.7816,10,431,Nashville + Franklin/Hendersonville/Gallatin/Murfreesboro

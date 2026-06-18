@@ -464,7 +464,7 @@ in parallel trips the web-search rate limiter (9 concurrent failed; sequential s
 - ✅ Phase 1 — publish scope + schema/enums locked (`DATA_MODEL.md`)
 - ✅ Phase 2 — ETL done (`vending_circuit_etl.py` → `data/markets.csv` 17 hubs, `data/events.csv` 127 events; 0 dupes, all mapped to a hub, enums normalized)
 - ✅ Phase 3 — geocoded 127/127 (city-level + jitter, `vending_circuit_geocode.py`) + `data/event_schedules.csv`
-- ⬜ Phase 4 — load to Supabase + validation gate
+- 🔄 Phase 4 — schema + data SQL generated (`supabase_vending_schema.sql` + `supabase_vending_data.sql`); load into existing Glizzness Supabase pending execution-method choice
 - ⬜ Phase 5 — two-tier lazy-load map UI (markets → events → detail drawer)
 - ⬜ Phase 6 — filters, conditional homepage links, mobile
 

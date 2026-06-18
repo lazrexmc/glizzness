@@ -173,4 +173,4 @@ to **NW Arkansas**.
 - [x] Market hubs enumerated
 - [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (127 events, 0 dupes, 0 unmapped)
 - [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (127/127 geocoded)
-- [ ] (Task 4) Load to Supabase + validation gate
+- [~] (Task 4) Load to Supabase — artifacts ready (`supabase_vending_schema.sql`, `supabase_vending_data.sql`); execution pending method choice (MCP vs. SQL editor)
