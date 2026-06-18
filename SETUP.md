@@ -351,11 +351,11 @@ python sync_wave.py --sync-accounts              # rebuild Wave accounts
 
 ## Vending Circuit (food-truck event map)
 
-A separate sub-project: a researched, fact-checked list of 345 events (342 published; Missouri covered
-statewide via a county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville
-corridors; 31 market hubs) where
-The Glizzness could vend, normalized into Supabase and shown on a static map. Full detail in
-`ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`.
+A separate sub-project: a researched, fact-checked list of 380 events (377 published; Missouri covered
+statewide via a county-by-county sweep, plus regional metros incl. Indianapolis, the I-70/I-74/Louisville-Evansville
+corridors, and an interior off-corridor gap-fill across S. IL / S. IA / NE OK / N-NE AR / W. KY; 31 market hubs) where
+The Glizzness could vend, normalized into Supabase and shown on a static clustered map. Full detail in
+`ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`; running history in `CHATLOG.md` (local).
 
 **Data pipeline (regenerate the normalized files from the master CSV):**
 ```powershell
@@ -366,17 +366,20 @@ python vending_circuit_gen_md.py     # data/events.csv -> VendingCircuit.md (hum
 # (run in this order; ETL clears lat/lng, geocode refills it)
 ```
 
-**Adding events (e.g. the Missouri county sweep):** append rows to `VendingCircuit.csv` (set
-`county`, an estimated `distance_mi`, `month`, `typical_dates`, `status`, `last_verified`); if an
-event is in a new town, add that town to `CITY_HUB` in `vending_circuit_etl.py` and to the `C`
-centroid table in `vending_circuit_geocode.py`. Then run the four commands above and reload the DB.
+**Adding events (e.g. the Missouri county sweep / interior gap-fill):** append rows to
+`VendingCircuit.csv` (set `county`, an estimated `distance_mi`, `month`, `typical_dates`, `status`,
+`last_verified`); if an event is in a new town, add that town to `CITY_HUB` in
+`vending_circuit_etl.py` (→ nearest hub) and to the `C` centroid table in `vending_circuit_geocode.py`.
+Then run the four commands above and reload the DB. Two re-runnable helper scripts persist past
+batches: `add_gap_events.py` (idempotent lightweight-lead appender) and `confirm_updates.py`
+(per-event confirmation patcher) — both match by `(event_name, city)` and are safe to re-run.
 
 **Reload the database (Supabase SQL Editor):**
 1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS, the
    anon grant, and the `last_verified` column).
 2. Run `supabase_vending_data.sql` (idempotent: `truncate … restart identity cascade` then inserts
-   17 markets / 127 events / 127 schedules).
-3. Validate: `select count(*) from vending_published_events;`  → expect **124**.
+   31 markets / 380 events / 380 schedules).
+3. Validate: `select count(*) from vending_published_events;`  → expect **377**.
 
 `supabase_vending_data.sql` is **idempotent** — re-run it alone anytime to refresh the data (no
 need to re-run the schema unless table structure changed). Regenerate it after editing data with

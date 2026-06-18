@@ -450,19 +450,21 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
-A researched master list of **345 events** (342 published) — Missouri covered statewide via a
-county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville corridors (31 market
+A researched master list of **380 events** (377 published) — Missouri covered statewide via a
+county-by-county sweep, plus regional metros incl. Indianapolis and the I-70/I-74/Louisville-Evansville corridors, plus an
+interior off-corridor gap-fill across S. IL / S. IA / NE OK / N-NE AR / W. KY (31 market
 hubs) — feeds a live Supabase database and a
 static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
 
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — authoritative flat master, 345 events, 16 columns (added `county` + per-row `last_verified`)
+- `VendingCircuit.csv` — authoritative flat master, 380 events, 16 columns (added `county` + per-row `last_verified`)
+- `add_gap_events.py` — idempotent appender for off-corridor interior gap-fill leads (lightweight)
   (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
 - `vending_circuit_etl.py` — Phase 2 transform (flat CSV → `data/markets.csv` + `data/events.csv`)
 - `vending_circuit_geocode.py` — Phase 3 geocode + schedule parse (→ fills lat/lng, `data/event_schedules.csv`)
-- `data/markets.csv` (31), `data/events.csv` (345), `data/event_schedules.csv` (345)
+- `data/markets.csv` (31), `data/events.csv` (380), `data/event_schedules.csv` (380)
 - `vending_circuit_gen_sql.py` — generates `supabase_vending_data.sql` from `data/`
 - `vending_circuit_gen_md.py` — regenerates `VendingCircuit.md` from the CSV
 - `confirm_updates.py` — re-runnable patcher holding the 2026-06-18 per-event confirmation

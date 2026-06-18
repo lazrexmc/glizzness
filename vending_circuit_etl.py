@@ -125,6 +125,23 @@ reg(2,"KS","Lawrence")           # Busker Fest -> KC hub
 reg(12,"KS","Emporia")           # Great American Market -> Central Kansas hub
 reg(11,"KS","El Dorado")         # -> Wichita hub
 
+# ===== Interior-gap fill (2026-06-18): counties off the corridors, inside the footprint =====
+# Southern Illinois interior -> STL hub (deep south) / Central IL hub / Hannibal hub (Quincy area)
+reg(3,"IL","Du Quoin","Murphysboro","Marion","West Frankfort","Anna","Centralia")
+reg(5,"IL","Decatur","Jacksonville","Charleston")
+reg(22,"IL","Quincy","Mendon")
+# Southern Iowa interior -> Quad Cities hub (SE river towns) / Des Moines hub (south-central)
+reg(7,"IA","Burlington","Mount Pleasant","Fort Madison")
+reg(6,"IA","Centerville","Oskaloosa","Ottumwa")
+# NE Oklahoma (Green Country) interior -> Tulsa hub (Muskogee already mapped)
+reg(13,"OK","Tahlequah","Claremore","Grove","Okmulgee")
+# North / NE Arkansas (Ozarks) interior -> NW Arkansas / Central Arkansas / Memphis hubs
+reg(14,"AR","Harrison","Mountain Home")
+reg(15,"AR","Mountain View","Batesville")
+reg(16,"AR","Jonesboro","Paragould")
+# West Kentucky interior -> Evansville/Tri-State hub (KY region)
+reg(31,"KY","Paducah","Benton","Murray","Princeton","Madisonville")
+
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)
 

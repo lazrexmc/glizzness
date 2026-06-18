@@ -139,6 +139,46 @@ C = {
  ("Franklin","TN"):(35.9251,-86.8689),("Gallatin","TN"):(36.3884,-86.4467),
  ("Murfreesboro","TN"):(35.8456,-86.3903),
 }
+# ===== Interior-gap fill (2026-06-18) =====
+# Southern Illinois interior
+C[("Du Quoin","IL")] = (38.0145,-89.2362)
+C[("Murphysboro","IL")] = (37.7645,-89.3351)
+C[("Marion","IL")] = (37.7306,-88.9331)
+C[("West Frankfort","IL")] = (37.8975,-88.9314)
+C[("Anna","IL")] = (37.4606,-89.2470)
+C[("Centralia","IL")] = (38.5250,-89.1334)
+C[("Decatur","IL")] = (39.8403,-88.9548)
+C[("Jacksonville","IL")] = (39.7339,-90.2290)
+C[("Charleston","IL")] = (39.4961,-88.1762)
+C[("Quincy","IL")] = (39.9356,-91.4099)
+C[("Mendon","IL")] = (40.0892,-91.4585)
+# Southern Iowa interior
+C[("Burlington","IA")] = (40.8075,-91.1129)
+C[("Mount Pleasant","IA")] = (40.9636,-91.5579)
+C[("Fort Madison","IA")] = (40.6298,-91.3151)
+C[("Centerville","IA")] = (40.7339,-92.8743)
+C[("Oskaloosa","IA")] = (41.2964,-92.6443)
+C[("Ottumwa","IA")] = (41.0200,-92.4113)
+# NE Oklahoma (Green Country) interior  (Muskogee was in CITY_HUB but never geocoded)
+C[("Muskogee","OK")] = (35.7479,-95.3697)
+C[("Tahlequah","OK")] = (35.9154,-94.9700)
+C[("Claremore","OK")] = (36.3126,-95.6160)
+C[("Grove","OK")] = (36.5931,-94.7716)
+C[("Okmulgee","OK")] = (35.6231,-95.9608)
+# North / NE Arkansas (Ozarks) interior
+C[("Mountain View","AR")] = (35.8692,-92.1182)
+C[("Jonesboro","AR")] = (35.8423,-90.7043)
+C[("Paragould","AR")] = (36.0584,-90.4973)
+C[("Harrison","AR")] = (36.2298,-93.1077)
+C[("Mountain Home","AR")] = (36.3353,-92.3852)
+C[("Batesville","AR")] = (35.7698,-91.6410)
+# West Kentucky interior
+C[("Paducah","KY")] = (37.0834,-88.6000)
+C[("Benton","KY")] = (36.8567,-88.3503)
+C[("Murray","KY")] = (36.6103,-88.3148)
+C[("Princeton","KY")] = (37.1095,-87.8819)
+C[("Madisonville","KY")] = (37.3281,-87.4989)
+
 # fix the two sentinel typos defensively
 C[("Hartsburg","MO")] = (38.7039,-92.3088)
 C[("Canehill","AR")] = (35.9081,-94.4022)

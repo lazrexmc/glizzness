@@ -1,8 +1,8 @@
 # Vending Circuit — Data Model & Normalization Spec (LOCKED)
 
 > **Task 1 deliverable.** This is the contract the ETL/geocode/load phases build against.
-> Source of truth today: `VendingCircuit.csv` (127 rows, flat). Target: a normalized
-> relational model in Supabase Postgres feeding a two-tier map UI.
+> Source of truth today: `VendingCircuit.csv` (380 rows, flat). Target: a normalized
+> relational model in Supabase Postgres feeding a clustered map UI.
 
 ---
 
@@ -13,14 +13,15 @@ verified passes, so there is no "unverified candidate" tier left to badge. Locke
 
 | Bucket | Rule | UI behavior |
 |---|---|---|
-| **Publish** | `verification_status IN (verified, partial)` AND `food_truck_friendly <> excluded` AND `lat/lng` present | Shown on map — this IS the `vending_published_events` gate view (124 rows) |
+| **Publish** | `verification_status IN (verified, partial)` AND `food_truck_friendly <> excluded` AND `lat/lng` present | Shown on map — this IS the `vending_published_events` gate view (377 rows) |
 | **Flagged subset** | published rows where `needs_confirmation = true` (this includes every `partial` row) | Shown with a "verify before relying" badge |
 | **Hide by default** | `verification_status IN (defunct, excluded)` | Kept in DB for the record; filtered out of default map view, reachable via a toggle |
 | **Quarantine (not published)** | missing `lat/lng` or `market_id` | Excluded by the gate view until fixed |
 
-> Note: `partial` (e.g. Illinois State Fair, SeptemberFest Omaha — dates/size soft) is published
-> *with* the verify badge, not hidden. The implemented gate view is the single source of truth for
-> what's live; the table above documents it.
+> Note: `partial` is published *with* the verify badge, not hidden. As of the 2026-06-18
+> confirmation pass the `partial` tier is currently empty (Illinois State Fair & SeptemberFest
+> Omaha were both upgraded to `verified` once dates were confirmed). The implemented gate view is
+> the single source of truth for what's live; the table above documents it.
 
 Rationale: everything we have is food-truck-relevant and fact-checked; the only things worth
 hiding are the dead (Roots N Blues) and the closed-to-trucks (Bartlett, Vala's). Caveated
@@ -30,7 +31,7 @@ events are still useful leads, so we publish them with a flag rather than droppi
 
 ## 2. Relational schema (LOCKED)
 
-### `markets` — top-tier map hubs (~17 rows)
+### `markets` — geographic map hubs (31 rows)
 | column | type | notes |
 |---|---|---|
 | id | serial PK | |
@@ -148,7 +149,14 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 A research pass ≠ a market. These geographic hubs are the map's top tier; each event maps to one.
 Hubs 18–26 were added in the 2026-06-18 statewide Missouri sweep: 18–21 southern/SE (Mark Twain
 sector), 22–24 north + west-central ring, 25–26 Bootheel + Northwest. Hannibal moved from hub 1 to
-hub 22 (Northeast Missouri).
+hub 22 (Northeast Missouri). Hubs 27–31 were then added for the out-of-region corridor network
+(Indianapolis, I-70 STL–Indy, I-74 QC–Indy, Louisville, Evansville/Tri-State).
+
+> **Hub # is now display-agnostic.** Since the map switched to zoom-based marker clustering
+> (location-based), the hub number only keeps the data sane / non-zero (`market_id = 0` is
+> quarantined) — it no longer drives any map tier. New off-corridor towns (e.g. the 2026-06-18
+> interior gap-fill across S. IL / S. IA / NE OK / N-NE AR / W. KY) are mapped to the **nearest
+> existing hub** rather than spawning new hubs.
 
 | # | Hub | Anchor | States covered | ~mi from COMO |
 |---|---|---|---|---|
@@ -226,6 +234,23 @@ to **NW Arkansas**.
     corridor/Indy lightweight leads (not yet confirmed).
     NOTE: clearing the badge means changing `status` AND scrubbing the word "confirm"/"verify" from the
     row's notes — those substrings re-trigger needs_confirmation/unconfirmed in the ETL.
+  - **Corridor network (hubs 28–31)** — added I-70 (STL–Indy), I-74 (QC–Indy), Louisville, and
+    Evansville/Tri-State; corridor intermediates fold into the nearest hub. KC–Topeka–Wichita–Tulsa
+    and I-40/I-49 events folded into existing hubs. Plus nearby-STL infill (Franklin/Warren,
+    Jefferson, St. Charles counties) and 4-area fill (mid-MO, Lake of the Ozarks).
+  - **Full confirmation pass (2026-06-18)** — every flagged lead across ALL 31 hubs researched
+    event-by-event (dates + food-vendor application + contact); `needs_confirmation` 133 → 3 (only
+    Walk Back in Time, Clarkton Purple Hull Pea, Deutsch Country Days left honestly flagged for
+    unverifiable 2026 dates). Reproducible from `confirm_updates.py` (133 records).
+  - **Interior gap-fill, batch 1 (2026-06-18)** — off-corridor counties inside the footprint:
+    S. Illinois (+12), S. Iowa (+6), NE Oklahoma (+5), N/NE Arkansas (+6), West Kentucky (+6) =
+    **+35 lightweight leads** via `add_gap_events.py`. Batch 2 (S. Indiana, SE Nebraska, SE Kansas,
+    West Tennessee) deferred per the reassess gate.
+
+> **Current totals (2026-06-18):** **380 events / 377 published / 31 hubs**; 0 unmapped, 0 missing
+> coords; `needs_confirmation` = 38 (3 prior holds + 35 new gap-fill leads). The live default map
+> count is lower than 377 because the date-aware "past events" and "music fests" toggles hide some
+> rows by default (toggleable on).
 
 ---
 
