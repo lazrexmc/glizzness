@@ -296,22 +296,22 @@ id,event_id,month,display_text,recurrence_text,year_specific
 295,295,9,Sep 25-27 (2026),,true
 296,296,6,Jun 24-27 (2026),,true
 297,297,6,Jun 11-14 (2026),,true
-298,298,6,Jun 25-27 (2026),,true
-299,299,5,May 29-31 (2026),,true
+298,298,6,Late June 2026 (TBD; 2025 was Jun 24-28),,true
+299,299,6,Jun 20-22 (2026),,true
 300,300,6,Jun 27 (2026),,true
-301,301,,Verify date (2026),,false
-302,302,9,Weekend after Labor Day (2026),,false
-303,303,5,May 2 (2026),,true
-304,304,9,Late September (Saturday) 2026,,false
-305,305,3,Mar 26-27 (2026),,true
-306,306,,Summer (2026),,false
-307,307,9,"Sep 20-22 (2026, verify)",,true
+301,301,7,Mid-July 2026 (TBD; 2025 was Jul 10-13),,true
+302,302,9,Sep 12 (2026),,true
+303,303,5,May 2-3 (2026),,true
+304,304,9,Sep 19 (2026),,true
+305,305,3,Late March 2026 (HS jazz competition),,true
+306,306,7,Mid-July 2026 (TBD; 2025 was Jul 17-20),,true
+307,307,9,Late September 2026 (TBD; 2025 was Sep 20-22),,true
 308,308,6,Jun 5-7 (2026),,true
 309,309,3,Mar 14 (2026),,true
-310,310,10,Mid-October (2026),,false
+310,310,10,Mid-October 2026 (TBD; typically 3rd weekend),,false
 311,311,9,Sep 25-27 (2026),,true
 312,312,7,Jul 3-4 (2026),,true
-313,313,,"Fri-Sun, day after Thanksgiving - Dec 24",,true
+313,313,12,"Fri-Sun, Nov 27 - Dec 24 (2026)",,true
 314,314,8,Aug 22-23 (2026),,true
 315,315,3,Mar 14 (2026),,true
 316,316,7,Jul 1-4 (2026),,true
@@ -323,10 +323,10 @@ id,event_id,month,display_text,recurrence_text,year_specific
 322,322,9,Sep 5-7 (2026),,true
 323,323,8,Aug 14-16 (2026),,true
 324,324,9,Sep 18-20 (2026),,true
-325,325,10,October (verify 2026),,true
+325,325,10,Early October 2026 (TBD; 2025 was Oct 4),,true
 326,326,9,Sep 18-20 (2026),,true
 327,327,7,Jul 10 (2026),,true
-328,328,,Verify date (2026),,false
+328,328,8,Late August 2026 (TBD; 2025 was Aug 23),,true
 329,329,5,May 1-3 (2026),,true
 330,330,9,Sep 4-6 (2026),,true
 331,331,8,Aug 21-23 (2026),,true

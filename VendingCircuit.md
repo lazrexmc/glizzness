@@ -87,45 +87,45 @@
 | Hermann Maifest | Hermann, MO | Gasconade | 75 | May | Mid-May (2027) | Wine-country crowd | maifesthermann.org |
 | Hermann Oktoberfest | Hermann, MO | Gasconade | 75 | October | All weekends in October | Wine-country crowds | visithermann.com/festivals-events |
 | Johnson County Fair | Warrensburg, MO | Johnson | 75 | June | Early July (2026) | — | johnsoncountyfairassociation.com |
-| Warren County Fair ⚠️ | Warrenton, MO | Warren | 75 | June | Jun 24-27 (2026) | — | warrencountyfairgrounds.com |
+| Warren County Fair | Warrenton, MO | Warren | 75 | June | Jun 24-27 (2026) | — | warrencountyfairgrounds.com |
 | Warsaw Jubilee Days | Warsaw, MO | Benton | 75 | June | Jun 3-6 (2026) | — | warsawjubileedays.com |
-| Deutsch Country Days ⚠️ | Marthasville, MO | Warren | 80 | October | Mid-October (2026) | — | deutschcountrydays.org |
-| Augusta Wine & Jazz Festival ⚠️ | Augusta, MO | St. Charles | 85 | June | Jun 5-7 (2026) | — | visitaugustamo.com |
-| Defiance St. Patrick's Day Festival ⚠️ | Defiance, MO | St. Charles | 90 | March | Mar 14 (2026) | — | defiancemo.com |
+| Deutsch Country Days ⚠️ | Marthasville, MO | Warren | 80 | October | Mid-October 2026 (TBD; typically 3rd weekend) | — | deutschcountrydays.org |
+| Augusta Wine & Jazz Festival | Augusta, MO | St. Charles | 85 | June | Jun 5-7 (2026) | — | townofaugustamo.org |
+| Defiance St. Patrick's Day Festival | Defiance, MO | St. Charles | 90 | March | Mar 14 (2026) | — | defiancemo.com |
 | Missouri State Fair | Sedalia, MO | Pettis | 90 | August | Aug 13-23 | 329000-350000 | mostatefair.com/participate/commercial/vendor-concessionaire |
-| Art Fair & Winefest ⚠️ | Washington, MO | Franklin | 95 | May | May 15-17 (2026) | — | downtownwashmo.org |
-| Fall Festival of the Arts & Crafts ⚠️ | Washington, MO | Franklin | 95 | September | Sep 25-27 (2026) | — | downtownwashmo.org |
+| Art Fair & Winefest | Washington, MO | Franklin | 95 | May | May 15-17 (2026) | — | downtownwashmo.org |
+| Fall Festival of the Arts & Crafts | Washington, MO | Franklin | 95 | September | Sep 25-27 (2026) | — | downtownwashmo.org |
 | Livingston County Fair | Chillicothe, MO | Livingston | 95 | June | Late June (2026) | — | Livingston County Fair / Kim Williams / 660-247-2636 |
 | NEMO District Fair | Kirksville, MO | Adair | 95 | July | Jul 14-18 (2026) | — | nemofair.net |
 | Olde Glory Days | Clinton, MO | Henry | 95 | July | Jul 1-4 (2026) | — | clintonmo.com |
 | Red Barn Arts & Crafts Festival | Kirksville, MO | Adair | 95 | September | Late September (2026) | — | visitkirksville.com |
-| St. Charles County Fair ⚠️ | Wentzville, MO | St. Charles | 95 | July | Jul 23-27 (2026) | — | stcharlescofair.org |
+| St. Charles County Fair | Wentzville, MO | St. Charles | 95 | July | Jul 23-27 (2026) | — | stcharlescofair.org |
 | St. James Grape & Fall Festival | St. James, MO | Phelps | 95 | September | Sep 10-12 (2026) | — | visitstjamesmo.com |
-| Washington Town & Country Fair ⚠️ | Washington, MO | Franklin | 95 | August | Aug 5-9 (2026) | — | washmofair.com |
+| Washington Town & Country Fair | Washington, MO | Franklin | 95 | August | Aug 5-9 (2026) | — | washmofair.com |
 | Wentzville Days Fair & Music Festival | Wentzville, MO | St. Charles | 95 | May | May 15-17 | Community festival | wentzvillemo.gov |
 | Blue Springs Fall Fun Festival | Blue Springs, MO | Jackson | 100 | September | Sep 18-20 | Community festival | bluespringsfallfestival.com/apply |
-| Cottleville Irish Fest ⚠️ | Cottleville, MO | St. Charles | 100 | March | Mar 14 (2026) | — | — |
+| Cottleville Irish Fest | Cottleville, MO | St. Charles | 100 | March | Mar 14 (2026) | — | cityofcottleville.com |
 | Festival of the Little Hills | St. Charles, MO | St. Charles | 100 | August | 3rd full weekend | ~350,000 | festivalofthelittlehills.com |
-| Franklin County Fair ⚠️ | Union, MO | Franklin | 100 | June | Jun 11-14 (2026) | — | — |
+| Franklin County Fair | Union, MO | Franklin | 100 | June | Jun 11-14 (2026) | — | franklincountyfair.org |
 | National Tom Sawyer Days | Hannibal, MO | Marion | 100 | June-July | Jun 27 - Jul 5 (centered on Jul 4) | Multi-day | visithannibal.com/events/71st-annual-national-tom-sawyer-days |
 | Phelps County Fair | Rolla, MO | Phelps | 100 | May | May 28-30 (2026) | — | phelpscountyfair.com |
 | Richmond Mushroom Festival | Richmond, MO | Ray | 100 | May | First weekend May (May 1-2, 2026) | — | mushroomfestival.net |
 | Hannibal Autumn Historic Folklife Festival | Hannibal, MO | Marion | 105 | October | Oct 18-19 (2026) | — | hannibalarts.com |
 | Lincoln County Fair | Troy, MO | Lincoln | 105 | July | Jul 14-18 (2026) | — | lincolncountyfair.net |
-| O'Fallon Heritage & Freedom Fest ⚠️ | O'Fallon, MO | St. Charles | 105 | July | Jul 1-4 (2026) | — | heritageandfreedomfest.com |
-| One World Fest ⚠️ | St. Peters, MO | St. Charles | 105 | August | Aug 22-23 (2026) | — | — |
-| Pacific Car Show & Block Party ⚠️ | Pacific, MO | Franklin | 105 | June | Jun 27 (2026) | — | pacificmo.org |
-| Route 66 BBQ & Bluegrass Festival ⚠️ | Pacific, MO | Franklin | 105 | May | May 29-31 (2026) | — | pacificmo.org |
-| St. Clair Pickin' on Picknic Festival ⚠️ | St. Clair, MO | Franklin | 105 |  | Verify date (2026) | — | — |
+| O'Fallon Heritage & Freedom Fest | O'Fallon, MO | St. Charles | 105 | July | Jul 1-4 (2026) | — | heritageandfreedomfest.com |
+| One World Fest | St. Peters, MO | St. Charles | 105 | August | Aug 22-23 (2026) | — | facebook.com/1WorldFest |
+| Pacific Car Show & Block Party | Pacific, MO | Franklin | 105 | June | Jun 27 (2026) | — | pacificmo.org |
+| Route 66 BBQ & Bluegrass Festival | Pacific, MO | Franklin | 105 | June | Jun 20-22 (2026) | — | pacificmissouri.com |
+| St. Clair Pickin' on Picknic Festival | St. Clair, MO | Franklin | 105 | July | Mid-July 2026 (TBD; 2025 was Jul 10-13) | — | pickinfestival.com |
 | Land of Goshen Community Market | Edwardsville, IL | Madison | 110 | May-Oct | Sat | ~60 vendors | goshenmarket.org/participate-vendors |
-| Meramec Community Fair ⚠️ | Sullivan, MO | Franklin | 110 | June | Jun 25-27 (2026) | — | merameccommunityfair.com |
+| Meramec Community Fair | Sullivan, MO | Franklin | 110 | June | Late June 2026 (TBD; 2025 was Jun 24-28) | — | merameccommunityfair.com |
 | Missouri Day Festival | Trenton, MO | Grundy | 110 | October | Oct 16-17 (2026) | — | trentonmochamber.com |
 | MoRoots Music Festival ⚠️ | Steelville, MO | Crawford | 110 | September | Sep 24-26 | — | naturallymeramec.org |
 | O'Fallon Food Truck Frenzy / Fright | O'Fallon, MO | St. Charles | 110 | May/Oct | Frenzy May 29 + Oct 9; Fright Oct | Food-truck showcase | ofallon.mo.us/food-truck-frenzy |
 | Pulaski County Old Settlers Day | Waynesville, MO | Pulaski | 110 | July | Jul 25-26 (2026) | — | route66courthouse.com |
-| St. Charles Christmas Traditions ⚠️ | St. Charles, MO | St. Charles | 110 |  | Fri-Sun, day after Thanksgiving - Dec 24 | — | discoverstcharles.com |
-| St. Charles Oktoberfest ⚠️ | St. Charles, MO | St. Charles | 110 | September | Sep 25-27 (2026) | — | saintcharlesoktoberfest.com |
-| St. Charles Riverfest ⚠️ | St. Charles, MO | St. Charles | 110 | July | Jul 3-4 (2026) | — | stcharlescitymo.gov |
+| St. Charles Christmas Traditions | St. Charles, MO | St. Charles | 110 | December | Fri-Sun, Nov 27 - Dec 24 (2026) | — | discoverstcharles.com |
+| St. Charles Oktoberfest | St. Charles, MO | St. Charles | 110 | September | Sep 25-27 (2026) | — | saintcharlesoktoberfest.com |
+| St. Charles Riverfest | St. Charles, MO | St. Charles | 110 | July | Jul 3-4 (2026) | — | stcharlescitymo.gov |
 | Steelville Harvest Festival | Steelville, MO | Crawford | 110 | September | Early September (2026) | — | steelville.info |
 | Crawford County Fair | Cuba, MO | Crawford | 115 | July | Jul 14-18 (2026) | — | crawfordcountyfair.info |
 | Dardenne Prairie Summer Concert & Food Truck Rally | Dardenne Prairie, MO | St. Charles | 115 | May-Sep | Select Fridays 6:30-9:30p | Food truck rally | dardenneprairie.org |
@@ -137,45 +137,45 @@
 | Belleville Oktoberfest | Belleville, IL | St. Clair | 120 | September | Sep 18-20 (2026) | 3-day | bellevilleoktoberfest.com |
 | Collinsville Italian Fest | Collinsville, IL | Madison | 120 | September | Sep 18-19 | 30+ food vendors | italianfest.net/food |
 | Edwardsville Route 66 Festival | Edwardsville, IL | Madison | 120 | June | Jun 13 (2026) | Single-day | cityofedwardsville.com |
-| Greentree Festival ⚠️ | Kirkwood, MO | St. Louis | 120 | September | Sep 18-20 (2026) | — | kirkwoodmo.org |
+| Greentree Festival | Kirkwood, MO | St. Louis | 120 | September | Sep 18-20 (2026) | — | kirkwoodmo.org |
 | Highland Schweizerfest | Highland, IL | Madison | 120 | June | Jun 12-14 | Carnival + vendors | highlandil.gov |
 | Independence Square Food Truck Festival | Independence, MO | Jackson | 120 | June | Jun 12 (2026) | — | — |
-| Saint Louis Art Fair ⚠️ | Clayton, MO | St. Louis | 120 | September | Sep 18-20 (2026) | — | saintlouisartfair.com |
+| Saint Louis Art Fair | Clayton, MO | St. Louis | 120 | September | Sep 18-20 (2026) | — | saintlouisartfair.com |
 | Santa-Cali-Gon Days | Independence, MO | Jackson | 120 | September | Sep 4-7 (Labor Day) | ~300,000 | santacaligon.com |
-| Taste of St. Louis ⚠️ | Clayton, MO | St. Louis | 120 | August | Aug 14-16 (2026) | — | thetastestl.com |
-| Let Them Eat Art ⚠️ | Maplewood, MO | St. Louis | 122 | July | Jul 10 (2026) | — | maplewoodmo.gov |
-| Arnold Days ⚠️ | Arnold, MO | Jefferson | 125 | September | Sep 20-22 (2026, verify) | — | arnoldmo.org |
+| Taste of St. Louis | Clayton, MO | St. Louis | 120 | August | Aug 14-16 (2026) | — | thetastestl.com |
+| Let Them Eat Art | Maplewood, MO | St. Louis | 122 | July | Jul 10 (2026) | — | maplewoodmo.gov |
+| Arnold Days | Arnold, MO | Jefferson | 125 | September | Late September 2026 (TBD; 2025 was Sep 20-22) | — | arnoldmo.org |
 | Brookside Art Annual ⚠️ | Kansas City, MO | Jackson | 125 | May | May 1-3 (2026) | — | brooksideartannual.com |
 | Crossroads First Fridays | Kansas City, MO | Jackson | 125 | Apr-Oct (monthly) | 1st Fri 5-9p | 10,000+/month | kccrossroads.org/first-fridays |
 | Ethnic Enrichment Festival ⚠️ | Kansas City, MO | Jackson | 125 | August | Aug 21-23 (2026) | — | eeckc.org |
-| Festival of Nations ⚠️ | St. Louis, MO | St. Louis City | 125 | August | Aug 29-30 (2026) | — | festofnations.com |
+| Festival of Nations | St. Louis, MO | St. Louis City | 125 | August | Aug 29-30 (2026) | — | festofnations.com |
 | Fountain Fest | Kansas City, MO | Jackson | 125 | April | Spring 2026 (food-truck registration to Mar 15) | Small (selects ~5 trucks) | cityoffountains.org |
-| Grove Fest ⚠️ | St. Louis, MO | St. Louis City | 125 | October | October (verify 2026) | — | stlgrovefest.com |
-| Italian Heritage Parade & Festa ⚠️ | St. Louis, MO | St. Louis City | 125 | October | Oct 11 (2026) | — | hillstl.org |
-| Japanese Festival ⚠️ | St. Louis, MO | St. Louis City | 125 | September | Sep 5-7 (2026) | — | missouribotanicalgarden.org |
+| Grove Fest | St. Louis, MO | St. Louis City | 125 | October | Early October 2026 (TBD; 2025 was Oct 4) | — | stlgrovefest.com |
+| Italian Heritage Parade & Festa | St. Louis, MO | St. Louis City | 125 | October | Oct 11 (2026) | — | hillstl.org |
+| Japanese Festival | St. Louis, MO | St. Louis City | 125 | September | Sep 5-7 (2026) | — | missouribotanicalgarden.org |
 | Kansas City Irish Fest ⚠️ | Kansas City, MO | Jackson | 125 | September | Sep 4-6 (2026) | — | kcirishfest.com |
 | Parkville Days | Parkville, MO | Platte | 125 | August | Late Aug (~Aug 21-23) | 75+ vendors | parkvillemo.org/whatsgoingon/parkville-days |
 | Plaza Art Fair | Kansas City, MO | Jackson | 125 | September | Mid-Sep | 250,000+ | countryclubplaza.com |
 | Sauce Food Truck Fridays | St. Louis, MO | St. Louis City | 125 | May-Oct (8 Fridays) | May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2 | 20+ trucks (free admission) | saucemagazine.com/food-truck-fridays-2026 |
 | Snake Saturday Parade & Festival ⚠️ | North Kansas City, MO | Clay | 125 | March | Mar 14 (2026) | — | snakesaturday.com |
-| Soulard Mardi Gras ⚠️ | St. Louis, MO | St. Louis City | 125 | February | Grand Parade Feb 14 (2026); season Jan-Feb | — | stlmardigras.org |
-| Soulard Oktoberfest ⚠️ | St. Louis, MO | St. Louis City | 125 | October | Oct 9-10 (2026) | — | soulard-oktoberfest.com |
-| St. Louis Street Food Festival ⚠️ | St. Louis, MO | St. Louis City | 125 |  | Verify date (2026) | — | streetfoodfests.com |
+| Soulard Mardi Gras | St. Louis, MO | St. Louis City | 125 | February | Grand Parade Feb 14 (2026); season Jan-Feb | — | stlmardigras.org |
+| Soulard Oktoberfest | St. Louis, MO | St. Louis City | 125 | October | Oct 9-10 (2026) | — | soulard-oktoberfest.com |
+| St. Louis Street Food Festival | St. Louis, MO | St. Louis City | 125 | August | Late August 2026 (TBD; 2025 was Aug 23) | — | streetfoodfests.com |
 | 18th & Vine Arts Festival | Kansas City, MO | Jackson | 126 | September | Sep 25-27 | Thousands (selects 10 trucks) | 18thandvineartsfestival.com/foodtruck |
 | Gladstone Summertime Bluesfest ⚠️ | Gladstone, MO | Clay | 130 | May | May 15-16 (2026) | — | gladstonechamber.com |
 | Great Lenexa BBQ Battle | Lenexa, KS | Johnson | 130 | June | ~Jun 26-27 | 7 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
-| Jefferson County Fair ⚠️ | Hillsboro, MO | Jefferson | 130 |  | Summer (2026) | — | jeffersoncountyfair.net |
+| Jefferson County Fair | Hillsboro, MO | Jefferson | 130 | July | Mid-July 2026 (TBD; 2025 was Jul 17-20) | — | jeffersoncountyfair.net |
 | Lenexa Art Fair | Lenexa, KS | Johnson | 130 | May | May 9 | 6 food trucks | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | Lenexa Chili Challenge | Lenexa, KS | Johnson | 130 | October | ~Oct 9-10 | 6 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | Lenexa Food Truck Frenzy | Lenexa, KS | Johnson | 130 | Jul & Sep | Jul 18 + Sep 19 | Food-truck showcase | lenexa.com/City-Calendar/Annual-Events/Food-Truck-Frenzy |
 | Lenexa Spinach Festival | Lenexa, KS | Johnson | 130 | September | Sep 12 | 13 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
-| De Soto Fall Festival ⚠️ | De Soto, MO | Jefferson | 135 | September | Late September (Saturday) 2026 | — | desotomochamber.com |
-| Festus Art & Music Festival ⚠️ | Festus, MO | Jefferson | 135 | May | May 2 (2026) | — | festusmo.gov |
-| Fountain City Jazz Fest ⚠️ | De Soto, MO | Jefferson | 135 | March | Mar 26-27 (2026) | — | — |
+| De Soto Fall Festival | De Soto, MO | Jefferson | 135 | September | Sep 19 (2026) | — | desotomochamber.com |
+| Festus Art & Music Festival | Festus, MO | Jefferson | 135 | May | May 2-3 (2026) | — | festusmainstreet.org |
+| Fountain City Jazz Fest | De Soto, MO | Jefferson | 135 | March | Late March 2026 (HS jazz competition) | — | — |
 | NW Missouri State Fair | Bethany, MO | Harrison | 135 | August | Aug 27-31 (2026, Labor Day wknd) | — | nwmostatefair.com |
 | Overland Park Fall Festival ⚠️ | Overland Park, KS | Johnson | 135 | September | Sep 25-26 (2026) | — | opkansas.gov |
 | Stockton Black Walnut Festival | Stockton, MO | Cedar | 135 | September | Late September (2026) | — | theblackwalnutfestival.com |
-| Twin City Days ⚠️ | Festus, MO | Jefferson | 135 | September | Weekend after Labor Day (2026) | — | twincitychamber.com |
+| Twin City Days | Festus, MO | Jefferson | 135 | September | Sep 12 (2026) | — | twincitychamber.com |
 | Bushwhacker Days | Nevada, MO | Vernon | 140 | June | Jun 11-13 (2026) | — | nevada-mo.com |
 | Douglas County Fair | Ava, MO | Douglas | 140 | July | July (2026) | — | dgcountyfair.com |
 | Food Truck Friday (Central Park) | Carthage, MO | Jasper | 140 | Apr-Sep (monthly) | 2nd Fri 11a-9p | Food-truck-centered | visitcarthage.com/foodtruckfriday |
