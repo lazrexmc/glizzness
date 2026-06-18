@@ -17,6 +17,14 @@
     #crumb { color:var(--muted); font-size:13px; margin-left:auto; }
     #back { display:none; cursor:pointer; background:var(--accent); color:#1a1206; border:none;
             border-radius:6px; padding:6px 10px; font-weight:600; font-size:13px; }
+    /* filter bar */
+    #filterbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+                 padding:8px 14px; background:#1a1712; border-bottom:1px solid #000; z-index:1000; }
+    #filterbar .fb-label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px; }
+    #filterbar select, #filterbar button { background:#2a241c; color:var(--ink);
+                 border:1px solid #3a342c; border-radius:6px; padding:6px 8px; font-size:13px; font-family:inherit; cursor:pointer; }
+    #filterbar label { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); cursor:pointer; }
+    #filterbar #f-reset { margin-left:auto; }
     #main { flex:1; position:relative; }
     #map { position:absolute; inset:0; }
     /* detail drawer */
@@ -44,6 +52,18 @@
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
+    /* mobile polish */
+    @media (max-width:560px) {
+      header { padding:8px 10px; gap:8px; }
+      header h1 { font-size:14px; }
+      #crumb { font-size:11px; }
+      #drawer { width:100%; }
+      #filterbar { gap:6px; padding:6px 10px; }
+      #filterbar .fb-label { display:none; }
+      #filterbar select, #filterbar button { padding:5px 6px; font-size:12px; }
+      #filterbar #f-reset { margin-left:0; }
+      .legend { font-size:11px; padding:8px 10px; bottom:10px; left:10px; max-width:62vw; }
+    }
   </style>
 </head>
 <body>
@@ -54,6 +74,24 @@
       <button id="back">← All markets</button>
       <span id="crumb"></span>
     </header>
+    <div id="filterbar">
+      <span class="fb-label">Filter</span>
+      <select id="f-month" aria-label="Month"><option value="all">Any month</option></select>
+      <select id="f-friendly" aria-label="Food-truck fit">
+        <option value="all">Any fit</option>
+        <option value="explicit_yes">Food-truck friendly</option>
+        <option value="concession_friendly">Concession friendly</option>
+        <option value="unconfirmed">Unconfirmed</option>
+      </select>
+      <select id="f-trip" aria-label="Trip type">
+        <option value="all">Any trip</option>
+        <option value="hometown">Hometown</option>
+        <option value="day_trip">Day trip</option>
+        <option value="overnight">Overnight</option>
+      </select>
+      <label><input type="checkbox" id="f-hidden" /> Show defunct/excluded</label>
+      <button id="f-reset">Reset</button>
+    </div>
     <div id="main">
       <div id="map"></div>
       <div id="status">Loading…</div>
@@ -62,6 +100,7 @@
         <div class="row"><span class="dot" style="background:#5bbf6a"></span> Food-truck friendly</div>
         <div class="row"><span class="dot" style="background:#5aa7e0"></span> Concession friendly</div>
         <div class="row"><span class="dot" style="background:#e0b14a"></span> Unconfirmed — verify</div>
+        <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
         <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Pins show the market area, not exact addresses.</div>
       </div>
       <aside id="drawer">

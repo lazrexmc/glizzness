@@ -41,6 +41,9 @@ venv/
 # Chat logs — contain financial figures and business context
 CHATLOG.md
 
+# Playwright MCP scratch (screenshots / snapshots from local smoke tests)
+.playwright-mcp/
+
 # OS
 .DS_Store
 Thumbs.db

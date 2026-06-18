@@ -1,6 +1,7 @@
 /* The Glizzness — Vending Circuit map (two-tier, lazy render).
    Tier 1: market hub pins. Tier 2: events of the selected market. Tier 3: detail drawer.
-   Reads Supabase REST with the public anon key (vending_* tables have public-read RLS). */
+   Reads Supabase REST with the public anon key (vending_* tables have public-read RLS).
+   Phase 6: month / friendliness / trip-type filters + a defunct/excluded toggle. */
 
 const URL = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY;
 const HEADERS = { apikey: KEY, Authorization: "Bearer " + KEY };
@@ -11,7 +12,10 @@ const backBtn  = document.getElementById("back");
 const drawer   = document.getElementById("drawer");
 const drawerBody = document.getElementById("drawer-body");
 
-let MARKETS = [], EVENTS = [], marketsById = {};
+let MARKETS = [], EVENTS = [], marketsById = {}, monthsByEvent = {};
+let currentMarket = null;                       // null = Tier 1; else selected market id
+const FILT = { month: "all", friendly: "all", trip: "all", showHidden: false };
+
 let marketLayer = L.layerGroup(), eventLayer = L.layerGroup();
 
 const map = L.map("map", { zoomControl: true }).setView([39.2, -93.0], 5);
@@ -27,40 +31,68 @@ async function fetchJSON(path) {
   return res.json();
 }
 
-const friendlyColor = f =>
-  f === "explicit_yes" ? "#5bbf6a" : f === "unconfirmed" ? "#e0b14a" : "#5aa7e0";
+// ---------- publish gate + filtering ----------
+// "Published" mirrors the Supabase vending_published_events gate. Anything else
+// (defunct / excluded) is hidden unless the user toggles it on.
+const isPublished = e =>
+  (e.verification_status === "verified" || e.verification_status === "partial")
+  && e.food_truck_friendly !== "excluded";
+const isHidden = e => !isPublished(e);
+
+function passesFilter(e) {
+  if (e.lat == null || e.lng == null) return false;
+  if (!FILT.showHidden && isHidden(e)) return false;
+  if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
+  if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
+  if (FILT.month !== "all") {
+    const ms = monthsByEvent[e.id] || [];
+    // year-round / recurring events carry no month -> they match any month filter.
+    if (ms.length && !ms.includes(Number(FILT.month))) return false;
+  }
+  return true;
+}
+const visibleEvents = () => EVENTS.filter(passesFilter);
+
+const friendlyColor = e => {
+  if (isHidden(e)) return "#d0594f";            // red — defunct / excluded
+  const f = e.food_truck_friendly;
+  return f === "explicit_yes" ? "#5bbf6a" : f === "unconfirmed" ? "#e0b14a" : "#5aa7e0";
+};
 
 function setStatus(msg) { statusEl.textContent = msg; statusEl.style.display = msg ? "block" : "none"; }
 
 // ---------- Tier 1: markets ----------
 function showMarkets() {
+  currentMarket = null;
   eventLayer.clearLayers();
   marketLayer.clearLayers();
   drawer.classList.remove("open");
   backBtn.style.display = "none";
+
+  const vis = visibleEvents();
   const counts = {};
-  EVENTS.forEach(e => { counts[e.market_id] = (counts[e.market_id] || 0) + 1; });
+  vis.forEach(e => { counts[e.market_id] = (counts[e.market_id] || 0) + 1; });
 
   const pts = [];
   MARKETS.forEach(m => {
     if (m.center_lat == null || m.center_lng == null) return;
     const n = counts[m.id] || 0;
     const mk = L.circleMarker([m.center_lat, m.center_lng], {
-      radius: Math.min(10 + n, 26), color: "#7a5a1e", weight: 2,
-      fillColor: "#e8a33d", fillOpacity: 0.9
+      radius: n ? Math.min(10 + n, 26) : 8, color: "#7a5a1e", weight: 2,
+      fillColor: n ? "#e8a33d" : "#5a4a2e", fillOpacity: n ? 0.9 : 0.3
     }).bindTooltip(`${esc(m.name)} — ${n} event${n === 1 ? "" : "s"}`, { direction: "top" });
-    mk.on("click", () => selectMarket(m.id));
+    if (n) { mk.on("click", () => selectMarket(m.id)); pts.push([m.center_lat, m.center_lng]); }
     marketLayer.addLayer(mk);
-    pts.push([m.center_lat, m.center_lng]);
   });
   if (pts.length) map.fitBounds(pts, { padding: [40, 40] });
-  crumbEl.textContent = `${MARKETS.length} markets · ${EVENTS.length} events`;
+  crumbEl.textContent = `${MARKETS.length} markets · ${vis.length} event${vis.length === 1 ? "" : "s"}`;
 }
 
 // ---------- Tier 2: events in a market ----------
 function selectMarket(id) {
+  currentMarket = id;
   const m = marketsById[id];
-  const evs = EVENTS.filter(e => String(e.market_id) === String(id));
+  const evs = visibleEvents().filter(e => String(e.market_id) === String(id));
   marketLayer.clearLayers();
   eventLayer.clearLayers();
   backBtn.style.display = "inline-block";
@@ -71,7 +103,7 @@ function selectMarket(id) {
     if (e.lat == null || e.lng == null) return;
     const mk = L.circleMarker([e.lat, e.lng], {
       radius: 8, color: "#000", weight: 1,
-      fillColor: friendlyColor(e.food_truck_friendly), fillOpacity: 0.95
+      fillColor: friendlyColor(e), fillOpacity: 0.95
     }).bindTooltip(esc(e.name), { direction: "top" });
     mk.on("click", () => openDrawer(e));
     eventLayer.addLayer(mk);
@@ -79,6 +111,12 @@ function selectMarket(id) {
   });
   if (pts.length) map.fitBounds(pts, { padding: [60, 60], maxZoom: 12 });
   else if (m.center_lat != null) map.setView([m.center_lat, m.center_lng], m.default_zoom || 9);
+}
+
+// re-render the current tier after a filter change
+function applyFilters() {
+  if (currentMarket != null && marketsById[currentMarket]) selectMarket(currentMarket);
+  else showMarkets();
 }
 
 // ---------- Tier 3: detail drawer ----------
@@ -93,6 +131,9 @@ function openDrawer(e) {
     unconfirmed:   badge("Food fit unconfirmed", "b-amber"),
     excluded:      badge("Not food-truck", "b-red")
   }[e.food_truck_friendly] || "";
+  const statusB = e.verification_status === "defunct" ? badge("Defunct", "b-red")
+    : (e.verification_status === "excluded" || e.food_truck_friendly === "excluded")
+      ? badge("Excluded — not vending", "b-red") : "";
   const verify = e.needs_confirmation === true || e.needs_confirmation === "true"
     ? badge("Verify before relying", "b-amber") : "";
   const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
@@ -117,7 +158,7 @@ function openDrawer(e) {
   drawerBody.innerHTML = `
     <h2>${esc(e.name)}</h2>
     <div class="loc">${esc(e.city)}, ${esc(e.state)}</div>
-    <div>${typeB}${friendly}${verify}</div>
+    <div>${typeB}${friendly}${statusB}${verify}</div>
     <dl>${rows.join("")}</dl>
     ${home}`;
   drawer.classList.add("open");
@@ -126,6 +167,35 @@ function openDrawer(e) {
 document.querySelector("#drawer .close").addEventListener("click", () => drawer.classList.remove("open"));
 backBtn.addEventListener("click", showMarkets);
 
+// ---------- filter controls ----------
+const MONTH_NAMES = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function wireFilters() {
+  const monthSel = document.getElementById("f-month");
+  for (let i = 1; i <= 12; i++) {
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = MONTH_NAMES[i];
+    monthSel.appendChild(o);
+  }
+  const bind = (elId, key) => {
+    const el = document.getElementById(elId);
+    el.addEventListener("change", () => { FILT[key] = el.value; applyFilters(); });
+  };
+  bind("f-month", "month");
+  bind("f-friendly", "friendly");
+  bind("f-trip", "trip");
+  document.getElementById("f-hidden").addEventListener("change", e => {
+    FILT.showHidden = e.target.checked; applyFilters();
+  });
+  document.getElementById("f-reset").addEventListener("click", () => {
+    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.showHidden = false;
+    monthSel.value = "all";
+    document.getElementById("f-friendly").value = "all";
+    document.getElementById("f-trip").value = "all";
+    document.getElementById("f-hidden").checked = false;
+    showMarkets();
+  });
+}
+
 // ---------- boot ----------
 (async function init() {
   if (!KEY || KEY.includes("PASTE_YOUR")) {
@@ -133,11 +203,19 @@ backBtn.addEventListener("click", showMarkets);
   }
   try {
     setStatus("Loading…");
-    [MARKETS, EVENTS] = await Promise.all([
+    let schedules;
+    [MARKETS, EVENTS, schedules] = await Promise.all([
       fetchJSON("vending_markets?select=*&order=id"),
-      fetchJSON("vending_events?select=*&verification_status=in.(verified,partial)&food_truck_friendly=neq.excluded&lat=not.is.null")
+      fetchJSON("vending_events?select=*&lat=not.is.null&order=id"),
+      fetchJSON("vending_event_schedules?select=event_id,month")
     ]);
     marketsById = Object.fromEntries(MARKETS.map(m => [String(m.id), m]));
+    monthsByEvent = {};
+    schedules.forEach(s => {
+      if (s.month == null) return;
+      (monthsByEvent[s.event_id] = monthsByEvent[s.event_id] || []).push(Number(s.month));
+    });
+    wireFilters();
     setStatus("");
     showMarkets();
   } catch (err) {
