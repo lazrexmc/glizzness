@@ -1,0 +1,128 @@
+id,event_id,month,display_text,recurrence_text,year_specific
+1,1,,"Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)","Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)",true
+2,2,3,Mar 5-8 (2026); Mar 4-7 (2027),,true
+3,3,4,Mid-April (~Apr 19),,true
+4,4,4,Apr 26 (rain date May 3); 12-6pm,,true
+5,5,5,Mid-May (May 13-16),,true
+6,6,5,Mid-May (2027),,false
+7,7,5,Late May - early June (May 29-Jun 6),,true
+8,8,5,"May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2","May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2",true
+9,9,6,Saturday (Jun 13),,true
+10,10,6,Jun 3-6,,true
+11,11,6,Fourth weekend of June,,false
+12,12,6,Jun 27 - Jul 5 (centered on Jul 4),,true
+13,13,7,Jul 21-25,,true
+14,14,7,Late July / early August (verify),,false
+15,15,8,Aug 4-9,,true
+16,16,8,Aug 7-8,,true
+17,17,8,Aug 13-23,,true
+18,18,8,Aug 13-23,,true
+19,19,8,Mid-late August (unverified),,false
+20,20,8,Aug 28 - Sep 7 (ends Labor Day),,true
+21,21,9,Labor Day weekend (4 days),,false
+22,22,9,Saturday (Sep 12),,true
+23,23,9,Late September (Fri-Sun ~Sep 19-21),,true
+24,24,9,Sep 26 (10a-5p),,true
+25,25,9,Saturday Sep 26,,true
+26,26,9,Sep 25-27,,true
+27,27,10,Oct 1-11,,true
+28,28,10,First Saturday (Oct 3),,true
+29,29,10,All weekends in October,All weekends in October,false
+30,30,10,Oct 10-11 (9a-5p both days),,true
+31,31,10,Oct 16-25,,true
+32,32,12,First Friday of December (6-8pm),,false
+33,33,9,N/A,,false
+34,34,8,Aug 28-30,,true
+35,35,9,Sep 18-19,,true
+36,36,9,Sep 26-27,,true
+37,37,6,Jun 11 (11a-7p),,true
+38,38,5,Tue 11a-2p,Tue 11a-2p,true
+39,39,10,Oct 3,,true
+40,40,7,Jul 4 (noon-10p),,true
+41,41,8,Aug 13-16,,true
+42,42,,Rotating daily,Rotating daily,false
+43,43,9,Late Sep,,false
+44,44,5,Sat 7:30a-12p,,true
+45,45,5,Frenzy May 29 + Oct 9; Fright Oct,,true
+46,46,5,Select Fridays 6:30-9:30p,Select Fridays 6:30-9:30p,true
+47,47,8,3rd full weekend,,false
+48,48,9,Sep 18-19,,true
+49,49,6,Jun 12-14,,true
+50,50,5,May 15-17,,true
+51,51,5,Sat,,false
+52,52,5,May 15-17,,true
+53,53,4,Apr 23-26,,true
+54,54,5,Late May/early Jun (11a-7p),,false
+55,55,7,Jul 4-11,,true
+56,56,7,Jul 30-Aug 8,,true
+57,57,10,Oct 2-3,,true
+58,58,10,Oct 2-4,,true
+59,59,12,Dec (dates unconfirmed),,false
+60,60,,2-day,2-day,false
+61,61,3,3rd Thu 5:30-8:30p,3rd Thu 5:30-8:30p,false
+62,62,4,2nd Fri 11a-9p,2nd Fri 11a-9p,false
+63,63,,Near-daily,Near-daily,false
+64,64,4,1st Fri 5-9p,1st Fri 5-9p,false
+65,65,7,Jul 18 + Sep 19,,true
+66,66,8,Late Aug (~Aug 21-23),,true
+67,67,9,Sep 4-7 (Labor Day),,true
+68,68,9,Sep 12,,true
+69,69,6,~Jun 26-27,,true
+70,70,10,~Oct 9-10,,true
+71,71,5,May 9,,true
+72,72,9,Sep 18-20,,true
+73,73,9,Mid-Sep,,false
+74,74,9,Late Sep (~Sep 25-27),,true
+75,75,4,Wed 11a-2p,Wed 11a-2p,true
+76,76,4,Tue 4-8p / Sat 8a-12p,Tue 4-8p / Sat 8a-12p,true
+77,77,4,Apr 11 (10a-2p),,true
+78,78,5,May 29-30 (2026 reduced),,true
+79,79,5,Mid-May (~May 19-21),,true
+80,80,5,May 14-17,,true
+81,81,5,May 29-31 (Memorial wknd),,true
+82,82,5,"5/16, 6/20, 7/18, 8/15","5/16, 6/20, 7/18, 8/15",false
+83,83,6,Jun 24-27,,true
+84,84,,Date fuzzy,,false
+85,85,10,Oct 10 (11a-4p),,true
+86,86,10,Oct 22-25,,true
+87,87,,Varies,Varies,false
+88,88,3,Last Fri 5-9:30p,Last Fri 5-9:30p,false
+89,89,9,Sep 11-20,,true
+90,90,6,Jun 11-14,,true
+91,91,6,Jun 12-13,,true
+92,92,10,Oct 2-3,,true
+93,93,10,Oct 2-3,,true
+94,94,5,Mid-May (3rd weekend),,false
+95,95,5,Late May/early Jun (Fri-Sun),,false
+96,96,5,"4 weekends (May 1-10, Oct 2-11)","4 weekends (May 1-10, Oct 2-11)",true
+97,97,,Lunch/dinner slots,Lunch/dinner slots,false
+98,98,7,Jul 31-Aug 2,,true
+99,99,7,Jul 10-12,,true
+100,100,8,Aug 13-15,,true
+101,101,9,Sep 11-13,,true
+102,102,9,~Sep 18-20,,true
+103,103,5,Thu 4:30-7:30p,,true
+104,104,6,Jun 17-21 (Father's Day wknd),,true
+105,105,10,Sep-Oct,,false
+106,106,4,Apr 19 (12-5p),,true
+107,107,,Thu 11a-2p,Thu 11a-2p,true
+108,108,9,Sep 12-13,,true
+109,109,10,Oct 16-17,,true
+110,110,10,Oct 2-3,,true
+111,111,8,Aug 15,,true
+112,112,,Thu 11a-2p,Thu 11a-2p,true
+113,113,10,October,,false
+114,114,4,Apr 25-26,,true
+115,115,10,Oct 24-25,,true
+116,116,12,Dec 12-13,,true
+117,117,12,"Square Fest, Main St Fest (Oct 3), etc.",,true
+118,118,,Varies,Varies,false
+119,119,9,Sep 30-Oct 3,,true
+120,120,4,"1st Fri, trucks open 11a","1st Fri, trucks open 11a",false
+121,121,,Daily,Daily,false
+122,122,9,Sep 19,,true
+123,123,9,Mid-late Sep,,false
+124,124,8,Late August,,false
+125,125,5,Early May (~May 1-3),,true
+126,126,4,Apr 17,,true
+127,127,5,May 1-2,,true
