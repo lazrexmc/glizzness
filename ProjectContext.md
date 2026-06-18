@@ -450,13 +450,13 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
-A researched master list of **240 events** (237 published) — Missouri covered statewide via a
-county-by-county sweep, plus regional metros incl. Indianapolis (27 market hubs) — feeds a live
-Supabase database and a
+A researched master list of **253 events** (250 published) — Missouri covered statewide via a
+county-by-county sweep, plus regional metros incl. Indianapolis and the I-70 corridor (28 market
+hubs) — feeds a live Supabase database and a
 static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
 
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — authoritative flat master, 240 events, 16 columns (added `county` + per-row `last_verified`)
+- `VendingCircuit.csv` — authoritative flat master, 253 events, 16 columns (added `county` + per-row `last_verified`)
   (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
@@ -472,7 +472,7 @@ static web map. Distinct from the accounting automation but lives in the same re
 
 **Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
 `vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view
-`vending_published_events` (237 rows). Public-read RLS on `vending_*` only; accounting tables
+`vending_published_events` (250 rows). Public-read RLS on `vending_*` only; accounting tables
 remain anon-blocked. The map reads via the anon key (safe to expose).
 
 **How the data was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each

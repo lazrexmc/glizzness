@@ -351,8 +351,9 @@ python sync_wave.py --sync-accounts              # rebuild Wave accounts
 
 ## Vending Circuit (food-truck event map)
 
-A separate sub-project: a researched, fact-checked list of 240 events (237 published; Missouri covered
-statewide via a county-by-county sweep, plus regional metros incl. Indianapolis; 27 market hubs) where
+A separate sub-project: a researched, fact-checked list of 253 events (250 published; Missouri covered
+statewide via a county-by-county sweep, plus regional metros incl. Indianapolis and the I-70 corridor;
+28 market hubs) where
 The Glizzness could vend, normalized into Supabase and shown on a static map. Full detail in
 `ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`.
 

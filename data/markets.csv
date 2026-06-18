@@ -26,3 +26,4 @@ id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_colum
 25,Bootheel,Kennett,MO,36.2364,-90.0557,9,250,"MO Bootheel: Kennett, Caruthersville, New Madrid, Charleston"
 26,Northwest Missouri,St. Joseph,MO,39.7686,-94.8466,9,150,"NW Missouri: St. Joseph, Maryville, Bethany"
 27,Indianapolis Metro,Indianapolis,IN,39.7684,-86.1581,10,480,"Indianapolis metro: Indy, Carmel, Noblesville, Greenwood, Plainfield, Greenfield"
+28,I-70 Corridor (STL-Indy),Effingham,IL,39.12,-88.5434,8,200,"I-70 between STL & Indy: Effingham, Vandalia, Terre Haute, Greencastle"
