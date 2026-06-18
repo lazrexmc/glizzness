@@ -13,10 +13,14 @@ verified passes, so there is no "unverified candidate" tier left to badge. Locke
 
 | Bucket | Rule | UI behavior |
 |---|---|---|
-| **Publish** | `verification_status = verified` AND `food_truck_friendly ≠ excluded` | Shown on map by default |
-| **Publish, flagged** | verified but with a caveat (dates/app/year unconfirmed) → `needs_confirmation = true` | Shown with a "verify before relying" badge |
+| **Publish** | `verification_status IN (verified, partial)` AND `food_truck_friendly <> excluded` AND `lat/lng` present | Shown on map — this IS the `vending_published_events` gate view (124 rows) |
+| **Flagged subset** | published rows where `needs_confirmation = true` (this includes every `partial` row) | Shown with a "verify before relying" badge |
 | **Hide by default** | `verification_status IN (defunct, excluded)` | Kept in DB for the record; filtered out of default map view, reachable via a toggle |
-| **Quarantine (not published)** | missing `lat/lng`, or missing `market_id`, or no schedule/recurring flag | Stays in a `needs_review` state until fixed |
+| **Quarantine (not published)** | missing `lat/lng` or `market_id` | Excluded by the gate view until fixed |
+
+> Note: `partial` (e.g. Illinois State Fair, SeptemberFest Omaha — dates/size soft) is published
+> *with* the verify badge, not hidden. The implemented gate view is the single source of truth for
+> what's live; the table above documents it.
 
 Rationale: everything we have is food-truck-relevant and fact-checked; the only things worth
 hiding are the dead (Roots N Blues) and the closed-to-trucks (Bartlett, Vala's). Caveated
@@ -38,33 +42,36 @@ events are still useful leads, so we publish them with a flag rather than droppi
 | distance_from_columbia_mi | int | driving miles, anchor city |
 | summary | text | one-line cluster description |
 
-### `events` — one row per real event/venue
+### `events` — one row per real event/venue  (AS IMPLEMENTED — matches `data/events.csv` + `supabase_vending_schema.sql`)
 | column | type | notes |
 |---|---|---|
-| id | serial PK | |
+| id | int PK | |
 | market_id | int FK → markets | **required to publish** |
 | name | text | |
 | city / state | text | |
-| venue_name | text | nullable |
-| address | text | nullable |
-| **lat / lng** | double | **required to publish** (geocoded — Task 3) |
-| event_type | enum | see §3 |
-| cadence | enum | see §3 |
+| event_type | enum (text+CHECK) | see §3 |
+| cadence | enum (text+CHECK) | see §3 |
 | is_recurring_venue | bool | true for taprooms/markets/food-truck courts |
-| food_truck_friendly | enum | see §3 |
-| trip_type | enum | see §3 (recomputed from distance in ETL) |
-| verification_status | enum | see §3 |
+| food_truck_friendly | enum (text+CHECK) | see §3 |
+| trip_type | enum (text+CHECK) | see §3 (recomputed from distance in ETL) |
+| verification_status | enum (text+CHECK) | see §3 |
 | needs_confirmation | bool | true when a caveat applies (dates/app/year) |
 | distance_from_columbia_mi | int | |
-| homepage_url | text | nullable — **drives the conditional UI link** |
-| application_url | text | nullable |
-| application_method | text | free text (form / email / PDF / portal) |
-| contact_name / contact_email / contact_phone | text | split from current `contact` |
-| attendance_estimate | int | nullable (parsed) |
+| month | text | convenience; normalized dates live in `event_schedules` |
+| typical_dates | text | verbatim display string |
+| attendance_estimate | int | nullable (parsed from attendance_text) |
 | attendance_text | text | original string ("~300,000", "5,000-8,000/month") |
+| food_vendor_fee | text | mostly "Not researched" (fees deferred) |
+| application_method | text | free text (form / email / PDF / portal) |
+| contact_name / contact_email / contact_phone | text | split from the source `contact` field |
+| homepage_url | text | nullable — **drives the conditional UI link** |
 | primary_source_url | text | provenance |
+| **lat / lng** | double | **required to publish** (geocoded — Task 3) |
 | notes | text | caveats, fit warnings |
-| created_at / updated_at | timestamptz | |
+
+> Deferred / not yet implemented (add later if needed): `venue_name`, `address` (we geocode at
+> city level, so these are unused for now), `application_url` (folded into `application_method` /
+> `homepage_url`), and `created_at`/`updated_at` timestamps.
 
 ### `event_schedules` — normalizes the messy date field (1 event → many)
 | column | type | notes |
