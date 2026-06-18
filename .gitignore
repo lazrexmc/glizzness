@@ -8,6 +8,8 @@
 
 # Wave CSV exports — contain transaction data
 *.csv
+# Exception: vending circuit master is public event data (no financials)
+!VendingCircuit.csv
 
 # Secrets / env files
 .env

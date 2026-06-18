@@ -442,3 +442,30 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 - If Streamlit Cloud shows a stale version: reboot the app in the Streamlit Cloud dashboard
 - CLI scripts still work with `glizzness.db` (SQLite) for ad-hoc work
 - `run_daily.ps1` runs via Windows Task Scheduler at 9 AM daily (CLI path, SQLite)
+
+---
+
+## Vending Circuit (sub-project — food-truck event sourcing)
+
+A separate effort from the accounting automation: a researched master list of festivals, fairs,
+and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
+
+**Deliverables (tracked in git):**
+- `VendingCircuit.csv` — **authoritative master, 127 events**, 14 columns, database-ready
+  (gitignored `*.csv` rule has a `!VendingCircuit.csv` exception — it's public event data, no financials)
+- `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
+- `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
+
+**How it was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each
+adversarially fact-checked. Lesson learned: run research workflows **one at a time** — firing many
+in parallel trips the web-search rate limiter (9 concurrent failed; sequential succeeded clean).
+
+**Status / roadmap (see project todo list):**
+- ✅ Phase 1 — publish scope + schema/enums locked (`DATA_MODEL.md`)
+- ⬜ Phase 2 — ETL: consolidate, dedupe, assign `market_id`, normalize enums, recompute `trip_type`
+- ⬜ Phase 3 — geocode lat/lng + parse dates into schedules
+- ⬜ Phase 4 — load to Supabase + validation gate
+- ⬜ Phase 5 — two-tier lazy-load map UI (markets → events → detail drawer)
+- ⬜ Phase 6 — filters, conditional homepage links, mobile
+
+**Workflow rule:** update docs + commit/push to `master` after each phase (checkpoint "just in case").
