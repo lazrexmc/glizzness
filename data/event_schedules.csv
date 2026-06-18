@@ -306,3 +306,13 @@ id,event_id,month,display_text,recurrence_text,year_specific
 305,305,3,Mar 26-27 (2026),,true
 306,306,,Summer (2026),,false
 307,307,9,"Sep 20-22 (2026, verify)",,true
+308,308,6,Jun 5-7 (2026),,true
+309,309,3,Mar 14 (2026),,true
+310,310,10,Mid-October (2026),,false
+311,311,9,Sep 25-27 (2026),,true
+312,312,7,Jul 3-4 (2026),,true
+313,313,,"Fri-Sun, day after Thanksgiving - Dec 24",,true
+314,314,8,Aug 22-23 (2026),,true
+315,315,3,Mar 14 (2026),,true
+316,316,7,Jul 1-4 (2026),,true
+317,317,7,Jul 23-27 (2026),,true

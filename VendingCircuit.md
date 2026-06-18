@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 307 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 317 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 304 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 314 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -13,7 +13,7 @@
 ## Counts
 
 - 🏠 Hometown / mid-MO: **5**
-- 🚗 Day trips (≤150 mi): **122**
+- 🚗 Day trips (≤150 mi): **132**
 - 🏨 Overnight (>150 mi): **177**
 - ❌ Defunct / excluded (hidden): **3**
 
@@ -29,7 +29,7 @@
 | Living Windows Festival ⚠️ | Columbia, MO | Boone | 0 | December | First Friday of December (6-8pm) | Downtown holiday crowd | discoverthedistrict.com |
 | True/False Film Fest ⚠️ | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026); Mar 4-7 (2027) | Large (downtown crowds) | truefalse.org |
 
-## 🚗 Day trips (≤150 mi)  (122)
+## 🚗 Day trips (≤150 mi)  (132)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -81,6 +81,9 @@
 | Johnson County Fair | Warrensburg, MO | Johnson | 75 | June | Early July (2026) | — | johnsoncountyfairassociation.com |
 | Warren County Fair ⚠️ | Warrenton, MO | Warren | 75 | June | Jun 24-27 (2026) | — | warrencountyfairgrounds.com |
 | Warsaw Jubilee Days | Warsaw, MO | Benton | 75 | June | Jun 3-6 (2026) | — | warsawjubileedays.com |
+| Deutsch Country Days ⚠️ | Marthasville, MO | Warren | 80 | October | Mid-October (2026) | — | deutschcountrydays.org |
+| Augusta Wine & Jazz Festival ⚠️ | Augusta, MO | St. Charles | 85 | June | Jun 5-7 (2026) | — | visitaugustamo.com |
+| Defiance St. Patrick's Day Festival ⚠️ | Defiance, MO | St. Charles | 90 | March | Mar 14 (2026) | — | defiancemo.com |
 | Missouri State Fair | Sedalia, MO | Pettis | 90 | August | Aug 13-23 | 329000-350000 | mostatefair.com/participate/commercial/vendor-concessionaire |
 | Art Fair & Winefest ⚠️ | Washington, MO | Franklin | 95 | May | May 15-17 (2026) | — | downtownwashmo.org |
 | Fall Festival of the Arts & Crafts ⚠️ | Washington, MO | Franklin | 95 | September | Sep 25-27 (2026) | — | downtownwashmo.org |
@@ -88,10 +91,12 @@
 | NEMO District Fair | Kirksville, MO | Adair | 95 | July | Jul 14-18 (2026) | — | nemofair.net |
 | Olde Glory Days | Clinton, MO | Henry | 95 | July | Jul 1-4 (2026) | — | clintonmo.com |
 | Red Barn Arts & Crafts Festival | Kirksville, MO | Adair | 95 | September | Late September (2026) | — | visitkirksville.com |
+| St. Charles County Fair ⚠️ | Wentzville, MO | St. Charles | 95 | July | Jul 23-27 (2026) | — | stcharlescofair.org |
 | St. James Grape & Fall Festival | St. James, MO | Phelps | 95 | September | Sep 10-12 (2026) | — | visitstjamesmo.com |
 | Washington Town & Country Fair ⚠️ | Washington, MO | Franklin | 95 | August | Aug 5-9 (2026) | — | washmofair.com |
 | Wentzville Days Fair & Music Festival | Wentzville, MO | St. Charles | 95 | May | May 15-17 | Community festival | wentzvillemo.gov |
 | Blue Springs Fall Fun Festival | Blue Springs, MO | Jackson | 100 | September | Sep 18-20 | Community festival | bluespringsfallfestival.com/apply |
+| Cottleville Irish Fest ⚠️ | Cottleville, MO | St. Charles | 100 | March | Mar 14 (2026) | — | — |
 | Festival of the Little Hills | St. Charles, MO | St. Charles | 100 | August | 3rd full weekend | ~350,000 | festivalofthelittlehills.com |
 | Franklin County Fair ⚠️ | Union, MO | Franklin | 100 | June | Jun 11-14 (2026) | — | — |
 | National Tom Sawyer Days | Hannibal, MO | Marion | 100 | June-July | Jun 27 - Jul 5 (centered on Jul 4) | Multi-day | visithannibal.com/events/71st-annual-national-tom-sawyer-days |
@@ -99,6 +104,8 @@
 | Richmond Mushroom Festival | Richmond, MO | Ray | 100 | May | First weekend May (May 1-2, 2026) | — | mushroomfestival.net |
 | Hannibal Autumn Historic Folklife Festival | Hannibal, MO | Marion | 105 | October | Oct 18-19 (2026) | — | hannibalarts.com |
 | Lincoln County Fair | Troy, MO | Lincoln | 105 | July | Jul 14-18 (2026) | — | lincolncountyfair.net |
+| O'Fallon Heritage & Freedom Fest ⚠️ | O'Fallon, MO | St. Charles | 105 | July | Jul 1-4 (2026) | — | heritageandfreedomfest.com |
+| One World Fest ⚠️ | St. Peters, MO | St. Charles | 105 | August | Aug 22-23 (2026) | — | — |
 | Pacific Car Show & Block Party ⚠️ | Pacific, MO | Franklin | 105 | June | Jun 27 (2026) | — | pacificmo.org |
 | Route 66 BBQ & Bluegrass Festival ⚠️ | Pacific, MO | Franklin | 105 | May | May 29-31 (2026) | — | pacificmo.org |
 | St. Clair Pickin' on Picknic Festival ⚠️ | St. Clair, MO | Franklin | 105 |  | Verify date (2026) | — | — |
@@ -108,6 +115,9 @@
 | MoRoots Music Festival ⚠️ | Steelville, MO | Crawford | 110 | September | Sep 24-26 | — | naturallymeramec.org |
 | O'Fallon Food Truck Frenzy / Fright | O'Fallon, MO | St. Charles | 110 | May/Oct | Frenzy May 29 + Oct 9; Fright Oct | Food-truck showcase | ofallon.mo.us/food-truck-frenzy |
 | Pulaski County Old Settlers Day | Waynesville, MO | Pulaski | 110 | July | Jul 25-26 (2026) | — | route66courthouse.com |
+| St. Charles Christmas Traditions ⚠️ | St. Charles, MO | St. Charles | 110 |  | Fri-Sun, day after Thanksgiving - Dec 24 | — | discoverstcharles.com |
+| St. Charles Oktoberfest ⚠️ | St. Charles, MO | St. Charles | 110 | September | Sep 25-27 (2026) | — | saintcharlesoktoberfest.com |
+| St. Charles Riverfest ⚠️ | St. Charles, MO | St. Charles | 110 | July | Jul 3-4 (2026) | — | stcharlescitymo.gov |
 | Steelville Harvest Festival | Steelville, MO | Crawford | 110 | September | Early September (2026) | — | steelville.info |
 | Crawford County Fair | Cuba, MO | Crawford | 115 | July | Jul 14-18 (2026) | — | crawfordcountyfair.info |
 | Dardenne Prairie Summer Concert & Food Truck Rally | Dardenne Prairie, MO | St. Charles | 115 | May-Sep | Select Fridays 6:30-9:30p | Food truck rally | dardenneprairie.org |

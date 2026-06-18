@@ -66,6 +66,7 @@ reg(3,"MO","St. Louis","St. Charles","O'Fallon","Wentzville","Dardenne Prairie",
 reg(3,"IL","Edwardsville","Belleville","Collinsville","Highland","Granite City","Glen Carbon","Alton")
 reg(3,"MO","Warrenton","Union","Sullivan","Pacific","St. Clair")  # Franklin/Warren Co. (W of STL)
 reg(3,"MO","Festus","De Soto","Hillsboro","Arnold")              # Jefferson Co. (S of STL)
+reg(3,"MO","Augusta","Defiance","Marthasville","St. Peters")     # St. Charles Co. / wine country (NW of STL)
 reg(4,"MO","Springfield","Ozark","Republic","Branson","Joplin","Carthage","Marshfield","Lebanon","Nixa","Bolivar")
 reg(5,"IL","Springfield")
 reg(6,"IA","Des Moines","West Des Moines","Ankeny","Urbandale","Ames")
