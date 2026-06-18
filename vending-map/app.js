@@ -26,8 +26,16 @@ const clusterGroup = L.markerClusterGroup({
   maxClusterRadius: 55,
   showCoverageOnHover: false,
   spiderfyOnMaxZoom: true,
+  zoomToBoundsOnClick: false,   // handled below so small clusters expand instead of zooming
   chunkedLoading: true
 }).addTo(map);
+
+// small clusters (<= 5 events) fan out on click — no need to keep zooming in;
+// bigger clusters still zoom to their bounds.
+clusterGroup.on("clusterclick", a => {
+  if (a.layer.getChildCount() <= 5) a.layer.spiderfy();
+  else a.layer.zoomToBounds({ padding: [40, 40] });
+});
 
 async function fetchJSON(path) {
   const res = await fetch(URL + "/rest/v1/" + path, { headers: HEADERS });

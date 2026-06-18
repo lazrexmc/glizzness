@@ -81,9 +81,10 @@ published, edit the rows in Supabase (or re-run the ETL + reload) — the map re
 ## Architecture notes
 - One **cluster layer** (`L.markerClusterGroup`) holds every visible event as a colored
   divIcon dot (colored by food-truck-friendliness). The plugin groups/scatters them by zoom.
-- **Clicking a cluster** bubble zooms to its bounds (spiderfies at max zoom); **clicking a dot**
-  opens the side drawer with dates, size, distance/trip-type, application method, contact, fee
-  (if known), notes, and a conditional **Event page** button.
+- **Clicking a cluster** with more than 5 events zooms to its bounds; a cluster with **≤5 events
+  fans out (spiderfies) in place** so you don't have to keep zooming in. **Clicking a dot** opens
+  the side drawer with dates, size, distance/trip-type, application method, contact, fee (if known),
+  notes, and a conditional **Event page** button.
 - A **filter change** rebuilds the cluster layer from the filtered events and fit-bounds to them.
 
 ## Features
