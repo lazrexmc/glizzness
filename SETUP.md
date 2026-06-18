@@ -351,7 +351,8 @@ python sync_wave.py --sync-accounts              # rebuild Wave accounts
 
 ## Vending Circuit (food-truck event map)
 
-A separate sub-project: a researched, fact-checked list of 127 events (124 published) where
+A separate sub-project: a researched, fact-checked list of 154 events (151 published, growing via a
+Missouri county-by-county sweep) where
 The Glizzness could vend, normalized into Supabase and shown on a static map. Full detail in
 `ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`.
 
@@ -359,8 +360,15 @@ The Glizzness could vend, normalized into Supabase and shown on a static map. Fu
 ```powershell
 python vending_circuit_etl.py        # VendingCircuit.csv -> data/markets.csv + data/events.csv
 python vending_circuit_geocode.py    # fills lat/lng + writes data/event_schedules.csv
+python vending_circuit_gen_sql.py    # data/*.csv -> supabase_vending_data.sql (idempotent reload)
+python vending_circuit_gen_md.py     # data/events.csv -> VendingCircuit.md (human view)
 # (run in this order; ETL clears lat/lng, geocode refills it)
 ```
+
+**Adding events (e.g. the Missouri county sweep):** append rows to `VendingCircuit.csv` (set
+`county`, an estimated `distance_mi`, `month`, `typical_dates`, `status`, `last_verified`); if an
+event is in a new town, add that town to `CITY_HUB` in `vending_circuit_etl.py` and to the `C`
+centroid table in `vending_circuit_geocode.py`. Then run the four commands above and reload the DB.
 
 **Reload the database (Supabase SQL Editor):**
 1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS, the
@@ -383,6 +391,7 @@ existing events, set their per-row last_verified date in VendingCircuit.csv, the
 python vending_circuit_etl.py
 python vending_circuit_geocode.py
 python vending_circuit_gen_sql.py
+python vending_circuit_gen_md.py
 # then re-run supabase_vending_data.sql in the SQL editor
 ```
 

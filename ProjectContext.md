@@ -450,11 +450,12 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
-A researched master list of **127 events** (124 published) feeds a live Supabase database and a
+A researched master list of **154 events** (151 published) — growing via an ongoing Missouri
+county-by-county sweep — feeds a live Supabase database and a
 static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
 
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — authoritative flat master, 127 events, 14 columns
+- `VendingCircuit.csv` — authoritative flat master, 154 events, 16 columns (added `county` + per-row `last_verified`)
   (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
@@ -468,14 +469,14 @@ static web map. Distinct from the accounting automation but lives in the same re
 
 **Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
 `vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view
-`vending_published_events` (124 rows). Public-read RLS on `vending_*` only; accounting tables
+`vending_published_events` (151 rows). Public-read RLS on `vending_*` only; accounting tables
 remain anon-blocked. The map reads via the anon key (safe to expose).
 
 **How the data was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each
 adversarially fact-checked. Lesson learned: run research workflows **one at a time** — firing many
 in parallel trips the web-search rate limiter (9 concurrent failed; sequential succeeded clean).
 
-**Regenerate the data pipeline:** `python vending_circuit_etl.py && python vending_circuit_geocode.py`
+**Regenerate the data pipeline:** `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`
 (then re-generate INSERTs if reloading the DB). Order matters: ETL before geocode.
 
 **Run the map:** open `vending-map/index.html` (anon key already in `config.js`), or host the

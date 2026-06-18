@@ -184,7 +184,13 @@ to **NW Arkansas**.
 - [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (127/127 geocoded)
 - [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (17 markets / 127 events / 127 schedules / 124 published)
 - [x] (Task 5) Two-tier Leaflet map (`vending-map/`) — data path verified via anon key
-- [ ] (Task 6) Filters, defunct-toggle, marker clustering, mobile polish
+- [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish (clustering skipped)
+- [x] (Cleanup) Per-row `last_verified` + `county` column + `vending_circuit_gen_md.py` (regenerable human view)
+- [~] (MO county sweep) Lightweight capture of plausibly-vendable events, county by county. **Batch 1**
+  (14 central-MO counties: Boone, Callaway, Cole, Cooper, Howard, Randolph, Audrain, Moniteau, Morgan,
+  Osage, Gasconade, Pettis, Saline, Montgomery) done → 154 events / 151 published. New rows carry
+  `status = "Verified - vending unconfirmed"` (verify badge); details deferred for backfill. Reassess
+  before continuing statewide (Mid-MO hub density is the watch-item).
 
 ---
 

@@ -40,6 +40,8 @@ def reg(mid, state, *cities):
     for c in cities:
         CITY_HUB[(c.lower(), state)] = mid
 reg(1,"MO","Columbia","Boonville","Hartsburg","Jefferson City","Moberly","Hermann","Sedalia","Hannibal","Mexico","Fulton","Rocheport","Ashland")
+# Mid-MO county sweep batch 1 — additional towns roll up to the Mid-Missouri hub (county field carries the fine grain)
+reg(1,"MO","Centralia","Sturgeon","Auxvasse","Kingdom City","Fayette","New Franklin","Higbee","Huntsville","California","Versailles","Linn","Owensville","Marshall","Montgomery City")
 reg(2,"MO","Kansas City","Independence","Lee's Summit","Parkville","Blue Springs","Liberty","Gladstone")
 reg(2,"KS","Lenexa","Overland Park","Leavenworth","Olathe","Shawnee","Kansas City")
 reg(3,"MO","St. Louis","St. Charles","O'Fallon","Wentzville","Dardenne Prairie","Cottleville","Chesterfield","Kirkwood","Fenton","Maplewood","Washington")
