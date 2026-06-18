@@ -327,3 +327,12 @@ id,event_id,month,display_text,recurrence_text,year_specific
 326,326,9,Sep 18-20 (2026),,true
 327,327,7,Jul 10 (2026),,true
 328,328,,Verify date (2026),,false
+329,329,5,May 1-3 (2026),,true
+330,330,9,Sep 4-6 (2026),,true
+331,331,8,Aug 21-23 (2026),,true
+332,332,3,Mar 14 (2026),,true
+333,333,9,Sep 25-27 (2026),,true
+334,334,5,May 15-16 (2026),,true
+335,335,9,Weekends Sep 5 - Oct 18 (2026),Weekends Sep 5 - Oct 18 (2026),true
+336,336,9,Sep 25-26 (2026),,true
+337,337,6,Jun 12 (2026),,true
