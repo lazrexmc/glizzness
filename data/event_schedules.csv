@@ -1,13 +1,13 @@
 id,event_id,month,display_text,recurrence_text,year_specific
 1,1,,"Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)","Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar)",true
 2,2,3,Mar 5-8 (2026); Mar 4-7 (2027),,true
-3,3,4,Mid-April (~Apr 19),,true
+3,3,4,Spring 2026 (food-truck registration to Mar 15),,true
 4,4,4,Apr 26 (rain date May 3); 12-6pm,,true
 5,5,5,Mid-May (May 13-16),,true
 6,6,5,Mid-May (2027),,false
 7,7,5,Late May - early June (May 29-Jun 6),,true
 8,8,5,"May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2","May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2",true
-9,9,6,Saturday (Jun 13),,true
+9,9,6,Jun 13 (2026),,true
 10,10,6,Jun 3-6,,true
 11,11,6,Fourth weekend of June,,false
 12,12,6,Jun 27 - Jul 5 (centered on Jul 4),,true
@@ -21,7 +21,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 20,20,8,Aug 28 - Sep 7 (ends Labor Day),,true
 21,21,9,Labor Day weekend (4 days),,false
 22,22,9,Saturday (Sep 12),,true
-23,23,9,Late September (Fri-Sun ~Sep 19-21),,true
+23,23,9,Sep 18-20 (2026),,true
 24,24,9,Sep 26 (10a-5p),,true
 25,25,9,Saturday Sep 26,,true
 26,26,9,Sep 25-27,,true
@@ -207,7 +207,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 206,206,5,First weekend May (2026),,false
 207,207,7,Jul 26 - Aug 1 (2026),,true
 208,208,6,Jun 11-13 (2026),,true
-209,209,9,Late Sep (verify 2026),,true
+209,209,9,Late September (2026),,false
 210,210,4,Apr 16-19 (2026),,true
 211,211,9,September (verify),,false
 212,212,9,3rd week Sep (verify),,false
@@ -221,7 +221,7 @@ id,event_id,month,display_text,recurrence_text,year_specific
 220,220,7,Jul 9-11 (2026),,true
 221,221,10,Oct 10-17 (2026),,true
 222,222,10,Oct 3 (2026),,true
-223,223,10,Oct 9-11 (verify 2026),,true
+223,223,10,Mid-October (2026),,false
 224,224,8,Aug 22-29 (2026),,true
 225,225,9,Sep 12 (2026),,true
 226,226,8,Aug 7-23 (2026),,true

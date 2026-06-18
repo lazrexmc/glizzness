@@ -107,13 +107,13 @@
 | Texas County Livestock Fair ⚠️ | Houston, MO | Texas | 115 |  | Summer (verify 2026) | — | houstoncountyfair.org |
 | Bates County Youth Fair ⚠️ | Butler, MO | Bates | 120 | July | Jul 26 - Aug 1 (2026) | — | — |
 | Belleville Art on the Square | Belleville, IL | St. Clair | 120 | May | May 15-17 | 100+ artists | artonthesquare.com |
-| Belleville Oktoberfest ⚠️ | Belleville, IL | St. Clair | 120 | September | Late September (Fri-Sun ~Sep 19-21) | 3-day | bellevilleoktoberfest.com |
+| Belleville Oktoberfest | Belleville, IL | St. Clair | 120 | September | Sep 18-20 (2026) | 3-day | bellevilleoktoberfest.com |
 | Collinsville Italian Fest | Collinsville, IL | Madison | 120 | September | Sep 18-19 | 30+ food vendors | italianfest.net/food |
-| Edwardsville Route 66 Festival ⚠️ | Edwardsville, IL | Madison | 120 | June | Saturday (Jun 13) | Single-day | cityofedwardsville.com/811/Edwardsville-Route-66-Festival |
+| Edwardsville Route 66 Festival | Edwardsville, IL | Madison | 120 | June | Jun 13 (2026) | Single-day | cityofedwardsville.com |
 | Highland Schweizerfest | Highland, IL | Madison | 120 | June | Jun 12-14 | Carnival + vendors | highlandil.gov |
 | Santa-Cali-Gon Days | Independence, MO | Jackson | 120 | September | Sep 4-7 (Labor Day) | ~300,000 | santacaligon.com |
 | Crossroads First Fridays | Kansas City, MO | Jackson | 125 | Apr-Oct (monthly) | 1st Fri 5-9p | 10,000+/month | kccrossroads.org/first-fridays |
-| Fountain Fest ⚠️ | Kansas City, MO | Jackson | 125 | April | Mid-April (~Apr 19) | Small (selects ~5 trucks) | cityoffountains.org/fountain-fest-food-trucks |
+| Fountain Fest | Kansas City, MO | Jackson | 125 | April | Spring 2026 (food-truck registration to Mar 15) | Small (selects ~5 trucks) | cityoffountains.org |
 | Parkville Days | Parkville, MO | Platte | 125 | August | Late Aug (~Aug 21-23) | 75+ vendors | parkvillemo.org/whatsgoingon/parkville-days |
 | Plaza Art Fair | Kansas City, MO | Jackson | 125 | September | Mid-Sep | 250,000+ | countryclubplaza.com |
 | Sauce Food Truck Fridays | St. Louis, MO | St. Louis City | 125 | May-Oct (8 Fridays) | May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2 | 20+ trucks (free admission) | saucemagazine.com/food-truck-fridays-2026 |
@@ -124,7 +124,7 @@
 | Lenexa Food Truck Frenzy | Lenexa, KS | Johnson | 130 | Jul & Sep | Jul 18 + Sep 19 | Food-truck showcase | lenexa.com/City-Calendar/Annual-Events/Food-Truck-Frenzy |
 | Lenexa Spinach Festival | Lenexa, KS | Johnson | 130 | September | Sep 12 | 13 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | NW Missouri State Fair ⚠️ | Bethany, MO | Harrison | 135 | August | Aug 27-31 (2026, Labor Day wknd) | — | nwmostatefair.com |
-| Stockton Black Walnut Festival ⚠️ | Stockton, MO | Cedar | 135 | September | Late Sep (verify 2026) | — | theblackwalnutfestival.com |
+| Stockton Black Walnut Festival | Stockton, MO | Cedar | 135 | September | Late September (2026) | — | theblackwalnutfestival.com |
 | Bushwhacker Days ⚠️ | Nevada, MO | Vernon | 140 | June | Jun 11-13 (2026) | — | nevada-mo.com |
 | Douglas County Fair ⚠️ | Ava, MO | Douglas | 140 | July | Jul 18-19 (2026, verify) | — | douglascountymofair.com |
 | Food Truck Friday (Central Park) | Carthage, MO | Jasper | 140 | Apr-Sep (monthly) | 2nd Fri 11a-9p | Food-truck-centered | visitcarthage.com/foodtruckfriday |
@@ -145,11 +145,11 @@
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
 | Laclede County Fair | Lebanon, MO | Laclede | 155 | July | Jul 4-11 | County fair | lacledecountyfair.org |
-| Lamar Free Fair ⚠️ | Lamar, MO | Barton | 155 | August | Aug 22-29 (2026) | — | bartoncounty.com |
+| Lamar Free Fair | Lamar, MO | Barton | 155 | August | Aug 22-29 (2026) | — | bartoncounty.com |
 | 417 Christmas Market | Springfield, MO | Greene | 165 | December | Dec (dates unconfirmed) | 200+ vendors | springfieldexpo.com |
 | Arcadia Valley Music Festival ⚠️ | Ironton, MO | Iron | 165 | May | May 15-16 | — | — |
 | Birthplace of Route 66 Festival | Springfield, MO | Greene | 165 | August | Aug 7-8 | 65000+ (expecting 70000+) | route66festivalsgf.com/vendors |
-| Carthage Maple Leaf Festival ⚠️ | Carthage, MO | Jasper | 165 | October | Oct 10-17 (2026) | — | mapleleaffestival.com |
+| Carthage Maple Leaf Festival | Carthage, MO | Jasper | 165 | October | Oct 10-17 (2026) | — | mapleleaffestival.com |
 | Hold Fast Brewing | Springfield, MO | Greene | 165 | Year-round | Near-daily | Brewery rotation | hfbrewing.com/food-truck-schedule |
 | Hootin an Hollarin ⚠️ | Gainesville, MO | Ozark | 165 | September | Sep 17-19 (2026) | — | hootinanhollarin.com |
 | MO Food Truck Fest | Springfield, MO | Greene | 165 | September | Saturday (Sep 12) | Mid-size | mofoodtruckfest.wordpress.com |
@@ -157,15 +157,15 @@
 | Ozarks Food Truck Rally | Springfield, MO | Greene | 165 | May-June | Late May/early Jun (11a-7p) | 20+ trucks | ozarkempirefair.com |
 | Farmington Country Days ⚠️ | Farmington, MO | St. Francois | 170 | June | Jun 5-7 (2026) | — | farmingtoncountrydays.com |
 | St. Francois County Fair ⚠️ | Farmington, MO | St. Francois | 170 | July | Jul 30 - Aug 1 (2026) | — | sfcfairgrounds.org |
-| Webb City Mining Days Festival ⚠️ | Webb City, MO | Jasper | 170 | September | Sep 12 (2026) | — | webbcitymo.org |
-| Apple Butter Makin' Days ⚠️ | Mount Vernon, MO | Lawrence | 175 | October | Oct 9-11 (verify 2026) | — | mtvchamber.com |
+| Webb City Mining Days Festival | Webb City, MO | Jasper | 170 | September | Sep 12 (2026) | — | webbcitymo.org |
+| Apple Butter Makin' Days | Mount Vernon, MO | Lawrence | 175 | October | Mid-October (2026) | — | mtvchamber.com |
 | Ozark Craft Fair | Ozark, MO | Christian | 175 | October | Oct 2-4 | 350+ vendors | ozarkcraftfair.com |
 | Republic Pumpkin Daze | Republic, MO | Greene | 175 | October | Oct 2-3 | 300+ booths | republicpumpkindaze.com |
 | Thayer Fall Festival ⚠️ | Thayer, MO | Oregon | 175 | October | Oct 10 | — | — |
 | Fredericktown Azalea Festival ⚠️ | Fredericktown, MO | Madison | 180 | May | May 1-3 (2026) | — | azaleafestival.info |
 | Nodaway County Fair ⚠️ | Maryville, MO | Nodaway | 180 | July | Jul 9-11 (2026) | — | nodcofair.org |
 | Perryville Mayfest ⚠️ | Perryville, MO | Perry | 180 | May | May (verify) | — | — |
-| Neosho Fall Festival ⚠️ | Neosho, MO | Newton | 185 | October | Oct 3 (2026) | — | neoshomo.gov |
+| Neosho Fall Festival | Neosho, MO | Newton | 185 | October | Oct 3 (2026) | — | neoshomo.gov |
 | Current River Food Truck Festival | Van Buren, MO | Carter | 190 | June | Jun 27 | — | — |
 | Greenville Christmas Festival ⚠️ | Greenville, MO | Wayne | 190 | December | December (verify) | — | — |
 | Beaverdale Fall Festival | Des Moines, IA | Polk | 200 | September | Sep 18-19 | 15+ food trucks | fallfestival.org |

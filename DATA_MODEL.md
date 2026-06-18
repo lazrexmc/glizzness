@@ -216,8 +216,8 @@ to **NW Arkansas**.
     (Marion/Hamilton/Johnson/Hendricks/Hancock counties, IN). **Total now 240 / 237 published, 27 hubs.**
   - Density is now handled by zoom-based clustering (the old per-hub pin density watch-item is moot).
   - **Data confirmation pass** (event by event, filling application_method/contact/homepage/fee +
-    clearing the verify badge): **Mid-MO (hub 1) done — 33/41 confirmed** (8 left flagged for genuinely
-    weak fit or unpublished dates). Confirmation backlog now 98 (was 121). Remaining hubs: not yet done.
+    clearing the verify badge): **done — Mid-MO 33/41, KC 13/13, St. Louis 11/11, Springfield 19/19.**
+    Backlog now 89 (was 121). Remaining hubs (6–26 ex-4 + 27): not yet done.
     NOTE: clearing the badge means changing `status` AND scrubbing the word "confirm"/"verify" from the
     row's notes — those substrings re-trigger needs_confirmation/unconfirmed in the ETL.
 
