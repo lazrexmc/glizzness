@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 301 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 307 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 298 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 304 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -13,7 +13,7 @@
 ## Counts
 
 - 🏠 Hometown / mid-MO: **5**
-- 🚗 Day trips (≤150 mi): **116**
+- 🚗 Day trips (≤150 mi): **122**
 - 🏨 Overnight (>150 mi): **177**
 - ❌ Defunct / excluded (hidden): **3**
 
@@ -29,7 +29,7 @@
 | Living Windows Festival ⚠️ | Columbia, MO | Boone | 0 | December | First Friday of December (6-8pm) | Downtown holiday crowd | discoverthedistrict.com |
 | True/False Film Fest ⚠️ | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026); Mar 4-7 (2027) | Large (downtown crowds) | truefalse.org |
 
-## 🚗 Day trips (≤150 mi)  (116)
+## 🚗 Day trips (≤150 mi)  (122)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -121,6 +121,7 @@
 | Edwardsville Route 66 Festival | Edwardsville, IL | Madison | 120 | June | Jun 13 (2026) | Single-day | cityofedwardsville.com |
 | Highland Schweizerfest | Highland, IL | Madison | 120 | June | Jun 12-14 | Carnival + vendors | highlandil.gov |
 | Santa-Cali-Gon Days | Independence, MO | Jackson | 120 | September | Sep 4-7 (Labor Day) | ~300,000 | santacaligon.com |
+| Arnold Days ⚠️ | Arnold, MO | Jefferson | 125 | September | Sep 20-22 (2026, verify) | — | arnoldmo.org |
 | Crossroads First Fridays | Kansas City, MO | Jackson | 125 | Apr-Oct (monthly) | 1st Fri 5-9p | 10,000+/month | kccrossroads.org/first-fridays |
 | Fountain Fest | Kansas City, MO | Jackson | 125 | April | Spring 2026 (food-truck registration to Mar 15) | Small (selects ~5 trucks) | cityoffountains.org |
 | Parkville Days | Parkville, MO | Platte | 125 | August | Late Aug (~Aug 21-23) | 75+ vendors | parkvillemo.org/whatsgoingon/parkville-days |
@@ -128,12 +129,17 @@
 | Sauce Food Truck Fridays | St. Louis, MO | St. Louis City | 125 | May-Oct (8 Fridays) | May 1, May 29, Jun 12, Jun 26, Aug 7, Aug 21, Sep 11, Oct 2 | 20+ trucks (free admission) | saucemagazine.com/food-truck-fridays-2026 |
 | 18th & Vine Arts Festival | Kansas City, MO | Jackson | 126 | September | Sep 25-27 | Thousands (selects 10 trucks) | 18thandvineartsfestival.com/foodtruck |
 | Great Lenexa BBQ Battle | Lenexa, KS | Johnson | 130 | June | ~Jun 26-27 | 7 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
+| Jefferson County Fair ⚠️ | Hillsboro, MO | Jefferson | 130 |  | Summer (2026) | — | jeffersoncountyfair.net |
 | Lenexa Art Fair | Lenexa, KS | Johnson | 130 | May | May 9 | 6 food trucks | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | Lenexa Chili Challenge | Lenexa, KS | Johnson | 130 | October | ~Oct 9-10 | 6 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | Lenexa Food Truck Frenzy | Lenexa, KS | Johnson | 130 | Jul & Sep | Jul 18 + Sep 19 | Food-truck showcase | lenexa.com/City-Calendar/Annual-Events/Food-Truck-Frenzy |
 | Lenexa Spinach Festival | Lenexa, KS | Johnson | 130 | September | Sep 12 | 13 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
+| De Soto Fall Festival ⚠️ | De Soto, MO | Jefferson | 135 | September | Late September (Saturday) 2026 | — | desotomochamber.com |
+| Festus Art & Music Festival ⚠️ | Festus, MO | Jefferson | 135 | May | May 2 (2026) | — | festusmo.gov |
+| Fountain City Jazz Fest ⚠️ | De Soto, MO | Jefferson | 135 | March | Mar 26-27 (2026) | — | — |
 | NW Missouri State Fair | Bethany, MO | Harrison | 135 | August | Aug 27-31 (2026, Labor Day wknd) | — | nwmostatefair.com |
 | Stockton Black Walnut Festival | Stockton, MO | Cedar | 135 | September | Late September (2026) | — | theblackwalnutfestival.com |
+| Twin City Days ⚠️ | Festus, MO | Jefferson | 135 | September | Weekend after Labor Day (2026) | — | twincitychamber.com |
 | Bushwhacker Days | Nevada, MO | Vernon | 140 | June | Jun 11-13 (2026) | — | nevada-mo.com |
 | Douglas County Fair | Ava, MO | Douglas | 140 | July | July (2026) | — | dgcountyfair.com |
 | Food Truck Friday (Central Park) | Carthage, MO | Jasper | 140 | Apr-Sep (monthly) | 2nd Fri 11a-9p | Food-truck-centered | visitcarthage.com/foodtruckfriday |

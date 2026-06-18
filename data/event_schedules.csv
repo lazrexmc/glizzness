@@ -300,3 +300,9 @@ id,event_id,month,display_text,recurrence_text,year_specific
 299,299,5,May 29-31 (2026),,true
 300,300,6,Jun 27 (2026),,true
 301,301,,Verify date (2026),,false
+302,302,9,Weekend after Labor Day (2026),,false
+303,303,5,May 2 (2026),,true
+304,304,9,Late September (Saturday) 2026,,false
+305,305,3,Mar 26-27 (2026),,true
+306,306,,Summer (2026),,false
+307,307,9,"Sep 20-22 (2026, verify)",,true
