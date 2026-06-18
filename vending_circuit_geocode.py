@@ -82,6 +82,13 @@ C = {
  ("Urbana","IL"):(40.1106,-88.2073),("Champaign","IL"):(40.1164,-88.2434),
  ("Danville","IL"):(40.1245,-87.6300),("Crawfordsville","IN"):(40.0411,-86.8745),
  ("Covington","IN"):(40.1417,-87.3953),
+ # Louisville/Evansville corridors (KY/IN/IL)
+ ("Louisville","KY"):(38.2527,-85.7585),("New Albany","IN"):(38.2856,-85.8241),
+ ("Jeffersonville","IN"):(38.2776,-85.7372),("Bardstown","KY"):(37.8093,-85.4669),
+ ("Elizabethtown","KY"):(37.6936,-85.8591),("Seymour","IN"):(38.9592,-85.8902),
+ ("Evansville","IN"):(37.9716,-87.5711),("Mt. Vernon","IL"):(38.3173,-88.9031),
+ ("Henderson","KY"):(37.8361,-87.5900),("Owensboro","KY"):(37.7742,-87.1133),
+ ("Columbus","IN"):(39.2014,-85.9214),("Bowling Green","KY"):(36.9685,-86.4808),
  ("Lenexa","KS"):(38.9536,-94.7336),("Wichita","KS"):(37.6872,-97.3301),
  ("Hutchinson","KS"):(38.0608,-97.9298),("Salina","KS"):(38.8403,-97.6114),
  ("Derby","KS"):(37.5450,-97.2689),("Junction City","KS"):(39.0286,-96.8314),

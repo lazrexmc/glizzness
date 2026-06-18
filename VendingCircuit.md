@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 263 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 280 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 260 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 277 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -14,7 +14,7 @@
 
 - 🏠 Hometown / mid-MO: **5**
 - 🚗 Day trips (≤150 mi): **107**
-- 🏨 Overnight (>150 mi): **148**
+- 🏨 Overnight (>150 mi): **165**
 - ❌ Defunct / excluded (hidden): **3**
 
 ---
@@ -141,7 +141,7 @@
 | Ste. Genevieve Jour de Fete ⚠️ | Ste. Genevieve, MO | Ste. Genevieve | 150 | August | Aug 8-9 (2026) | — | saintegenevievejourdefete.com |
 | Trails West Festival ⚠️ | St. Joseph, MO | Buchanan | 150 | August | August (verify) | — | stjosephmo.gov |
 
-## 🏨 Overnight (>150 mi)  (148)
+## 🏨 Overnight (>150 mi)  (165)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -155,6 +155,7 @@
 | Hold Fast Brewing | Springfield, MO | Greene | 165 | Year-round | Near-daily | Brewery rotation | hfbrewing.com/food-truck-schedule |
 | Hootin an Hollarin ⚠️ | Gainesville, MO | Ozark | 165 | September | Sep 17-19 (2026) | — | hootinanhollarin.com |
 | MO Food Truck Fest | Springfield, MO | Greene | 165 | September | Saturday (Sep 12) | Mid-size | mofoodtruckfest.wordpress.com |
+| Mt. Vernon Fall Fest ⚠️ | Mt. Vernon, IL | Jefferson | 165 | September | Sep 25-26 (2026) | — | mtvfestivals.com |
 | Ozark Empire Fair | Springfield, MO | Greene | 165 | Jul-Aug | Jul 30-Aug 8 | 150,000+ | ozarkempirefair.com/p/fair/vendors |
 | Ozarks Food Truck Rally | Springfield, MO | Greene | 165 | May-June | Late May/early Jun (11a-7p) | 20+ trucks | ozarkempirefair.com |
 | Vandalia Grand Levee ⚠️ | Vandalia, IL | Fayette | 165 | June | Jun 19-20 (2026) | — | — |
@@ -189,11 +190,15 @@
 | Sikeston Jaycee Bootheel Rodeo ⚠️ | Sikeston, MO | Scott | 220 | August | August (verify) | — | — |
 | Stoddard County Fair ⚠️ | Dexter, MO | Stoddard | 225 | September | 3rd week Sep (verify) | — | stoddardcountyfair.com |
 | Casey Popcorn Festival ⚠️ | Casey, IL | Clark | 230 | September | Sep 4-7 (2026) | — | popcornfestival.net |
+| Frog Follies ⚠️ | Evansville, IN | Vanderburgh | 230 | August | Aug 28-30 (2026) | — | — |
 | Heart of Illinois Fair ⚠️ | Peoria, IL | Peoria | 230 | July | Jul 14-18 (2026) | — | heartofillinoisfair.com |
 | McLean County Fair ⚠️ | Bloomington, IL | McLean | 230 | August | Summer (verify 2026) | — | mcleancountyfair.org |
 | New Madrid Fall Festival ⚠️ | New Madrid, MO | New Madrid | 230 | September | September (verify) | — | — |
 | Peoria Irish Fest ⚠️ | Peoria, IL | Peoria | 230 | August | Aug 28-30 (2026) | — | peoriairishfest.com |
+| ShrinersFest ⚠️ | Evansville, IN | Vanderburgh | 230 | May | May (2026) | — | — |
 | Sweet Corn Circus ⚠️ | Normal, IL | McLean | 230 | September | Early September (verify) | — | normalil.gov |
+| West Side Nut Club Fall Festival ⚠️ | Evansville, IN | Vanderburgh | 230 | October | First full week of October | — | nutclubfallfestival.com |
+| W.C. Handy Blues & Barbecue Festival ⚠️ | Henderson, KY | Henderson | 235 | June | Jun 17-20 (2026) | — | handyblues.org |
 | Clark County Fair ⚠️ | Marshall, IL | Clark | 240 | August | Aug 7-9 (2026) | — | — |
 | Northside Oktoberfest & Iowa City BrewFest | Iowa City, IA | Johnson | 240 | September | Late Sep | Brewfest | northsideiowacity.org |
 | Clarkton Purple Hull Pea Festival ⚠️ | Clarkton, MO | Dunklin | 245 | August | 4th week Aug (verify) | — | — |
@@ -211,6 +216,7 @@
 | Urbana Sweetcorn Festival ⚠️ | Urbana, IL | Champaign | 255 | August | Late August (2026) | — | — |
 | Washington County Fair | Prairie Grove, AR | Washington | 265 | August | Late August | AR's largest/oldest county fair | mywashcofair.com/commercial-vendors |
 | Alternating Currents | Davenport, IA | Scott | 270 | August | Aug 13-16 | Large (40+ venues) | alternatingcurrentsqc.com |
+| BBQ & Barrels (International Bar-B-Q Festival) ⚠️ | Owensboro, KY | Daviess | 270 | May | May 8-9 (2026) | — | bbqandbarrels.com |
 | Bettendorf 4th of July Festival | Bettendorf, IA | Scott | 270 | July | Jul 4 (noon-10p) | 14-15 food vendors | bettendorf.org/community/street_fest_vendors |
 | Cane Hill Harvest Festival | Canehill, AR | Washington | 270 | September | Sep 19 | Food trucks 10a-3:30p | historiccanehillar.org/festival |
 | Caruthersville Backyard BBQ Festival ⚠️ | Caruthersville, MO | Pemiscot | 270 | July | Jul 31 - Aug 1 | — | — |
@@ -239,6 +245,7 @@
 | First Friday Greencastle ⚠️ | Greencastle, IN | Putnam | 320 |  | First Friday monthly (May-Oct) | — | — |
 | Putnam County Fair ⚠️ | Greencastle, IN | Putnam | 320 | July | Jul 17-24 (2026) | — | putcofair.org |
 | Wilber Czech Festival (Czech Days) | Wilber, NE | Saline | 320 | Jul-Aug | Jul 31-Aug 2 | 65th annual | nebraskaczechsofwilber.com/czech-days |
+| Highland Farms Country Fest ⚠️ | Elizabethtown, KY | Hardin | 330 | September | Labor Day weekend (2026) | — | highlandfarmscountryfest.com |
 | Lancaster County Super Fair ⚠️ | Lincoln, NE | Lancaster | 330 | Summer (verify) | Late July / early August (verify) | Mid-size county fair | superfair.org/support/vendor |
 | Arrows to Aerospace | Bellevue, NE | Sarpy | 335 | August | Aug 13-15 | 55th annual | bokiwanis.org/arrows-to-aerospace |
 | Council Bluffs Farmers Market | Council Bluffs, IA | Pottawattamie | 340 | May-Sep | Thu 4:30-7:30p | Local market | councilbluffsiowa.com/farmers-market-council-bluffs |
@@ -259,16 +266,26 @@
 | Tulsa International Mayfest | Tulsa, OK | Tulsa | 346 | May | May 29-30 (2026 reduced) | Large | tulsamayfest.org/apply-food-vendors |
 | Tulsa Oktoberfest | Tulsa, OK | Tulsa | 346 | October | Oct 22-25 | Very large (#1 US) | tulsaoktoberfest.org/applications |
 | Tulsa State Fair | Tulsa, OK | Tulsa | 346 | October | Oct 1-11 | Large | tulsastatefair.com |
+| Kentucky Bourbon Festival ⚠️ | Bardstown, KY | Nelson | 350 | September | Sep 10-13 (2026) | — | kybourbonfestival.com |
 | Toad Suck Daze | Conway, AR | Faulkner | 350 | May | Early May (~May 1-3) | 30+ food vendors | toadsuck.org/food |
 | Bixby Green Corn Festival | Bixby, OK | Tulsa | 360 | June | Jun 24-27 | Food/craft booths | bixbyoptimist.com/vendors |
 | Broken Arrow Rooster Days | Broken Arrow, OK | Tulsa | 360 | May | May 14-17 | 95th yr, 100+ vendors | roosterdays.com/vendors |
+| Harvest Homecoming ⚠️ | New Albany, IN | Floyd | 360 | October | Oct 8-11 (2026) | — | harvesthomecoming.com |
+| Kentucky Derby Festival ⚠️ | Louisville, KY | Jefferson | 360 | April | Apr-May (Fest-a-Ville Apr 22-25) | — | kdf.org |
+| Kentucky State Fair ⚠️ | Louisville, KY | Jefferson | 360 | August | Aug 20-30 (2026) | — | kystatefair.org |
+| NuLu Summer Fest ⚠️ | Louisville, KY | Jefferson | 360 | July | Jul 18 (2026) | — | — |
 | Rose District Farmers Market | Broken Arrow, OK | Tulsa | 360 | Apr-Oct (weekly) | Tue 4-8p / Sat 8a-12p | 15+ trucks Tue | brokenarrowok.gov |
+| St. James Court Art Show ⚠️ | Louisville, KY | Jefferson | 360 | October | Oct 2-4 (2026) | — | stjamescourtartshow.com |
 | Taste On Main Food Truck Festival | Broken Arrow, OK | Tulsa | 360 | TBD | Date fuzzy | 24+ trucks | facebook.com/Tasteonmainba |
+| Bowling Green International Festival ⚠️ | Bowling Green, KY | Warren | 370 | September | Sep 26 (2026) | — | bginternationalfest.com |
 | John C. Fremont Days | Fremont, NE | Dodge | 370 | July | Jul 10-12 | Citywide festival | johncfremontdays.org/entry-forms |
 | Arkansas State Fair | Little Rock, AR | Pulaski | 376 | October | Oct 16-25 | Large | arkansasstatefair.com |
 | Arkansas Times Craft Beer Festival | North Little Rock, AR | Pulaski | 376 | April | Apr 17 | 50+ breweries | northlittlerock.org |
 | Bartlesville SunFest | Bartlesville, OK | Washington | 390 | May | May 29-31 (Memorial wknd) | Large | bartlesvillesunfest.org/food |
+| Jammin' in Jeff ⚠️ | Jeffersonville, IN | Clark | 390 |  | Summer Friday nights (RiverStage) | — | gosoin.com |
+| Seymour Oktoberfest ⚠️ | Seymour, IN | Jackson | 390 | October | Oct 1-3 (2026) | — | seymouroktoberfest.com |
 | Nebraska State Fair | Grand Island, NE | Hall | 419 | Aug-Sep | Aug 28 - Sep 7 (ends Labor Day) | Large | statefair.org/food-vendors/vendor-application |
+| Ethnic Expo ⚠️ | Columbus, IN | Bartholomew | 420 | October | Oct 9-10 (2026) | — | ethnicexpo.org |
 | Murfreesboro Parks & Rec events | Murfreesboro, TN | Rutherford | 420 | Year-round | Varies | Park events | murfreesborotn.gov/2704/Food-Trucks-at-Parks-Rec-Events |
 | Middle TN Food Truck Festival & Competition | Hendersonville, TN | Sumner | 431 | August | Aug 15 | Food-truck competition | midtnfoodtrucks.com |
 | Nashville Oktoberfest | Nashville, TN | Davidson | 431 | Fall | October | Large | thenashvilleoktoberfest.com/become-a-vendor |

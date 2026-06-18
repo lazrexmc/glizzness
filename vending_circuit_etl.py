@@ -48,6 +48,8 @@ MARKETS = [
     (27, "Indianapolis Metro", "Indianapolis", "IN", 39.7684, -86.1581, 10, 480, "Indianapolis metro: Indy, Carmel, Noblesville, Greenwood, Plainfield, Greenfield"),
     (28, "I-70 Corridor (STL-Indy)", "Effingham", "IL", 39.1200, -88.5434, 8, 200, "I-70 between STL & Indy: Effingham, Vandalia, Terre Haute, Greencastle"),
     (29, "I-74 Corridor (QC-Indy)", "Champaign", "IL", 40.1164, -88.2434, 8, 250, "I-74 Davenport->Indy: Galesburg, Peoria, Bloomington-Normal, Champaign-Urbana, Danville"),
+    (30, "Louisville Metro", "Louisville", "KY", 38.2527, -85.7585, 10, 360, "Louisville metro: New Albany/Jeffersonville/Seymour IN, Bardstown, Elizabethtown KY"),
+    (31, "Evansville / Tri-State", "Evansville", "IN", 37.9716, -87.5711, 10, 230, "Evansville tri-state: Mt. Vernon IL, Henderson & Owensboro KY"),
 ]
 
 # ---- city -> market_id (keyed by (city_lower, state)) ----
@@ -100,6 +102,14 @@ reg(28,"IN","Terre Haute","Brazil","Greencastle")
 # I-74 Corridor (Quad Cities -> Indy)
 reg(29,"IL","Peoria","Galesburg","Normal","Bloomington","Urbana","Champaign","Danville")
 reg(29,"IN","Crawfordsville","Covington")
+# Louisville/Evansville corridors (STL/Indy -> Louisville -> Nashville)
+reg(30,"KY","Louisville","Bardstown","Elizabethtown")
+reg(30,"IN","New Albany","Jeffersonville","Seymour")
+reg(31,"IN","Evansville")
+reg(31,"IL","Mt. Vernon")
+reg(31,"KY","Henderson","Owensboro")
+reg(27,"IN","Columbus")          # Ethnic Expo -> Indy hub
+reg(17,"KY","Bowling Green")     # BG International Festival -> Nashville hub
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)
