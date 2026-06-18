@@ -450,22 +450,42 @@ Or just hit **Full Sync** (runs steps 3–5 automatically).
 A separate effort from the accounting automation: a researched master list of festivals, fairs,
 and food-truck-friendly events The Glizzness could vend at, within ~480 mi of Columbia.
 
+A researched master list of **127 events** (124 published) feeds a live Supabase database and a
+static web map. Distinct from the accounting automation but lives in the same repo + Supabase project.
+
 **Deliverables (tracked in git):**
-- `VendingCircuit.csv` — **authoritative master, 127 events**, 14 columns, database-ready
-  (gitignored `*.csv` rule has a `!VendingCircuit.csv` exception — it's public event data, no financials)
+- `VendingCircuit.csv` — authoritative flat master, 127 events, 14 columns
+  (gitignored `*.csv` rule has `!VendingCircuit.csv` + `!data/*.csv` exceptions — public event data, no financials)
 - `VendingCircuit.md` — human-readable view, regenerated from the CSV, grouped by trip type
 - `DATA_MODEL.md` — locked normalization spec (schema, enums, 17 market hubs, publish scope, status map)
+- `vending_circuit_etl.py` — Phase 2 transform (flat CSV → `data/markets.csv` + `data/events.csv`)
+- `vending_circuit_geocode.py` — Phase 3 geocode + schedule parse (→ fills lat/lng, `data/event_schedules.csv`)
+- `data/markets.csv` (17), `data/events.csv` (127), `data/event_schedules.csv` (127)
+- `supabase_vending_schema.sql` — DDL + `vending_published_events` gate view + public-read RLS
+- `supabase_vending_data.sql` — generated INSERTs (17 + 127 + 127)
+- `vending-map/` — static Leaflet map (index.html / app.js / config.js / README.md)
 
-**How it was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each
+**Live data (Supabase, same project):** tables `vending_markets`, `vending_events`,
+`vending_event_schedules`, `vending_sources` (stub), `vending_fees` (stub), view
+`vending_published_events` (124 rows). Public-read RLS on `vending_*` only; accounting tables
+remain anon-blocked. The map reads via the anon key (safe to expose).
+
+**How the data was built:** 12 deep-research passes (3 foundational + 9 per-market regional), each
 adversarially fact-checked. Lesson learned: run research workflows **one at a time** — firing many
 in parallel trips the web-search rate limiter (9 concurrent failed; sequential succeeded clean).
 
-**Status / roadmap (see project todo list):**
+**Regenerate the data pipeline:** `python vending_circuit_etl.py && python vending_circuit_geocode.py`
+(then re-generate INSERTs if reloading the DB). Order matters: ETL before geocode.
+
+**Run the map:** open `vending-map/index.html` (anon key already in `config.js`), or host the
+`vending-map/` folder on GitHub Pages / Netlify. See `vending-map/README.md`.
+
+**Status / roadmap:**
 - ✅ Phase 1 — publish scope + schema/enums locked (`DATA_MODEL.md`)
-- ✅ Phase 2 — ETL done (`vending_circuit_etl.py` → `data/markets.csv` 17 hubs, `data/events.csv` 127 events; 0 dupes, all mapped to a hub, enums normalized)
-- ✅ Phase 3 — geocoded 127/127 (city-level + jitter, `vending_circuit_geocode.py`) + `data/event_schedules.csv`
-- 🔄 Phase 4 — schema + data SQL generated (`supabase_vending_schema.sql` + `supabase_vending_data.sql`); load into existing Glizzness Supabase pending execution-method choice
-- ⬜ Phase 5 — two-tier lazy-load map UI (markets → events → detail drawer)
-- ⬜ Phase 6 — filters, conditional homepage links, mobile
+- ✅ Phase 2 — ETL (`vending_circuit_etl.py`; 0 dupes, all mapped, enums normalized)
+- ✅ Phase 3 — geocoded 127/127 (city-level + jitter) + schedules parsed
+- ✅ Phase 4 — loaded to Supabase; validation gate satisfied (17 / 127 / 127 / 124, all confirmed)
+- ✅ Phase 5 — two-tier Leaflet map built + data path verified (markets→events→detail drawer, conditional homepage link)
+- ⬜ Phase 6 — filters (month / food-truck-friendly / day-trip), defunct-toggle, marker clustering, mobile polish
 
 **Workflow rule:** update docs + commit/push to `master` after each phase (checkpoint "just in case").

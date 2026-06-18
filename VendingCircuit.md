@@ -3,6 +3,10 @@
 **Master list — 127 events** within ~480 mi of Columbia, MO. Built from 12 deep, adversarially-verified research passes (9 regional + 3 foundational).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master** (14 structured columns). This markdown is a human-readable view kept in sync with it. Distances are approximate **driving miles** from Columbia.
+>
+> **Live versions:** the data is normalized into Supabase (`vending_*` tables, 124 published) and
+> visualized by a static map in `vending-map/` (open `index.html` or host the folder).
+> Normalization spec: `DATA_MODEL.md`. Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py`.
 
 **Legend:** 🏠 hometown (~0 mi) · 🚗 day trip (≤150 mi) · 🏨 overnight (>150 mi). `status` in the CSV flags verification level, defunct, and excluded events.
 

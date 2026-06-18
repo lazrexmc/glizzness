@@ -346,3 +346,34 @@ python sync_wave.py --sync-accounts              # rebuild Wave accounts
 # import Wave CSVs for each year
 # or just open the Streamlit dashboard URL — no local setup needed
 ```
+
+---
+
+## Vending Circuit (food-truck event map)
+
+A separate sub-project: a researched, fact-checked list of 127 events (124 published) where
+The Glizzness could vend, normalized into Supabase and shown on a static map. Full detail in
+`ProjectContext.md` (Vending Circuit section) and `DATA_MODEL.md`.
+
+**Data pipeline (regenerate the normalized files from the master CSV):**
+```powershell
+python vending_circuit_etl.py        # VendingCircuit.csv -> data/markets.csv + data/events.csv
+python vending_circuit_geocode.py    # fills lat/lng + writes data/event_schedules.csv
+# (run in this order; ETL clears lat/lng, geocode refills it)
+```
+
+**Reload the database (Supabase SQL Editor):**
+1. Run `supabase_vending_schema.sql` (drops + recreates `vending_*` tables, gate view, RLS).
+2. Run `supabase_vending_data.sql` (inserts 17 markets / 127 events / 127 schedules).
+3. Validate: `select count(*) from vending_published_events;`  → expect **124**.
+
+To regenerate `supabase_vending_data.sql` after editing the data, re-run the INSERT generator
+(see git history) or re-export the `data/*.csv` files.
+
+**View the map:**
+```powershell
+# open vending-map/index.html in a browser, or serve the folder:
+python -m http.server 8000   # then http://localhost:8000/vending-map/
+```
+The Supabase anon key is in `vending-map/config.js` (public-safe — RLS limits it to `vending_*`).
+Deploy by hosting the `vending-map/` folder on GitHub Pages / Netlify. See `vending-map/README.md`.
