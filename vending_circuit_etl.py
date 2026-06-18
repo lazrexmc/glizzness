@@ -44,6 +44,8 @@ MARKETS = [
     # Bootheel + Northwest Missouri (added in batch 4, completing the state)
     (25, "Bootheel", "Kennett", "MO", 36.2364, -90.0557, 9, 250,                "MO Bootheel: Kennett, Caruthersville, New Madrid, Charleston"),
     (26, "Northwest Missouri", "St. Joseph", "MO", 39.7686, -94.8466, 9, 150,    "NW Missouri: St. Joseph, Maryville, Bethany"),
+    # Out-of-region major market (added on request)
+    (27, "Indianapolis Metro", "Indianapolis", "IN", 39.7684, -86.1581, 10, 480, "Indianapolis metro: Indy, Carmel, Noblesville, Greenwood, Plainfield, Greenfield"),
 ]
 
 # ---- city -> market_id (keyed by (city_lower, state)) ----
@@ -88,6 +90,8 @@ reg(4,"MO","Stockton","Neosho","Mount Vernon","Lamar","Webb City")
 # Bootheel + Northwest Missouri (batch 4)
 reg(25,"MO","Kennett","Caruthersville","New Madrid","Charleston","Campbell","Clarkton")
 reg(26,"MO","St. Joseph","Bethany","Maryville")
+# Indianapolis Metro (Indiana)
+reg(27,"IN","Indianapolis","Carmel","Noblesville","Greenwood","Plainfield","Greenfield")
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)

@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 225 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 240 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 222 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 237 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -14,7 +14,7 @@
 
 - 🏠 Hometown / mid-MO: **5**
 - 🚗 Day trips (≤150 mi): **106**
-- 🏨 Overnight (>150 mi): **111**
+- 🏨 Overnight (>150 mi): **126**
 - ❌ Defunct / excluded (hidden): **3**
 
 ---
@@ -140,7 +140,7 @@
 | Ste. Genevieve Jour de Fete ⚠️ | Ste. Genevieve, MO | Ste. Genevieve | 150 | August | Aug 8-9 (2026) | — | saintegenevievejourdefete.com |
 | Trails West Festival ⚠️ | St. Joseph, MO | Buchanan | 150 | August | August (verify) | — | stjosephmo.gov |
 
-## 🏨 Overnight (>150 mi)  (111)
+## 🏨 Overnight (>150 mi)  (126)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -254,7 +254,22 @@
 | Franklin Main Street Festival | Franklin, TN | Williamson | 440 | April | Apr 25-26 | 120,000+ | williamsonheritage.org |
 | Franklin PumpkinFest | Franklin, TN | Williamson | 440 | October | Oct 24-25 | ~115,000 | eventeny.com/events/pumpkinfest-2026-26429 |
 | Historic Downtown Gallatin event series | Gallatin, TN | Sumner | 440 | Spring-Dec | Square Fest, Main St Fest (Oct 3), etc. | 25,000-30,000+ | downtowngallatin.org/festival-info |
+| Our Lady of the Greenwood Parish Festival ⚠️ | Greenwood, IN | Johnson | 470 | June | Jun 3-6 (2026) | — | — |
+| Plainfield Quaker Day Festival ⚠️ | Plainfield, IN | Hendricks | 470 | September | Sep 19 (2026) | — | visithendrickscounty.com |
+| 500 Festival Parade ⚠️ | Indianapolis, IN | Marion | 480 | May | May 23 (2026) | — | 500festival.com |
+| Carmel International Arts Festival ⚠️ | Carmel, IN | Hamilton | 480 | September | Sep 26-27 (2026) | — | — |
+| CarmelFest ⚠️ | Carmel, IN | Hamilton | 480 | July | Jul 3-4 (2026) | — | — |
 | Celebrate Nashville Cultural Festival | Nashville, TN | Davidson | 480 | October | First Saturday (Oct 3) | Large | celebratenashville.org/2026-food-vendor-application |
+| FOODEESFEST Indianapolis | Indianapolis, IN | Marion | 480 | September | Sep 18-20 (2026) | — | foodeesfest.com |
+| First Friday Food Truck Festival | Indianapolis, IN | Marion | 480 |  | First Friday monthly, May-Oct | — | — |
+| Fountain Square Art Festival ⚠️ | Indianapolis, IN | Marion | 480 | April | Apr 18 (2026) | — | — |
+| Indiana Black Expo Summer Celebration ⚠️ | Indianapolis, IN | Marion | 480 | July | Jul 9-19 (2026) | — | indianablackexpo.com |
+| Indiana State Fair ⚠️ | Indianapolis, IN | Marion | 480 | August | Aug 7-23 (2026) | — | indianastatefair.com |
+| Penrod Arts Fair ⚠️ | Indianapolis, IN | Marion | 480 | September | Sat after Labor Day (verify) | — | — |
+| Talbot Street Art Fair ⚠️ | Indianapolis, IN | Marion | 480 | June | Jun 20-21 (2026) | — | talbotstreet.org |
+| HATCH Fest ⚠️ | Noblesville, IN | Hamilton | 490 | June | Jun 14 (2026) | — | — |
+| Indiana Peony Festival ⚠️ | Noblesville, IN | Hamilton | 490 | May | May 16 (2026) | — | — |
+| Riley Festival ⚠️ | Greenfield, IN | Hancock | 490 | October | First Thursday Oct (4-day) | — | rileyfestival.com |
 
 ## ❌ Defunct / excluded (hidden from the map by default)  (3)
 

@@ -224,3 +224,18 @@ id,event_id,month,display_text,recurrence_text,year_specific
 223,223,10,Oct 9-11 (verify 2026),,true
 224,224,8,Aug 22-29 (2026),,true
 225,225,9,Sep 12 (2026),,true
+226,226,8,Aug 7-23 (2026),,true
+227,227,5,May 23 (2026),,true
+228,228,6,Jun 20-21 (2026),,true
+229,229,7,Jul 9-19 (2026),,true
+230,230,9,Sat after Labor Day (verify),,false
+231,231,4,Apr 18 (2026),,true
+232,232,9,Sep 18-20 (2026),,true
+233,233,,"First Friday monthly, May-Oct","First Friday monthly, May-Oct",false
+234,234,7,Jul 3-4 (2026),,true
+235,235,9,Sep 26-27 (2026),,true
+236,236,5,May 16 (2026),,true
+237,237,6,Jun 14 (2026),,true
+238,238,6,Jun 3-6 (2026),,true
+239,239,9,Sep 19 (2026),,true
+240,240,10,First Thursday Oct (4-day),,false

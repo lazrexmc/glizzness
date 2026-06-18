@@ -143,7 +143,7 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 
 ---
 
-## 5. Market hubs (26 hubs)
+## 5. Market hubs (27 hubs)
 
 A research pass ≠ a market. These geographic hubs are the map's top tier; each event maps to one.
 Hubs 18–26 were added in the 2026-06-18 statewide Missouri sweep: 18–21 southern/SE (Mark Twain
@@ -178,6 +178,7 @@ hub 22 (Northeast Missouri).
 | 24 | West-Central Missouri | Warrensburg, MO | MO | 85 |
 | 25 | Bootheel | Kennett, MO | MO | 250 |
 | 26 | Northwest Missouri | St. Joseph, MO | MO | 150 |
+| 27 | Indianapolis Metro | Indianapolis, IN | IN | 480 |
 
 Assignment is by city → hub (handled in Task 2). Sedalia (MO State Fair), Hannibal, Hermann,
 Jeff City, Boonville, Moberly, Marshfield all roll up to **Mid-Missouri** or **Springfield/Ozarks**
@@ -211,6 +212,8 @@ to **NW Arkansas**.
   - **Batch 4** — rest of state: deep Bootheel (hub 25), far Northwest/St. Joseph (hub 26), and the SW
     corner (Carthage/Joplin into hub 4) → +16 events. **Total now 225 / 222 published, 26 hubs.**
     Missouri is broadly covered; remaining work is detail backfill + occasional infill.
+  - **Indianapolis Metro (hub 27)** — added on request as an out-of-region major market: +15 events
+    (Marion/Hamilton/Johnson/Hendricks/Hancock counties, IN). **Total now 240 / 237 published, 27 hubs.**
   - Density is now handled by zoom-based clustering (the old per-hub pin density watch-item is moot).
   - Biggest open item: the `needs_confirmation` backlog (108 lightweight leads) awaiting detail backfill.
 
