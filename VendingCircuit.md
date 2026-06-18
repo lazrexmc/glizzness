@@ -33,31 +33,31 @@
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
-| Ashland Bay Days Festival ⚠️ | Ashland, MO | Boone | 16 | July | Jul 17-18 (2026) | — | visitashland.com |
+| Ashland Bay Days Festival | Ashland, MO | Boone | 16 | July | Jul 17-18 (2026) | — | ashlandbaydays.com |
 | Hartsburg Pumpkin Festival | Hartsburg, MO | Boone | 20 | October | Oct 10-11 (9a-5p both days) | 25000-30000+ (150+ craft vendors) | hartsburgpumpkinfest.com/vendor.php |
-| Central Missouri Renaissance Festival ⚠️ | Kingdom City, MO | Callaway | 24 | May | May (weekends; ~May 1-2 2026) | — | — |
-| Centralia Anchor Festival ⚠️ | Centralia, MO | Boone | 24 | May | May 29-31 (2026) | — | centraliamochamber.org |
-| Sturgeon Summer Days Rodeo ⚠️ | Sturgeon, MO | Boone | 26 | August | Aug 14-15 (2026) | — | — |
+| Central Missouri Renaissance Festival | Kingdom City, MO | Callaway | 24 | May | Apr 18-19, 25-26 & May 3-4 (2026) | — | centralmorenfest.net |
+| Centralia Anchor Festival | Centralia, MO | Boone | 24 | May | May 29-31 (2026) | — | centraliamochamber.org |
+| Sturgeon Summer Days Rodeo | Sturgeon, MO | Boone | 26 | August | Aug 14-15 (2026) | — | summerfest.sturgeon-mo.org |
 | Big Muddy Folk Festival ⚠️ | Boonville, MO | Cooper | 28 | April | Apr 10-11 (2026) | — | bigmuddy.org |
-| Boonville Heritage Days ⚠️ | Boonville, MO | Cooper | 28 | June | Fourth weekend of June | Community festival | boonvillemochamber.com/heritage-days |
-| Chestnut Roast Festival ⚠️ | New Franklin, MO | Howard | 28 | October | Oct 17 (verify year) | — | — |
-| Cooper County Fair ⚠️ | Boonville, MO | Cooper | 28 | July | Jul 21-25 (2026) | — | coopercountyfair.org |
-| Fulton Street Fair ⚠️ | Fulton, MO | Callaway | 28 | June | Jun 11-12 (2026) | — | fultonstreetfair.com |
-| Kingdom of Callaway Fair ⚠️ | Fulton, MO | Callaway | 28 | July | Late July (verify 2026) | — | callawaycounty.org |
+| Boonville Heritage Days | Boonville, MO | Cooper | 28 | June | Fourth weekend of June | Community festival | goboonville.com/heritage-days-4th-weekend-in-june |
+| Chestnut Roast Festival | New Franklin, MO | Howard | 28 | October | Saturday, early October (2026) | — | centerforagroforestry.org |
+| Cooper County Fair | Boonville, MO | Cooper | 28 | July | Jul 21-25 (2026) | — | coopercountyfair.org |
+| Fulton Street Fair | Fulton, MO | Callaway | 28 | June | Jun 11-12 (2026) | — | fultonstreetfair.com |
+| Kingdom of Callaway Fair ⚠️ | Fulton, MO | Callaway | 28 | July | Late July (verify 2026) | — | callawaycountyfairfultonmo.com |
 | Hatton Craft Fair ⚠️ | Auxvasse, MO | Callaway | 30 | October | Oct 3 (2026) | — | — |
 | Old Munichburg Oktoberfest | Jefferson City, MO | Cole | 30 | September | Saturday Sep 26 | 25th annual (10a-6p) | oldmunichburg.com/oktoberfest.html |
-| Cole County Fair ⚠️ | Jefferson City, MO | Cole | 32 | July | Jul 29-31 (2026) | — | — |
-| Fayette Festival of the Arts ⚠️ | Fayette, MO | Howard | 32 | August | Aug 1 (2026) | — | fayettefestival.org |
-| Salute to America ⚠️ | Jefferson City, MO | Cole | 32 | July | Jul 4 | — | visitjeffersoncity.com/salute-to-america |
-| Higbee Fair ⚠️ | Higbee, MO | Randolph | 35 | August | Aug 13-15 (2026) | — | moberly.com/higbeefair |
-| Mexico Soybean Festival ⚠️ | Mexico, MO | Audrain | 36 | August | Aug 20-22 (2026) | — | mexico-chamber.org |
+| Cole County Fair | Jefferson City, MO | Cole | 32 | July | Jul 28 - Aug 2 (2026) | — | Jefferson City Jaycees |
+| Fayette Festival of the Arts | Fayette, MO | Howard | 32 | August | Aug 1 (2026) | — | fayettefestival.org |
+| Salute to America | Jefferson City, MO | Cole | 32 | July | Jul 4 | — | salutetoamerica.org |
+| Higbee Fair | Higbee, MO | Randolph | 35 | August | Aug 13-15 (2026) | — | higbeefair.com |
+| Mexico Soybean Festival | Mexico, MO | Audrain | 36 | August | Aug 20-22 (2026) | — | mexicosoybean.org |
 | Moberly Railroad Days | Moberly, MO | Randolph | 36 | June | Jun 3-6 | Free admission (multi-day) | railroaddays.com/events/food-vendors |
 | Walk Back in Time ⚠️ | Mexico, MO | Audrain | 36 | September | September (biennial; verify) | — | — |
-| Randolph County Fair ⚠️ | Moberly, MO | Randolph | 38 | July | July (verify 2026) | — | randolphcountymofair.com |
-| Ozark Ham & Turkey Festival ⚠️ | California, MO | Moniteau | 42 | September | Sep 19 (2026); 3rd Sat Sep | — | cityofcalifornia.net |
-| Randolph County Old Settlers ⚠️ | Huntsville, MO | Randolph | 42 | September | Sep 10-12 (2026) | — | — |
+| Randolph County Fair | Moberly, MO | Randolph | 38 | August | Aug 24-29 (2026) | — | randolphcountymofair.com |
+| Ozark Ham & Turkey Festival | California, MO | Moniteau | 42 | September | Sep 19 (2026); 3rd Sat Sep | — | calmo.com/ham-turkey-festival |
+| Randolph County Old Settlers | Huntsville, MO | Randolph | 42 | September | Sep 10-12 (2026) | — | moberly.com/randolphcountyoldsettlers |
 | Monroe County Fair ⚠️ | Paris, MO | Monroe | 45 | July | Jul 6-11 (2026) | — | — |
-| Osage County Fair ⚠️ | Linn, MO | Osage | 48 | June | Jun 11-13 (2026) | — | osagecountyfair.com |
+| Osage County Fair | Linn, MO | Osage | 48 | June | Jun 11-13 (2026) | — | osagecountyfair.com |
 | Taste of Osage County ⚠️ | Linn, MO | Osage | 48 | September | Sep 12 | — | — |
 | Chariton County Youth Fair ⚠️ | Salisbury, MO | Chariton | 50 | July | July (verify 2026) | — | discoverchariton.com |
 | Maries County Fair ⚠️ | Vienna, MO | Maries | 50 | August | Aug (verify 2026) | — | mariescountyfair.weebly.com |
@@ -65,18 +65,18 @@
 | Eldon Turkey Festival ⚠️ | Eldon, MO | Miller | 55 | September | Sep 26 (2026) | — | eldonchamber.com |
 | Macon County Fair ⚠️ | Macon, MO | Macon | 55 | July | July (verify 2026) | — | — |
 | Laurie Hillbilly Fair ⚠️ | Laurie, MO | Morgan | 60 | September | Sep 26-27 (2026) | — | — |
-| Montgomery County Fair ⚠️ | Montgomery City, MO | Montgomery | 60 | July | Jul 20-25 (verify 2026) | — | montgomerycountyfair.org |
-| Saline County Fair ⚠️ | Marshall, MO | Saline | 60 | September | Sep 8-12 (2026) | — | salinecountymofairgrounds.org |
-| Gasconade County Fair ⚠️ | Owensville, MO | Gasconade | 70 | July | Jul 29 - Aug 1 (2026) | — | gasconadecountyfair.com |
+| Montgomery County Fair | Montgomery City, MO | Montgomery | 60 | July | Jul 20-25 (2026) | — | montgomerycountyfair.org |
+| Saline County Fair | Marshall, MO | Saline | 60 | September | Sep 8-12 (2026) | — | salinecountymofairgrounds.org |
+| Gasconade County Fair | Owensville, MO | Gasconade | 70 | July | Jul 29 - Aug 1 (2026) | — | gasconadecountyfair.com |
 | Great Pershing Balloon Derby ⚠️ | Brookfield, MO | Linn | 70 | August | Aug 29 - Sep 1 (2026) | — | pershingballoonderby.com |
 | Lake of the Ozarks Bikefest ⚠️ | Osage Beach, MO | Camden | 70 | September | Sep 15-20 (2026) | — | — |
-| Morgan County Fair ⚠️ | Versailles, MO | Morgan | 70 | July | Jul 7-12 (2026) | — | themorgancountyfair.com |
+| Morgan County Fair | Versailles, MO | Morgan | 70 | July | Jul 7-12 (2026) | — | themorgancountyfair.com |
 | Pike County Fair ⚠️ | Bowling Green, MO | Pike | 70 | July | Jul 28 - Aug 1 (2026) | — | pikecountyfair.org |
-| Versailles Olde Tyme Apple Festival ⚠️ | Versailles, MO | Morgan | 70 | October | Oct 3-5 (2026) | — | versaillesapplefestival.com |
+| Versailles Olde Tyme Apple Festival | Versailles, MO | Morgan | 70 | October | Oct 3-5 (2026) | — | versaillesapplefestival.com |
 | Camdenton Dogwood Festival ⚠️ | Camdenton, MO | Camden | 75 | April | Apr 23-25 (2026) | — | camdentonchamber.com |
 | Carroll County Fair ⚠️ | Carrollton, MO | Carroll | 75 | July | Jul 31 - Aug 8 (2026) | — | carrollcountyfair.com |
 | Hermann Harvest Festival | Hermann, MO | Gasconade | 75 | September | Sep 26 (10a-5p) | Wine-country crowd ($5 admission) | visithermann.com/event/hermann-harvest-festival-4 |
-| Hermann Maifest ⚠️ | Hermann, MO | Gasconade | 75 | May | Mid-May (2027) | Wine-country crowd | maifesthermann.org |
+| Hermann Maifest | Hermann, MO | Gasconade | 75 | May | Mid-May (2027) | Wine-country crowd | maifesthermann.org |
 | Hermann Oktoberfest | Hermann, MO | Gasconade | 75 | October | All weekends in October | Wine-country crowds | visithermann.com/festivals-events |
 | Johnson County Fair ⚠️ | Warrensburg, MO | Johnson | 75 | June | Jun 26 - Jul 5 (2026) | — | visitwarrensburg.com |
 | Warsaw Jubilee Days ⚠️ | Warsaw, MO | Benton | 75 | June | Jun 3-6 (2026) | — | jubileewarsaw.com |

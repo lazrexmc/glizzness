@@ -215,7 +215,11 @@ to **NW Arkansas**.
   - **Indianapolis Metro (hub 27)** — added on request as an out-of-region major market: +15 events
     (Marion/Hamilton/Johnson/Hendricks/Hancock counties, IN). **Total now 240 / 237 published, 27 hubs.**
   - Density is now handled by zoom-based clustering (the old per-hub pin density watch-item is moot).
-  - Biggest open item: the `needs_confirmation` backlog (108 lightweight leads) awaiting detail backfill.
+  - **Data confirmation pass** (event by event, filling application_method/contact/homepage/fee +
+    clearing the verify badge): **Mid-MO (hub 1) done — 33/41 confirmed** (8 left flagged for genuinely
+    weak fit or unpublished dates). Confirmation backlog now 98 (was 121). Remaining hubs: not yet done.
+    NOTE: clearing the badge means changing `status` AND scrubbing the word "confirm"/"verify" from the
+    row's notes — those substrings re-trigger needs_confirmation/unconfirmed in the ETL.
 
 ---
 
