@@ -48,7 +48,7 @@ function showMarkets() {
     const mk = L.circleMarker([m.center_lat, m.center_lng], {
       radius: Math.min(10 + n, 26), color: "#7a5a1e", weight: 2,
       fillColor: "#e8a33d", fillOpacity: 0.9
-    }).bindTooltip(`${m.name} — ${n} event${n === 1 ? "" : "s"}`, { direction: "top" });
+    }).bindTooltip(`${esc(m.name)} — ${n} event${n === 1 ? "" : "s"}`, { direction: "top" });
     mk.on("click", () => selectMarket(m.id));
     marketLayer.addLayer(mk);
     pts.push([m.center_lat, m.center_lng]);
@@ -72,7 +72,7 @@ function selectMarket(id) {
     const mk = L.circleMarker([e.lat, e.lng], {
       radius: 8, color: "#000", weight: 1,
       fillColor: friendlyColor(e.food_truck_friendly), fillOpacity: 0.95
-    }).bindTooltip(e.name, { direction: "top" });
+    }).bindTooltip(esc(e.name), { direction: "top" });
     mk.on("click", () => openDrawer(e));
     eventLayer.addLayer(mk);
     pts.push([e.lat, e.lng]);
@@ -82,7 +82,9 @@ function selectMarket(id) {
 }
 
 // ---------- Tier 3: detail drawer ----------
-function badge(text, cls) { return `<span class="badge ${cls}">${text}</span>`; }
+const ESC = { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ESC[c]);
+function badge(text, cls) { return `<span class="badge ${cls}">${esc(text)}</span>`; }
 
 function openDrawer(e) {
   const friendly = {
@@ -96,7 +98,7 @@ function openDrawer(e) {
   const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
 
   const rows = [];
-  const add = (label, val) => { if (val) rows.push(`<dt>${label}</dt><dd>${val}</dd>`); };
+  const add = (label, val) => { if (val) rows.push(`<dt>${esc(label)}</dt><dd>${esc(val)}</dd>`); };
   add("When", e.typical_dates || e.month);
   add("Size / attendance", e.attendance_text);
   add("Distance from Columbia", e.distance_from_columbia_mi ? e.distance_from_columbia_mi + " mi (" + (e.trip_type || "").replace("_", " ") + ")" : "");
@@ -106,13 +108,15 @@ function openDrawer(e) {
   add("Fee", e.food_vendor_fee && e.food_vendor_fee !== "Not researched" ? e.food_vendor_fee : "");
   add("Notes", e.notes);
 
-  const home = e.homepage_url
-    ? `<a class="home" href="${/^https?:\/\//.test(e.homepage_url) ? e.homepage_url : "https://" + e.homepage_url}" target="_blank" rel="noopener">Event page ↗</a>`
-    : "";
+  let home = "";
+  if (e.homepage_url) {
+    const url = /^https?:\/\//.test(e.homepage_url) ? e.homepage_url : "https://" + e.homepage_url;
+    home = `<a class="home" href="${esc(url)}" target="_blank" rel="noopener">Event page ↗</a>`;
+  }
 
   drawerBody.innerHTML = `
-    <h2>${e.name}</h2>
-    <div class="loc">${e.city}, ${e.state}</div>
+    <h2>${esc(e.name)}</h2>
+    <div class="loc">${esc(e.city)}, ${esc(e.state)}</div>
     <div>${typeB}${friendly}${verify}</div>
     <dl>${rows.join("")}</dl>
     ${home}`;
