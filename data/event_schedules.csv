@@ -252,3 +252,13 @@ id,event_id,month,display_text,recurrence_text,year_specific
 251,251,7,Jul 18-24 (2026),,true
 252,252,7,Jul 17-24 (2026),,true
 253,253,,First Friday monthly (May-Oct),First Friday monthly (May-Oct),false
+254,254,7,Jul 14-18 (2026),,true
+255,255,8,Aug 28-30 (2026),,true
+256,256,6,Jun 25-28 (2026),,true
+257,257,9,Early September (verify),,false
+258,258,8,Summer (verify 2026),,true
+259,259,7,Jul 25 - Aug 1 (2026),,true
+260,260,8,Late August (2026),,false
+261,261,6,Jun 24-28 (2026),,true
+262,262,6,2nd weekend June (2026),,false
+263,263,9,Last Saturday September (2026),Last Saturday September (2026),false

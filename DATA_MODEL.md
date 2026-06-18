@@ -143,7 +143,7 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 
 ---
 
-## 5. Market hubs (28 hubs)
+## 5. Market hubs (29 hubs)
 
 A research pass ≠ a market. These geographic hubs are the map's top tier; each event maps to one.
 Hubs 18–26 were added in the 2026-06-18 statewide Missouri sweep: 18–21 southern/SE (Mark Twain
@@ -180,6 +180,7 @@ hub 22 (Northeast Missouri).
 | 26 | Northwest Missouri | St. Joseph, MO | MO | 150 |
 | 27 | Indianapolis Metro | Indianapolis, IN | IN | 480 |
 | 28 | I-70 Corridor (STL–Indy) | Effingham, IL | IL, IN | 200 |
+| 29 | I-74 Corridor (QC–Indy) | Champaign, IL | IL, IN | 250 |
 
 Assignment is by city → hub (handled in Task 2). Sedalia (MO State Fair), Hannibal, Hermann,
 Jeff City, Boonville, Moberly, Marshfield all roll up to **Mid-Missouri** or **Springfield/Ozarks**

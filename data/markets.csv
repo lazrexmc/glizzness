@@ -27,3 +27,4 @@ id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_colum
 26,Northwest Missouri,St. Joseph,MO,39.7686,-94.8466,9,150,"NW Missouri: St. Joseph, Maryville, Bethany"
 27,Indianapolis Metro,Indianapolis,IN,39.7684,-86.1581,10,480,"Indianapolis metro: Indy, Carmel, Noblesville, Greenwood, Plainfield, Greenfield"
 28,I-70 Corridor (STL-Indy),Effingham,IL,39.12,-88.5434,8,200,"I-70 between STL & Indy: Effingham, Vandalia, Terre Haute, Greencastle"
+29,I-74 Corridor (QC-Indy),Champaign,IL,40.1164,-88.2434,8,250,"I-74 Davenport->Indy: Galesburg, Peoria, Bloomington-Normal, Champaign-Urbana, Danville"
