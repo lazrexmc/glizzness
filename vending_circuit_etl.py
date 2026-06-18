@@ -82,7 +82,9 @@ def event_type(name, notes):
     n = name.lower()
     if "state fair" in n: return "state_fair"
     if "county fair" in n or (("fair" in n) and "food truck" not in n and "art" not in n and "craft" not in n): return "county_fair"
-    if "food truck" in n or "feastival" in n or "food truck rally" in t or "food truck wednesday" in t or "food truck thursday" in t or "food truck friday" in t or "food truck frenzy" in n: return "food_truck_rally"
+    if ("food truck" in n or "feastival" in n or "truck rally" in n or "first fridays" in n
+            or "food truck rally" in t or "food truck wednesday" in t or "food truck thursday" in t
+            or "food truck friday" in t or "food truck frenzy" in n): return "food_truck_rally"
     if "farmers market" in n or "market days" in n or "night market" in n or "community market" in n: return "farmers_market"
     if "oktoberfest" in n or "schweizerfest" in n: return "oktoberfest"
     if "craft fair" in n: return "craft_fair"
