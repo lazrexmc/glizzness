@@ -23,3 +23,5 @@ id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_colum
 22,Northeast Missouri,Hannibal,MO,39.7084,-91.3585,9,105,"NE Missouri / Mark Twain river country: Hannibal, Bowling Green, Troy, Paris"
 23,North-Central Missouri,Kirksville,MO,40.1947,-92.583,9,95,"N-central MO: Kirksville, Macon, Brookfield, Trenton, Chillicothe, Carrollton"
 24,West-Central Missouri,Warrensburg,MO,38.7628,-93.736,9,85,"W-central MO: Warrensburg, Clinton, Warsaw, Richmond, Butler, Nevada"
+25,Bootheel,Kennett,MO,36.2364,-90.0557,9,250,"MO Bootheel: Kennett, Caruthersville, New Madrid, Charleston"
+26,Northwest Missouri,St. Joseph,MO,39.7686,-94.8466,9,150,"NW Missouri: St. Joseph, Maryville, Bethany"

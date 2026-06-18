@@ -143,11 +143,11 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 
 ---
 
-## 5. Market hubs (24 hubs)
+## 5. Market hubs (26 hubs)
 
 A research pass ≠ a market. These geographic hubs are the map's top tier; each event maps to one.
-Hubs 18–21 were added in the 2026-06-18 southern/SE Missouri sweep (the Mark Twain National Forest
-sector); hubs 22–24 in the north + west-central ring sweep (same day). Hannibal moved from hub 1 to
+Hubs 18–26 were added in the 2026-06-18 statewide Missouri sweep: 18–21 southern/SE (Mark Twain
+sector), 22–24 north + west-central ring, 25–26 Bootheel + Northwest. Hannibal moved from hub 1 to
 hub 22 (Northeast Missouri).
 
 | # | Hub | Anchor | States covered | ~mi from COMO |
@@ -176,6 +176,8 @@ hub 22 (Northeast Missouri).
 | 22 | Northeast Missouri | Hannibal, MO | MO | 105 |
 | 23 | North-Central Missouri | Kirksville, MO | MO | 95 |
 | 24 | West-Central Missouri | Warrensburg, MO | MO | 85 |
+| 25 | Bootheel | Kennett, MO | MO | 250 |
+| 26 | Northwest Missouri | St. Joseph, MO | MO | 150 |
 
 Assignment is by city → hub (handled in Task 2). Sedalia (MO State Fair), Hannibal, Hermann,
 Jeff City, Boonville, Moberly, Marshfield all roll up to **Mid-Missouri** or **Springfield/Ozarks**
@@ -203,9 +205,12 @@ to **NW Arkansas**.
   - **Batch 2** — southern/SE "Mark Twain" sector (~28 counties across hubs 18–21: Lake of the Ozarks,
     Rolla/I-44, Southeast MO, South-Central Ozarks) → +36 events.
   - **Batch 3** — north + west-central ring (~18 counties across hubs 22–24: Northeast MO, North-Central
-    MO, West-Central MO) → +19 events. **Total now 209 / 206 published, 24 hubs.**
+    MO, West-Central MO) → +19 events.
+  - **Batch 4** — rest of state: deep Bootheel (hub 25), far Northwest/St. Joseph (hub 26), and the SW
+    corner (Carthage/Joplin into hub 4) → +16 events. **Total now 225 / 222 published, 26 hubs.**
+    Missouri is broadly covered; remaining work is detail backfill + occasional infill.
   - Watch-item: Mid-MO hub at 41 pins; the county filter mitigates, revisit clustering if it grows.
-  - Remaining: the rest of the state's counties (deep Bootheel, far NW, and infill).
+  - Biggest open item: the `needs_confirmation` backlog (108 lightweight leads) awaiting detail backfill.
 
 ---
 

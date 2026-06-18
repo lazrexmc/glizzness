@@ -41,6 +41,9 @@ MARKETS = [
     (22, "Northeast Missouri", "Hannibal", "MO", 39.7084, -91.3585, 9, 105,     "NE Missouri / Mark Twain river country: Hannibal, Bowling Green, Troy, Paris"),
     (23, "North-Central Missouri", "Kirksville", "MO", 40.1947, -92.5830, 9, 95, "N-central MO: Kirksville, Macon, Brookfield, Trenton, Chillicothe, Carrollton"),
     (24, "West-Central Missouri", "Warrensburg", "MO", 38.7628, -93.7360, 9, 85, "W-central MO: Warrensburg, Clinton, Warsaw, Richmond, Butler, Nevada"),
+    # Bootheel + Northwest Missouri (added in batch 4, completing the state)
+    (25, "Bootheel", "Kennett", "MO", 36.2364, -90.0557, 9, 250,                "MO Bootheel: Kennett, Caruthersville, New Madrid, Charleston"),
+    (26, "Northwest Missouri", "St. Joseph", "MO", 39.7686, -94.8466, 9, 150,    "NW Missouri: St. Joseph, Maryville, Bethany"),
 ]
 
 # ---- city -> market_id (keyed by (city_lower, state)) ----
@@ -81,7 +84,10 @@ reg(21,"MO","West Plains","Gainesville","Thayer","Eminence","Ava","Houston")
 reg(22,"MO","Hannibal","Bowling Green","Troy","Paris")
 reg(23,"MO","Kirksville","Brookfield","Trenton","Chillicothe","Carrollton","Macon","Salisbury")
 reg(24,"MO","Warrensburg","Clinton","Warsaw","Richmond","Butler","Nevada")
-reg(4,"MO","Stockton")
+reg(4,"MO","Stockton","Neosho","Mount Vernon","Lamar","Webb City")
+# Bootheel + Northwest Missouri (batch 4)
+reg(25,"MO","Kennett","Caruthersville","New Madrid","Charleston","Campbell","Clarkton")
+reg(26,"MO","St. Joseph","Bethany","Maryville")
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)

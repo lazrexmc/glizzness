@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 209 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 225 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 206 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 222 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -13,8 +13,8 @@
 ## Counts
 
 - 🏠 Hometown / mid-MO: **5**
-- 🚗 Day trips (≤150 mi): **103**
-- 🏨 Overnight (>150 mi): **98**
+- 🚗 Day trips (≤150 mi): **106**
+- 🏨 Overnight (>150 mi): **111**
 - ❌ Defunct / excluded (hidden): **3**
 
 ---
@@ -29,7 +29,7 @@
 | Living Windows Festival ⚠️ | Columbia, MO | Boone | 0 | December | First Friday of December (6-8pm) | Downtown holiday crowd | discoverthedistrict.com |
 | True/False Film Fest ⚠️ | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026); Mar 4-7 (2027) | Large (downtown crowds) | truefalse.org |
 
-## 🚗 Day trips (≤150 mi)  (103)
+## 🚗 Day trips (≤150 mi)  (106)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -123,6 +123,7 @@
 | Lenexa Chili Challenge | Lenexa, KS | Johnson | 130 | October | ~Oct 9-10 | 6 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
 | Lenexa Food Truck Frenzy | Lenexa, KS | Johnson | 130 | Jul & Sep | Jul 18 + Sep 19 | Food-truck showcase | lenexa.com/City-Calendar/Annual-Events/Food-Truck-Frenzy |
 | Lenexa Spinach Festival | Lenexa, KS | Johnson | 130 | September | Sep 12 | 13 food vendors | lenexa.com/Events-Activities/Get-Involved/Food-Vendor-Opportunities |
+| NW Missouri State Fair ⚠️ | Bethany, MO | Harrison | 135 | August | Aug 27-31 (2026, Labor Day wknd) | — | nwmostatefair.com |
 | Stockton Black Walnut Festival ⚠️ | Stockton, MO | Cedar | 135 | September | Late Sep (verify 2026) | — | theblackwalnutfestival.com |
 | Bushwhacker Days ⚠️ | Nevada, MO | Vernon | 140 | June | Jun 11-13 (2026) | — | nevada-mo.com |
 | Douglas County Fair ⚠️ | Ava, MO | Douglas | 140 | July | Jul 18-19 (2026, verify) | — | douglascountymofair.com |
@@ -135,16 +136,20 @@
 | Junction City Oktoberfest | Junction City, KS | Geary | 150 | October | Oct 2-3 | 50+ vendors | junctioncityoktoberfest.com/about |
 | Moses Austin Heritage Festival ⚠️ | Potosi, MO | Washington | 150 | June | Jun 13-14 (verify) | — | — |
 | Old Time Music, Ozark Heritage Festival ⚠️ | West Plains, MO | Howell | 150 | October | October (verify; Oct 17-18 in 2025) | — | oldtimemusic.org |
+| St. Joseph Apple Blossom Festival ⚠️ | St. Joseph, MO | Buchanan | 150 | May | First Saturday May (2026) | — | appleblossomparade.com |
 | Ste. Genevieve Jour de Fete ⚠️ | Ste. Genevieve, MO | Ste. Genevieve | 150 | August | Aug 8-9 (2026) | — | saintegenevievejourdefete.com |
+| Trails West Festival ⚠️ | St. Joseph, MO | Buchanan | 150 | August | August (verify) | — | stjosephmo.gov |
 
-## 🏨 Overnight (>150 mi)  (98)
+## 🏨 Overnight (>150 mi)  (111)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
 | Laclede County Fair | Lebanon, MO | Laclede | 155 | July | Jul 4-11 | County fair | lacledecountyfair.org |
+| Lamar Free Fair ⚠️ | Lamar, MO | Barton | 155 | August | Aug 22-29 (2026) | — | bartoncounty.com |
 | 417 Christmas Market | Springfield, MO | Greene | 165 | December | Dec (dates unconfirmed) | 200+ vendors | springfieldexpo.com |
 | Arcadia Valley Music Festival ⚠️ | Ironton, MO | Iron | 165 | May | May 15-16 | — | — |
 | Birthplace of Route 66 Festival | Springfield, MO | Greene | 165 | August | Aug 7-8 | 65000+ (expecting 70000+) | route66festivalsgf.com/vendors |
+| Carthage Maple Leaf Festival ⚠️ | Carthage, MO | Jasper | 165 | October | Oct 10-17 (2026) | — | mapleleaffestival.com |
 | Hold Fast Brewing | Springfield, MO | Greene | 165 | Year-round | Near-daily | Brewery rotation | hfbrewing.com/food-truck-schedule |
 | Hootin an Hollarin ⚠️ | Gainesville, MO | Ozark | 165 | September | Sep 17-19 (2026) | — | hootinanhollarin.com |
 | MO Food Truck Fest | Springfield, MO | Greene | 165 | September | Saturday (Sep 12) | Mid-size | mofoodtruckfest.wordpress.com |
@@ -152,11 +157,15 @@
 | Ozarks Food Truck Rally | Springfield, MO | Greene | 165 | May-June | Late May/early Jun (11a-7p) | 20+ trucks | ozarkempirefair.com |
 | Farmington Country Days ⚠️ | Farmington, MO | St. Francois | 170 | June | Jun 5-7 (2026) | — | farmingtoncountrydays.com |
 | St. Francois County Fair ⚠️ | Farmington, MO | St. Francois | 170 | July | Jul 30 - Aug 1 (2026) | — | sfcfairgrounds.org |
+| Webb City Mining Days Festival ⚠️ | Webb City, MO | Jasper | 170 | September | Sep 12 (2026) | — | webbcitymo.org |
+| Apple Butter Makin' Days ⚠️ | Mount Vernon, MO | Lawrence | 175 | October | Oct 9-11 (verify 2026) | — | mtvchamber.com |
 | Ozark Craft Fair | Ozark, MO | Christian | 175 | October | Oct 2-4 | 350+ vendors | ozarkcraftfair.com |
 | Republic Pumpkin Daze | Republic, MO | Greene | 175 | October | Oct 2-3 | 300+ booths | republicpumpkindaze.com |
 | Thayer Fall Festival ⚠️ | Thayer, MO | Oregon | 175 | October | Oct 10 | — | — |
 | Fredericktown Azalea Festival ⚠️ | Fredericktown, MO | Madison | 180 | May | May 1-3 (2026) | — | azaleafestival.info |
+| Nodaway County Fair ⚠️ | Maryville, MO | Nodaway | 180 | July | Jul 9-11 (2026) | — | nodcofair.org |
 | Perryville Mayfest ⚠️ | Perryville, MO | Perry | 180 | May | May (verify) | — | — |
+| Neosho Fall Festival ⚠️ | Neosho, MO | Newton | 185 | October | Oct 3 (2026) | — | neoshomo.gov |
 | Current River Food Truck Festival | Van Buren, MO | Carter | 190 | June | Jun 27 | — | — |
 | Greenville Christmas Festival ⚠️ | Greenville, MO | Wayne | 190 | December | December (verify) | — | — |
 | Beaverdale Fall Festival | Des Moines, IA | Polk | 200 | September | Sep 18-19 | 15+ food trucks | fallfestival.org |
@@ -169,14 +178,20 @@
 | SEMO District Fair ⚠️ | Cape Girardeau, MO | Cape Girardeau | 205 | September | Sep 12-19 (2026) | — | semofair.com |
 | FreedomFest ⚠️ | Doniphan, MO | Ripley | 210 | June | Jun 26-27 | — | ripleycountymissouri.org |
 | Jackson Homecomers ⚠️ | Jackson, MO | Cape Girardeau | 210 | July | Late July (verify) | — | — |
+| Charleston Dogwood-Azalea Festival ⚠️ | Charleston, MO | Mississippi | 215 | April | Apr 16-19 (2026) | — | dogwoodazaleafestival.org |
 | Downtown Sikeston Wine Festival ⚠️ | Sikeston, MO | Scott | 220 | September | Sep 7 | — | — |
 | Sikeston Jaycee Bootheel Rodeo ⚠️ | Sikeston, MO | Scott | 220 | August | August (verify) | — | — |
 | Stoddard County Fair ⚠️ | Dexter, MO | Stoddard | 225 | September | 3rd week Sep (verify) | — | stoddardcountyfair.com |
+| New Madrid Fall Festival ⚠️ | New Madrid, MO | New Madrid | 230 | September | September (verify) | — | — |
 | Northside Oktoberfest & Iowa City BrewFest | Iowa City, IA | Johnson | 240 | September | Late Sep | Brewfest | northsideiowacity.org |
+| Clarkton Purple Hull Pea Festival ⚠️ | Clarkton, MO | Dunklin | 245 | August | 4th week Aug (verify) | — | — |
 | Benton County Fair | Bentonville, AR | Benton | 250 | September | Mid-late Sep | County fair | bentoncountyfairar.org/vendor-forms |
 | Bikes, Blues & BBQ | Rogers, AR | Benton | 250 | Sep-Oct | Sep 30-Oct 3 | 275,000-350,000+ | bikesbluesandbbq.org/vendors-sponsors |
+| Delta Fair ⚠️ | Kennett, MO | Dunklin | 250 | September | 3rd week Sep (verify) | — | — |
 | Downtown Bentonville First Fridays | Bentonville, AR | Benton | 250 | Apr-Oct (monthly) | 1st Fri, trucks open 11a | Recurring | downtownbentonville.org/events/apply |
+| Show Me State BBQ Cook Off ⚠️ | Kennett, MO | Dunklin | 250 | May | May 7-8 | — | — |
 | The Boardwalk Food Court | Springdale, AR | Washington | 250 | Year-round | Daily | 11 vendors | theboardwalknwa.com/become-a-vendor |
+| Campbell Peach Fair ⚠️ | Campbell, MO | Dunklin | 255 | August | 3rd week Aug (verify) | — | — |
 | Cedar Rapids Downtown Farmers Market | Cedar Rapids, IA | Linn | 255 | May-Sep | Sat 7:30a-12p | Major weekend draw | cedar-rapids.org |
 | Freedom FEASTival | Cedar Rapids, IA | Linn | 255 | June | Jun 11 (11a-7p) | Food-truck-centric | freedomfestival.com/feastival |
 | NewBo City Market Food Truck Tuesdays | Cedar Rapids, IA | Linn | 255 | May-Aug (weekly) | Tue 11a-2p | 3 trucks/week | newbocitymarket.org/food-truck-tuesdays |
@@ -184,6 +199,7 @@
 | Alternating Currents | Davenport, IA | Scott | 270 | August | Aug 13-16 | Large (40+ venues) | alternatingcurrentsqc.com |
 | Bettendorf 4th of July Festival | Bettendorf, IA | Scott | 270 | July | Jul 4 (noon-10p) | 14-15 food vendors | bettendorf.org/community/street_fest_vendors |
 | Cane Hill Harvest Festival | Canehill, AR | Washington | 270 | September | Sep 19 | Food trucks 10a-3:30p | historiccanehillar.org/festival |
+| Caruthersville Backyard BBQ Festival ⚠️ | Caruthersville, MO | Pemiscot | 270 | July | Jul 31 - Aug 1 | — | — |
 | Marketplace at 2500 | Moline, IL | Rock Island | 270 | Year-round | Rotating daily | Food truck park | marketplaceat2500.com |
 | Mississippi Valley Fair | Davenport, IA | Scott | 270 | August | Aug 4-9 | ~295000 (6-day) | mvfair.com/commercial-space |
 | Anamosa Pumpkinfest | Anamosa, IA | Jones | 280 | October | Oct 3 | Dozens of vendors | anamosapumpkinfest.com |
