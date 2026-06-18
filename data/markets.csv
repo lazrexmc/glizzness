@@ -1,0 +1,18 @@
+id,name,anchor_city,state,distance_from_columbia_mi,summary
+1,Columbia / Mid-Missouri,Columbia,MO,0,Hometown + mid-MO towns within ~100 mi
+2,Kansas City Metro,Kansas City,MO,125,KC MO+KS metro and suburbs
+3,St. Louis Metro,St. Louis,MO,125,STL MO side + Illinois Metro East
+4,Springfield / Ozarks,Springfield,MO,165,SW Missouri Ozarks incl. Branson/Joplin
+5,Central Illinois,Springfield,IL,140,Springfield IL / Illinois State Fair
+6,Des Moines,Des Moines,IA,200,Des Moines metro
+7,Quad Cities,Davenport,IA,270,Davenport/Bettendorf IA + Moline IL
+8,Cedar Rapids / Iowa City,Cedar Rapids,IA,255,CR + Iowa City corridor
+9,Omaha Metro,Omaha,NE,340,Omaha NE + Council Bluffs IA
+10,Lincoln Area,Lincoln,NE,330,Lincoln + Wilber + Grand Island
+11,Wichita / S-Central Kansas,Wichita,KS,280,"Wichita, Hutchinson, Salina, Derby"
+12,Central Kansas,Junction City,KS,150,Junction City / Manhattan corridor
+13,Tulsa Metro,Tulsa,OK,346,Tulsa + Broken Arrow/Owasso/Bixby/Bartlesville
+14,NW Arkansas,Bentonville,AR,250,Bentonville/Rogers/Springdale/Fayetteville + Fort Smith
+15,Central Arkansas,Little Rock,AR,376,Little Rock / North Little Rock / Conway
+16,Memphis,Memphis,TN,290,Memphis TN + suburbs + Southaven MS
+17,Nashville,Nashville,TN,431,Nashville + Franklin/Hendersonville/Gallatin/Murfreesboro

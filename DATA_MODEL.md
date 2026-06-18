@@ -171,6 +171,6 @@ to **NW Arkansas**.
 - [x] Enums locked
 - [x] Status→fields map defined
 - [x] Market hubs enumerated
-- [ ] (Task 2) Consolidate + assign `market_id` + normalize enums
+- [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (127 events, 0 dupes, 0 unmapped)
 - [ ] (Task 3) Geocode lat/lng + parse schedules
 - [ ] (Task 4) Load to Supabase + validation gate
