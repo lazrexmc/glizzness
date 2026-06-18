@@ -41,7 +41,7 @@ nm = emit("vending_markets", "data/markets.csv", out)
 ne = emit("vending_events", "data/events.csv", out)
 ns = emit("vending_event_schedules", "data/event_schedules.csv", out)
 out += ["commit;", "",
-        f"-- checks: markets {nm} | events {ne} | schedules {ns} | published expect 124",
+        f"-- checks: markets {nm} | events {ne} | schedules {ns} | published = verified/partial, non-excluded, geocoded",
         "-- select count(*) from vending_published_events;", ""]
 open("supabase_vending_data.sql","w",encoding="utf-8").write("\n".join(out))
 print(f"wrote supabase_vending_data.sql (markets {nm}, events {ne}, schedules {ns})")

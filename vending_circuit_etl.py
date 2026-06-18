@@ -32,6 +32,11 @@ MARKETS = [
     (15, "Central Arkansas", "Little Rock", "AR", 34.7465, -92.2896, 10, 376,   "Little Rock / North Little Rock / Conway"),
     (16, "Memphis", "Memphis", "TN", 35.1495, -90.0490, 10, 290,               "Memphis TN + suburbs + Southaven MS"),
     (17, "Nashville", "Nashville", "TN", 36.1627, -86.7816, 10, 431,           "Nashville + Franklin/Hendersonville/Gallatin/Murfreesboro"),
+    # Southern/SE Missouri — Mark Twain National Forest sector (added in batch 2)
+    (18, "Lake of the Ozarks", "Osage Beach", "MO", 38.1300, -92.6568, 10, 70,  "Lake of the Ozarks: Camdenton, Osage Beach, Eldon, Laurie"),
+    (19, "Rolla / I-44 Corridor", "Rolla", "MO", 37.9514, -91.7713, 9, 100,     "I-44 corridor: Rolla, St. James, Cuba, Steelville, Salem, Waynesville"),
+    (20, "Southeast Missouri", "Cape Girardeau", "MO", 37.3059, -89.5181, 8, 205,"SE Missouri: Cape Girardeau, Farmington, Poplar Bluff, Sikeston, Ste. Genevieve"),
+    (21, "South-Central Ozarks", "West Plains", "MO", 36.7281, -91.8524, 8, 150, "South-central Ozarks: West Plains, Ava, Gainesville, Houston, Eminence"),
 ]
 
 # ---- city -> market_id (keyed by (city_lower, state)) ----
@@ -63,6 +68,11 @@ reg(15,"AR","Conway","North Little Rock","Little Rock","Hot Springs")
 reg(16,"TN","Memphis","Germantown","Collierville","Bartlett")
 reg(16,"MS","Southaven")
 reg(17,"TN","Nashville","Franklin","Hendersonville","Gallatin","Murfreesboro")
+# Southern/SE Missouri sweep (batch 2)
+reg(18,"MO","Eldon","Camdenton","Laurie","Osage Beach")
+reg(19,"MO","Rolla","St. James","Cuba","Steelville","Salem","Waynesville","Vienna")
+reg(20,"MO","Cape Girardeau","Jackson","Perryville","Sikeston","Farmington","Ste. Genevieve","Fredericktown","Potosi","Ironton","Dexter","Doniphan","Van Buren","Poplar Bluff","Greenville","Marble Hill")
+reg(21,"MO","West Plains","Gainesville","Thayer","Eminence","Ava","Houston")
 
 def market_for(city, state):
     return CITY_HUB.get((city.strip().lower(), state.strip()), 0)

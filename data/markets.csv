@@ -16,3 +16,7 @@ id,name,anchor_city,state,center_lat,center_lng,default_zoom,distance_from_colum
 15,Central Arkansas,Little Rock,AR,34.7465,-92.2896,10,376,Little Rock / North Little Rock / Conway
 16,Memphis,Memphis,TN,35.1495,-90.049,10,290,Memphis TN + suburbs + Southaven MS
 17,Nashville,Nashville,TN,36.1627,-86.7816,10,431,Nashville + Franklin/Hendersonville/Gallatin/Murfreesboro
+18,Lake of the Ozarks,Osage Beach,MO,38.13,-92.6568,10,70,"Lake of the Ozarks: Camdenton, Osage Beach, Eldon, Laurie"
+19,Rolla / I-44 Corridor,Rolla,MO,37.9514,-91.7713,9,100,"I-44 corridor: Rolla, St. James, Cuba, Steelville, Salem, Waynesville"
+20,Southeast Missouri,Cape Girardeau,MO,37.3059,-89.5181,8,205,"SE Missouri: Cape Girardeau, Farmington, Poplar Bluff, Sikeston, Ste. Genevieve"
+21,South-Central Ozarks,West Plains,MO,36.7281,-91.8524,8,150,"South-central Ozarks: West Plains, Ava, Gainesville, Houston, Eminence"

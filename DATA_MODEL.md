@@ -143,9 +143,11 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 
 ---
 
-## 5. Market hubs (LOCKED — ~17 hubs)
+## 5. Market hubs (21 hubs)
 
 A research pass ≠ a market. These geographic hubs are the map's top tier; each event maps to one.
+Hubs 18–21 were added in the 2026-06-18 southern/SE Missouri sweep (the Mark Twain National Forest
+sector, previously unhubbed).
 
 | # | Hub | Anchor | States covered | ~mi from COMO |
 |---|---|---|---|---|
@@ -166,6 +168,10 @@ A research pass ≠ a market. These geographic hubs are the map's top tier; each
 | 15 | Central Arkansas | Little Rock, AR | AR | 376 |
 | 16 | Memphis | Memphis, TN | TN, MS | 290 |
 | 17 | Nashville | Nashville, TN | TN | 431 |
+| 18 | Lake of the Ozarks | Osage Beach, MO | MO | 70 |
+| 19 | Rolla / I-44 Corridor | Rolla, MO | MO | 100 |
+| 20 | Southeast Missouri | Cape Girardeau, MO | MO | 205 |
+| 21 | South-Central Ozarks | West Plains, MO | MO | 150 |
 
 Assignment is by city → hub (handled in Task 2). Sedalia (MO State Fair), Hannibal, Hermann,
 Jeff City, Boonville, Moberly, Marshfield all roll up to **Mid-Missouri** or **Springfield/Ozarks**
@@ -186,11 +192,14 @@ to **NW Arkansas**.
 - [x] (Task 5) Two-tier Leaflet map (`vending-map/`) — data path verified via anon key
 - [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish (clustering skipped)
 - [x] (Cleanup) Per-row `last_verified` + `county` column + `vending_circuit_gen_md.py` (regenerable human view)
-- [~] (MO county sweep) Lightweight capture of plausibly-vendable events, county by county. **Batch 1**
-  (14 central-MO counties: Boone, Callaway, Cole, Cooper, Howard, Randolph, Audrain, Moniteau, Morgan,
-  Osage, Gasconade, Pettis, Saline, Montgomery) done → 154 events / 151 published. New rows carry
-  `status = "Verified - vending unconfirmed"` (verify badge); details deferred for backfill. Reassess
-  before continuing statewide (Mid-MO hub density is the watch-item).
+- [~] (MO county sweep) Lightweight capture of plausibly-vendable events, county by county. New rows
+  carry `status = "Verified - vending unconfirmed"` (verify badge); details deferred for backfill.
+  - **Batch 1** — 14 central-MO counties (Boone, Callaway, Cole, Cooper, Howard, Randolph, Audrain,
+    Moniteau, Morgan, Osage, Gasconade, Pettis, Saline, Montgomery) → +27 events.
+  - **Batch 2** — southern/SE "Mark Twain" sector (~28 counties across hubs 18–21: Lake of the Ozarks,
+    Rolla/I-44, Southeast MO, South-Central Ozarks) → +36 events. **Total now 190 / 187 published.**
+  - Watch-item: Mid-MO hub at 42 pins; the county filter mitigates, revisit clustering if it grows.
+  - Remaining: the north & west-central next ring, then the rest of the state's counties.
 
 ---
 

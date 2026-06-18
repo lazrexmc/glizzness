@@ -139,9 +139,9 @@ commit;
 -- ============================================================
 
 -- VALIDATION (run after load; all should return sensible numbers):
--- select count(*) from vending_markets;                       -- expect 17
--- select count(*) from vending_events;                        -- expect 127
--- select count(*) from vending_event_schedules;               -- expect 127
+-- select count(*) from vending_markets;                       -- expect 21
+-- select count(*) from vending_events;                        -- expect 190
+-- select count(*) from vending_event_schedules;               -- expect 190
 -- select count(*) from vending_events where market_id is null;-- expect 0
 -- select count(*) from vending_events where lat is null;      -- expect 0
--- select count(*) from vending_published_events;              -- expect ~124 (127 minus 1 defunct + 2 excluded)
+-- select count(*) from vending_published_events;              -- expect 187 (190 minus 1 defunct + 2 excluded)
