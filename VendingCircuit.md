@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 340 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 345 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 337 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 342 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -13,7 +13,7 @@
 ## Counts
 
 - 🏠 Hometown / mid-MO: **7**
-- 🚗 Day trips (≤150 mi): **153**
+- 🚗 Day trips (≤150 mi): **158**
 - 🏨 Overnight (>150 mi): **177**
 - ❌ Defunct / excluded (hidden): **3**
 
@@ -31,7 +31,7 @@
 | Living Windows Festival ⚠️ | Columbia, MO | Boone | 0 | December | First Friday of December (6-8pm) | Downtown holiday crowd | discoverthedistrict.com |
 | True/False Film Fest ⚠️ | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026); Mar 4-7 (2027) | Large (downtown crowds) | truefalse.org |
 
-## 🚗 Day trips (≤150 mi)  (153)
+## 🚗 Day trips (≤150 mi)  (158)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
@@ -59,13 +59,18 @@
 | Randolph County Fair | Moberly, MO | Randolph | 38 | August | Aug 24-29 (2026) | — | randolphcountymofair.com |
 | Ozark Ham & Turkey Festival | California, MO | Moniteau | 42 | September | Sep 19 (2026); 3rd Sat Sep | — | calmo.com/ham-turkey-festival |
 | Randolph County Old Settlers | Huntsville, MO | Randolph | 42 | September | Sep 10-12 (2026) | — | moberly.com/randolphcountyoldsettlers |
+| Lake of the Ozarks Shootout ⚠️ | Osage Beach, MO | Camden | 45 | August | Aug 29-30 (2026) | — | lakeoftheozarksshootout.com |
 | Monroe County Fair | Paris, MO | Monroe | 45 | July | Jul 6-11 (2026) | — | Monroe County Fair / 660-721-1578 |
+| Magic Dragon Street Meet ⚠️ | Lake Ozark, MO | Miller | 48 | May | May 1-2 (2026) | — | magicdragoncarshow.com |
 | Osage County Fair | Linn, MO | Osage | 48 | June | Jun 11-13 (2026) | — | osagecountyfair.com |
 | Taste of Osage County ⚠️ | Linn, MO | Osage | 48 | September | Sep 12 | — | — |
 | Chariton County Youth Fair | Salisbury, MO | Chariton | 50 | July | July (2026) | — | discoverchariton.com |
+| Cole Camp Oktoberfest ⚠️ | Cole Camp, MO | Benton | 50 | September | Sep 26 (2026) | — | — |
 | Maries County Fair | Vienna, MO | Maries | 50 | August | August (2026) | — | mariescountyfair.weebly.com |
 | Scott Joplin International Ragtime Festival ⚠️ | Sedalia, MO | Pettis | 52 | May | May 27-30 (2026) | — | scottjoplin.org |
 | Eldon Turkey Festival | Eldon, MO | Miller | 55 | September | Sep 26 (2026) | — | eldonchamber.com |
+| Fall Harbor Hop ⚠️ | Sunrise Beach, MO | Camden | 55 | October | 2nd Sat Oct (Oct 10, 2026) | — | — |
+| Land of the Ozarks Food Truck Festival | Camdenton, MO | Camden | 55 | September | Sep 12-13 (2026) | — | — |
 | Macon County Fair | Macon, MO | Macon | 55 | July | Late July - early August (2026) | — | maconcountyfair.org |
 | Laurie Hillbilly Fair | Laurie, MO | Morgan | 60 | September | Sep 26-27 (2026) | — | lauriemo.gov |
 | Montgomery County Fair | Montgomery City, MO | Montgomery | 60 | July | Jul 20-25 (2026) | — | montgomerycountyfair.org |

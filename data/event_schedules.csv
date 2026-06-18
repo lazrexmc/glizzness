@@ -339,3 +339,8 @@ id,event_id,month,display_text,recurrence_text,year_specific
 338,338,6,Jun 6-7 (2026),,true
 339,339,9,Sep 19-20 (2026),,true
 340,340,5,May 23-24 (2026),,true
+341,341,5,May 1-2 (2026),,true
+342,342,8,Aug 29-30 (2026),,true
+343,343,9,Sep 12-13 (2026),,true
+344,344,9,Sep 26 (2026),,true
+345,345,10,"2nd Sat Oct (Oct 10, 2026)","2nd Sat Oct (Oct 10, 2026)",false
