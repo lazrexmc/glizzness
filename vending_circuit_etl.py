@@ -197,10 +197,15 @@ def event_type(name, notes):
     return "festival"
 
 VENUE_NAMES = ("hold fast","marketplace at 2500","t&t","boardwalk","marshall brewing","newbo","guthrie green","rose district farmers","crossroads first fridays")
-def cadence_and_venue(name, month, dates, etype):
+def cadence_and_venue(name, month, dates, etype, notes=""):
     m = (month + " " + dates).lower()
     n = name.lower()
     venue = etype == "venue" or any(v in n for v in VENUE_NAMES)
+    # one-off: a single-date event that will NOT recur. Marked with "one-time"/"one-off"
+    # in the dates or notes; short-circuits before the recurring-cadence heuristics so its
+    # passed date reads "ended", not the annual "returns next year".
+    if re.search(r'one[-\s]?time|one[-\s]?off', (m + " " + notes).lower()):
+        return "one_time", venue
     if "year-round" in m or "year round" in m: cad = "year_round"
     elif "weekly" in m or re.search(r'\b(mon|tue|wed|thu|fri|sat|sun)\b', m) and ("every" in m or "weekly" in m or "11a-2p" in m or "4-8p" in m): cad = "weekly"
     elif "weekly" in dates.lower() or "(weekly)" in m: cad = "weekly"
@@ -256,7 +261,7 @@ events = []
 unmapped = []
 for i, r in enumerate(deduped, start=1):
     et = event_type(r["event_name"], r["notes"])
-    cad, venue = cadence_and_venue(r["event_name"], r["month"], r["typical_dates"], et)
+    cad, venue = cadence_and_venue(r["event_name"], r["month"], r["typical_dates"], et, r["notes"])
     vs, needs = verif(r["status"])
     mid = market_for(r["city"], r["state"])
     if mid == 0: unmapped.append(f'{r["event_name"]} ({r["city"]}, {r["state"]})')

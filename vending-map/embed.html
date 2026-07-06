@@ -68,6 +68,7 @@
     .lp-row:hover { background:#2a241c; }
     .lp-row.lp-past { opacity:.6; }
     .lp-passed { color:var(--amber); font-weight:600; }
+    .lp-onetime { color:var(--blue); font-weight:600; }
     .lp-row .nm { font-size:13px; font-weight:600; display:flex; align-items:center; gap:7px; }
     .lp-row .sub { color:var(--muted); font-size:11px; margin:2px 0 0 18px; }
     .lp-dot { width:11px; height:11px; border-radius:50%; border:1px solid #000; flex:none; }
@@ -172,27 +173,38 @@ const listBody  = document.getElementById("list-body");
 const lpCount   = document.getElementById("lp-count");
 let listOpen = false;
 
-let EVENTS = [], monthsByEvent = {}, eventsById = {};
+let EVENTS = [], monthsByEvent = {}, dateByEvent = {}, eventsById = {};
 const FILT = { month: "all", friendly: "all", trip: "all", county: "all",
                showHidden: false, showMusic: false, showPast: false };
 
-// ---------- date awareness (events are annual; "past" means next is next year) ----------
+// ---------- date awareness ----------
+// Annual events: "passed" = the season is over this year; it returns next year.
+// One-off events (cadence one_time): "passed" = the specific date is gone for good (no return).
 const NOW = new Date();
 const NOW_M = NOW.getMonth() + 1, NEXT_Y = NOW.getFullYear() + 1;
+const pad2 = n => String(n).padStart(2, "0");
+const TODAY_ISO = `${NOW.getFullYear()}-${pad2(NOW_M)}-${pad2(NOW.getDate())}`;
 const MONTH_FULL = ["", "January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"];
-// an annual event has "passed this year" when every month it runs has already gone by.
+const isMusic   = e => e.event_type === "music_fest";
+const isOneTime = e => e.cadence === "one_time";
+
 function isPastSeason(e) {
+  if (isOneTime(e)) {
+    const d = dateByEvent[e.id];             // exact date drives one-off expiry
+    const end = d && (d.end || d.start);
+    return end ? end < TODAY_ISO : false;    // no parsed date yet -> treat as upcoming
+  }
   const ms = monthsByEvent[e.id] || [];
-  if (!ms.length) return false;            // year-round / no month -> always upcoming
+  if (!ms.length) return false;              // year-round / no month -> always upcoming
   return Math.max(...ms) < NOW_M;
 }
-// next occurrence label for a passed event: its earliest month, next year.
+// where a passed event next returns: annual -> earliest month next year; one-off -> never.
 function nextReturnLabel(e) {
+  if (isOneTime(e)) return "";
   const ms = monthsByEvent[e.id] || [];
   return ms.length ? "~" + MONTH_FULL[Math.min(...ms)] + " " + NEXT_Y : "";
 }
-const isMusic = e => e.event_type === "music_fest";
 
 const map = L.map("map", { zoomControl: true }).setView([38.7, -92.3], 7);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -293,7 +305,11 @@ function renderList() {
     ? vis.map(e => {
         const when = e.typical_dates || e.month || "";
         const past = isPastSeason(e);
-        const passed = past ? ` · <span class="lp-passed">passed · returns ${esc(nextReturnLabel(e))}</span>` : "";
+        const passed = past
+          ? (isOneTime(e)
+              ? ` · <span class="lp-passed">one-time · ended</span>`
+              : ` · <span class="lp-passed">passed · returns ${esc(nextReturnLabel(e))}</span>`)
+          : (isOneTime(e) ? ` · <span class="lp-onetime">one-time</span>` : "");
         return `<button class="lp-row${past ? " lp-past" : ""}" data-id="${esc(e.id)}">
           <div class="nm"><span class="lp-dot" style="background:${friendlyColor(e)}"></span>${esc(e.name)}</div>
           <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}${passed}</div>
@@ -325,7 +341,9 @@ function openDrawer(e) {
       ? badge("Excluded — not vending", "b-red") : "";
   const verify = e.needs_confirmation === true || e.needs_confirmation === "true"
     ? badge("Verify before relying", "b-amber") : "";
-  const pastB = isPastSeason(e) ? badge("Passed this year · returns " + nextReturnLabel(e), "b-amber") : "";
+  const pastB = isOneTime(e)
+    ? badge(isPastSeason(e) ? "One-time · ended" : "One-time event", isPastSeason(e) ? "b-amber" : "b-blue")
+    : (isPastSeason(e) ? badge("Passed this year · returns " + nextReturnLabel(e), "b-amber") : "");
   const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
 
   const rows = [];
@@ -433,12 +451,15 @@ function wireFilters() {
     let schedules;
     [EVENTS, schedules] = await Promise.all([
       fetchJSON("vending_events?select=*&lat=not.is.null&order=id"),
-      fetchJSON("vending_event_schedules?select=event_id,month")
+      fetchJSON("vending_event_schedules?select=event_id,month,start_date,end_date")
     ]);
     monthsByEvent = {};
+    dateByEvent = {};
     schedules.forEach(s => {
-      if (s.month == null) return;
-      (monthsByEvent[s.event_id] = monthsByEvent[s.event_id] || []).push(Number(s.month));
+      if (s.month != null)
+        (monthsByEvent[s.event_id] = monthsByEvent[s.event_id] || []).push(Number(s.month));
+      if (s.start_date || s.end_date)
+        dateByEvent[s.event_id] = { start: s.start_date || "", end: s.end_date || "" };
     });
     eventsById = Object.fromEntries(EVENTS.map(e => [String(e.id), e]));
     wireFilters();

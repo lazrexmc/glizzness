@@ -2,6 +2,7 @@
 Fills lat/lng in data/events.csv and writes data/event_schedules.csv.
 """
 import csv, os, re
+from datetime import date
 
 EV = "data/events.csv"
 OUT_SCHED = "data/event_schedules.csv"
@@ -233,6 +234,32 @@ def year_specific(dates):
     # a concrete day range like "Aug 13-23" or "Sep 4-7" or "Jun 11"
     return "true" if re.search(r'[A-Za-z]{3,}\.?\s*\d{1,2}', dates) and not re.search(r'(weekly|monthly|1st|2nd|3rd|last|every)', dates.lower()) else "false"
 
+MON3 = {"jan":1,"feb":2,"mar":3,"apr":4,"may":5,"jun":6,"jul":7,"aug":8,
+        "sep":9,"oct":10,"nov":11,"dec":12}
+def parse_exact_dates(dates):
+    """Extract (start_date, end_date) ISO strings when a full date WITH a year is present
+    (e.g. 'Sat, Aug 15, 2026' or 'Sep 4-7, 2026'); else ('','').  Powers one-off expiry:
+    the map compares end_date to today to mark a one-off 'ended' rather than 'returns next year'.
+    Populated for any dated row; only the one_time cadence path actually reads it."""
+    s = dates or ""
+    y = re.search(r'\b(20\d{2})\b', s)
+    if not y:
+        return "", ""
+    year = int(y.group(1))
+    m = re.search(r'([A-Za-z]{3,9})\.?\s+(\d{1,2})(?:\s*[-–—]\s*(?:([A-Za-z]{3,9})\.?\s+)?(\d{1,2}))?', s)
+    if not m:
+        return "", ""
+    mo1 = MON3.get(m.group(1)[:3].lower())
+    if not mo1:
+        return "", ""
+    d1 = int(m.group(2))
+    mo2 = MON3.get((m.group(3) or "")[:3].lower(), mo1)
+    d2 = int(m.group(4)) if m.group(4) else d1
+    try:
+        return date(year, mo1, d1).isoformat(), date(year, mo2, d2).isoformat()
+    except ValueError:
+        return "", ""
+
 rows = list(csv.DictReader(open(EV, encoding="utf-8")))
 
 # group indices per city for jitter
@@ -272,16 +299,19 @@ sid = 0
 for r in rows:
     sid += 1
     sm = start_month(r["month"])
+    sd, ed = parse_exact_dates(r["typical_dates"])
     sched.append({
         "id": sid,
         "event_id": r["id"],
         "month": sm,
+        "start_date": sd,
+        "end_date": ed,
         "display_text": r["typical_dates"] or r["month"],
         "recurrence_text": recurrence_text(r["cadence"], r["typical_dates"], r["month"]),
         "year_specific": year_specific(r["typical_dates"]),
     })
 with open(OUT_SCHED, "w", newline="", encoding="utf-8") as f:
-    w = csv.DictWriter(f, fieldnames=["id","event_id","month","display_text","recurrence_text","year_specific"])
+    w = csv.DictWriter(f, fieldnames=["id","event_id","month","start_date","end_date","display_text","recurrence_text","year_specific"])
     w.writeheader()
     for s in sched: w.writerow(s)
 
@@ -293,3 +323,4 @@ print("schedules written:", len(sched))
 from collections import Counter
 print("schedule month set:", sum(1 for s in sched if s["month"]!=""), "of", len(sched), "(rest year-round/TBD/seasonal)")
 print("year_specific true:", sum(1 for s in sched if s["year_specific"]=="true"))
+print("start_date parsed (full date w/ year):", sum(1 for s in sched if s["start_date"]))

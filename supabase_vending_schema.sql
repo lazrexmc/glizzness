@@ -38,7 +38,7 @@ create table vending_events (
        'oktoberfest','craft_fair','art_fair','music_fest','bbq_fest','balloon_fest',
        'holiday_market','cultural_fest','venue','booking_platform')),
   cadence           text check (cadence in
-      ('annual','multi_week','monthly','weekly','recurring','year_round')),
+      ('annual','multi_week','monthly','weekly','recurring','year_round','one_time')),
   is_recurring_venue   boolean default false,
   food_truck_friendly  text check (food_truck_friendly in
       ('explicit_yes','concession_friendly','unconfirmed','excluded')),
