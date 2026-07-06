@@ -27,7 +27,7 @@ Trint uses it from anywhere. Password-protected (shared `APP_PASSWORD` secret).
 
 ---
 
-## Current Status (as of 2026-06-17)
+## Current Status (as of 2026-07-06)
 
 - Square sync: **working** — syncs payouts/entries/payments/orders into Supabase
 - Wave posting: **working** — posts staged journal entries to Wave via GraphQL
@@ -36,6 +36,20 @@ Trint uses it from anywhere. Password-protected (shared `APP_PASSWORD` secret).
 - Streamlit Cloud: **live and deployed** at share.streamlit.io (lazrexmc/glizzness)
 - 2022–2024 books: **closed** — status='closed' in DB, hard date floor in code
 - Known open issue: 2024-11-11 payout has status='error' (UNBALANCED, $42.26 gap) — investigate separately
+
+**This repo now holds THREE sub-systems** (all share the same Supabase project):
+1. **Accounting automation** (this doc's main subject) — Square → Wave, Streamlit dashboard.
+2. **Vending Circuit** — 403-event food-truck map (see section at the bottom). Live at
+   festivals.glizzness.com (Netlify, folder `vending-map/`). `one_time` cadence added 2026-07-06.
+3. **Catering booking** — `catering/` booking page → Supabase `catering_leads` (see section below).
+   Deploy in progress (Netlify base-directory gotcha — see `catering/README.md`).
+
+**The "why" (business strategy):** the goal driving the map + catering is getting operator Trint to
+$500+/day profit → a food-truck / brick-&-mortar upgrade. Full plan + constraints live in Claude
+memory `project_glizzness_growth.md`; the Mizzou campus vending contract (renew before fall) in
+`project_mu_vending_agreement.md`. Revenue lanes: delivery/ghost-kitchen at the Flyover commissary,
+catering, the MU agreement, and reachable local events/nightlife. Cart can't do the interstate
+(needs a ~$1–2k trailer), so far-flung map events are aspirational until that upgrade.
 
 ---
 
@@ -520,3 +534,34 @@ are cleared but show an amber food dot via notes. See CHATLOG Session 7. The lat
 - ⬜ Phase 6 — filters (month / food-truck-friendly / day-trip), defunct-toggle, marker clustering, mobile polish
 
 **Workflow rule:** update docs + commit/push to `master` after each phase (checkpoint "just in case").
+
+**Map updates since this section was written:** Phase 6 filters shipped (month / food-truck-fit /
+trip-type / **county**), the two-tier model was replaced by **zoom-based marker clustering**, and
+**date-aware toggles** were added — a "Past events" toggle (annual events past their season, hidden by
+default) and a "Music fests" toggle. On **2026-07-06** a **`one_time` cadence** was added for true
+one-off events (concert nights, Show Me State Games): they carry an exact `start_date`/`end_date` in
+the schedule, show "One-time · <date>", and read "One-time · ended" once past (no annual "returns next
+year"). Code-complete; needs a DB reload (schema+data) before it renders on the live map.
+
+---
+
+## Catering Booking System (sub-project — `catering/`)
+
+Turns the catering menu from a static brochure into a lead funnel — the first build of the growth
+strategy (catering is high-margin, booked ahead, weather/towing-proof). Built 2026-07-06.
+
+**Files:** `catering/index.html` (8 packages $350–$1,100 + hero "Book" CTA + per-package "Request this
+package" buttons that pre-select + scroll to a booking form), `catering/config.js` (Supabase URL +
+anon key + booking phone/email), `catering/netlify.toml`, `catering/MARKETING.md` (social + B2B
+outreach kit), `catering/README.md` (deploy steps + status). Table DDL: `supabase_catering_schema.sql`.
+
+**Data:** Supabase table `catering_leads` — **anon INSERT-only** RLS, **no SELECT** policy (public can
+submit a lead, cannot read leads back with the anon key). Form POSTs to `/rest/v1/catering_leads` with
+`Prefer: return=minimal`. Read leads as service_role: `select * from catering_leads order by created_at desc;`.
+
+**Deploy status (2026-07-06): IN PROGRESS.** Hosted separately on Netlify (folder `catering/`) at
+`catering.glizzness.com`. GOTCHA: the repo-root `netlify.toml` forces `publish=vending-map` for every
+site built from this repo — a second site MUST set **Base directory = `catering`** (not just Publish
+dir) to read `catering/netlify.toml`. See `catering/README.md` + memory `feedback_netlify_multisite.md`.
+Remaining: run the schema SQL, set the base directory (or drag-drop deploy), add the CNAME, link from
+GoDaddy. Next enhancements: Supabase webhook → instant lead alert; a `catering_leads` dashboard view.
