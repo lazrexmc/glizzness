@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glizzness Catering — Book Your Event</title>
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f5ea7d; margin: 0; padding: 0; background: #dbd02e;
+    }
+    .page { max-width: 1800px; margin: 0 auto; padding: 36px; background: #0e0d0a;
+      border: 1px solid #ffd700; box-shadow: 0 24px 80px rgba(255, 215, 0, 0.15); }
+    header { display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 18px; margin-bottom: 32px; flex-wrap: wrap; }
+    .hero { position: relative;
+      background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://img1.wsimg.com/isteam/ip/497e556f-3792-4a3b-9974-7c66f4dc888a/GlizBanner.jpg');
+      background-size: cover; background-position: center top; border-radius: 28px;
+      padding: 122px 54px; color: #fff; border: 2px solid #ffd700; text-align: center;
+      display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-height: 320px; }
+    .brand { max-width: 100%; }
+    header h1 { margin: 0; font-size: 3rem; letter-spacing: -0.03em; color: #ffd700; text-transform: uppercase; }
+    .tagline { margin: 16px 0 0; font-size: 1.05rem; color: rgba(255, 255, 255, 0.94); line-height: 1.8; }
+    .brand-foot { margin-top: 22px; font-size: 0.95rem; color: rgba(255, 255, 255, 0.74); }
+    .section { margin-bottom: 30px; }
+    .section h2 { margin-bottom: 18px; font-size: 1.75rem; color: #ffd700;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.22); padding-bottom: 10px; }
+    .section-intro h2 { text-align: center; border-bottom: none; }
+    .offer-summary { display: block; margin-bottom: 28px; }
+    .summary-card, .compare-card, .menu-card, .info-card, .category-card {
+      border: 1px solid rgba(255, 215, 0, 0.14); border-radius: 18px; padding: 28px;
+      background: #121110; color: #f2e89b; }
+    .summary-headline { margin: 0 0 14px; font-size: 1.45rem; color: #ffd700;
+      text-transform: uppercase; letter-spacing: 0.04em; }
+    .summary-card .summary-headline { text-align: center; }
+    .section-grid { display: grid; gap: 24px; }
+    .section-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .section-header h2 { margin: 0; font-size: 2rem; letter-spacing: -0.02em; color: #ffd700; }
+    .section-header p { margin: 0; color: #e8dd92; max-width: 1800px; line-height: 1.75; }
+    .comparison-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .custom-note { grid-column: 1 / -1; margin: 0; color: #fff5b1; line-height: 1.7; text-align: center; }
+    .paired-grid { display: grid; gap: 24px; }
+    .paired-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
+    .menu-card, .compare-card { display: flex; flex-direction: column;
+      border: 1px solid rgba(255, 215, 0, 0.18); border-radius: 22px; padding: 28px;
+      background: #121110; color: #f2e89b; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); min-height: 1px; }
+    .menu-card h3, .compare-card h3 { margin: 0 0 16px; font-size: 1.4rem; color: #ffd700; }
+    .menu-card p, .compare-card p { margin: 0 0 20px; color: #e9df99; line-height: 1.75; }
+    .compare-card { background: linear-gradient(180deg, rgba(255, 215, 0, 0.04), #121110);
+      border-color: rgba(255, 215, 0, 0.28); box-shadow: 0 22px 50px rgba(255, 215, 0, 0.05); }
+    .menu-meta { display: grid; gap: 12px; margin-top: 18px; }
+    .menu-card .menu-meta, .compare-card .menu-meta { margin-top: auto; }
+    .meta-row { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.1); }
+    .meta-row:last-child { border-bottom: none; }
+    .meta-label { color: #f5e37d; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.09em; }
+    .meta-value { color: #ffffff; font-weight: 700; text-align: right; }
+    .summary-copy { color: #e9df99; line-height: 1.75; }
+    .footer { margin-top: 34px; padding-top: 22px; border-top: 1px solid rgba(255, 215, 0, 0.12);
+      color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; text-align: center; }
+
+    /* --- booking CTAs + form (added) --- */
+    .cta-btn { display:inline-block; margin-top:22px; background:#ffd700; color:#0b0b0b;
+      font-weight:800; text-transform:uppercase; letter-spacing:.06em; text-decoration:none;
+      padding:16px 30px; border-radius:999px; font-size:1rem; border:none; cursor:pointer;
+      box-shadow:0 10px 30px rgba(255,215,0,.28); }
+    .cta-btn:hover { background:#ffe14d; }
+    .pkg-btn { margin-top:16px; align-self:flex-start; background:transparent; color:#ffd700;
+      border:1px solid rgba(255,215,0,.5); border-radius:999px; padding:10px 18px; font-weight:700;
+      font-size:.9rem; cursor:pointer; font-family:inherit; letter-spacing:.03em; }
+    .pkg-btn:hover { background:rgba(255,215,0,.12); }
+    #book { scroll-margin-top:20px; }
+    .book-card { border:1px solid rgba(255,215,0,.28); border-radius:22px; padding:28px;
+      background:linear-gradient(180deg, rgba(255,215,0,.05), #121110); }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    .field.full { grid-column:1 / -1; }
+    .field label { font-size:.82rem; text-transform:uppercase; letter-spacing:.08em; color:#f5e37d; font-weight:700; }
+    .field input, .field select, .field textarea {
+      background:#0e0d0a; border:1px solid rgba(255,215,0,.3); border-radius:10px; padding:12px;
+      color:#fff; font-family:inherit; font-size:1rem; }
+    .field textarea { min-height:90px; resize:vertical; }
+    .book-actions { margin-top:22px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .book-note { color:#e7d98c; font-size:.9rem; line-height:1.6; margin:0; }
+    .book-note a { color:#ffd700; }
+    #book-status { margin-top:16px; font-weight:700; line-height:1.6; }
+    #book-status.ok { color:#8fe39a; }
+    #book-status.err { color:#ff9d8a; }
+
+    @media (max-width: 1800px) {
+      .comparison-intro, .section-grid { grid-template-columns: 1fr; }
+      header { align-items: flex-start; }
+      .brand { max-width: 100%; }
+    }
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
+      .page { padding: 16px; border-left: none; border-right: none; border-radius: 0; }
+      .hero { padding: 28px 18px; border-radius: 16px; }
+      header h1 { font-size: 2rem; }
+      .section-header h2 { font-size: 1.5rem; }
+      .paired-row, .comparison-intro { grid-template-columns: 1fr; }
+      .menu-card, .compare-card, .summary-card, .info-card, .category-card { padding: 20px 16px; }
+      .meta-row { flex-direction: column; gap: 4px; }
+      .meta-value { text-align: left; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="brand">
+        <h1>Glizzness Catering</h1>
+        <p class="tagline">Premium hot dog catering with package options, full menu items, and a bold Columbia flavor profile.</p>
+        <p class="brand-foot">www.glizzness.com • On-site service, fresh flavors, unforgettable service.</p>
+        <a class="cta-btn" href="#book">Book / Request Catering →</a>
+      </div>
+    </header>
+
+    <section class="section section-intro">
+      <h2>Go Bold: The Glizzness Presents:</h2>
+      <div class="offer-summary">
+        <article class="summary-card">
+          <p class="summary-headline">The Glizzy Gobbler</p>
+          <p class="summary-copy">50 of our 1/4 lb hot dogs served with a customizable condiments station so your event can be tailored to the exact style and flavor profile you want. Includes one hour of on-site catering support, fresh ingredients delivered hot, and a polished catering presentation.</p>
+          <div class="menu-meta">
+            <div class="meta-row"><span class="meta-label">Guests Served</span><span class="meta-value">50 people</span></div>
+            <div class="meta-row"><span class="meta-label">Per Guest Cost</span><span class="meta-value">$7.00</span></div>
+            <div class="meta-row"><span class="meta-label">Package Total</span><span class="meta-value">$350.00</span></div>
+          </div>
+          <button class="pkg-btn" data-package="The Glizzy Gobbler">Request this package →</button>
+        </article>
+        <article class="summary-card">
+          <p class="summary-headline">The Nacho Party</p>
+          <p class="summary-copy">A full nacho bar experience built for parties that want a flexible, customizable spread. Includes loaded nachos with a toppings station, fresh ingredients delivered hot, and one hour of on-site catering support so guests can build the exact flavor profile they want. Inquire about our vegetarian options as well!</p>
+          <div class="menu-meta">
+            <div class="meta-row"><span class="meta-label">Guests Served</span><span class="meta-value">25 people</span></div>
+            <div class="meta-row"><span class="meta-label">Per Guest Cost</span><span class="meta-value">$14.00</span></div>
+            <div class="meta-row"><span class="meta-label">Package Total</span><span class="meta-value">$350.00</span></div>
+          </div>
+          <button class="pkg-btn" data-package="The Nacho Party">Request this package →</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-comparison">
+      <div class="section-header">
+        <h2>Upgrade your event:</h2>
+      </div>
+      <div class="comparison-intro">
+        <p class="custom-note">We can accommodate fully customizable requests with advance notification so your event gets exactly what it needs.</p>
+      </div>
+      <div class="paired-grid">
+        <div class="paired-row">
+          <article class="menu-card">
+            <h3>The Glizzy Feast</h3>
+            <p>35 of our 1/4 lb hot dogs with your choice of brats and sausages plus hot toppings like chili, pulled pork, house-made queso, chicken, and other customizable options. Same flat $350 investment, designed for a richer Glizzness experience with 1 hour of on-site catering support.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Package</span><span class="meta-value">35 guests</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$10.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$350.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Glizzy Feast">Request this package →</button>
+          </article>
+          <article class="compare-card">
+            <h3>The Glizzy Beast</h3>
+            <p>50 of our signature 1/4 lb hot dogs upgraded with brats, sausages, and a full spread of premium hot toppings — chili, pulled pork, house-made queso, chicken, and more — all crafted to feed a full crowd without sacrificing the Glizzness flavor punch. Built for large gatherings that want maximum variety, better per‑person value, and the same polished one‑hour on‑site service that defines the Glizzness experience.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Equivalent Size</span><span class="meta-value">50 people</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$9.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$450.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Glizzy Beast">Request this package →</button>
+          </article>
+        </div>
+        <div class="paired-row">
+          <article class="menu-card">
+            <h3>The Glizzness Throwdown</h3>
+            <p>25 of our 1/4 lb hot dogs with your choice of brats and sausages plus hot toppings like chili, pulled pork, house-made queso, chicken, and other customizable options plus chips and soft drinks. Same flat $350 investment, designed for an unforgettable Glizzness experience with 1 hour of on-site catering support.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Package</span><span class="meta-value">25 guests</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$14.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$350.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Glizzness Throwdown">Request this package →</button>
+          </article>
+          <article class="compare-card">
+            <h3>The Glizzness Showdown</h3>
+            <p>50 of our signature 1/4 lb hot dogs upgraded with brats, sausages, and a full spread of premium hot toppings — chili, pulled pork, house-made queso, chicken, with chips and soft drinks — all crafted to feed a full crowd without sacrificing the Glizzness flavor punch. Built for large gatherings that want maximum variety, better per‑person value, and the same polished one‑hour on‑site service that defines the Glizzness experience.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Equivalent Size</span><span class="meta-value">50 people</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$12.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$600.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Glizzness Showdown">Request this package →</button>
+          </article>
+        </div>
+        <div class="paired-row">
+          <article class="menu-card">
+            <h3>The Daddy Warbucks</h3>
+            <p>A private Glizzness dinner for 16, crafted in collaboration with you and our chef to build a personalized menu that elevates your evening to perfection. This intimate package transforms a small gathering into a tailored culinary experience. The same $350 investment includes one hour of dedicated on‑site catering support to ensure every detail feels intentional and unforgettable.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Package</span><span class="meta-value">16 guests</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$22.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$350.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Daddy Warbucks">Request this package →</button>
+          </article>
+          <article class="compare-card">
+            <h3>The Big Mama</h3>
+            <p>The grand expansion of The Daddy Warbucks — a full‑scale, chef‑guided Glizzness experience built for 50 guests. This elevated package transforms the intimate, customized dinner concept into a large‑format celebration. Designed for events that deserve both scale and sophistication, The Big Mama delivers a refined, high‑touch Glizzness service that brings your culinary ideas to life at crowd size.</p>
+            <div class="menu-meta">
+              <div class="meta-row"><span class="meta-label">Equivalent Size</span><span class="meta-value">50 people</span></div>
+              <div class="meta-row"><span class="meta-label">Per Person</span><span class="meta-value">$22.00</span></div>
+              <div class="meta-row"><span class="meta-label">Total</span><span class="meta-value">$1,100.00</span></div>
+            </div>
+            <button class="pkg-btn" data-package="The Big Mama">Request this package →</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="book">
+      <div class="section-header">
+        <h2>Book The Glizzness</h2>
+        <p>Tell us about your event and we'll get right back to you. Everything is fully customizable — Trint is a culinary‑school chef and can build any menu, any size, for any occasion.</p>
+      </div>
+      <div class="book-card">
+        <form id="book-form" novalidate>
+          <div class="form-grid">
+            <div class="field"><label for="f-name">Your name *</label><input id="f-name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="f-phone">Phone (call / text) *</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required /></div>
+            <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" /></div>
+            <div class="field"><label for="f-date">Event date</label><input id="f-date" name="event_date" type="date" /></div>
+            <div class="field"><label for="f-guests">Estimated guests</label><input id="f-guests" name="guest_count" type="number" min="1" inputmode="numeric" /></div>
+            <div class="field">
+              <label for="f-package">Package</label>
+              <select id="f-package" name="package">
+                <option value="Custom / help me choose">Custom / help me choose</option>
+                <option value="The Glizzy Gobbler">The Glizzy Gobbler — 50 guests · $350</option>
+                <option value="The Nacho Party">The Nacho Party — 25 guests · $350</option>
+                <option value="The Glizzy Feast">The Glizzy Feast — 35 guests · $350</option>
+                <option value="The Glizzy Beast">The Glizzy Beast — 50 guests · $450</option>
+                <option value="The Glizzness Throwdown">The Glizzness Throwdown — 25 guests · $350</option>
+                <option value="The Glizzness Showdown">The Glizzness Showdown — 50 guests · $600</option>
+                <option value="The Daddy Warbucks">The Daddy Warbucks — 16 guests · $350</option>
+                <option value="The Big Mama">The Big Mama — 50 guests · $1,100</option>
+              </select>
+            </div>
+            <div class="field full"><label for="f-location">Event location / city</label><input id="f-location" name="location" autocomplete="address-level2" /></div>
+            <div class="field full"><label for="f-message">Anything else? (menu ideas, dietary needs, budget)</label><textarea id="f-message" name="message"></textarea></div>
+          </div>
+          <div class="book-actions">
+            <button class="cta-btn" type="submit" id="book-submit">Send my request</button>
+            <p class="book-note">Prefer to talk? Call or text <a id="call-link" href="#">us</a> · email <a id="email-link" href="#">us</a>.</p>
+          </div>
+          <div id="book-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>www.glizzness.com • On-site service, fresh flavors, unforgettable service.</p>
+    </footer>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    (function () {
+      var U = window.SUPABASE_URL, K = window.SUPABASE_ANON_KEY;
+      var phone = window.GLIZZNESS_PHONE || "", email = window.GLIZZNESS_EMAIL || "";
+      var telHref = phone ? "tel:" + phone.replace(/[^0-9+]/g, "") : "";
+
+      // fallback contact links
+      var call = document.getElementById("call-link"), mail = document.getElementById("email-link");
+      if (phone) { call.href = telHref; call.textContent = phone; }
+      if (email) { mail.href = "mailto:" + email; mail.textContent = email; }
+
+      // "Request this package" -> preselect in the dropdown + scroll to the form
+      var sel = document.getElementById("f-package");
+      document.querySelectorAll(".pkg-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var p = b.getAttribute("data-package");
+          for (var i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].value === p) { sel.selectedIndex = i; break; }
+          }
+          document.getElementById("book").scrollIntoView({ behavior: "smooth" });
+          setTimeout(function () { document.getElementById("f-name").focus(); }, 350);
+        });
+      });
+
+      // submit -> insert into Supabase (anon insert-only; return=minimal so no SELECT needed)
+      var form = document.getElementById("book-form"),
+          status = document.getElementById("book-status"),
+          btn = document.getElementById("book-submit");
+      function val(id) { return (document.getElementById(id).value || "").trim(); }
+
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        status.className = ""; status.textContent = "";
+        if (!val("f-name") || !val("f-phone")) {
+          status.className = "err";
+          status.textContent = "Please add at least your name and a phone number so we can reach you.";
+          return;
+        }
+        if (!U || !K || K.indexOf("PASTE_YOUR") !== -1) {
+          status.className = "err";
+          status.textContent = "Booking isn't fully set up yet — please call/text or email us and we'll get you booked.";
+          return;
+        }
+        var data = {
+          name: val("f-name"), phone: val("f-phone"), email: val("f-email") || null,
+          event_date: val("f-date") || null,
+          guest_count: val("f-guests") ? Number(val("f-guests")) : null,
+          package: sel.value, location: val("f-location") || null,
+          message: val("f-message") || null, source: "catering_page"
+        };
+        btn.disabled = true; btn.textContent = "Sending…";
+        fetch(U + "/rest/v1/catering_leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: K, Authorization: "Bearer " + K, Prefer: "return=minimal" },
+          body: JSON.stringify(data)
+        }).then(function (r) {
+          if (!r.ok) return r.text().then(function (t) { throw new Error(r.status + " " + t); });
+          status.className = "ok";
+          status.textContent = "🌭 Got it! We'll reach out shortly to lock in your event. Thanks for choosing The Glizzness.";
+          form.reset(); btn.disabled = false; btn.textContent = "Send my request";
+        }).catch(function (e) {
+          console.error(e);
+          status.className = "err";
+          var msg = "Hmm, that didn't go through. Please ";
+          if (phone) msg += "call or text <a href='" + telHref + "'>" + phone + "</a>";
+          if (phone && email) msg += " or ";
+          if (email) msg += "email <a href='mailto:" + email + "'>" + email + "</a>";
+          if (!phone && !email) msg += "reach out to us";
+          status.innerHTML = msg + " and we'll get you booked.";
+          btn.disabled = false; btn.textContent = "Send my request";
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
