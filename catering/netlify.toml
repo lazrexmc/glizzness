@@ -1,0 +1,7 @@
+# Netlify config for the catering booking page (https://catering.glizzness.com).
+# IMPORTANT: set this Netlify site's "Base directory" to "catering" in the UI. That makes
+# Netlify read THIS file instead of the repo-root netlify.toml (which pins the vending map),
+# so the two sites don't collide. publish = "." means "serve the catering/ folder itself".
+[build]
+  publish = "."
+  command = ""
