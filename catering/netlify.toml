@@ -5,3 +5,6 @@
 [build]
   publish = "."
   command = ""
+  # Always build this site (never inherit the root config's vending-map skip rule).
+  # `false` exits non-zero, which tells Netlify to proceed with the deploy.
+  ignore = "false"
