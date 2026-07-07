@@ -402,3 +402,15 @@ id,event_id,month,start_date,end_date,display_text,recurrence_text,year_specific
 401,401,9,2026-09-26,2026-09-26,Sep 26 (2026),,true
 402,402,8,2026-08-24,2026-08-29,Aug 24-29 (2026),,true
 403,403,9,2026-09-07,2026-09-12,Sep 7-12 (2026),,true
+404,404,,,,Year-round; rotating outside food trucks in the Shipyard beer garden,Year-round; rotating outside food trucks in the Shipyard beer garden,false
+405,405,,,,Year-round; food trucks on weekends,Year-round; food trucks on weekends,false
+406,406,,,,"Riverside music venue, ~Apr-Oct; rotating outside food trucks (recurring, Fri-Sun)","Riverside music venue, ~Apr-Oct; rotating outside food trucks (recurring, Fri-Sun)",false
+407,407,,,,Outdoor concert season ~May-Oct (Rose Park); indoor year-round,Outdoor concert season ~May-Oct (Rose Park); indoor year-round,false
+408,408,7,2026-06-11,2026-06-14,"2026 sessions: Jun 11-14, Jul 17-19, Jul 24-26",,true
+409,409,9,2026-09-05,2026-09-05,"2026 home games: Sep 5, Sep 19, Oct 3 (Homecoming vs Florida), Oct 10, Nov 7, Nov 21, Nov 28",,true
+410,410,,,,"First Friday of each month, ~6-9pm; monthly","First Friday of each month, ~6-9pm; monthly",false
+411,411,,,,Most First Fridays (monthly); occasional special market days,Most First Fridays (monthly); occasional special market days,false
+412,412,9,2026-09-23,2026-09-23,"Sep 23, 2026",,true
+413,413,9,2026-09-24,2026-09-24,"Sep 24, 2026",,true
+414,414,,,,,,false
+415,415,,,,Sat 8-11a (May-Oct) + Thu 3-5:30p; Columbia Mall parking lot,,true

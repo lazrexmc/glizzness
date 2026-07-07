@@ -227,6 +227,13 @@ to **NW Arkansas**.
   - **Indianapolis Metro (hub 27)** — added on request as an out-of-region major market: +15 events
     (Marion/Hamilton/Johnson/Hendricks/Hancock counties, IN). **Total now 240 / 237 published, 27 hubs.**
   - Density is now handled by zoom-based clustering (the old per-hub pin density watch-item is moot).
+  - **Boone County nightlife / mass-gathering pass (2026-07-06, one adversarially-verified deep-research
+    run):** +12 Columbia/Boone events targeting the gap categories — breweries/venues (Logboat, Bur Oak,
+    Cooper's Landing = explicit_yes, kitchen-free truck hosts; Rose Music Hall/Rose Park = unconfirmed),
+    Show-Me State Games + Mizzou football home games + First Fridays + Market at Serendipity
+    (unconfirmed/concession), **2 `one_time` concerts** (Pixies 9/23/26, Modest Mouse 9/24/26), and 2
+    `excluded` dead-ends (Broadway Brewery Taproom = own kitchen; Boone County Farmers Market =
+    producer-only, no resale). **Total now 415 / 410 published, 31 hubs.**
   - **Data confirmation pass** (event by event, filling application_method/contact/homepage/fee +
     clearing the verify badge): **ALL Missouri hubs done** — Mid-MO 33/41, KC 13/13, St. Louis 11/11,
     Springfield 19/19, regional hubs 18-26 58/64. ~14 MO events left intentionally flagged (weak/uncertain

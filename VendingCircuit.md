@@ -1,10 +1,10 @@
 # 🌭 The Glizzness — Festival & Fair Vending Circuit
 
-**Master list — 403 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
+**Master list — 415 events** within ~480 mi of Columbia, MO. Built from adversarially-verified research passes (foundational + regional + an ongoing Missouri county-by-county sweep).
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 400 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 410 published) and visualized by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.
 >
 > Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.
 
@@ -12,24 +12,34 @@
 
 ## Counts
 
-- 🏠 Hometown / mid-MO: **7**
+- 🏠 Hometown / mid-MO: **17**
 - 🚗 Day trips (≤150 mi): **166**
 - 🏨 Overnight (>150 mi): **227**
-- ❌ Defunct / excluded (hidden): **3**
+- ❌ Defunct / excluded (hidden): **5**
 
 ---
 
-## 🏠 Hometown & mid-Missouri (~0 mi)  (7)
+## 🏠 Hometown & mid-Missouri (~0 mi)  (17)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
 | Art in the Park | Columbia, MO | Boone | 0 | June | Jun 6-7 (2026) | — | columbiaartleague.org |
 | Boone County Fair | Columbia, MO | Boone | 0 | July | Jul 21-25 | County fair (booth hrs 5-10pm) | theboonecountyfair.com/vendors |
+| Bur Oak Brewing Company | Columbia, MO | Boone | 0 |  | Year-round; food trucks on weekends | Taproom + food-truck crowd (weekends) | buroakbeer.com |
 | Columbia Area Earth Day Festival | Columbia, MO | Boone | 0 | April | Apr 26 (rain date May 3); 12-6pm | 200+ vendors (35th year) | columbiaearthday.org |
 | Columbia Farmers Market | Columbia, MO | Boone | 0 | Year-round | Sat 8a-12p (Apr-Oct), Wed 4-7p (May-Aug), member Sat (Nov-Mar) | Steady local traffic | columbiafarmersmarket.org/how-to/become-a-vendor |
+| First Fridays - North Village Arts District ⚠️ | Columbia, MO | Boone | 0 |  | First Friday of each month, ~6-9pm; monthly | Downtown art-crawl crowd (~20 venues) | northvillageartsdistrict.org/first-fridays |
 | Heritage Festival & Craft Show | Columbia, MO | Boone | 0 | September | Sep 19-20 (2026) | — | como.gov |
 | Living Windows Festival | Columbia, MO | Boone | 0 | December | First Friday Dec (Dec 4, 2026), 6-8pm | Downtown holiday crowd | discoverthedistrict.com |
+| Logboat Brewing Co. | Columbia, MO | Boone | 0 |  | Year-round; rotating outside food trucks in the Shipyard beer garden | Taproom + beer-garden crowd (nightly, frequent live music) | logboatbrewing.com |
+| Mizzou Football Home Games ⚠️ | Columbia, MO | Boone | 0 | September | 2026 home games: Sep 5, Sep 19, Oct 3 (Homecoming vs Florida), Oct 10, Nov 7, Nov 21, Nov 28 | ~62,000 per game at Faurot Field + tailgaters | mutigers.com |
+| Modest Mouse at Rose Park ⚠️ | Columbia, MO | Boone | 0 | September | Sep 24, 2026 | National concert (Rose Park outdoor, 'Central Bank Downtown Live!') | rosemusichall.com |
+| Pixies at Rose Park ⚠️ | Columbia, MO | Boone | 0 | September | Sep 23, 2026 | Sold-out national concert (Rose Park outdoor) | rosemusichall.com |
+| Rose Music Hall / Rose Park ⚠️ | Columbia, MO | Boone | 0 |  | Outdoor concert season ~May-Oct (Rose Park); indoor year-round | Outdoor concert crowds (Rose Park), up to ~1,500 | rosemusichall.com |
+| Show-Me State Games ⚠️ | Columbia, MO | Boone | 0 | July | 2026 sessions: Jun 11-14, Jul 17-19, Jul 24-26 | 15,000-20,000 participants across 40+ sports | smsg.org |
+| The Market at Serendipity | Columbia, MO | Boone | 0 |  | Most First Fridays (monthly); occasional special market days | First-Friday market crowd (North Village Arts District) | serendipitycomo.com/farmersandartisansmarket |
 | True/False Film Fest | Columbia, MO | Boone | 0 | March | Mar 5-8 (2026) | Large (downtown crowds) | truefalse.org |
+| Cooper's Landing | Columbia, MO | Boone | 11 |  | Riverside music venue, ~Apr-Oct; rotating outside food trucks (recurring, Fri-Sun) | Riverside live-music crowd (voted Best Live Music in COMO 2023-25) | cooperslandingmo.com |
 
 ## 🚗 Day trips (≤150 mi)  (166)
 
@@ -434,10 +444,12 @@
 | Indiana Peony Festival | Noblesville, IN | Hamilton | 490 | May | May 16 (2026) | — | indianapeonyfestival.com |
 | Riley Festival | Greenfield, IN | Hancock | 490 | October | Oct 1-4 (2026) | — | rileyfestival.com |
 
-## ❌ Defunct / excluded (hidden from the map by default)  (3)
+## ❌ Defunct / excluded (hidden from the map by default)  (5)
 
 | Event | Location | County | Dist | Month | Typical dates | Size | Contact / link |
 |---|---|---|---|---|---|---|---|
+| Boone County Farmers Market | Columbia, MO | Boone | 0 |  | Sat 8-11a (May-Oct) + Thu 3-5:30p; Columbia Mall parking lot | — | boonecountyfarmers.com |
+| Broadway Brewery Taproom | Columbia, MO | Boone | 0 |  | — | — | broadwaybrewery.com |
 | Roots N Blues / Treeline | Columbia, MO | Boone | 0 | September | N/A | N/A | N/A |
 | Bartlett Festival, BBQ Contest & Car Show | Bartlett, TN | Shelby | 300 | October | Oct 2-3 | Large BBQ fest | cityofbartlett.org/628 |
 | Vala's Pumpkin Patch | Gretna, NE | Sarpy | 350 | Fall | Sep-Oct | Large | valaspumpkinpatch.com |
