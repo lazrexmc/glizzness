@@ -44,6 +44,11 @@ CHATLOG.md
 # Playwright MCP scratch (screenshots / snapshots from local smoke tests)
 .playwright-mcp/
 
+# Square catalog exports/backups (generated dumps of the live menu; regenerate via pull_catalog.py)
+catalog_export.json
+catalog_backup_before_cleanup.json
+catalog_cleanup_plan.json
+
 # OS
 .DS_Store
 Thumbs.db
