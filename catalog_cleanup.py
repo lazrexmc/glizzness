@@ -3,8 +3,10 @@
 DRY-RUN BY DEFAULT (reads catalog_export.json, calls Square for NOTHING, just prints
 the plan). Use --apply to actually write to Square (needs SQUARE_TOKEN with ITEMS_WRITE).
 
-Deleting catalog items does NOT affect historical sales/reporting — Square keeps the
-item name on past transactions. Because DoorDash reads Square's catalog, this cleans both.
+Applies changes OBJECT-BY-OBJECT (not one atomic batch) so a single object Square won't
+let us touch can't abort the whole run — it deletes/renames everything it can and reports
+exactly what it couldn't (with the real error). Deleting catalog items does NOT affect
+historical sales/reporting. Because DoorDash reads Square's catalog, this cleans both.
 
     python catalog_cleanup.py                 # dry run — shows exactly what would happen
     $env:SQUARE_TOKEN = "token_with_ITEMS_WRITE"
@@ -22,22 +24,16 @@ HEADERS = {
 }
 
 # ---- DECISIONS (from the 2026 cleanup review) ----
-# Junk items to DELETE (broken topping-as-variation items + $0 abandoned items + catering clutter).
 DELETE_ITEMS = [
-    # broken "toppings-as-variations" junk
     "apple", "black", "snake", "double", "mush",
-    # $0 / never-finished abandoned items
     "arkansauce", "Asian chicken", "blackened catfish", "cuban", "fireball",
     "Goofy Goober", "hot honey chicken", "meatball", "pineapple curry chicken",
     "pineapple teriyaki", "veggie", "veggies", "chicken salad", "Fettuccine",
     "Lasagna", "cheesecake", "philly", "Half B&Gs", "Biscuits And Gravy",
-    # catering/event clutter (do manually / via the booking form instead)
     "Catering for 100", "On site setup", "On site service",
     "Deposit for on site service for event", "Food Truck Fest ~ 200",
 ]
-# Placeholder / orphan modifier lists to DELETE (only if not referenced by any item).
 DELETE_MODIFIER_LISTS = ["Bag of Chips Choice", "Fruit Choice", "Soda Choice", "Glizzies"]
-# Name fixes (typos / abbreviations).
 RENAME_ITEMS = {
     "Chkn Tryki": "Chicken Teriyaki",
     "Strwbry Uncrstble": "Strawberry Uncrustable",
@@ -46,7 +42,7 @@ RENAME_ITEMS = {
     "GlizzyClassic": "Glizzy Classic",
     "dasani": "Dasani",
 }
-DELETE_EMPTY_CATEGORIES = True   # remove categories no item references (dupes/empties)
+DELETE_EMPTY_CATEGORIES = True
 
 
 def load():
@@ -55,15 +51,13 @@ def load():
     return json.load(open(EXPORT, encoding="utf-8"))
 
 
-def index(objs):
+def build_plan(objs):
     items = [o for o in objs if o["type"] == "ITEM"]
     mls   = [o for o in objs if o["type"] == "MODIFIER_LIST"]
     cats  = [o for o in objs if o["type"] == "CATEGORY"]
     by_item = {(o["item_data"].get("name") or "").strip(): o for o in items}
     by_ml   = {(o["modifier_list_data"].get("name") or "").strip(): o for o in mls}
-    # category ids referenced by any item
-    used_cat_ids = set()
-    ml_refs = set()
+    used_cat_ids, ml_refs = set(), set()
     for o in items:
         d = o["item_data"]
         if d.get("category_id"): used_cat_ids.add(d["category_id"])
@@ -73,83 +67,91 @@ def index(objs):
             used_cat_ids.add(d["reporting_category"]["id"])
         for mi in d.get("modifier_list_info", []) or []:
             if mi.get("modifier_list_id"): ml_refs.add(mi["modifier_list_id"])
-    return items, mls, cats, by_item, by_ml, used_cat_ids, ml_refs
+
+    deletes, notes = [], []          # deletes: list of (id, label)
+    for name in DELETE_ITEMS:
+        o = by_item.get(name)
+        if o: deletes.append((o["id"], f"ITEM  {name}"))
+        else: notes.append(f"ITEM  {name}  [NOT FOUND - skipped]")
+    for name in DELETE_MODIFIER_LISTS:
+        o = by_ml.get(name)
+        if not o: notes.append(f"MODLIST  {name}  [NOT FOUND - skipped]")
+        elif o["id"] in ml_refs: notes.append(f"MODLIST  {name}  [STILL REFERENCED - keeping]")
+        else: deletes.append((o["id"], f"MODLIST  {name}"))
+    if DELETE_EMPTY_CATEGORIES:
+        for c in cats:
+            if c["id"] not in used_cat_ids:
+                deletes.append((c["id"], f"CATEGORY  {c['category_data'].get('name','?')} [empty]"))
+
+    renames = []                     # renames: list of (object, label)
+    for old, new in RENAME_ITEMS.items():
+        o = by_item.get(old)
+        if not o: notes.append(f"RENAME  {old!r} -> {new!r}  [NOT FOUND - skipped]"); continue
+        obj = json.loads(json.dumps(o))
+        obj["item_data"]["name"] = new
+        renames.append((obj, f"{old!r} -> {new!r}"))
+    return deletes, renames, notes, len(items)
 
 
 def main():
     apply = "--apply" in sys.argv
     objs = load()
-    items, mls, cats, by_item, by_ml, used_cat_ids, ml_refs = index(objs)
+    deletes, renames, notes, n_items = build_plan(objs)
 
-    del_ids, del_report = [], []
-    # items
-    for name in DELETE_ITEMS:
-        o = by_item.get(name)
-        if o:
-            del_ids.append(o["id"]); del_report.append(f"ITEM   {name}")
-        else:
-            del_report.append(f"ITEM   {name}   [NOT FOUND - skipped]")
-    # modifier lists (only if unreferenced)
-    for name in DELETE_MODIFIER_LISTS:
-        o = by_ml.get(name)
-        if not o:
-            del_report.append(f"MODLIST {name}   [NOT FOUND - skipped]"); continue
-        if o["id"] in ml_refs:
-            del_report.append(f"MODLIST {name}   [STILL REFERENCED - skipped, keeping]")
-        else:
-            del_ids.append(o["id"]); del_report.append(f"MODLIST {name}")
-    # empty categories
-    if DELETE_EMPTY_CATEGORIES:
-        for c in cats:
-            if c["id"] not in used_cat_ids:
-                del_ids.append(c["id"])
-                del_report.append(f"CATEGORY {c['category_data'].get('name','?')}   [empty]")
-
-    # renames -> upsert objects (preserve version + full data)
-    upserts, ren_report = [], []
-    for old, new in RENAME_ITEMS.items():
-        o = by_item.get(old)
-        if not o:
-            ren_report.append(f"{old!r} -> {new!r}   [NOT FOUND - skipped]"); continue
-        obj = json.loads(json.dumps(o))       # deep copy
-        obj["item_data"]["name"] = new
-        upserts.append(obj); ren_report.append(f"{old!r} -> {new!r}")
-
-    # ---- report ----
     print("=== SQUARE CATALOG CLEANUP - PASS 1 (declutter) ===")
-    print(f"mode: {'APPLY (writes to Square)' if apply else 'DRY RUN (no changes)'}\n")
-    print(f"DELETE {len(del_ids)} objects:")
-    for r in del_report: print("   -", r)
-    print(f"\nRENAME {len(upserts)} items:")
-    for r in ren_report: print("   -", r)
-    kept = len(items) - sum(1 for n in DELETE_ITEMS if n in by_item)
-    print(f"\nResult: {len(items)} items -> ~{kept} items after deletes.")
-    plan = {"delete_ids": del_ids, "delete_report": del_report,
-            "rename_report": ren_report, "upsert_count": len(upserts)}
-    json.dump(plan, open("catalog_cleanup_plan.json", "w"), indent=2)
-    print("Wrote catalog_cleanup_plan.json")
+    print(f"mode: {'APPLY (writes to Square, object-by-object)' if apply else 'DRY RUN (no changes)'}\n")
+    print(f"DELETE {len(deletes)} objects:")
+    for _, label in deletes: print("   -", label)
+    print(f"\nRENAME {len(renames)} items:")
+    for _, label in renames: print("   -", label)
+    if notes:
+        print("\nskipped:")
+        for nnote in notes: print("   -", nnote)
+    print(f"\nResult: {n_items} items -> ~{n_items - sum(1 for l in deletes if l[1].startswith('ITEM'))} items after deletes.")
 
     if not apply:
         print("\nDRY RUN complete - nothing changed. Re-run with --apply to execute.")
         return
-
     if not os.environ.get("SQUARE_TOKEN"):
         sys.exit("[error] --apply needs SQUARE_TOKEN (with ITEMS_WRITE) set.")
+
     shutil.copy(EXPORT, "catalog_backup_before_cleanup.json")
     print("\nBacked up -> catalog_backup_before_cleanup.json")
+    print("Applying object-by-object...\n")
 
-    if del_ids:
-        r = requests.post(f"{SQUARE_BASE}/catalog/batch-delete", headers=HEADERS,
-                          json={"object_ids": del_ids})
-        print("batch-delete:", r.status_code, r.text[:200])
-        r.raise_for_status()
-    if upserts:
-        body = {"idempotency_key": str(uuid.uuid4()),
-                "batches": [{"objects": upserts}]}
-        r = requests.post(f"{SQUARE_BASE}/catalog/batch-upsert", headers=HEADERS, json=body)
-        print("batch-upsert:", r.status_code, r.text[:200])
-        r.raise_for_status()
-    print("\nDONE. Re-run pull_catalog.py to see the cleaned catalog.")
+    ok_del, fail_del = [], []
+    for oid, label in deletes:
+        r = requests.delete(f"{SQUARE_BASE}/catalog/object/{oid}", headers=HEADERS)
+        if r.ok:
+            ok_del.append(label)
+        else:
+            try: err = r.json().get("errors", [{}])[0]
+            except Exception: err = {"detail": r.text[:160]}
+            fail_del.append((label, err.get("code"), err.get("detail")))
+
+    ok_ren, fail_ren = [], []
+    for obj, label in renames:
+        body = {"idempotency_key": str(uuid.uuid4()), "object": obj}
+        r = requests.post(f"{SQUARE_BASE}/catalog/object", headers=HEADERS, json=body)
+        if r.ok:
+            ok_ren.append(label)
+        else:
+            try: err = r.json().get("errors", [{}])[0]
+            except Exception: err = {"detail": r.text[:160]}
+            fail_ren.append((label, err.get("code"), err.get("detail")))
+
+    print(f"DELETED  {len(ok_del)}/{len(deletes)}   |   RENAMED  {len(ok_ren)}/{len(renames)}")
+    if fail_del:
+        print(f"\nCOULD NOT DELETE ({len(fail_del)}) — reason from Square:")
+        for label, code, detail in fail_del:
+            print(f"   - {label}\n        {code}: {detail}")
+    if fail_ren:
+        print(f"\nCOULD NOT RENAME ({len(fail_ren)}):")
+        for label, code, detail in fail_ren:
+            print(f"   - {label}\n        {code}: {detail}")
+    print("\nDONE. Re-run pull_catalog.py to see the current catalog.")
+    if fail_del or fail_ren:
+        print("Send me the 'COULD NOT ...' lines above and I'll sort the remainder.")
 
 
 if __name__ == "__main__":
