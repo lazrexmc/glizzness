@@ -8,3 +8,9 @@ window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 // Booking contact — used for the "call/text/email us" fallback if a form submit ever fails.
 window.GLIZZNESS_PHONE = "314-266-8636";
 window.GLIZZNESS_EMAIL = "glizzness@gmail.com";
+
+// DoorDash storefront URL. Paste your Glizzness DoorDash store link here to reveal the
+// "Order on DoorDash" button (it stays hidden while this still says PASTE_YOUR_STORE).
+// Find it: DoorDash merchant portal -> your store -> the public storefront URL, e.g.
+//   https://www.doordash.com/store/glizzness-columbia-XXXXXXXX/
+window.GLIZZNESS_DOORDASH = "https://www.doordash.com/store/38788821";
