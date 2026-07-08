@@ -46,7 +46,7 @@ CHATLOG.md
 
 # Square catalog exports/backups (generated dumps of the live menu; regenerate via pull_catalog.py)
 catalog_export.json
-catalog_backup_before_cleanup.json
+catalog_backup_*.json
 catalog_cleanup_plan.json
 
 # OS

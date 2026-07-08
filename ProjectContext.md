@@ -565,3 +565,29 @@ site built from this repo — a second site MUST set **Base directory = `caterin
 dir) to read `catering/netlify.toml`. See `catering/README.md` + memory `feedback_netlify_multisite.md`.
 Remaining: run the schema SQL, set the base directory (or drag-drop deploy), add the CNAME, link from
 GoDaddy. Next enhancements: Supabase webhook → instant lead alert; a `catering_leads` dashboard view.
+
+---
+
+## Square Catalog / Menu cleanup (POS + DoorDash) — `catalog_*.py`
+
+The Square catalog is the single menu source of truth — **DoorDash pulls its menu from Square**
+(storefront https://www.doordash.com/store/38788821), so cleaning Square cleans DoorDash. Cleaned
+end-to-end 2026-07-06 via custom Catalog-API tools. Full detail + memory: `project_square_catalog.md`.
+
+**Tools (repo root; DRY-RUN by default, `--apply` writes to Square object-by-object + resilient,
+backs up first):** `pull_catalog.py` (READ-ONLY export → `catalog_export.json` + triage),
+`catalog_cleanup.py` (Pass 1 declutter), `catalog_pass2.py` (Pass 2 organize), `catalog_tax.py`
+(7.975% tax on all items), `catalog_desc.py` (item descriptions). `catalog_*.json` dumps gitignored.
+
+**Auth:** `SQUARE_TOKEN` = the account **Production Access token** (full access incl. ITEMS_WRITE),
+base `connect.squareup.com/v2`, `Square-Version: 2025-01-23`. Token lives in Lance's shell, not
+Claude's → Lance runs each `--apply` himself.
+
+**GOTCHA:** Square `batch-delete` is atomic → tools go object-by-object. Square blocks deleting its
+"menu category" objects via API (`client not allowed to delete ... menu category objects`) → delete
+those in the Dashboard. Reassign format that works: `item_data.reporting_category` + `categories=[{id}]`.
+
+**State:** 67 → 37 clean items in 6 sections (Glizzy 13 / Not-a-Glizzy 7 / Vegetarian 1 / Sides 9 /
+Drinks 4 / Cart Only 3 = hidden from DoorDash). All 37 collect 7.975% tax (was 3/37; Lance previously
+trued up by hand). 30/37 described. OPEN: Trint's descriptions for 7 items; Lance to delete 2 empty
+menu-categories in Dashboard + exclude "Cart Only" in the DoorDash portal.
