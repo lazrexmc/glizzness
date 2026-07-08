@@ -49,6 +49,29 @@ Recreational + medical; good for **staff feeds** and **customer-appreciation / v
 ## Worth a look (named but not individually verified this pass)
 Carfax, Socket Telecom, MFA Incorporated / MFA Oil, State Farm operations, Columbia Insurance Group, Hubbell (main plant is in **Centralia**, not Columbia), Solventum/former 3M (Columbia presence confirmed ~526, but specifics unverified). Verify current Columbia headcount/site before pitching.
 
+## 🆕 Recent arrivals & expansions (2021-2026) — fresh, under-pitched
+New/growing sites the old rosters miss. The **Paris Road (north Columbia) industrial corridor** now clusters several.
+- **Swift Prepared Foods / "Principe Foods"** — $200M Italian-meats/charcuterie plant, **5008 Paris Rd**, ~200–300 workers, operating since 2023 (Food Engineering's 2024 Plant of the Year). *This is the "alternative-protein" plant everyone means — it's a **meat** plant, NOT Beyond Meat.* Caveat: USDA meat plant, heavy automation → may restrict outside food on-site; confirm w/ facilities/HR. Best as a customer/vendor-event fit.
+- **EquipmentShare HQ campus** — ~$100M, **555 new jobs** (phased), 35-acre campus near the **I-70 Lake of the Woods exit**; R&D center opened 2025. Young office/tech staff = prime cart-day + drop-off target.
+- **Schneider Electric expansion** — $73.6M, **+241 jobs**, **4800 block Paris Rd**, completing ~March 2026. Plant/supervisory staff.
+
+**Strong leads the search surfaced (verify before pitching) — incl. your dairy:**
+- **Aurora Organic Dairy** — organic **milk plant** in Columbia. *(This is the "big dairy" you remembered — real.)* Verify size/contact.
+- **Amazon** — delivery/distribution facility in **Ashland** (Boone County), ~100+ jobs, staffs up for holidays.
+- **American Outdoor Brands** — announced a **Boone County distribution center**.
+- *(No Beyond Meat / plant-based facility found.)*
+
+## 🚧 Worksite / Crew Feeding — the I-70 rebuild (time-boxed gold)
+MoDOT's Improve I-70 is rebuilding the highway through Boone County with **confirmed overnight work** and **~350 workers on the corridor at peak** — captive crews with nowhere to eat. Pitch the **contractor field/project offices**.
+
+| Segment | $ | Where | Contractor | Window | Fit |
+|---|---|---|---|---|---|
+| **Rocheport → Columbia** | $441M | 14 mi, **all in Boone County** (US-63 → Rocheport bridge) | **Emery Sapp & Sons** (ESS Team) — **Columbia-based** | spring 2026 → **late 2029** | ⭐ **TOP** — local contractor, longest runway, night work already underway |
+| **Columbia → Kingdom City** | $426M | 20 mi (US-63 → Kingdom City; west end near Columbia) | **Millstone Weber** | Jul 2024 → **late 2027** | Good — active now, west end reachable |
+
+**Double account:** Emery Sapp & Sons is *also* a ~500-employee Columbia HQ (Tier-1 above) — pitch their office staff **and** their I-70 night crews. Start there; they're local.
+*Next: call ESS for field-office locations + which zones run night shifts.*
+
 ## Caveats & next step
 - **Verify cafeteria status** for the hospitals + food plants (determines cart-day vs. event-only fit) — not confirmed this pass.
 - **Get named catering contacts** for the Tier-1 targets (VU, EquipmentShare, Shelter, Watlow) — only Boone County Gov's HR was verified. A quick call to each office manager gets you the right person.
