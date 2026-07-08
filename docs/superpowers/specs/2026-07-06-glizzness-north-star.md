@@ -9,7 +9,7 @@
 The Glizzness is a Columbia, MO chef-driven hot-dog cart that just turned profitable — and the plan is to **stop chasing low-value foot traffic and fill the week with the things that reliably clear $500+/day** (events, catering, corporate accounts, delivery), earning our way up to a food truck or a brick-and-mortar.
 
 ## 2. The Goal (success, concretely)
-- **Daily floor:** every working day clears **$500+ profit** (after food, fuel, setup). Below that projection, don't roll out.
+- **Daily floor:** every working day should project **$750+ in sales** — the number Trint can actually see day-of. (At ~57% margins that's ~$425 gross before fuel/setup, so it's the practical go/no-go line; under it, don't roll out.)
 - **Weekly engine:** a repeatable mix of **booked, prepaid, weather-proof** revenue — not hope-based streetside.
 - **Upgrade ladder:** (1) a used **trailer (~$1–2k)** to unlock reachable regional events → (2) a **food truck** → (3) a **brick-and-mortar** — funded by reinvested profit + a modest equipment loan, **not** by giving away equity.
 
@@ -37,13 +37,15 @@ The Glizzness is a Columbia, MO chef-driven hot-dog cart that just turned profit
 - **Local employers (NEW)** — big Columbia workplaces for prepaid cart days + boxed drop-offs.
 - **MU campus** — students & staff during the school year (permitted cart program).
 
-## 6. Revenue Lanes (ranked for a towing-constrained solo cart)
-1. **Delivery / ghost kitchen at Flyover** — cart at our own commissary, live on DoorDash (store `38788821`). Captures the delivery demand we've literally watched walk past the cart at breweries. Weather-, towing-, and season-proof. *Status: DoorDash live; Square menu just cleaned & taxed.*
-2. **Catering** — highest margin, booked ahead, weather/towing-proof. Booking page → Supabase `catering_leads` is built. *Status: needs final deploy + the marketing push.*
-3. **Corporate & Workplace Accounts (prepaid)** — recurring cart days and boxed-lunch drop-offs for big Columbia employers. **In-town = reachable, prepaid = no-risk, recurring = predictable.** Leads live as an internal prospect sheet (NOT on the public events map). *Status: verified target list in research — see below.*
-   > **[TARGET LIST — pending the Columbia-employer research pass; drops in here when done.]** Early targets: Veterans United, Shelter Insurance, MU Health Care, Boone Health, EquipmentShare, MFA, Schneider Electric, dispensaries, City/County/CPS.
-4. **Mizzou campus vending** — permitted Food Cart agreement (~$500/yr, school-year = our money season). The **On-Demand add-on lets student orgs / Greek life book the cart** for their events. *Status: renew FY27 before fall (Casey Forbis / EHS).*
-5. **Reachable local events & nightlife** — Boone County + easy day-trips: breweries (Logboat/Bur Oak/Cooper's Landing), Show-Me State Games (⏰ Jul 17-19 / 24-26), First Fridays, festivals. Backed by the 415-event vending map. **Best play: be at the venue AND on the delivery apps** to capture both crowds.
+## 6. Revenue Lanes (ranked by ease × margin × predictability, for a towing-constrained solo cart)
+Ranked deliberately: **the prepaid, bulk, low-hassle lanes come first.** Catering and corporate drop-offs are the easiest money we can make — booked ahead, made in bulk, no platform middleman — and they beat juggling three delivery apps for commission-thin per-order sales.
+
+1. **Catering** — the easiest, highest-margin lane: booked ahead, **prepaid**, made in bulk, weather/towing-proof. Booking page → Supabase `catering_leads` is built. *Status: needs final deploy + the marketing push.*
+2. **Corporate & Workplace Accounts (prepaid)** — recurring **drop-off lunches** and on-site **cart days** for big Columbia employers. **In-town = reachable, prepaid = no-risk, recurring = predictable — and far simpler than the delivery apps.** Internal prospect sheet (NOT on the public events map). *Status: verified target list in research — see below.*
+   > **Target list: `CorporateProspects.md`** (verified against REDI's official employer roster). Tier-1 bullseyes (big office staff, likely no cafeteria): **Veterans United** (~2,800 — #1), **EquipmentShare** (~600, growing fast), **Shelter Insurance**, Schneider Electric, Watlow, Central Bank, Midway USA, MBS. Tier-2 (event/appreciation): MU depts, MU Health Care, Boone Health, CPS, City/County (Boone Co HR contact verified), + the Kraft Heinz **Oscar Mayer hot-dog plant**. Cannabis: Hippos, Good Day Farm.
+3. **Reachable local events & nightlife** — the proven **$2,000 days**, limited to safe local/back-road range: breweries (Logboat/Bur Oak/Cooper's Landing), Show-Me State Games (⏰ Jul 17-19 / 24-26), First Fridays, festivals. Backed by the 415-event vending map. **Best play: be at the venue AND on the delivery apps** to catch both crowds.
+4. **Delivery / ghost kitchen (DoorDash / GrubHub / UberEats) at Flyover** — captures the delivery demand we've watched walk past the cart, and it's counter-seasonal. **But it's the operationally heaviest lane** — 15–30% platform commissions, packaging, and per-order logistics across three apps — so it ranks *below* the prepaid lanes even though the demand is real. *Status: DoorDash live (store `38788821`); Square menu just cleaned & taxed.*
+5. **Mizzou campus vending** — permitted Food Cart agreement (~$500/yr, school-year = our money season). The **On-Demand add-on lets student orgs / Greek life book the cart**. *Status: renew FY27 before fall (Casey Forbis / EHS).*
 6. **Kill random streetside.** The ~$50/day morale-killer. Only known-good spots (MU game days, downtown events) — never "park and hope."
 
 ## 7. Menu & Operations
