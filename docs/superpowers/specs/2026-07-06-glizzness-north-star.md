@@ -48,6 +48,8 @@ Ranked deliberately: **the prepaid, bulk, low-hassle lanes come first.** Caterin
 5. **Mizzou campus vending** — permitted Food Cart agreement (~$500/yr, school-year = our money season). The **On-Demand add-on lets student orgs / Greek life book the cart**. *Status: renew FY27 before fall (Casey Forbis / EHS).*
 6. **Kill random streetside.** The ~$50/day morale-killer. Only known-good spots (MU game days, downtown events) — never "park and hope."
 
+**Emerging lane (in research):** **Worksite / crew feeding** — roll up to large work crews with no food nearby and feed them, prepaid per crew. The standout: the multi-year **Improve I-70 reconstruction** (STL↔KC, ~$2.8B, through Columbia) with **night shifts** in staging zones — captive, hungry, and nobody's feeding them. Same research pass is hunting **recent new-arrival employers** (Beyond Meat / a big new dairy / logistics & distribution centers) that older employer rosters miss → these fold into `CorporateProspects.md` when it lands.
+
 ## 7. Menu & Operations
 - **Square is the single source of truth** for the menu → auto-feeds DoorDash. Just cleaned (2026-07-06): 67 → **37 items** in real sections (Glizzies / Not-a-Glizzy / Vegetarian / Sides / Drinks / Cart-Only), **all collecting 7.975% sales tax**, 30/37 described. Tooling: `catalog_*.py`.
 - **Flyover commissary** = legal prep + the ghost-kitchen base for delivery.
