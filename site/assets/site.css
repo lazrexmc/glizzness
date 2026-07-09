@@ -89,6 +89,16 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
   background-image: linear-gradient(rgba(14,13,10,.82), rgba(14,13,10,.90)), url("img/catering-embers.jpg");
   background-size: cover; background-position: center;
 }
+.band--grill {
+  background-color: var(--ink);
+  background-image: linear-gradient(180deg, rgba(14,13,10,.90) 0%, rgba(14,13,10,.66) 100%), url("img/menu-grill.jpg");
+  background-size: cover; background-position: center bottom;
+}
+.band--delivery {
+  background-color: var(--ink);
+  background-image: linear-gradient(90deg, rgba(14,13,10,.93) 0%, rgba(14,13,10,.75) 48%, rgba(14,13,10,.50) 100%), url("img/order-motion.jpg");
+  background-size: cover; background-position: center;
+}
 
 /* ---- Type helpers ---- */
 .g-display {
