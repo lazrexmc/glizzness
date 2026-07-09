@@ -311,10 +311,10 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .book__status.err { color: #ff9d8a; }
 
 /* ---- Contact action chips ---- */
-.contact-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.contact-actions { display: flex; gap: 14px; flex-wrap: wrap; row-gap: 12px; }
 .obtn {
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800;
-  text-transform: uppercase; letter-spacing: .04em; font-size: .88rem; padding: 12px 20px;
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .04em; font-size: .9rem; line-height: 1; padding: 14px 24px;
   border-radius: var(--radius-pill); border: 1px solid rgba(255,215,0,.5); color: var(--gold);
   background: transparent; cursor: pointer; font-family: inherit;
 }
