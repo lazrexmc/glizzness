@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Glizzness — Workplace Catering One-Pager</title>
+<style>
+  :root {
+    --ink: #14120c;
+    --gold: #c99700;        /* print-safe deep gold (bright #ffd700 washes out on paper) */
+    --gold-bright: #ffd700; /* screen accent */
+    --paper: #ffffff;
+    --muted: #55503f;
+    --line: #e4dcc0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    background: #cfc9b4;               /* screen backdrop only */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 18px auto;
+    background: var(--paper);
+    padding: 0.5in 0.55in 0.42in;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 18px 60px rgba(0,0,0,0.28);
+  }
+
+  /* ---- Header band ---- */
+  .band {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 16px 26px;
+    text-align: center;
+    border: 2px solid var(--gold);
+  }
+  .band .word {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    font-weight: 800;
+  }
+  .band .sub {
+    margin: 10px 0 0;
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .band .place {
+    margin: 6px 0 0;
+    color: rgba(255,255,255,0.65);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  /* ---- Pitch ---- */
+  .pitch {
+    margin: 12px 2px 0;
+    text-align: center;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .pitch b { color: #6b4e00; }
+
+  /* ---- Service cards ---- */
+  .services { display: flex; gap: 14px; margin-top: 12px; }
+  .svc {
+    flex: 1;
+    border: 1.5px solid var(--gold);
+    border-radius: 12px;
+    padding: 11px 15px;
+    background: #fffdf4;
+  }
+  .svc h3 {
+    margin: 0 0 6px;
+    font-size: 15.5px;
+    color: var(--ink);
+  }
+  .svc .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b4e00;
+    background: #f7edc8;
+    border-radius: 999px;
+    padding: 2px 9px;
+    margin-bottom: 8px;
+  }
+  .svc p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+  /* ---- Section titles ---- */
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    margin: 13px 0 7px;
+  }
+  .sec-title h2 {
+    margin: 0; font-size: 16px; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+  }
+  .sec-title .rule { flex: 1; height: 2px; background: var(--line); }
+  .sec-title .note { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+  /* ---- Menu taste ---- */
+  .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 22px; }
+  .item { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.38; padding: 2px 0; }
+  .item .dot { color: var(--gold); font-weight: 900; }
+  .item b { color: var(--ink); }
+  .item span { color: var(--muted); }
+
+  /* ---- Why us ---- */
+  .why { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .why div {
+    border-left: 3px solid var(--gold);
+    padding: 2px 0 2px 11px;
+  }
+  .why h4 { margin: 0 0 3px; font-size: 12.5px; color: var(--ink); }
+  .why p { margin: 0; font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+
+  /* ---- Occasions ---- */
+  .occasions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .occasions span {
+    font-size: 11.5px; font-weight: 600; color: var(--ink);
+    background: #fbf6e4; border: 1px solid var(--gold);
+    border-radius: 999px; padding: 5px 13px;
+  }
+
+  /* ---- CTA footer ---- */
+  .cta {
+    margin-top: auto;
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 14px 22px;
+    text-align: center;
+    border: 2px solid var(--gold);
+  }
+  .cta .lead { margin: 0 0 10px; color: var(--gold-bright); font-size: 16px; font-weight: 800; }
+  .cta .rows { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 22px; }
+  .cta .rows span { color: #fff; font-size: 14px; font-weight: 600; }
+  .cta .rows b { color: var(--gold-bright); }
+  .cta .fine { margin: 10px 0 0; color: rgba(255,255,255,0.6); font-size: 10.5px; }
+
+  @media print {
+    body { background: #fff; }
+    .sheet { margin: 0; width: auto; min-height: auto; box-shadow: none; padding: 0.2in 0.4in; }
+    @page { size: letter portrait; margin: 0.3in; }
+  }
+</style>
+</head>
+<body>
+  <div class="sheet">
+
+    <header class="band">
+      <p class="word">The Glizzness</p>
+      <p class="sub">Chef-driven hot dogs &amp; more — brought to your workplace.</p>
+      <p class="place">Columbia, Missouri</p>
+    </header>
+
+    <p class="pitch">
+      We roll a <b>full portable kitchen</b> right up to your office, plant, or job site and
+      serve your team fresh — <b>booked ahead, prepaid, zero cleanup for you.</b>
+    </p>
+
+    <div class="services">
+      <div class="svc">
+        <span class="tag">Prepaid • recurring</span>
+        <h3>On-Site Cart Days</h3>
+        <p>We bring the cart to you and cook on the spot. Perfect for employee-appreciation days,
+           culture events, and feeding work crews. Pick a date, we handle the rest.</p>
+      </div>
+      <div class="svc">
+        <span class="tag">Order ahead</span>
+        <h3>Boxed-Lunch Drop-Offs</h3>
+        <p>Individually packed lunches delivered to your workplace by headcount — meetings,
+           trainings, shift meals. Order ahead, we set it up, you look good.</p>
+      </div>
+    </div>
+
+    <div class="sec-title">
+      <h2>A Taste of the Menu</h2>
+      <span class="rule"></span>
+      <span class="note">Full custom menus available</span>
+    </div>
+    <div class="menu">
+      <div class="item"><span class="dot">&bull;</span><span><b>The Glizzy</b> — our 1/4&#8202;lb all-beef signature dog, built your way</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Hoggin' Dog</b> — local pulled pork + tangy BBQ mustard</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Chili Dog</b> — house bean-free chili, cheese sauce, crispy onions</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Apple Sausage Brat</b> — Patchwork apple-infused brat</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Walking Nachos</b> — chips, queso, load-your-own toppings</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Pulled Pork Sandwich</b> — piled high, house BBQ mustard</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Jackfruit Dog</b> &amp; <b>Street-Corn Elote</b> — veggie options</span></div>
+      <div class="item"><span class="dot">&bull;</span><span><b>Chef's specials</b> — we cook far beyond dogs on request</span></div>
+    </div>
+
+    <div class="sec-title">
+      <h2>Why The Glizzness</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="why">
+      <div>
+        <h4>A real chef</h4>
+        <p>Culinary-degreed chef (Art Institute of Phoenix) — we can build a menu for any crowd,
+           allergy, or budget, not just hot dogs.</p>
+      </div>
+      <div>
+        <h4>Local &amp; fresh</h4>
+        <p>Pork sourced locally from Patchwork Family Farms, cooked on-site — never steam-tray
+           reheated.</p>
+      </div>
+      <div>
+        <h4>Columbia's own</h4>
+        <p>A local brand with a loyal following of thousands. Also live on DoorDash for the days
+           you want it delivered.</p>
+      </div>
+    </div>
+
+    <div class="sec-title">
+      <h2>Perfect For</h2>
+      <span class="rule"></span>
+    </div>
+    <div class="occasions">
+      <span>Employee-appreciation days</span>
+      <span>Staff meetings &amp; trainings</span>
+      <span>Work-crew feeding</span>
+      <span>Company parties</span>
+      <span>Grad parties</span>
+      <span>Weddings</span>
+      <span>Church &amp; community events</span>
+      <span>Game days</span>
+    </div>
+
+    <div class="cta">
+      <p class="lead">Let's put a date on the calendar.</p>
+      <div class="rows">
+        <span>Call or text <b>314-266-8636</b></span>
+        <span><b>glizzness@gmail.com</b></span>
+        <span><b>glizzness.com</b></span>
+      </div>
+      <p class="fine">Prepaid cart days &amp; boxed lunches quoted to your headcount &amp; budget &nbsp;·&nbsp; Order any day on DoorDash — search &ldquo;The Glizzness&rdquo;</p>
+    </div>
+
+  </div>
+</body>
+</html>
