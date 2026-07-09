@@ -30,6 +30,9 @@ Sales/
 *.jpg
 *.jpeg
 *.gif
+# Exception: the unified site's brand image assets are intentional web deliverables
+!site/assets/img/
+!site/assets/img/*
 
 # Python
 __pycache__/

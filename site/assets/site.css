@@ -72,6 +72,24 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .band--cream a.btn, .band--cream a.obtn, .band--cream a.card,
 .band--cream a.card:hover, .band--cream a.nav__cta { text-decoration: none; }
 
+/* photographic band backgrounds (dark overlay keeps text readable). Declared
+   after band--dark/ink2 so the image wins when combined, e.g. band--dark band--embers */
+.band--texture {
+  background-color: var(--ink);
+  background-image: linear-gradient(rgba(14,13,10,.90), rgba(14,13,10,.93)), url("img/section-gold.jpg");
+  background-size: cover; background-position: center;
+}
+.band--bokeh {
+  background-color: var(--ink);
+  background-image: linear-gradient(rgba(14,13,10,.80), rgba(14,13,10,.90)), url("img/events-bokeh.jpg");
+  background-size: cover; background-position: center;
+}
+.band--embers {
+  background-color: var(--ink);
+  background-image: linear-gradient(rgba(14,13,10,.82), rgba(14,13,10,.90)), url("img/catering-embers.jpg");
+  background-size: cover; background-position: center;
+}
+
 /* ---- Type helpers ---- */
 .g-display {
   font-family: var(--font-display);
@@ -155,7 +173,17 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 }
 
 /* ---- Hero ---- */
-.hero { position: relative; overflow: hidden; background: radial-gradient(120% 120% at 50% -20%, #1c190f 0%, var(--ink) 60%); }
+.hero {
+  position: relative; overflow: hidden;
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(90deg, rgba(14,13,10,.95) 0%, rgba(14,13,10,.80) 42%, rgba(14,13,10,.42) 100%),
+    linear-gradient(0deg, rgba(14,13,10,.85) 0%, rgba(14,13,10,0) 46%),
+    url("img/hero-smoke.jpg");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
 .hero__in { padding-top: clamp(56px, 10vw, 108px); padding-bottom: clamp(56px, 10vw, 108px); }
 .hero__word { font-size: clamp(3.4rem, 13vw, 9rem); color: var(--gold); text-shadow: 0 4px 0 rgba(0,0,0,.35); }
 .hero__word span { color: var(--char); }

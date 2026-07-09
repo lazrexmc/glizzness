@@ -69,10 +69,20 @@ When ready to go live:
 
 `_redirects` handles friendly aliases (`/book`, `/delivery`, `/festivals`, …).
 
+## Imagery
+
+- **Brand backgrounds** in `assets/img/` are AI-generated (local SDXL / Juggernaut-XL
+  on the RTX 3080, from the `inoculated-by-the-phoenix` genai pipeline) — atmosphere
+  only, no fake food: `hero-smoke.jpg` (home hero), `section-gold.jpg` (home menu
+  texture), `events-bokeh.jpg` (events hero), `catering-embers.jpg` (catering hero).
+  Each sits under a dark CSS overlay (`.hero`, `.band--texture/-bokeh/-embers`) so text
+  stays readable. Regenerate/retune via `comfy_gen.py` + re-run the compressor.
+
 ## TODO before launch
 
-- [ ] **Real photos** — the feature blocks use emoji placeholders (🌭 👨‍🍳 🐖 🛵).
-      Swap in cart/food/chef photos (add to `assets/img/`, reference locally).
+- [ ] **Real food photos** — the feature blocks + menu still use emoji (🌭 🛵). AI can't
+      honestly stand in for the actual Glizzy — shoot real cart/food photos and drop them
+      in `assets/img/` (the atmospheric brand backgrounds above are already done).
 - [ ] **Social URLs** — set `GLIZZNESS_FACEBOOK` / `GLIZZNESS_INSTAGRAM` in
       `config.js` (links + "follow us" buttons are hidden until then).
 - [ ] **Confirm the DoorDash storefront** resolves and the store shows as
