@@ -71,22 +71,26 @@ When ready to go live:
 
 ## Imagery
 
-All images in `assets/img/` are AI-generated (local SDXL / Juggernaut-XL on the RTX 3080,
-from the `inoculated-by-the-phoenix` genai pipeline). Regenerate/retune via `comfy_gen.py`
-+ re-run the compressor.
+`assets/img/` mixes **real photos** and **AI-generated backgrounds**.
 
-- **Section backgrounds** (atmosphere, no fake food) — sit under a dark CSS overlay so
-  text stays readable: `hero-smoke.jpg` (home hero), `section-gold.jpg` (home menu
-  texture), `menu-grill.jpg` (menu header), `order-motion.jpg` (order hero),
-  `catering-embers.jpg` (catering hero), `events-bokeh.jpg` (events hero).
-- **Feature panels** (image boxes, real subjects): `feat-kitchen.jpg` (home — flat-top),
-  `feat-cart.jpg` (home — cart at a night market), `feat-event.jpg` (order — cart at an event).
+- **Real photos** (anything a customer could mistake for the product): `day1-cart.jpg`
+  (the 2022 day-one cart — Our Story), `cart-mizzou.jpg` (the cart on MU campus),
+  `glizzy.jpg` (a real loaded Glizzy), `logo.jpg` (the brand mark).
+- **AI section backgrounds** — atmosphere only, no food or carts. Local SDXL /
+  Juggernaut-XL on the RTX 3080 via the `inoculated-by-the-phoenix` genai pipeline;
+  regenerate via `comfy_gen.py` + re-run the compressor. Each sits under a dark CSS
+  overlay so text stays readable: `hero-smoke.jpg`, `section-gold.jpg`, `menu-grill.jpg`,
+  `order-motion.jpg`, `catering-embers.jpg`, `events-bokeh.jpg`.
+
+> **Rule:** never use AI-generated food or cart imagery — it reads as fabricated, which is
+> poison for a real food business. Real photos only for anything depicting the product.
+> Also do not use the cart manufacturer's marketing photo (it isn't our cart, and it's
+> their copyrighted image).
 
 ## TODO before launch
 
-- [ ] **Real food photos** — the menu items still have no photos, and the feature panels
-      use AI *ambiance* shots (cart/grill/event), not the actual Glizzy. AI can't honestly
-      stand in for a specific menu item — shoot real cart/food photos and swap them in.
+- [ ] **More real food photos** — individual menu items still have no photos. Shoot them
+      and drop them in `assets/img/`.
 - [ ] **Social URLs** — set `GLIZZNESS_FACEBOOK` / `GLIZZNESS_INSTAGRAM` in
       `config.js` (links + "follow us" buttons are hidden until then).
 - [ ] **Confirm the DoorDash storefront** resolves and the store shows as
