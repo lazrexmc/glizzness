@@ -10,6 +10,6 @@ window.GLIZZNESS_PHONE    = "314-266-8636";
 window.GLIZZNESS_EMAIL    = "glizzness@gmail.com";
 window.GLIZZNESS_DOORDASH = "https://www.doordash.com/store/38788821";
 
-/* Social — TODO: confirm the exact handles/URLs before launch. Leave blank to hide. */
-window.GLIZZNESS_FACEBOOK  = "";
-window.GLIZZNESS_INSTAGRAM = "";
+/* Social — leave blank to hide the link/button. */
+window.GLIZZNESS_FACEBOOK  = "https://www.facebook.com/Glizzness/";
+window.GLIZZNESS_INSTAGRAM = "";  /* TODO: add the Instagram URL/handle */
