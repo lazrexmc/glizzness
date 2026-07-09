@@ -1,0 +1,11 @@
+# Cloudflare Pages redirects (also works on Netlify).
+# Clean URLs (menu, order, catering, events) are served automatically from the
+# matching .html file, so no rules are needed for those.
+
+# Legacy / friendly aliases
+/home            /                 301
+/delivery        /order            301
+/corporate       /catering         301
+/book            /catering#book    301
+/festivals       /events           301
+/where           /events           301
