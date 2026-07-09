@@ -12,4 +12,4 @@ window.GLIZZNESS_DOORDASH = "https://www.doordash.com/store/38788821";
 
 /* Social — leave blank to hide the link/button. */
 window.GLIZZNESS_FACEBOOK  = "https://www.facebook.com/Glizzness/";
-window.GLIZZNESS_INSTAGRAM = "";  /* TODO: add the Instagram URL/handle */
+window.GLIZZNESS_INSTAGRAM = "https://www.instagram.com/glizzness";
