@@ -71,18 +71,22 @@ When ready to go live:
 
 ## Imagery
 
-- **Brand backgrounds** in `assets/img/` are AI-generated (local SDXL / Juggernaut-XL
-  on the RTX 3080, from the `inoculated-by-the-phoenix` genai pipeline) — atmosphere
-  only, no fake food: `hero-smoke.jpg` (home hero), `section-gold.jpg` (home menu
-  texture), `events-bokeh.jpg` (events hero), `catering-embers.jpg` (catering hero).
-  Each sits under a dark CSS overlay (`.hero`, `.band--texture/-bokeh/-embers`) so text
-  stays readable. Regenerate/retune via `comfy_gen.py` + re-run the compressor.
+All images in `assets/img/` are AI-generated (local SDXL / Juggernaut-XL on the RTX 3080,
+from the `inoculated-by-the-phoenix` genai pipeline). Regenerate/retune via `comfy_gen.py`
++ re-run the compressor.
+
+- **Section backgrounds** (atmosphere, no fake food) — sit under a dark CSS overlay so
+  text stays readable: `hero-smoke.jpg` (home hero), `section-gold.jpg` (home menu
+  texture), `menu-grill.jpg` (menu header), `order-motion.jpg` (order hero),
+  `catering-embers.jpg` (catering hero), `events-bokeh.jpg` (events hero).
+- **Feature panels** (image boxes, real subjects): `feat-kitchen.jpg` (home — flat-top),
+  `feat-cart.jpg` (home — cart at a night market), `feat-event.jpg` (order — cart at an event).
 
 ## TODO before launch
 
-- [ ] **Real food photos** — the feature blocks + menu still use emoji (🌭 🛵). AI can't
-      honestly stand in for the actual Glizzy — shoot real cart/food photos and drop them
-      in `assets/img/` (the atmospheric brand backgrounds above are already done).
+- [ ] **Real food photos** — the menu items still have no photos, and the feature panels
+      use AI *ambiance* shots (cart/grill/event), not the actual Glizzy. AI can't honestly
+      stand in for a specific menu item — shoot real cart/food photos and swap them in.
 - [ ] **Social URLs** — set `GLIZZNESS_FACEBOOK` / `GLIZZNESS_INSTAGRAM` in
       `config.js` (links + "follow us" buttons are hidden until then).
 - [ ] **Confirm the DoorDash storefront** resolves and the store shows as
