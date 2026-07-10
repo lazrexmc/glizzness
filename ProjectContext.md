@@ -25,6 +25,17 @@ bank deposit in Wave. Also tracks weekly Weenie Wagon truck loan payments.
 **Live dashboard:** Deployed on Streamlit Community Cloud (share.streamlit.io).
 Trint uses it from anywhere. Password-protected (shared `APP_PASSWORD` secret).
 
+### Other systems in this repo (this file only covers the accounting sync)
+
+| System | Start here |
+|---|---|
+| **Website** — the unified glizzness.com rebuild | `site/README.md` (built, **not deployed**; Cloudflare Pages path, GoDaddy untouched) |
+| **Menu** — `menu.json` is the source of truth, Square is downstream | `MENU_PIPELINE.md` |
+| **Square catalog / POS tooling** (`pull_catalog.py`, `catalog_*.py`) | `MENU_PIPELINE.md` + script docstrings |
+| **Sales / outreach contacts** | `Contacts.md`, `CorporateProspects.md` |
+| **Strategy / north-star** | `docs/superpowers/specs/2026-07-06-glizzness-north-star.md` |
+| **Vending events map** | `vending-map/README.md` (kept hidden from the public for now) |
+
 ---
 
 ## Current Status (as of 2026-07-06)
