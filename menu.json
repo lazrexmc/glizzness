@@ -63,7 +63,7 @@
       "square_id": "DPX6AS2FEBAA5GQ57ICXLPQT",
       "section": "glizzy",
       "name": "Link",
-      "description": "A cheddar cheese-filled pork frank (jalapeno & cheddar option available).",
+      "description": "A cheddar cheese-filled pork frank (jalapeño & cheddar option available).",
       "website": true,
       "variations": [
         {
@@ -82,7 +82,7 @@
       "square_id": "USYH6WSFQTSHOHDG7E4AWXWT",
       "section": "glizzy",
       "name": "Smoked Pork Sausage Link",
-      "description": "Hatch green chile and Monterey Jack cheese-filled link",
+      "description": "A link filled with Hatch green chile and Monterey Jack cheese.",
       "website": true,
       "variations": [
         {
@@ -129,7 +129,7 @@
       "variations": [
         {
           "square_id": "ZKOJOVWTLCMG7TEXE57M25YJ",
-          "name": "Glossy Classic",
+          "name": "Glizzy Classic",
           "price_cents": 500
         },
         {
@@ -139,7 +139,7 @@
         },
         {
           "square_id": "YDPFMR7XPFXKQGSQWA7DMBFH",
-          "name": "Pull Pork",
+          "name": "Pulled Pork",
           "price_cents": 650
         },
         {
@@ -153,7 +153,7 @@
       "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
       "section": "glizzy",
       "name": "Apple Brat",
-      "description": "One of our favorites from Patchwork Family Farms, this brat is infused with apples — it's like fall on a bun!",
+      "description": "One of our favorites from Patchwork Family Farms — this brat is infused with apples, like fall on a bun!",
       "website": true,
       "variations": [
         {
@@ -181,7 +181,7 @@
       "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
       "section": "glizzy",
       "name": "All The Way",
-      "description": "",
+      "description": "A Glizzy topped with our house-made Sloppy Joe — seasoned for adults, but the kids love it too.",
       "website": true,
       "variations": [
         {
@@ -195,7 +195,7 @@
       "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
       "section": "glizzy",
       "name": "Chili Dawg",
-      "description": "Our house made bean-free chili poured over your Glizzy, topped with secret recipe cheese sauce and finished with crispy onions.",
+      "description": "Our house-made bean-free chili poured over your Glizzy, topped with secret-recipe cheese sauce and finished with crispy onions.",
       "website": true,
       "variations": [
         {
@@ -205,7 +205,7 @@
         },
         {
           "square_id": "3RDTUJ5AKHZJ6FWWLUHZ7FMQ",
-          "name": "Pull Pork",
+          "name": "Pulled Pork",
           "price_cents": 900
         },
         {
@@ -219,7 +219,7 @@
       "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
       "section": "glizzy",
       "name": "Hog N' Dawg",
-      "description": "Our slow roasted pulled pork sourced locally from Patchwork Family Farms is served on top of a Glizzy, then we drizzle it with our own tangy bbq mustard.",
+      "description": "Slow-roasted pulled pork, sourced locally from Patchwork Family Farms, piled on a Glizzy and drizzled with our own tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -229,7 +229,7 @@
         },
         {
           "square_id": "34TITOQCIGC3EKNP37GIC4AL",
-          "name": "Pull Pork",
+          "name": "Pulled Pork",
           "price_cents": 900
         },
         {
@@ -257,7 +257,7 @@
       "square_id": "ME2FHK3KF7AAIP3ZB6OK3F6J",
       "section": "glizzy",
       "name": "Half Pound Smoked Apple Brat",
-      "description": "A half-pound smoked apple brat from Patchwork Family Farms - like fall on a bun.",
+      "description": "A half-pound smoked apple brat from Patchwork Family Farms — like fall on a bun.",
       "website": true,
       "variations": [
         {
@@ -281,7 +281,7 @@
         },
         {
           "square_id": "WWNTHE6KDWYVGOZZOE7CI7DO",
-          "name": "Pull Pork Added",
+          "name": "Pulled Pork Added",
           "price_cents": 500
         }
       ]
@@ -309,7 +309,7 @@
       "square_id": "P5NVJPA6JUIZ5ELKM5F4P3PV",
       "section": "not-a-glizzy",
       "name": "Chicken Teriyaki",
-      "description": "Grilled teriyaki chicken - served as a single or 2 sticks.",
+      "description": "Grilled teriyaki chicken — served as a single or two sticks.",
       "website": true,
       "variations": [
         {
@@ -342,7 +342,7 @@
       "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
       "section": "not-a-glizzy",
       "name": "Pulled Pork",
-      "description": "Our Hoggin' Dog without the dog and more pulled pork! Our slow roasted pulled pork, sourced locally from Patchwork Family Farms, is piled high in the bun, then we drizzle it with our own tangy bbq mustard.",
+      "description": "Our Hog N' Dawg without the dawg, and more pulled pork! Slow-roasted pulled pork from Patchwork Family Farms piled high in the bun, drizzled with our tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -352,7 +352,7 @@
         },
         {
           "square_id": "62QBXCSDGLJHNPWMGMWKE5TL",
-          "name": "Chilly And Cheese",
+          "name": "Chili and Cheese",
           "price_cents": 900
         }
       ]
@@ -375,7 +375,7 @@
       "square_id": "2DY3BO6F5YRLCFVDKB2BIRJF",
       "section": "not-a-glizzy",
       "name": "Pork Chop Special",
-      "description": "pork with green beans, potato salad, apple sauce",
+      "description": "Pork chop with green beans, potato salad, and apple sauce.",
       "website": true,
       "variations": [
         {
@@ -491,7 +491,7 @@
     {
       "square_id": "XJN6HA22W4NE36ZATJZKAYBI",
       "section": "sides",
-      "name": "Walking Chips",
+      "name": "Walking Nachos",
       "description": "Dorito chips with queso. Topped with a tomato blend Add chilly or pulled pork",
       "website": true,
       "variations": [
@@ -502,7 +502,7 @@
         },
         {
           "square_id": "IRLWDXLBIW7WJBYM5YTAX4L3",
-          "name": "Chilly",
+          "name": "Chili",
           "price_cents": 500
         },
         {
@@ -516,7 +516,7 @@
       "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
       "section": "sides",
       "name": "Nachos",
-      "description": "Build-your-own nachos - tortilla chips piled high, covered in queso, then finish with your choice of cold toppings from the side bar.",
+      "description": "Build-your-own nachos — tortilla chips piled high, covered in queso, then finished with your choice of cold toppings from the side bar.",
       "website": true,
       "variations": [
         {
@@ -545,7 +545,7 @@
       "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
       "section": "sides",
       "name": "Street Corn",
-      "description": "Traditional Mexican street food - roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
+      "description": "Traditional Mexican street food — roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
       "website": true,
       "variations": [
         {
@@ -573,7 +573,7 @@
       "square_id": "JBX3LNLDS4VKCV6TXCBNTF4C",
       "section": "drinks",
       "name": "Beverage",
-      "description": "Gatorade or Dr Pepper Cans only",
+      "description": "Gatorade or Dr Pepper — cans only.",
       "website": true,
       "variations": [
         {
