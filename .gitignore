@@ -55,3 +55,9 @@ catalog_cleanup_plan.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code local state — NEVER commit.
+# memory-backup/ carries the agent's project memory, which includes credentials
+# (e.g. the Supabase service-role key). settings.local.json is machine-specific.
+# Do not rely on a global gitignore for this: it won't exist on another machine.
+.claude/
