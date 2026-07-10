@@ -4,14 +4,15 @@
     "  python gen_menu.py --write    -> regenerates the website menu from this file",
     "  python push_menu.py --apply   -> pushes names/descriptions/prices to Square (-> DoorDash)",
     "square_id fields let the push UPDATE existing Square objects instead of creating duplicates.",
-    "website:false hides an item from the site (still sold on the cart / in Square)."
+    "website:false hides an item from the site (still sold on the cart / in Square).",
+    "\"retired\": true marks an item to remove from Square on the next push."
   ],
   "sections": [
     {
       "key": "glizzy",
       "square_category": "Glizzy",
       "heading": "Glizzy",
-      "blurb": "Our original take on the classic 1/4&nbsp;lb all-beef dog."
+      "blurb": "Our original take on the classic 1/4&nbsp;lb all-beef dog. A Glizzy is $5 — premium dawgs start at just $2 more."
     },
     {
       "key": "not-a-glizzy",
@@ -96,7 +97,7 @@
       "square_id": "ANVOXDMVSWF3IGKTF6FWGHCS",
       "section": "glizzy",
       "name": "Glizzy",
-      "description": "Classic Americano topped with your favorites.",
+      "description": "Our classic 1/4 lb all-beef dog, topped with your favorites from the toppings bar.",
       "website": true,
       "variations": [
         {
@@ -111,14 +112,15 @@
       "section": "glizzy",
       "name": "Glizzy Classic",
       "description": "Our classic 1/4 lb all-beef Glizzy, topped with your favorites.",
-      "website": true,
+      "website": false,
       "variations": [
         {
           "square_id": "FYAJFQCDWJXBAVSAB3HQ5LQV",
           "name": "Regular",
           "price_cents": 500
         }
-      ]
+      ],
+      "retired": true
     },
     {
       "square_id": "DRZOQAKRGPZ5O24JI5UARBJP",
@@ -168,14 +170,15 @@
       "section": "glizzy",
       "name": "Special Brat",
       "description": "",
-      "website": true,
+      "website": false,
       "variations": [
         {
           "square_id": "ZE2CFPRFTVOBAJBBOOQ3MDFP",
           "name": "Regular",
           "price_cents": 600
         }
-      ]
+      ],
+      "retired": true
     },
     {
       "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
