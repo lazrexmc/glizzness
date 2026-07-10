@@ -1,0 +1,683 @@
+{
+  "_readme": [
+    "SOURCE OF TRUTH for The Glizzness menu. Edit this file, never site/menu.html.",
+    "  python gen_menu.py --write    -> regenerates the website menu from this file",
+    "  python push_menu.py --apply   -> pushes names/descriptions/prices to Square (-> DoorDash)",
+    "square_id fields let the push UPDATE existing Square objects instead of creating duplicates.",
+    "website:false hides an item from the site (still sold on the cart / in Square)."
+  ],
+  "sections": [
+    {
+      "key": "glizzy",
+      "square_category": "Glizzy",
+      "heading": "Glizzy",
+      "blurb": "Our original take on the classic 1/4&nbsp;lb all-beef dog."
+    },
+    {
+      "key": "not-a-glizzy",
+      "square_category": "Not-a-Glizzy",
+      "heading": "Not-a-Glizzy",
+      "blurb": "Awesome in their own right — just not quite a Glizzy."
+    },
+    {
+      "key": "vegetarian",
+      "square_category": "Vegetarian",
+      "heading": "Vegetarian",
+      "blurb": "Our meat-free picks."
+    },
+    {
+      "key": "sides",
+      "square_category": "Sides",
+      "heading": "Sides",
+      "blurb": "Sides rotate and can sell out — just ask what we've got."
+    },
+    {
+      "key": "drinks",
+      "square_category": "Drinks",
+      "heading": "Drinks",
+      "blurb": "Gotta wash it down."
+    },
+    {
+      "key": "cart-only",
+      "square_category": "Cart Only",
+      "heading": "Cart Only",
+      "blurb": "In-person at the cart only."
+    }
+  ],
+  "items": [
+    {
+      "square_id": "YP44N5GSLXJY6R5YFN4YONWS",
+      "section": "glizzy",
+      "name": "Turkey Link",
+      "description": "A smoked turkey sausage link.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "YZ5QCKYK57TG6CD2HRL2E75I",
+          "name": "Regular",
+          "price_cents": 75
+        }
+      ]
+    },
+    {
+      "square_id": "DPX6AS2FEBAA5GQ57ICXLPQT",
+      "section": "glizzy",
+      "name": "Link",
+      "description": "A cheddar cheese-filled pork frank (jalapeno & cheddar option available).",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "LNXWNWXIJFBO6T7IWWTUW6KD",
+          "name": "Jalapeno And Cheddar",
+          "price_cents": 450
+        },
+        {
+          "square_id": "TAM6TCA6BMUC3NQIBK5OS5IL",
+          "name": "Cheddar Cheese Pork Frank",
+          "price_cents": 450
+        }
+      ]
+    },
+    {
+      "square_id": "USYH6WSFQTSHOHDG7E4AWXWT",
+      "section": "glizzy",
+      "name": "Smoked Pork Sausage Link",
+      "description": "Hatch green chile and Monterey Jack cheese-filled link",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "J5SLCUWLLGOYHX5QR3I6CD2F",
+          "name": "Regular",
+          "price_cents": 450
+        }
+      ]
+    },
+    {
+      "square_id": "ANVOXDMVSWF3IGKTF6FWGHCS",
+      "section": "glizzy",
+      "name": "Glizzy",
+      "description": "Classic Americano topped with your favorites.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "7DPIYA7L43VOCMQHM3HF25HN",
+          "name": "Plain",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "WJ7SN7LA7T4DHIHBNH6SU2DP",
+      "section": "glizzy",
+      "name": "Glizzy Classic",
+      "description": "Our classic 1/4 lb all-beef Glizzy, topped with your favorites.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "FYAJFQCDWJXBAVSAB3HQ5LQV",
+          "name": "Regular",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "DRZOQAKRGPZ5O24JI5UARBJP",
+      "section": "glizzy",
+      "name": "Nacho Dawg",
+      "description": "A Glizzy topped with nacho cheese, our salsa blend, and crumbled cheese chips.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "ZKOJOVWTLCMG7TEXE57M25YJ",
+          "name": "Glossy Classic",
+          "price_cents": 500
+        },
+        {
+          "square_id": "PXMYVZGYFONWAB4OZPZ23QY3",
+          "name": "Link",
+          "price_cents": 600
+        },
+        {
+          "square_id": "YDPFMR7XPFXKQGSQWA7DMBFH",
+          "name": "Pull Pork",
+          "price_cents": 650
+        },
+        {
+          "square_id": "FM6K2G2ZRCBV6PT7HU7RZVWD",
+          "name": "Brat",
+          "price_cents": 650
+        }
+      ]
+    },
+    {
+      "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
+      "section": "glizzy",
+      "name": "Apple Brat",
+      "description": "One of our favorites from Patchwork Family Farms, this brat is infused with apples — it's like fall on a bun!",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "JMI4AG25NJ4XG55C4O4VN3BF",
+          "name": "Regular",
+          "price_cents": 600
+        }
+      ]
+    },
+    {
+      "square_id": "DCY5TQR3RX3HEYIZQQLIO2ZD",
+      "section": "glizzy",
+      "name": "Special Brat",
+      "description": "",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "ZE2CFPRFTVOBAJBBOOQ3MDFP",
+          "name": "Regular",
+          "price_cents": 600
+        }
+      ]
+    },
+    {
+      "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
+      "section": "glizzy",
+      "name": "All The Way",
+      "description": "",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "AMJ4ALCNMHQAG56SPXWXBRJU",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
+      "section": "glizzy",
+      "name": "Chili Dawg",
+      "description": "Our house made bean-free chili poured over your Glizzy, topped with secret recipe cheese sauce and finished with crispy onions.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "GJDRV4AAD5JMPDZQIRVCQZLO",
+          "name": "Regular",
+          "price_cents": 700
+        },
+        {
+          "square_id": "3RDTUJ5AKHZJ6FWWLUHZ7FMQ",
+          "name": "Pull Pork",
+          "price_cents": 900
+        },
+        {
+          "square_id": "DTHG3GCD3X44VAM3HI57AJAK",
+          "name": "Brat",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
+      "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
+      "section": "glizzy",
+      "name": "Hog N' Dawg",
+      "description": "Our slow roasted pulled pork sourced locally from Patchwork Family Farms is served on top of a Glizzy, then we drizzle it with our own tangy bbq mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "VL7BDMS62Q7PG3YO5RWG3OV4",
+          "name": "Classic Glizzy",
+          "price_cents": 700
+        },
+        {
+          "square_id": "34TITOQCIGC3EKNP37GIC4AL",
+          "name": "Pull Pork",
+          "price_cents": 900
+        },
+        {
+          "square_id": "SGI2GSWBZI4CB4DU23MJKF3N",
+          "name": "Brat",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
+      "square_id": "TG66QACP6SGS7QERS4IXVPQP",
+      "section": "glizzy",
+      "name": "Something Fowl",
+      "description": "",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "6IE5HRFUS6LKRF4HDNHWZL2W",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "ME2FHK3KF7AAIP3ZB6OK3F6J",
+      "section": "glizzy",
+      "name": "Half Pound Smoked Apple Brat",
+      "description": "A half-pound smoked apple brat from Patchwork Family Farms - like fall on a bun.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "TTJKFYFAODPZVIEVBNMPFGFA",
+          "name": "Regular",
+          "price_cents": 1000
+        }
+      ]
+    },
+    {
+      "square_id": "4D5BT6ME2QYQDYB7XKNZFFT3",
+      "section": "not-a-glizzy",
+      "name": "Grill Cheese",
+      "description": "A classic grilled cheese.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "ZJ4NPB7OLU62EEVN6EO3CMHG",
+          "name": "Regular",
+          "price_cents": 350
+        },
+        {
+          "square_id": "WWNTHE6KDWYVGOZZOE7CI7DO",
+          "name": "Pull Pork Added",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "CGCYSGLTN6K4VAI6JWN65AAE",
+      "section": "not-a-glizzy",
+      "name": "Taco",
+      "description": "",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "VP3TZRBPWFJXCE564ILUDLUW",
+          "name": "Regular",
+          "price_cents": 400
+        },
+        {
+          "square_id": "YJJOSHCYOZ3J3XYOFR3HAT2A",
+          "name": "Double",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "P5NVJPA6JUIZ5ELKM5F4P3PV",
+      "section": "not-a-glizzy",
+      "name": "Chicken Teriyaki",
+      "description": "Grilled teriyaki chicken - served as a single or 2 sticks.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "S4EYL6F7CJKNQ6XL3HY7TMUM",
+          "name": "Regular",
+          "price_cents": 450
+        },
+        {
+          "square_id": "VWIEB6EUTWY3UW7P4GMO4TA2",
+          "name": "2 Sticks",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
+      "square_id": "ACWKCTBNJ4F3TNZVWT6B7JW4",
+      "section": "not-a-glizzy",
+      "name": "Shredded Chicken",
+      "description": "",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NUK4U2ZCN4GQIEM4FWOJDIRQ",
+          "name": "Regular",
+          "price_cents": 600
+        }
+      ]
+    },
+    {
+      "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
+      "section": "not-a-glizzy",
+      "name": "Pulled Pork",
+      "description": "Our Hoggin' Dog without the dog and more pulled pork! Our slow roasted pulled pork, sourced locally from Patchwork Family Farms, is piled high in the bun, then we drizzle it with our own tangy bbq mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "AJE6KQR7GK4RLJZTNEAJ44PV",
+          "name": "Regular",
+          "price_cents": 700
+        },
+        {
+          "square_id": "62QBXCSDGLJHNPWMGMWKE5TL",
+          "name": "Chilly And Cheese",
+          "price_cents": 900
+        }
+      ]
+    },
+    {
+      "square_id": "744CFH6JFCF7QMLQRQ2WTV6B",
+      "section": "not-a-glizzy",
+      "name": "Sloppy Joe",
+      "description": "A classic sloppy joe piled on a bun.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "HJDRWD2HLQKG6VABDCM7ZRZV",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "2DY3BO6F5YRLCFVDKB2BIRJF",
+      "section": "not-a-glizzy",
+      "name": "Pork Chop Special",
+      "description": "pork with green beans, potato salad, apple sauce",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "YSLOW7XLNLKXUXRRKVSQZN4K",
+          "name": "Regular",
+          "price_cents": 1000
+        }
+      ]
+    },
+    {
+      "square_id": "FHYYWK6BPMBHGCZZA26FU7DJ",
+      "section": "vegetarian",
+      "name": "Jackfruit",
+      "description": "Jackfruit, seasoned and roasted to perfection, served on our bun.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "64WH5N5V2JXA5RVJAHV3PWVU",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "ES2DDLQP4KRRHCFFCUXQTETW",
+      "section": "sides",
+      "name": "Chips",
+      "description": "Random bag of variety chips",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "AOJLOYAZWTSSGXFO2LBUA3YG",
+          "name": "Regular",
+          "price_cents": 100
+        }
+      ]
+    },
+    {
+      "square_id": "XNKZNLWPNWGQDX7QANGAGD6A",
+      "section": "sides",
+      "name": "Slim Jim",
+      "description": "A Slim Jim meat snack stick.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "SP6K724JBADBFIIUSXT34VIB",
+          "name": "Regular",
+          "price_cents": 100
+        }
+      ]
+    },
+    {
+      "square_id": "6MS4DRLUR5WCB36BJPUHNEGG",
+      "section": "sides",
+      "name": "Fries",
+      "description": "Hot, crispy fries.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "RGOIG67VTXHPIYHZQ3TARNRV",
+          "name": "Regular",
+          "price_cents": 300
+        }
+      ]
+    },
+    {
+      "square_id": "AEFLWICUECQQG5CPYLV5V3HN",
+      "section": "sides",
+      "name": "Sides",
+      "description": "Potato salad or coleslaw",
+      "website": false,
+      "variations": [
+        {
+          "square_id": "P3CAIK5PJAWAH65SGFGVAXOP",
+          "name": "Regular",
+          "price_cents": 400
+        },
+        {
+          "square_id": "HMRQPRU4WL2W2PCUC52KJ4YH",
+          "name": "Small",
+          "price_cents": 300
+        }
+      ]
+    },
+    {
+      "square_id": "7NSBLY5G5574UWBTFJ6Z4Y3S",
+      "section": "sides",
+      "name": "Strawberry Uncrustable",
+      "description": "A Strawberry Uncrustable - crustless PB&J sandwich.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "O6DZPEXK2CSPMAEXXJIRAOXT",
+          "name": "Regular",
+          "price_cents": 300
+        }
+      ]
+    },
+    {
+      "square_id": "5WJWSMY3XOFLWZTUQ7QHS253",
+      "section": "sides",
+      "name": "Mac N' Cheese",
+      "description": "Creamy mac & cheese.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NGI7F6LDJ5KTJQZL4EIIZDBO",
+          "name": "Regular",
+          "price_cents": 350
+        }
+      ]
+    },
+    {
+      "square_id": "XJN6HA22W4NE36ZATJZKAYBI",
+      "section": "sides",
+      "name": "Walking Chips",
+      "description": "Dorito chips with queso. Topped with a tomato blend Add chilly or pulled pork",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "YCQCNJWUWM4T4VW7V3KGGREC",
+          "name": "Regular",
+          "price_cents": 350
+        },
+        {
+          "square_id": "IRLWDXLBIW7WJBYM5YTAX4L3",
+          "name": "Chilly",
+          "price_cents": 500
+        },
+        {
+          "square_id": "D3IGRQKOG7AGHSG6VQY7SB7M",
+          "name": "Pulled Pork",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
+      "section": "sides",
+      "name": "Nachos",
+      "description": "Build-your-own nachos - tortilla chips piled high, covered in queso, then finish with your choice of cold toppings from the side bar.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "HDRCJMX6TJ4OXWGZVRABWAZW",
+          "name": "Bacon",
+          "price_cents": 700
+        },
+        {
+          "square_id": "ZW3XWWRZBMW3CTNDSFM56L7U",
+          "name": "Chili",
+          "price_cents": 700
+        },
+        {
+          "square_id": "4II2ACIDCS2LH46GQWNT2RZC",
+          "name": "Pulled Pork",
+          "price_cents": 700
+        },
+        {
+          "square_id": "ID2VZ4BXG3FAO5C4N3QBNA3Z",
+          "name": "Normal",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
+      "section": "sides",
+      "name": "Street Corn",
+      "description": "Traditional Mexican street food - roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "TCS5YH2ZYGV5ZNBGH2WW5GAX",
+          "name": "Regular",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "BVLXBP6QJHJ3BV6AYQGBJ5VH",
+      "section": "drinks",
+      "name": "Water",
+      "description": "Bottled water.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "FRM3UW7BILJD766K23AJJ7VT",
+          "name": "Regular",
+          "price_cents": 100
+        }
+      ]
+    },
+    {
+      "square_id": "JBX3LNLDS4VKCV6TXCBNTF4C",
+      "section": "drinks",
+      "name": "Beverage",
+      "description": "Gatorade or Dr Pepper Cans only",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "UZYDWKNQQDPDGCZVQ5OQQO2D",
+          "name": "Regular",
+          "price_cents": 200
+        }
+      ]
+    },
+    {
+      "square_id": "2S535DEW6D4N5GQDDA7CA7YM",
+      "section": "drinks",
+      "name": "Iced Coffee",
+      "description": "Cold, refreshing iced coffee.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "VLGM23AS6UXSGPGITXASMRLX",
+          "name": "Regular",
+          "price_cents": 300
+        }
+      ]
+    },
+    {
+      "square_id": "5Q3RPUZKI5LOHBCEDW6MQG4R",
+      "section": "cart-only",
+      "name": "Burger",
+      "description": "",
+      "website": false,
+      "variations": [
+        {
+          "square_id": "IBRIGWM23BRLD4WL5EGLIBVK",
+          "name": "American Plain",
+          "price_cents": 500
+        },
+        {
+          "square_id": "J2A5SAPII7WXTSDUORJTMW4Z",
+          "name": "Pepper Jack Plain",
+          "price_cents": 500
+        },
+        {
+          "square_id": "CQPWSFXJLVX7ISSZNQKOAQXI",
+          "name": "Both Cheeses Plain",
+          "price_cents": 500
+        },
+        {
+          "square_id": "6KOMF5O2YHUZKCBDM6ANLUE5",
+          "name": "Pepper jack And Onions",
+          "price_cents": 500
+        },
+        {
+          "square_id": "YMV566VVUQOR3LLFU3HOYZND",
+          "name": "American And Onions",
+          "price_cents": 500
+        },
+        {
+          "square_id": "KDKDXGKIZAMPZE6XQCOKPEXL",
+          "name": "2 Cheese And Onion",
+          "price_cents": 500
+        },
+        {
+          "square_id": "IW7OOD5A76CXCPCSA2WLRFE6",
+          "name": "Nothing Burger",
+          "price_cents": 450
+        },
+        {
+          "square_id": "WLBKCOLKJFX3RMFSWFBL2YDC",
+          "name": "Double",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
+      "square_id": "VWVJVHERHE6CBMCZC4W24WOE",
+      "section": "cart-only",
+      "name": "Keychain",
+      "description": "A Glizzness keychain - take a piece of the cart home.",
+      "website": false,
+      "variations": [
+        {
+          "square_id": "BAWH4ZGIXIF73YPZSQMD2VAS",
+          "name": "Regular",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "2PFW3NY2UIUA7NMXHJLS6DVW",
+      "section": "cart-only",
+      "name": "Boujee Burger",
+      "description": "",
+      "website": false,
+      "variations": [
+        {
+          "square_id": "HXKXNFUZNIEXK7OCJEQDKZYQ",
+          "name": "Regular",
+          "price_cents": 700
+        },
+        {
+          "square_id": "6PXV6PJG6LASMT3XSKMYXUBX",
+          "name": "Double",
+          "price_cents": 1200
+        }
+      ]
+    }
+  ]
+}

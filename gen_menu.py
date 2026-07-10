@@ -1,53 +1,32 @@
 #!/usr/bin/env python
-r"""gen_menu.py — regenerate the website menu from the Square catalog.
+r"""gen_menu.py — render the website menu from menu.json (the source of truth).
 
-Square is the single source of truth for the menu. This script reads the local
-export produced by `pull_catalog.py` and rewrites the menu block inside
-`site/menu.html` (between the MENU:START / MENU:END markers).
+  menu.json  ──> gen_menu.py --write  ──> site/menu.html   (the website)
+             └─> push_menu.py --apply ──> Square ──> DoorDash
 
-No Square token needed here — it only reads `catalog_export.json`. Refresh that
-first if you want the latest:
+Edit `menu.json`, never `site/menu.html` — the block between the MENU:START /
+MENU:END markers is overwritten.
 
-    python pull_catalog.py            # needs SQUARE_TOKEN; writes catalog_export.json
-    python gen_menu.py                # DRY RUN - prints the HTML + any data problems
-    python gen_menu.py --write        # rewrites site/menu.html
+    python gen_menu.py            # DRY RUN - prints the HTML + any data problems
+    python gen_menu.py --write    # rewrites site/menu.html
 
-Then commit and let Cloudflare Pages redeploy.
+Stdlib only. No Square token involved: a Square token must never reach the
+browser, so the menu is baked at build time, not fetched live.
 
-Design notes
-------------
-* Names, prices and descriptions come straight from Square. If a name reads badly
-  on the website, fix it IN SQUARE — that fixes the POS and DoorDash too.
-* Items in EXCLUDE_CATEGORIES / EXCLUDE_ITEMS never reach the website.
-* Anything in Square that this script can't place (unmapped category, no price,
-  no description) is reported loudly rather than quietly published.
+Items with `"website": false` (e.g. Cart Only) never reach the site.
+Rather than quietly publishing bad data, this reports it: missing descriptions,
+missing prices, and suspiciously low prices.
 """
-import argparse, html, json, os, re, sys
+import argparse, html, json, os, sys
 
-EXPORT = "catalog_export.json"
+SOURCE = "menu.json"
 TARGET = os.path.join("site", "menu.html")
 START = "<!-- MENU:START"
 END = "<!-- MENU:END -->"
 
-# Square category -> (website heading, blurb). Order here is the order on the page.
-SECTIONS = [
-    ("Glizzy",       "Glizzy",       "Our original take on the classic 1/4&nbsp;lb all-beef dog."),
-    ("Not-a-Glizzy", "Not-a-Glizzy", "Awesome in their own right — just not quite a Glizzy."),
-    ("Vegetarian",   "Vegetarian",   "Our meat-free picks."),
-    ("Sides",        "Sides",        "Sides rotate and can sell out — just ask what we've got."),
-    ("Drinks",       "Drinks",       "Gotta wash it down."),
-]
-
-# Never show on the website.
-EXCLUDE_CATEGORIES = {"Cart Only"}          # in-person only (incl. merch)
-EXCLUDE_ITEMS = {"Sides"}                   # a generic catch-all item, not a real dish
-
-# Show a per-variation breakdown only when it's short and actually informative.
-MAX_OPTS = 4
+MAX_OPTS = 4                                   # show per-variation prices only when short
 GENERIC_VARIATION_NAMES = {"", "regular", "plain"}
-
-# A price below this is almost certainly a data-entry slip in Square.
-SUSPICIOUS_UNDER_CENTS = 100
+SUSPICIOUS_UNDER_CENTS = 100                   # below $1.00 is almost certainly a typo
 
 
 def money(cents):
@@ -56,17 +35,22 @@ def money(cents):
     return f"${cents/100:.0f}" if cents % 100 == 0 else f"${cents/100:.2f}"
 
 
-def price_label(variations):
-    prices = [a for _, a in variations if a is not None]
-    if not prices:
+def prices_of(item):
+    return [v["price_cents"] for v in item.get("variations", []) if v.get("price_cents") is not None]
+
+
+def price_label(item):
+    p = prices_of(item)
+    if not p:
         return "—"
-    lo, hi = min(prices), max(prices)
+    lo, hi = min(p), max(p)
     return money(lo) if lo == hi else f"{money(lo)}–{money(hi)}"
 
 
-def variation_note(variations):
+def variation_note(item):
     """'Options: Brat $8 · Pull Pork $9.' — only when short and non-generic."""
-    priced = [(n or "", a) for n, a in variations if a is not None]
+    priced = [(v.get("name") or "", v["price_cents"])
+              for v in item.get("variations", []) if v.get("price_cents") is not None]
     if not (2 <= len(priced) <= MAX_OPTS):
         return ""
     if all(n.strip().lower() in GENERIC_VARIATION_NAMES for n, _ in priced):
@@ -74,77 +58,53 @@ def variation_note(variations):
     return "Options: " + " · ".join(f"{html.escape(n)} {money(a)}" for n, a in priced) + "."
 
 
-def load_items():
-    if not os.path.exists(EXPORT):
-        sys.exit(f"[error] {EXPORT} not found — run `python pull_catalog.py` first.")
-    objs = json.load(open(EXPORT, encoding="utf-8"))
-    cats = {o["id"]: o["category_data"]["name"] for o in objs if o["type"] == "CATEGORY"}
-
-    items = []
-    for o in objs:
-        if o["type"] != "ITEM" or o.get("is_deleted"):
-            continue
-        d = o["item_data"]
-        rc = (d.get("reporting_category") or {}).get("id")
-        variations = [
-            (v["item_variation_data"].get("name"),
-             (v["item_variation_data"].get("price_money") or {}).get("amount"))
-            for v in d.get("variations", [])
-        ]
-        items.append({
-            "name": " ".join((d.get("name") or "").split()),
-            # Square descriptions can contain hard line breaks; collapse to one line.
-            "desc": " ".join((d.get("description") or "").split()),
-            "category": cats.get(rc, ""),
-            "variations": variations,
-            "prices": [a for _, a in variations if a is not None],
-        })
-    return items
+def load():
+    if not os.path.exists(SOURCE):
+        sys.exit(f"[error] {SOURCE} not found.")
+    return json.load(open(SOURCE, encoding="utf-8"))
 
 
-def render(items, warn):
-    known = {c for c, _, _ in SECTIONS}
+def render(doc, warn):
     out = []
-
-    for cat, heading, blurb in SECTIONS:
-        rows = [i for i in items if i["category"] == cat and i["name"] not in EXCLUDE_ITEMS]
+    for sec in doc["sections"]:
+        rows = [i for i in doc["items"] if i.get("website") and i.get("section") == sec["key"]]
         if not rows:
-            warn.append(f"section '{heading}' has no items in Square — skipped")
             continue
-        rows.sort(key=lambda i: (min(i["prices"]) if i["prices"] else 10**9, i["name"].lower()))
+        rows.sort(key=lambda i: (min(prices_of(i)) if prices_of(i) else 10**9, i["name"].lower()))
 
         out.append('        <div class="menu-sec">')
         out.append('          <div class="menu-sec__h">')
-        out.append(f"            <h2>{heading}</h2>")
-        out.append(f"            <p>{blurb}</p>")
+        out.append(f'            <h2>{sec["heading"]}</h2>')
+        out.append(f'            <p>{sec["blurb"]}</p>')
         out.append("          </div>")
         out.append('          <div class="menu-list">')
         for i in rows:
-            desc = html.escape(i["desc"])
-            note = variation_note(i["variations"])
+            desc = html.escape(" ".join((i.get("description") or "").split()))
+            note = variation_note(i)
             if note:
                 desc = f"{desc} {note}".strip()
             line = (f'            <div class="mi"><span class="mi__name">{html.escape(i["name"])}</span>'
-                    f'<span class="mi__price">{price_label(i["variations"])}</span>')
+                    f'<span class="mi__price">{price_label(i)}</span>')
             line += f'<p class="mi__desc">{desc}</p></div>' if desc else "</div>"
             out.append(line)
         out.append("          </div>")
         out.append("        </div>")
         out.append("")
 
-    # --- data problems worth fixing in Square, not papering over here ---
-    for i in items:
-        if i["category"] in EXCLUDE_CATEGORIES or i["name"] in EXCLUDE_ITEMS:
+    known = {s["key"] for s in doc["sections"]}
+    for i in doc["items"]:
+        if not i.get("website"):
             continue
-        if i["category"] not in known:
-            warn.append(f"UNMAPPED category {i['category']!r} for item {i['name']!r} — not shown")
+        if i.get("section") not in known:
+            warn.append(f"UNMAPPED section {i.get('section')!r} for {i['name']!r} — not shown")
             continue
-        if not i["prices"]:
+        p = prices_of(i)
+        if not p:
             warn.append(f"NO PRICE  {i['name']!r} — shows as '—'")
-        elif min(i["prices"]) < SUSPICIOUS_UNDER_CENTS:
-            warn.append(f"SUSPICIOUS PRICE {i['name']!r} = {money(min(i['prices']))} — typo in Square?")
-        if not i["desc"]:
-            warn.append(f"NO DESCRIPTION {i['name']!r} — will render name + price only")
+        elif min(p) < SUSPICIOUS_UNDER_CENTS:
+            warn.append(f"SUSPICIOUS PRICE {i['name']!r} = {money(min(p))} — typo?")
+        if not (i.get("description") or "").strip():
+            warn.append(f"NO DESCRIPTION {i['name']!r} — renders name + price only")
 
     return "\n".join(out).rstrip() + "\n"
 
@@ -154,23 +114,20 @@ def main():
     ap.add_argument("--write", action="store_true", help=f"rewrite the menu block in {TARGET}")
     args = ap.parse_args()
 
-    items = load_items()
+    doc = load()
     warn = []
-    block = render(items, warn)
+    block = render(doc, warn)
 
-    shown = sum(1 for i in items
-                if i["category"] in {c for c, _, _ in SECTIONS} and i["name"] not in EXCLUDE_ITEMS)
-    hidden = len(items) - shown
-
-    print("=== GENERATE WEBSITE MENU FROM SQUARE ===")
+    shown = sum(1 for i in doc["items"] if i.get("website"))
+    print("=== RENDER WEBSITE MENU FROM menu.json ===")
     print(f"mode: {'WRITE' if args.write else 'DRY RUN (no changes)'}")
-    print(f"items in Square: {len(items)}  ->  on website: {shown}   hidden: {hidden}\n")
+    print(f"items: {len(doc['items'])}  ->  on website: {shown}   hidden: {len(doc['items']) - shown}\n")
 
     if not args.write:
         print(block)
 
     if warn:
-        print(f"\n--- {len(warn)} THING(S) TO FIX IN SQUARE ---")
+        print(f"\n--- {len(warn)} THING(S) STILL TO FIX in {SOURCE} ---")
         for w in sorted(set(warn)):
             print("  -", w)
     else:
@@ -184,7 +141,7 @@ def main():
     s, e = src.find(START), src.find(END)
     if s == -1 or e == -1:
         sys.exit(f"[error] markers not found in {TARGET} (expected {START} ... {END})")
-    head_end = src.find("-->", s) + 3          # keep the START comment intact
+    head_end = src.find("-->", s) + 3            # keep the START comment intact
     new = src[:head_end] + "\n" + block + src[e:]
     if new == src:
         print(f"\n{TARGET} already up to date.")
