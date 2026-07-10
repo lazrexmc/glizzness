@@ -133,4 +133,51 @@
       });
     });
   }
+
+  /* ---- Where We Vend: upcoming stops (sanitized calendar mirror in Supabase) ---- */
+  var schedEl = document.getElementById("schedule");
+  if (schedEl) {
+    var SU = window.SUPABASE_URL, SK = window.SUPABASE_ANON_KEY;
+    var schedMsg = function (t) { schedEl.innerHTML = '<p class="schedule__msg g-muted">' + t + "</p>"; };
+    var followMsg = 'Schedule coming soon — follow along on social for today’s spot, or <a href="catering.html#book">book the cart</a>.';
+    if (!SU || !SK) { schedMsg(followMsg); }
+    else {
+      var todayStr = new Date().toISOString().slice(0, 10);
+      var url = SU + "/rest/v1/cart_schedule?select=starts_at,ends_at,all_day,is_public,title,location"
+              + "&starts_at=gte." + todayStr + "&order=starts_at.asc&limit=60";
+      fetch(url, { headers: { apikey: SK, Authorization: "Bearer " + SK } })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (rows) { renderSchedule(schedEl, rows); })
+        .catch(function (e) { console.error("schedule", e); schedMsg(followMsg); });
+    }
+  }
+
+  function renderSchedule(el, rows) {
+    if (!rows || !rows.length) {
+      el.innerHTML = '<p class="schedule__msg g-muted">No public dates on the books yet — '
+        + 'follow along on social, or <a href="catering.html#book">book the cart</a> for your own event.</p>';
+      return;
+    }
+    var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    el.innerHTML = rows.map(function (r) {
+      var d = new Date(r.starts_at);
+      var time = r.all_day ? "All day" : d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      var busy = !r.is_public;
+      var title = busy ? "Booked — Unavailable" : (r.title || "The Glizzness cart");
+      var meta = busy ? time : (time + (r.location ? " · " + esc(r.location) : ""));
+      return '<div class="sched-row' + (busy ? " sched-row--busy" : "") + '">'
+        + '<div class="sched__date"><span class="sched__dow">' + DOW[d.getDay()] + "</span>"
+        + '<span class="sched__day">' + d.getDate() + "</span>"
+        + '<span class="sched__mon">' + MON[d.getMonth()] + "</span></div>"
+        + '<div class="sched__body"><h3>' + esc(title) + "</h3>"
+        + '<p class="sched__meta">' + meta + "</p></div></div>";
+    }).join("");
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
 })();

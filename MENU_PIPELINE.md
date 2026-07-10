@@ -5,7 +5,7 @@
 > Nothing reaches customers until someone runs a command.
 
 ```
-menu.json  ──> gen_menu.py --write  ──> site/menu.html      (the website)
+menu.json  ──> gen_menu.py --write  ──> site/our-menu.html      (the website)
            └─> push_menu.py --apply ──> Square ──> DoorDash  *** NOT BUILT YET ***
 ```
 
@@ -14,7 +14,7 @@ menu.json  ──> gen_menu.py --write  ──> site/menu.html      (the website
 | File | Role |
 |---|---|
 | `menu.json` | **Source of truth.** Every item + variation, with its Square ID. Committed. |
-| `gen_menu.py` | Renders `menu.json` → the block between `MENU:START` / `MENU:END` in `site/menu.html`. Stdlib only, **no Square token.** |
+| `gen_menu.py` | Renders `menu.json` → the block between `MENU:START` / `MENU:END` in `site/our-menu.html`. Stdlib only, **no Square token.** |
 | `push_menu.py` | *(to build)* Pushes `menu.json` → Square (which feeds DoorDash). |
 | `pull_catalog.py` | Read-only Square export → `catalog_export.json`. Now only used to **seed/reconcile** `menu.json`, not to render. |
 
@@ -23,11 +23,11 @@ menu.json  ──> gen_menu.py --write  ──> site/menu.html      (the website
 ```bash
 # 1. edit menu.json (names, prices, descriptions, sections, visibility)
 python gen_menu.py            # DRY RUN: prints the HTML + any data problems
-python gen_menu.py --write    # rewrite site/menu.html
+python gen_menu.py --write    # rewrite site/our-menu.html
 git commit -am "menu: ..."    # Cloudflare Pages redeploys
 ```
 
-Never hand-edit `site/menu.html` between the markers — it gets overwritten.
+Never hand-edit `site/our-menu.html` between the markers — it gets overwritten.
 
 ## Fields
 
@@ -56,8 +56,9 @@ Fix them in `menu.json`, then regenerate.
 
 1. **Descriptions still needed from Trint:** `Something Fowl` ($7), `Taco` ($4 / Double $7).
    *Never invent ingredients.* `Burger` and `Boujee Burger` also lack descriptions but are Cart Only.
-2. **`Turkey Link` is priced $0.75** in Square — almost certainly meant to be $7.50. Confirm, then fix
-   in `menu.json` and push.
+2. **`Turkey Link` — REMOVED (2026-07-10).** The $0.75 was a typo; the owner chose to retire the item
+   entirely (not reprice). Marked `"retired": true` in `menu.json` — **still live in Square** → delete
+   in the Dashboard or via `push_menu.py`. Same for `Special Brat` + `Glizzy Classic`.
 3. **Build `push_menu.py`.** Read `menu.json`, take the current `version` for each object from a fresh
    `catalog_export.json`, and POST object-by-object to `/v2/catalog/object`
    (Square's `batch-upsert` is atomic — one bad object aborts everything). DRY-RUN by default;
@@ -67,11 +68,16 @@ Fix them in `menu.json`, then regenerate.
 
 ## Decisions already baked in
 
-- Use **"Dog"** spellings (`Chili Dog`, `Hog N' Dog`). Reversed 2026-07-10 by owner (was "Dawg"); the item is **Hog N' Dog** — never "Hoggin'", "Hawg'n'Dawg", or any other form.
+- Use **"Dog"** spellings (`Chili Dog`, `Hog' N' Dog`). Reversed 2026-07-10 by owner (was "Dawg"); the item is **Hog' N' Dog** — never "Hoggin'", "Hawg'n'Dawg", or any other form.
 - `Walking Chips` → **`Walking Nachos`**.
 - **`Special Brat` retired.**
 - Duplicate consolidated to one **`Glizzy`** (retired `Glizzy Classic`).
+- **Two distinct nachos:** `Nachos` = tortilla chips piled in a serving boat; `Walking Nachos` = a bag
+  of chips we pour it all into. Separate items, separate descriptions.
+- **2026-07-10 Square sync:** Square was hand-edited to the current item set, then `menu.json` reconciled
+  to the fresh `catalog_export.json` — added `Tamal(es)`; removed 6 items no longer in Square (Smoked Pork
+  Sausage Link, Grill Cheese, Pork Chop Special, Slim Jim, Fries, Iced Coffee).
 - Pricing story: **"A Glizzy is $5 — premium dogs start at just $2 more."**
-  (Glizzy $5; Chili Dog / Hog N' Dog $7 base; Brat $8 and Pulled Pork $9 stack above.)
+  (Glizzy $5; Chili Dog / Hog' N' Dog $7 base; Brat $8 and Pulled Pork $9 stack above.)
 - Customer-visible typos fixed: `Glossy Classic`→`Glizzy Classic`, `Chilly`→`Chili`,
   `Pull Pork`→`Pulled Pork` (4 items).

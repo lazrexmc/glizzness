@@ -19,7 +19,7 @@ has a front door. Built from the business north-star
 | `menu.html` | `/menu` | Full menu (from Square, the single source of truth) |
 | `order.html` | `/order` | Delivery / pickup — DoorDash |
 | `catering.html` | `/catering` | Catering **and** corporate/workplace — 8 packages + booking form |
-| `events.html` | `/events` | Where we vend — **map hidden** (coming soon) + book-your-event/venue |
+| `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + map teaser (hidden/coming soon) + book-your-event/venue |
 | `404.html` | any miss | Branded not-found |
 
 Shared, reused verbatim on every page: the top nav and the footer.
@@ -49,6 +49,11 @@ Shared, reused verbatim on every page: the top nav and the footer.
   (fill these in — links stay hidden until set).
 - The catering form POSTs a lead to Supabase `catering_leads` (`source: site_catering`),
   same table + schema as the standalone catering page (`../catering/`).
+- **Where We Vend** — `events.html` fetches Supabase `cart_schedule` (anon key, read-only) and
+  renders "Upcoming stops": public dates show venue + location, private dates show only
+  "Booked — Unavailable". Data is a **sanitized** mirror of the Google Calendar, written
+  server-side by `../sync_calendar.py`. Setup + activation: `../CALENDAR_SETUP.md`, `../GO_LIVE.md` §3.
+  Degrades to a "coming soon" message if the table/sync isn't live yet.
 
 ## Deploy — Cloudflare Pages (do NOT touch GoDaddy yet)
 

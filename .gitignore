@@ -18,6 +18,10 @@
 run_daily.ps1
 run_daily.log
 
+# Google service-account key for the calendar sync — grants calendar read access, NEVER commit
+*service-account*.json
+gcal-*.json
+
 # Streamlit secrets — NEVER commit
 .streamlit/secrets.toml
 

@@ -35,6 +35,8 @@ Trint uses it from anywhere. Password-protected (shared `APP_PASSWORD` secret).
 | **Sales / outreach contacts** | `Contacts.md`, `CorporateProspects.md` |
 | **Strategy / north-star** | `docs/superpowers/specs/2026-07-06-glizzness-north-star.md` |
 | **Vending events map** | `vending-map/README.md` (kept hidden from the public for now) |
+| **Where We Vend calendar** | `CALENDAR_SETUP.md` — sanitized Google Calendar → Supabase `cart_schedule` → `site/events.html` |
+| **🚀 Bring it all online** | `GO_LIVE.md` — the master activation checklist (deploy, Supabase SQL, calendar, menu push, retire old pages) |
 
 ---
 
@@ -602,3 +604,34 @@ those in the Dashboard. Reassign format that works: `item_data.reporting_categor
 Drinks 4 / Cart Only 3 = hidden from DoorDash). All 37 collect 7.975% tax (was 3/37; Lance previously
 trued up by hand). 30/37 described. OPEN: Trint's descriptions for 7 items; Lance to delete 2 empty
 menu-categories in Dashboard + exclude "Cart Only" in the DoorDash portal.
+
+**Menu update 2026-07-10 (Square hand-edited → `menu.json` synced to it):** Trint updated Square's item
+list directly; `menu.json` was reconciled to the fresh `catalog_export.json` — **removed** 6 deleted
+items (Smoked Pork Sausage Link, Grill Cheese, Pork Chop Special, Slim Jim, Fries, Iced Coffee),
+**added** Tamal(es), **retired** Turkey Link ($0.75 typo) + Special Brat + Glizzy Classic (still live in
+Square → delete there or via `push_menu.py`), split the two nachos (Nachos = boat / Walking Nachos = bag).
+Also: **spelling reversed to "Dog" everywhere** ("Hog' N' Dog", never "Dawg"/"Hoggin'") — owner override,
+see memory `feedback_dog_spelling.md`. `site/menu.html` NOT regenerated yet (Something Fowl + Taco still
+need descriptions).
+
+---
+
+## Where We Vend Calendar (sub-project — `sync_calendar.py` + `cart_schedule`)
+
+The website's **Where We Vend** page shows an on-brand "Upcoming stops" list, driven by a **sanitized
+mirror** of the business Google Calendar. The browser never touches Google — only public-safe Supabase rows.
+
+**Flow:** Google Calendar → `sync_calendar.py` (server-side, service account, read-only) → Supabase
+`cart_schedule` (public-read RLS) → `site/events.html` (anon key). **Privacy = opt-in public:** an event
+is public only if colored **green/"Basil" (colorId 10)** → keeps title + location; **everything else** is
+stored as a "Booked — Unavailable" time block (no title/location). A forgotten event stays private.
+
+**Files:** `sync_calendar.py` (sync CLI, `--dry-run`), `supabase_schedule_schema.sql` (the table),
+`CALENDAR_SETUP.md` (Google service-account + run/schedule steps), plus the `#schedule` section in
+`site/events.html` and the fetch/render in `site/assets/site.js` (+ `.sched-*` CSS). SA JSON key is
+gitignored (`*service-account*.json` / `gcal-*.json`).
+
+**Status (2026-07-10): BUILT, not activated.** To turn on, see `GO_LIVE.md` §3 / `CALENDAR_SETUP.md`:
+run the schema, create the service account + share the calendar, `pip install google-api-python-client
+google-auth requests`, set env vars, run `sync_calendar.py`, schedule it. Until then the page shows a
+graceful "coming soon" fallback.

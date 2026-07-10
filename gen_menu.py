@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 r"""gen_menu.py — render the website menu from menu.json (the source of truth).
 
-  menu.json  ──> gen_menu.py --write  ──> site/menu.html   (the website)
+  menu.json  ──> gen_menu.py --write  ──> site/our-menu.html   (the website)
              └─> push_menu.py --apply ──> Square ──> DoorDash
 
-Edit `menu.json`, never `site/menu.html` — the block between the MENU:START /
+Edit `menu.json`, never `site/our-menu.html` — the block between the MENU:START /
 MENU:END markers is overwritten.
 
     python gen_menu.py            # DRY RUN - prints the HTML + any data problems
-    python gen_menu.py --write    # rewrites site/menu.html
+    python gen_menu.py --write    # rewrites site/our-menu.html
 
 Stdlib only. No Square token involved: a Square token must never reach the
 browser, so the menu is baked at build time, not fetched live.
@@ -20,7 +20,7 @@ missing prices, and suspiciously low prices.
 import argparse, html, json, os, sys
 
 SOURCE = "menu.json"
-TARGET = os.path.join("site", "menu.html")
+TARGET = os.path.join("site", "our-menu.html")
 START = "<!-- MENU:START"
 END = "<!-- MENU:END -->"
 
@@ -55,7 +55,7 @@ def variation_note(item):
         return ""
     if all(n.strip().lower() in GENERIC_VARIATION_NAMES for n, _ in priced):
         return ""
-    return "Options: " + " · ".join(f"{html.escape(n)} {money(a)}" for n, a in priced) + "."
+    return "Options: " + " · ".join(f"{html.escape(n)} <strong>{money(a)}</strong>" for n, a in priced) + "."
 
 
 def load():
