@@ -12,7 +12,7 @@
       "key": "glizzy",
       "square_category": "Glizzy",
       "heading": "Glizzy",
-      "blurb": "Our original take on the classic 1/4&nbsp;lb all-beef dog. A Glizzy is $5 — premium dawgs start at just $2 more."
+      "blurb": "Our original take on the classic 1/4&nbsp;lb all-beef dog. A Glizzy is $5 — premium dogs start at just $2 more."
     },
     {
       "key": "not-a-glizzy",
@@ -125,7 +125,7 @@
     {
       "square_id": "DRZOQAKRGPZ5O24JI5UARBJP",
       "section": "glizzy",
-      "name": "Nacho Dawg",
+      "name": "Nacho Dog",
       "description": "A Glizzy topped with nacho cheese, our salsa blend, and crumbled cheese chips.",
       "website": true,
       "variations": [
@@ -197,7 +197,7 @@
     {
       "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
       "section": "glizzy",
-      "name": "Chili Dawg",
+      "name": "Chili Dog",
       "description": "Our house-made bean-free chili poured over your Glizzy, topped with secret-recipe cheese sauce and finished with crispy onions.",
       "website": true,
       "variations": [
@@ -221,7 +221,7 @@
     {
       "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
       "section": "glizzy",
-      "name": "Hog N' Dawg",
+      "name": "Hog N' Dog",
       "description": "Slow-roasted pulled pork, sourced locally from Patchwork Family Farms, piled on a Glizzy and drizzled with our own tangy BBQ mustard.",
       "website": true,
       "variations": [
@@ -345,7 +345,7 @@
       "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
       "section": "not-a-glizzy",
       "name": "Pulled Pork",
-      "description": "Our Hog N' Dawg without the dawg, and more pulled pork! Slow-roasted pulled pork from Patchwork Family Farms piled high in the bun, drizzled with our tangy BBQ mustard.",
+      "description": "Our Hog N' Dog without the dog, and more pulled pork! Slow-roasted pulled pork from Patchwork Family Farms piled high in the bun, drizzled with our tangy BBQ mustard.",
       "website": true,
       "variations": [
         {

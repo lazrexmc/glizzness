@@ -67,11 +67,11 @@ Fix them in `menu.json`, then regenerate.
 
 ## Decisions already baked in
 
-- Keep the playful **"Dawg"** spellings (`Chili Dawg`, `Hog N' Dawg`) — brand voice, not a typo.
+- Use **"Dog"** spellings (`Chili Dog`, `Hog N' Dog`). Reversed 2026-07-10 by owner (was "Dawg"); the item is **Hog N' Dog** — never "Hoggin'", "Hawg'n'Dawg", or any other form.
 - `Walking Chips` → **`Walking Nachos`**.
 - **`Special Brat` retired.**
 - Duplicate consolidated to one **`Glizzy`** (retired `Glizzy Classic`).
-- Pricing story: **"A Glizzy is $5 — premium dawgs start at just $2 more."**
-  (Glizzy $5; Chili Dawg / Hog N' Dawg $7 base; Brat $8 and Pulled Pork $9 stack above.)
+- Pricing story: **"A Glizzy is $5 — premium dogs start at just $2 more."**
+  (Glizzy $5; Chili Dog / Hog N' Dog $7 base; Brat $8 and Pulled Pork $9 stack above.)
 - Customer-visible typos fixed: `Glossy Classic`→`Glizzy Classic`, `Chilly`→`Chili`,
   `Pull Pork`→`Pulled Pork` (4 items).
