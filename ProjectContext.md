@@ -637,6 +637,11 @@ stored as a "Booked — Unavailable" time block (no title/location). A forgotten
 `site/events.html` and the fetch/render in `site/assets/site.js` (+ `.sched-*` CSS). SA JSON key is
 gitignored (`*service-account*.json` / `gcal-*.json`).
 
+**Status: ✅ ACTIVATED 2026-07-11** — schema run, service account + calendar share done, real sync run
+(47 events in `cart_schedule`), `events.html` renders a **collapsible** list (next 3 + "Show all" → 55vh
+scroll panel; `SCHED_PREVIEW` in `site.js`). Remaining: automate the sync (Task Scheduler ~1–2h); public
+once the site deploys (Cloudflare).
+
 **Status (2026-07-10): BUILT, not activated.** To turn on, see `GO_LIVE.md` §3 / `CALENDAR_SETUP.md`:
 run the schema, create the service account + share the calendar, `pip install google-api-python-client
 google-auth requests`, set env vars, run `sync_calendar.py`, schedule it. Until then the page shows a

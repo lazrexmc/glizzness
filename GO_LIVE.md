@@ -10,7 +10,7 @@
 - **Catering booking** — `catering/` standalone page **and** the newer `site/catering.html` (both POST to Supabase `catering_leads`). Keep the `site/` one; retire the standalone.
 - **Vending map** — `vending-map/` (415 events), was on Netlify at `festivals.glizzness.com`.
 - **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` (**already regenerated & committed** — the site shows the full 20-item menu, verified byte-identical to a fresh render); `push_menu.py` (menu.json → Square → DoorDash) **is built.** `menu.json` is clean (25 items, all website items described). Only the Square push is left (§4).
-- **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list. **NEW — needs activation (§3).**
+- **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list (collapsible: next 3 + "Show all"). **✅ ACTIVATED 2026-07-11** — schema run, real sync done, page renders. Remaining: automate the sync (§7 Task Scheduler); it becomes publicly visible when the site deploys (§2).
 
 ---
 
@@ -38,8 +38,12 @@ GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**
 4. **Then** (separate, deliberate) point the domain: add `glizzness.com` (and `www`) as a custom domain in CF Pages, and update the DNS record at **GoDaddy**. *This is the only step that touches GoDaddy.*
 5. `site/_redirects` handles friendly aliases (`/book`, `/delivery`, `/festivals`, …).
 
-## 3. "Where We Vend" calendar — activate
-Full step-by-step: **`CALENDAR_SETUP.md`**. Short version:
+## 3. "Where We Vend" calendar — ✅ ACTIVATED 2026-07-11
+**Done:** schema run, Google service account created + calendar shared read-only, real sync run (47 events
+flow into `cart_schedule`), and `events.html` renders the collapsible "Upcoming stops" list. **Public
+trigger = event Visibility "Public"** (not color). **Remaining:** automate the sync on a timer (§7); note it
+only becomes *publicly* visible once the site is deployed (§2). Steps below kept for reference / re-running.
+Full detail: **`CALENDAR_SETUP.md`**. Short version:
 1. Run `supabase_schedule_schema.sql` (done in §1 if you ran it).
 2. **Google service account:** Cloud Console → enable **Google Calendar API** → create a
    service account → create a **JSON key** → save it OUTSIDE the repo (e.g. `..\PrivateData\gcal-service-account.json`).

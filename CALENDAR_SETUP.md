@@ -4,6 +4,10 @@ The website's **Where We Vend** page shows an on-brand "Upcoming stops" list. It
 a **sanitized mirror** of the business Google Calendar from Supabase (`cart_schedule`).
 The browser never touches Google — only public-safe rows.
 
+> **STATUS — ✅ ACTIVATED 2026-07-11:** schema run, service account + calendar share done, real sync run
+> (events populate `cart_schedule`), `events.html` renders the collapsible list. Remaining: put the sync on
+> a timer (§"Keep it fresh"), and it goes public when the site deploys. Steps below are the reference / re-run guide.
+
 ```
 Google Calendar (one business calendar)
    │  sync_calendar.py  (server-side, service account, read-only)
