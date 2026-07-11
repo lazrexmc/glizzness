@@ -629,7 +629,7 @@ mirror** of the business Google Calendar. The browser never touches Google — o
 
 **Flow:** Google Calendar → `sync_calendar.py` (server-side, service account, read-only) → Supabase
 `cart_schedule` (public-read RLS) → `site/events.html` (anon key). **Privacy = opt-in public:** an event
-is public only if colored **green/"Basil" (colorId 10)** → keeps title + location; **everything else** is
+is public only if its **Visibility is set to "Public"** → keeps title + location; **everything else** is
 stored as a "Booked — Unavailable" time block (no title/location). A forgotten event stays private.
 
 **Files:** `sync_calendar.py` (sync CLI, `--dry-run`), `supabase_schedule_schema.sql` (the table),

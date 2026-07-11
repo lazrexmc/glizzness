@@ -3,7 +3,7 @@
 -- Supabase SQL editor. Safe alongside the accounting + vending_* + catering tables.
 --
 -- Populated server-side by sync_calendar.py (service_role); read by the website
--- (anon key). PUBLIC events (green/"Basil" on the calendar) carry a title + location;
+-- (anon key). PUBLIC events (Visibility = "Public" on the calendar) carry a title + location;
 -- EVERY other event is stored only as a "Booked — Unavailable" time block with NO
 -- title and NO location — so private catering details never reach the web.
 

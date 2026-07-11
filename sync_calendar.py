@@ -6,10 +6,11 @@ PUBLIC-SAFE copy into Supabase `cart_schedule`, which the website's "Where We Ve
 page reads. The browser never touches Google — only the sanitized Supabase rows.
 
 PRIVACY MODEL (opt-in public):
-  * An event is PUBLIC only if its calendar color is "Basil"/green (colorId 10).
-    Public rows keep the event title (venue) + location.
-  * EVERY OTHER event becomes a "Booked — Unavailable" time block with NO title and
-    NO location — private catering details never leave Google.
+  * An event is PUBLIC only if its Google Calendar VISIBILITY is set to "Public"
+    (open the event -> Visibility dropdown -> Public). Public rows keep the event
+    title (venue) + location.
+  * EVERY OTHER event (Default / Private / Confidential) becomes a "Booked —
+    Unavailable" time block with NO title and NO location — details never leave Google.
   Opt-in means a forgotten event stays private (shows "Unavailable"), never leaks.
 
 SETUP: see CALENDAR_SETUP.md — create a Google service account, share the calendar
@@ -34,7 +35,7 @@ import datetime as dt
 import os
 import sys
 
-PUBLIC_COLOR_ID = "10"   # Google "Basil" (green) = public. Change if you pick another color.
+PUBLIC_VISIBILITY = "public"   # Google Calendar event Visibility = "Public" -> shown publicly.
 WINDOW_DAYS = 180
 
 
@@ -89,7 +90,7 @@ def to_row(ev):
     if not starts_at:
         return None
 
-    is_public = ev.get("colorId") == PUBLIC_COLOR_ID
+    is_public = ev.get("visibility") == PUBLIC_VISIBILITY
     return {
         "gcal_event_id": ev["id"],
         "starts_at": starts_at,

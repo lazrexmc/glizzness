@@ -49,8 +49,9 @@ Full step-by-step: **`CALENDAR_SETUP.md`**. Short version:
 5. Set env vars (`GOOGLE_SA_KEYFILE`, `GOOGLE_CALENDAR_ID`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`),
    then `python sync_calendar.py --dry-run` → then `python sync_calendar.py`.
 6. **Schedule it** (Task Scheduler, every 1–2h) so the site stays current.
-7. **Trint marks public dates:** color a calendar event **green/"Basil"** → it shows publicly
-   (venue + location). Any other color = shows only "Booked — Unavailable." Opt-in = never leaks.
+7. **Trint marks public dates:** open the event → Edit → set **Visibility = "Public"** → it shows
+   publicly (venue + location). Default / Private / Confidential = shows only "Booked — Unavailable."
+   Opt-in = never leaks.
 
 ## 4. Menu → Square → DoorDash
 DoorDash pulls its menu **from Square**, so Square is the push target. `menu.json` is the source of truth. Full flow: `MENU_PIPELINE.md`.

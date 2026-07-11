@@ -7,8 +7,8 @@ The browser never touches Google — only public-safe rows.
 ```
 Google Calendar (one business calendar)
    │  sync_calendar.py  (server-side, service account, read-only)
-   │    • green/"Basil" event  → PUBLIC: keep title + location
-   │    • everything else       → "Booked — Unavailable" (date/time only, no details)
+   │    • event Visibility = "Public"  → PUBLIC: keep title + location
+   │    • everything else               → "Booked — Unavailable" (date/time only, no details)
    ▼
 Supabase  cart_schedule  (public-read RLS; service_role writes)
    ▼
@@ -16,10 +16,12 @@ site/events.html  → "Upcoming stops"  (anon key, read-only)
 ```
 
 ## How Trint marks an event PUBLIC
-In Google Calendar, open the event → set its **color to "Basil" (green)** → save.
-That's it. Any other color (or no color) stays **private** and shows only as
-"Booked — Unavailable" on the site. *Opt-in by design: forget to color it and it stays
-private — it never leaks.* (To change which color = public, edit `PUBLIC_COLOR_ID` in
+In Google Calendar, open the event → click **Edit** (pencil) → change the
+**"Default visibility"** dropdown to **"Public"** → save. (For a recurring series,
+choose **"This event"** for a single stop, or **"All events"** for the whole series.)
+That's it. Any other setting (Default / Private / Confidential) stays **private** and shows
+only as "Booked — Unavailable" on the site. *Opt-in by design: forget to set it and it stays
+private — it never leaks.* (To change which setting = public, edit `PUBLIC_VISIBILITY` in
 `sync_calendar.py`.)
 
 ## One-time setup (Lance)
