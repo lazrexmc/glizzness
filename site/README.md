@@ -16,7 +16,7 @@ has a front door. Built from the business north-star
 | File | URL | Purpose |
 |---|---|---|
 | `index.html` | `/` | Home — brand, "where's the cart," the four lanes, why-us, menu teaser |
-| `menu.html` | `/menu` | Full menu (from Square, the single source of truth) |
+| `our-menu.html` | `/our-menu` | Full menu — rendered from `menu.json` by `gen_menu.py` (the source of truth; Square is downstream) |
 | `order.html` | `/order` | Delivery / pickup — DoorDash |
 | `catering.html` | `/catering` | Catering **and** corporate/workplace — 8 packages + booking form |
 | `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + map teaser (hidden/coming soon) + book-your-event/venue |
@@ -45,8 +45,8 @@ Shared, reused verbatim on every page: the top nav and the footer.
   degrades to call/text/email.
 - `config.js` holds the public constants: Supabase URL + **anon** key (INSERT-only
   into `catering_leads`, no read policy — safe to expose), phone `314-266-8636`,
-  email `glizzness@gmail.com`, DoorDash store `38788821`, and **empty social URLs**
-  (fill these in — links stay hidden until set).
+  email `glizzness@gmail.com`, DoorDash store `38788821`, and the **Facebook +
+  Instagram URLs** (both set — the "follow us" buttons show once a URL is present).
 - The catering form POSTs a lead to Supabase `catering_leads` (`source: site_catering`),
   same table + schema as the standalone catering page (`../catering/`).
 - **Where We Vend** — `events.html` fetches Supabase `cart_schedule` (anon key, read-only) and
@@ -96,8 +96,8 @@ When ready to go live:
 
 - [ ] **More real food photos** — individual menu items still have no photos. Shoot them
       and drop them in `assets/img/`.
-- [ ] **Social URLs** — set `GLIZZNESS_FACEBOOK` / `GLIZZNESS_INSTAGRAM` in
-      `config.js` (links + "follow us" buttons are hidden until then).
+- [x] **Social URLs** — Facebook + Instagram are set in `config.js`; the
+      "follow us" buttons render.
 - [ ] **Confirm the DoorDash storefront** resolves and the store shows as
       "The Glizzness" (the Order page falls back to "search The Glizzness" if the
       link is unset).

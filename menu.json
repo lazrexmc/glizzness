@@ -1,6 +1,6 @@
 {
   "_readme": [
-    "SOURCE OF TRUTH for The Glizzness menu. Edit this file, never site/menu.html.",
+    "SOURCE OF TRUTH for The Glizzness menu. Edit this file, never site/our-menu.html.",
     "  python gen_menu.py --write    -> regenerates the website menu from this file",
     "  python push_menu.py --apply   -> pushes names/descriptions/prices to Square (-> DoorDash)",
     "square_id fields let the push UPDATE existing Square objects instead of creating duplicates.",

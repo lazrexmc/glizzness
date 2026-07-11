@@ -27,6 +27,8 @@ gcal-*.json
 
 # Personal / sensitive documents — NEVER commit
 *.pdf
+*.docx          # resumes and other personal docs (PII)
+*.xlsx          # spreadsheets — financial data (e.g. SamsTransactions*.xlsx)
 Sales/
 
 # Images / binary assets
@@ -47,6 +49,7 @@ venv/
 
 # Chat logs — contain financial figures and business context
 CHATLOG.md
+chatlog.txt
 
 # Playwright MCP scratch (screenshots / snapshots from local smoke tests)
 .playwright-mcp/

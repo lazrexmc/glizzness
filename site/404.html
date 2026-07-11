@@ -12,14 +12,21 @@
   <link rel="stylesheet" href="assets/site.css" />
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ===== NAV (shared) ===== -->
   <header class="nav">
     <div class="wrap nav__in">
       <a class="nav__brand" href="index.html">The&nbsp;<b>Glizzness</b></a>
-      <nav class="nav__links" aria-label="Primary">
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="nav__links" id="primary-nav" aria-label="Primary">
         <a href="our-menu.html">Menu</a>
         <a href="order.html">Order</a>
         <a href="catering.html">Catering</a>
         <a href="events.html">Where We Vend</a>
+        <a class="nav__cta btn btn--gold" href="catering.html#book">Book Catering</a>
       </nav>
     </div>
   </header>

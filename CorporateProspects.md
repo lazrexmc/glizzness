@@ -12,7 +12,7 @@ These are the bullseyes: hundreds of on-site office staff, no cafeteria, culture
 
 | Company | ~Staff | Location | Notes / pitch |
 |---|---|---|---|
-| **Veterans United Home Loans** | ~2,800 (largest private employer) | 1400 & 550 Veterans United Dr, 65203 · 573-876-2600 | **#1 target.** Young office workforce, big perks/culture budget. Pitch HR/culture/events. (Had post-2022 layoffs — still the top prospect.) |
+| **Veterans United Home Loans** | ~2,800 (largest private employer) | 1400 & 550 Veterans United Dr, 65203 · 573-876-2600 | **#1 target — REPEAT CLIENT: reconnect, don't cold-pitch** (we've catered VU before, invoices on file). Young office workforce, big perks/culture budget; pitch HR/culture/events via the prior contact. (Had post-2022 layoffs — still the top prospect.) |
 | **EquipmentShare** | ~600 and **adding 500+** | 5710 Bull Run Dr | Fast-growing HQ, new $100M tech center, above-avg salaries. Top-tier cart-day target. |
 | **Shelter Insurance** | ~1,100–1,375 | Columbia HQ campus (W Broadway) | Large insurance office HQ. |
 | **Schneider Electric** | ~427 | Columbia | Office/engineering staff. |
@@ -74,5 +74,5 @@ MoDOT's Improve I-70 is rebuilding the highway through Boone County with **confi
 
 ## Caveats & next step
 - **Verify cafeteria status** for the hospitals + food plants (determines cart-day vs. event-only fit) — not confirmed this pass.
-- **Get named catering contacts** for the Tier-1 targets (VU, EquipmentShare, Shelter, Watlow) — only Boone County Gov's HR was verified. A quick call to each office manager gets you the right person.
+- **Get named catering contacts** for the cold Tier-1 targets (EquipmentShare, Shelter, Watlow) — only Boone County Gov's HR was verified. A quick call to each office manager gets you the right person. (**VU is a repeat client** — pull the prior events contact from past invoices instead of cold-calling.)
 - Headcounts are Q1-2024; treat as relative size. Re-run the research pass to refresh anytime.

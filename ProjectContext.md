@@ -604,15 +604,21 @@ those in the Dashboard. Reassign format that works: `item_data.reporting_categor
 Drinks 4 / Cart Only 3 = hidden from DoorDash). All 37 collect 7.975% tax (was 3/37; Lance previously
 trued up by hand). 30/37 described. OPEN: Trint's descriptions for 7 items; Lance to delete 2 empty
 menu-categories in Dashboard + exclude "Cart Only" in the DoorDash portal.
+> *Historical 2026-07-06 snapshot — superseded: the menu is now 25 items in `menu.json` with all website
+> items described; the OPEN items above are done. See the 2026-07-10 block below.*
 
 **Menu update 2026-07-10 (Square hand-edited → `menu.json` synced to it):** Trint updated Square's item
 list directly; `menu.json` was reconciled to the fresh `catalog_export.json` — **removed** 6 deleted
 items (Smoked Pork Sausage Link, Grill Cheese, Pork Chop Special, Slim Jim, Fries, Iced Coffee),
-**added** Tamal(es), **retired** Turkey Link ($0.75 typo) + Special Brat + Glizzy Classic (still live in
-Square → delete there or via `push_menu.py`), split the two nachos (Nachos = boat / Walking Nachos = bag).
-Also: **spelling reversed to "Dog" everywhere** ("Hog' N' Dog", never "Dawg"/"Hoggin'") — owner override,
-see memory `feedback_dog_spelling.md`. `site/menu.html` NOT regenerated yet (Something Fowl + Taco still
-need descriptions).
+**added** Tamal(es), and split the two nachos (Nachos = boat / Walking Nachos = bag). Also: **spelling
+reversed to "Dog" everywhere** ("Hog' N' Dog", never "Dawg"/"Hoggin'") — owner override, see memory
+`feedback_dog_spelling.md`.
+> **Corrected by the 2026-07-10 audit:** the earlier "retired Turkey Link / Special Brat / Glizzy Classic,
+> still live in Square" line was wrong. Those names aren't in `menu.json`; the actual `retired:true` items
+> are **Chicken Teriyaki, the generic Sides item, and Walking Nachos** — all already gone from Square
+> (`push_menu.py` dry-run = **0 deletes**). **Glizzy Classic was kept** as `Classic Glizzy` (`website:false`
+> POS button, not retired). `site/our-menu.html` **is** regenerated & committed; Something Fowl is
+> described; Taco was removed. Current pipeline truth: MENU_PIPELINE.md / GO_LIVE.md §4.
 
 ---
 
