@@ -6,7 +6,7 @@
 
 ```
 menu.json  ──> gen_menu.py --write  ──> site/our-menu.html      (the website)
-           └─> push_menu.py --apply ──> Square ──> DoorDash  *** NOT BUILT YET ***
+           └─> push_menu.py --apply ──> Square ──> DoorDash  (built; dry-run default, --apply needs SQUARE_TOKEN)
 ```
 
 ## Files
@@ -15,7 +15,7 @@ menu.json  ──> gen_menu.py --write  ──> site/our-menu.html      (the web
 |---|---|
 | `menu.json` | **Source of truth.** Every item + variation, with its Square ID. Committed. |
 | `gen_menu.py` | Renders `menu.json` → the block between `MENU:START` / `MENU:END` in `site/our-menu.html`. Stdlib only, **no Square token.** |
-| `push_menu.py` | *(to build)* Pushes `menu.json` → Square (which feeds DoorDash). |
+| `push_menu.py` | **Built.** Syncs Square FROM `menu.json`: pushes name/description/category/variations, **creates** missing items (writes the new Square IDs back into `menu.json`), **deletes** `retired` ones. Matches by `square_id` (updates in place, never duplicates). Leaves tax + modifiers on existing items alone. DRY-RUN default; `--apply` needs `SQUARE_TOKEN`. |
 | `pull_catalog.py` | Read-only Square export → `catalog_export.json`. Now only used to **seed/reconcile** `menu.json`, not to render. |
 
 ## Everyday use
@@ -54,17 +54,16 @@ Fix them in `menu.json`, then regenerate.
 
 ## Open items
 
-1. **Descriptions still needed from Trint:** `Something Fowl` ($7), `Taco` ($4 / Double $7).
-   *Never invent ingredients.* `Burger` and `Boujee Burger` also lack descriptions but are Cart Only.
-2. **`Turkey Link` — REMOVED (2026-07-10).** The $0.75 was a typo; the owner chose to retire the item
-   entirely (not reprice). Marked `"retired": true` in `menu.json` — **still live in Square** → delete
-   in the Dashboard or via `push_menu.py`. Same for `Special Brat` + `Glizzy Classic`.
-3. **Build `push_menu.py`.** Read `menu.json`, take the current `version` for each object from a fresh
-   `catalog_export.json`, and POST object-by-object to `/v2/catalog/object`
-   (Square's `batch-upsert` is atomic — one bad object aborts everything). DRY-RUN by default;
-   `--apply` requires `SQUARE_TOKEN`; back up the export first. Mirror `catalog_desc.py`.
-   Honour `"retired": true` (delete/archive). **Lance runs every `--apply` himself** — the Square
-   token lives in his shell, not the agent's.
+`menu.json` is clean — 25 items, all website items described, `gen_menu.py` dry-run reports **no data
+problems**. (Something Fowl is now described; Taco/Turkey Link were removed.) What's left is to *ship* it:
+
+1. **Refresh the website menu:** `python gen_menu.py --write` regenerates `site/our-menu.html` from the
+   current `menu.json`. ⚠️ The page still shows the **old 12-item curated teaser** until this runs.
+2. **Push the menu to Square (→ DoorDash):** `python push_menu.py` (dry run — read the diff, it also
+   **deletes** the retired `Turkey Link` / `Special Brat` / `Glizzy Classic`), then **Lance** runs
+   `python push_menu.py --apply` with `SQUARE_TOKEN`.
+3. `Burger` + `Boujee Burger` still have no description, but they're **Cart Only** (hidden from the site) —
+   only matters for the Square/DoorDash listing.
 
 ## Decisions already baked in
 

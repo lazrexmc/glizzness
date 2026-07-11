@@ -9,7 +9,7 @@
 - **Website** — unified `site/` (Home, Menu, Order, Catering/Corporate, Where We Vend, 404). Browser-verified, **not deployed.**
 - **Catering booking** — `catering/` standalone page **and** the newer `site/catering.html` (both POST to Supabase `catering_leads`). Keep the `site/` one; retire the standalone.
 - **Vending map** — `vending-map/` (415 events), was on Netlify at `festivals.glizzness.com`.
-- **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/menu.html`. `push_menu.py` (menu.json → Square → DoorDash) **NOT built yet.**
+- **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html`; `push_menu.py` (menu.json → Square → DoorDash) **is built.** `menu.json` is clean (25 items, all described). Two commands left to ship it (§4).
 - **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list. **NEW — needs activation (§3).**
 
 ---
@@ -54,15 +54,15 @@ Full step-by-step: **`CALENDAR_SETUP.md`**. Short version:
 
 ## 4. Menu → Square → DoorDash
 DoorDash pulls its menu **from Square**, so Square is the push target. `menu.json` is the source of truth. Full flow: `MENU_PIPELINE.md`.
-1. **Build `push_menu.py`** (not built) — `menu.json` → Square (object-by-object, needs each
-   object's current `version` from a fresh `catalog_export.json`, DRY-RUN default, `--apply`
-   needs `SQUARE_TOKEN`). Honour `"retired": true`. **Lance runs `--apply` himself.**
-2. **Delete the retired items in Square** (Dashboard, or via the push): **Turkey Link, Special
-   Brat, Glizzy Classic**.
-3. **Still-needed descriptions** (from Trint): **Something Fowl** ($7), **Taco** ($4 / Double $7).
-   *Never invent ingredients.*
-4. Once `menu.json` is clean: `python gen_menu.py --write` → refreshes `site/menu.html`
-   (this swaps the old curated teaser for the real ~30 items — only do it when descriptions are in).
+1. **Refresh the website menu:** `python gen_menu.py --write` regenerates `site/our-menu.html` from
+   `menu.json` — swaps the **old 12-item curated teaser** for the real ~20 items. `menu.json` is clean
+   (all website items described; dry-run reports no problems), so this is ready now. Commit + redeploy.
+2. **Push to Square (→ DoorDash):** `python push_menu.py` (dry run — **read the diff; it also DELETES**
+   the retired `Turkey Link` / `Special Brat` / `Glizzy Classic`), then **Lance** runs
+   `python push_menu.py --apply` with `SQUARE_TOKEN`. If you also changed add-ons, run order is
+   `catalog_modifiers.py --apply` → `pull_catalog.py` → `push_menu.py`.
+3. `Burger` + `Boujee Burger` have no description but are **Cart Only** (off the site) — only matters
+   for the Square/DoorDash listing, not the website.
 5. **DoorDash portal:** confirm the storefront `https://www.doordash.com/store/38788821` resolves
    and shows "The Glizzness"; **exclude the "Cart Only" category** from DoorDash.
 
