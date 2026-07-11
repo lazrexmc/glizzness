@@ -375,6 +375,10 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .sched__meta { margin: 0; color: var(--muted-l); font-size: .95rem; }
 .sched-row--busy .sched__body h3 { color: var(--muted-l); }
 .schedule__msg { padding: 6px 2px; }
+.sched-list, .sched-more { display: grid; gap: 12px; }
+.sched-more { max-height: 55vh; overflow-y: auto; padding-right: 4px; }
+.sched-more[hidden] { display: none; }         /* beats the grid display above so it truly hides */
+.sched-toggle { justify-self: start; }
 
 .callout { border: 1px dashed rgba(255,215,0,.4); border-radius: var(--radius); padding: clamp(24px,4vw,40px); text-align: center; background: var(--ink-2); }
 

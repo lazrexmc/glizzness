@@ -152,6 +152,8 @@
     }
   }
 
+  var SCHED_PREVIEW = 3;   // upcoming stops shown before the "Show all" toggle
+
   function renderSchedule(el, rows) {
     if (!rows || !rows.length) {
       el.innerHTML = '<p class="schedule__msg g-muted">No public dates on the books yet — '
@@ -160,7 +162,7 @@
     }
     var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    el.innerHTML = rows.map(function (r) {
+    function rowHtml(r) {
       var d = new Date(r.starts_at);
       var time = r.all_day ? "All day" : d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       var busy = !r.is_public;
@@ -172,7 +174,28 @@
         + '<span class="sched__mon">' + MON[d.getMonth()] + "</span></div>"
         + '<div class="sched__body"><h3>' + esc(title) + "</h3>"
         + '<p class="sched__meta">' + meta + "</p></div></div>";
-    }).join("");
+    }
+
+    var moreLabel = function () { return "Show all " + rows.length + " stops"; };
+    var html = '<div class="sched-list">' + rows.slice(0, SCHED_PREVIEW).map(rowHtml).join("") + "</div>";
+    var rest = rows.slice(SCHED_PREVIEW);
+    if (rest.length) {
+      html += '<div class="sched-more" id="schedMore" hidden>' + rest.map(rowHtml).join("") + "</div>"
+            + '<button type="button" class="btn btn--ghost sched-toggle" aria-expanded="false" '
+            + 'aria-controls="schedMore">' + moreLabel() + "</button>";
+    }
+    el.innerHTML = html;
+
+    var toggle = el.querySelector(".sched-toggle");
+    if (toggle) {
+      var more = el.querySelector("#schedMore");
+      toggle.addEventListener("click", function () {
+        var opening = more.hasAttribute("hidden");
+        if (opening) { more.removeAttribute("hidden"); } else { more.setAttribute("hidden", ""); }
+        toggle.setAttribute("aria-expanded", opening ? "true" : "false");
+        toggle.textContent = opening ? "Show fewer" : moreLabel();
+      });
+    }
   }
 
   function esc(s) {
