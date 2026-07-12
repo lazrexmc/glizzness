@@ -58,7 +58,8 @@
           "name": "Regular",
           "price_cents": 500
         }
-      ]
+      ],
+      "favorite": true
     },
     {
       "square_id": "WJ7SN7LA7T4DHIHBNH6SU2DP",
@@ -86,7 +87,8 @@
           "name": "Regular",
           "price_cents": 700
         }
-      ]
+      ],
+      "favorite": true
     },
     {
       "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
@@ -100,7 +102,8 @@
           "name": "Regular",
           "price_cents": 700
         }
-      ]
+      ],
+      "favorite": true
     },
     {
       "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
@@ -316,7 +319,8 @@
           "name": "Regular",
           "price_cents": 500
         }
-      ]
+      ],
+      "favorite": true
     },
     {
       "square_id": "NEW_chili_nachos",

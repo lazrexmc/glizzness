@@ -23,6 +23,9 @@ SOURCE = "menu.json"
 TARGET = os.path.join("site", "our-menu.html")
 START = "<!-- MENU:START"
 END = "<!-- MENU:END -->"
+HOME = os.path.join("site", "index.html")      # home-page "Cart favorites" teaser
+TSTART = "<!-- TEASER:START"
+TEND = "<!-- TEASER:END -->"
 
 MAX_OPTS = 4                                   # show per-variation prices only when short
 GENERIC_VARIATION_NAMES = {"", "regular", "plain"}
@@ -58,6 +61,38 @@ def variation_note(item):
     return "Options: " + " · ".join(f"{html.escape(n)} <strong>{money(a)}</strong>" for n, a in priced) + "."
 
 
+def mi_html(i, indent=12):
+    """One <div class="mi"> line for an item — name + price + optional description."""
+    pad = " " * indent
+    desc = html.escape(" ".join((i.get("description") or "").split()))
+    note = variation_note(i)
+    if note:
+        desc = f"{desc} {note}".strip()
+    s = (f'{pad}<div class="mi"><span class="mi__name">{html.escape(i["name"])}</span>'
+         f'<span class="mi__price">{price_label(i)}</span>')
+    return s + (f'<p class="mi__desc">{desc}</p></div>' if desc else "</div>")
+
+
+def render_teaser(doc):
+    """Home-page 'Cart favorites' block: items flagged favorite:true (in menu.json order)."""
+    favs = [i for i in doc["items"] if i.get("favorite") and i.get("website")]
+    return "\n".join(mi_html(i, 10) for i in favs)
+
+
+def replace_block(path, start, end, block):
+    """Rewrite the text between the start/end markers in `path`. Returns True if it changed."""
+    src = open(path, encoding="utf-8").read()
+    s, e = src.find(start), src.find(end)
+    if s == -1 or e == -1:
+        sys.exit(f"[error] markers not found in {path} (expected {start} ... {end})")
+    head_end = src.find("-->", s) + 3            # keep the START comment intact
+    new = src[:head_end] + "\n" + block.rstrip("\n") + "\n" + src[e:]
+    if new == src:
+        return False
+    open(path, "w", encoding="utf-8", newline="\n").write(new)
+    return True
+
+
 def load():
     if not os.path.exists(SOURCE):
         sys.exit(f"[error] {SOURCE} not found.")
@@ -80,14 +115,7 @@ def render(doc, warn):
         out.append("          </div>")
         out.append('          <div class="menu-list">')
         for i in rows:
-            desc = html.escape(" ".join((i.get("description") or "").split()))
-            note = variation_note(i)
-            if note:
-                desc = f"{desc} {note}".strip()
-            line = (f'            <div class="mi"><span class="mi__name">{html.escape(i["name"])}</span>'
-                    f'<span class="mi__price">{price_label(i)}</span>')
-            line += f'<p class="mi__desc">{desc}</p></div>' if desc else "</div>"
-            out.append(line)
+            out.append(mi_html(i, 12))
         out.append("          </div>")
         out.append("        </div>")
         out.append("")
@@ -138,17 +166,14 @@ def main():
         print("\nDRY RUN — nothing written. Re-run with --write to update the site.")
         return 0
 
-    src = open(TARGET, encoding="utf-8").read()
-    s, e = src.find(START), src.find(END)
-    if s == -1 or e == -1:
-        sys.exit(f"[error] markers not found in {TARGET} (expected {START} ... {END})")
-    head_end = src.find("-->", s) + 3            # keep the START comment intact
-    new = src[:head_end] + "\n" + block + src[e:]
-    if new == src:
-        print(f"\n{TARGET} already up to date.")
-        return 0
-    open(TARGET, "w", encoding="utf-8", newline="\n").write(new)
-    print(f"\nwrote {TARGET}. Review, commit, and Cloudflare Pages will redeploy.")
+    wrote_menu = replace_block(TARGET, START, END, block)
+    print(f"\n{'wrote ' + TARGET if wrote_menu else TARGET + ' already up to date'}.")
+
+    # The same menu.json feeds the home-page 'Cart favorites' teaser, so it can never drift.
+    n_fav = sum(1 for i in doc["items"] if i.get("favorite") and i.get("website"))
+    wrote_home = replace_block(HOME, TSTART, TEND, render_teaser(doc))
+    print(f"{'wrote ' + HOME + f' teaser ({n_fav} favorites)' if wrote_home else HOME + ' teaser already up to date'}.")
+    print("Review, commit, and Cloudflare Pages will redeploy.")
     return 0
 
 
