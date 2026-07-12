@@ -39,8 +39,12 @@ def build_update(sq, mi, cat_id):
     obj = copy.deepcopy(sq)
     d = obj["item_data"]
     d["name"] = mi["name"]
-    d["description"] = mi.get("description", "") or ""
-    d.pop("description_html", None)
+    # Square Online + DoorDash display description_HTML, NOT the legacy `description`. Set both;
+    # NEVER drop description_html or the customer-facing description goes blank (this was a bug).
+    # description_plaintext is read-only — Square regenerates it from description_html.
+    desc = mi.get("description", "") or ""
+    d["description"] = desc
+    d["description_html"] = desc
     d.pop("description_plaintext", None)
     if cat_id:
         d["reporting_category"] = {"id": cat_id}
@@ -68,7 +72,8 @@ def build_create(mi, cat_id, tax_id):
             "price_money": money(v["price_cents"]),
         },
     } for v in mi.get("variations", [])]
-    item_data = {"name": mi["name"], "description": mi.get("description", "") or "",
+    desc = mi.get("description", "") or ""
+    item_data = {"name": mi["name"], "description": desc, "description_html": desc,
                  "variations": variations}
     if tax_id:
         item_data["tax_ids"] = [tax_id]
@@ -84,7 +89,8 @@ def diff(sq, mi, cat_id, cat_name):
     cur = sq["item_data"]
     if (cur.get("name") or "") != mi["name"]:
         ch.append(f'name "{cur.get("name")}" -> "{mi["name"]}"')
-    if (cur.get("description") or "") != (mi.get("description") or ""):
+    cur_desc = cur.get("description_html") or cur.get("description") or ""
+    if cur_desc != (mi.get("description") or ""):
         ch.append("description")
     if cat_id and (cur.get("reporting_category") or {}).get("id") != cat_id:
         ch.append(f"category -> {cat_name}")
