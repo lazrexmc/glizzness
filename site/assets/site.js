@@ -56,8 +56,8 @@
   document.querySelectorAll(".js-email-link").forEach(function (el) { if (email) { el.href = "mailto:" + email; if (!el.textContent.trim()) el.textContent = email; } });
 
   /* Social links: reveal + wire when a URL is set, keep hidden when blank */
-  document.querySelectorAll(".js-fb").forEach(function (el) { var u = window.GLIZZNESS_FACEBOOK; if (u) { el.href = u; el.hidden = false; } else { el.hidden = true; } });
-  document.querySelectorAll(".js-ig").forEach(function (el) { var u = window.GLIZZNESS_INSTAGRAM; if (u) { el.href = u; el.hidden = false; } else { el.hidden = true; } });
+  document.querySelectorAll(".js-fb").forEach(function (el) { var u = window.GLIZZNESS_FACEBOOK; if (u) { el.href = u; el.target = "_blank"; el.rel = "noopener noreferrer"; el.hidden = false; } else { el.hidden = true; } });
+  document.querySelectorAll(".js-ig").forEach(function (el) { var u = window.GLIZZNESS_INSTAGRAM; if (u) { el.href = u; el.target = "_blank"; el.rel = "noopener noreferrer"; el.hidden = false; } else { el.hidden = true; } });
 
   /* ---- "Request this package" -> preselect + scroll to form ---- */
   var pkgSelect = document.getElementById("f-package");
