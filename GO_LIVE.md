@@ -29,6 +29,11 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 `select count(*) from catering_leads;` returns a number (0 is fine).
 
 ## 2. Website — deploy `site/` to Cloudflare Pages
+> **✅ DEPLOYED 2026-07-12** — live at **`glizzness.pages.dev`**, verified (home, menu from `menu.json`,
+> live Where-We-Vend calendar + collapse, `_redirects` clean URLs, social/DoorDash wired). Deployed via
+> **Cloudflare Pages → Connect to Git** (output dir `site`; the Workers/`wrangler` flow was the wrong path).
+> **Remaining: custom domain** — point `glizzness.com` at Pages (step 4) once you're ready (careful: MX/email).
+
 GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**. Full notes: `site/README.md`.
 
 1. **Push** the repo to GitHub (remote already set: `github.com/lazrexmc/glizzness`).
