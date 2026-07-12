@@ -21,6 +21,12 @@
       "blurb": "Awesome in their own right — just not quite a Glizzy."
     },
     {
+      "key": "small-plates",
+      "square_category": "Small Plates",
+      "heading": "Small Plates",
+      "blurb": "Smaller bites — great to share, or just to snack."
+    },
+    {
       "key": "vegetarian",
       "square_category": "Vegetarian",
       "heading": "Vegetarian",
@@ -94,7 +100,7 @@
       "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
       "section": "glizzy",
       "name": "Hog' N' Dog",
-      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our tangy BBQ mustard.",
+      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our own house-made tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -104,6 +110,20 @@
         }
       ],
       "favorite": true
+    },
+    {
+      "square_id": "NEW_nacho_glizzy",
+      "section": "glizzy",
+      "name": "Nacho Glizzy",
+      "description": "A Glizzy loaded with nacho cheese, our salsa blend, and crumbled cheese chips.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_nacho_glizzy",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
     },
     {
       "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
@@ -218,20 +238,6 @@
       ]
     },
     {
-      "square_id": "IANY56Y3X6MZYEHFH3B4PR2E",
-      "section": "not-a-glizzy",
-      "name": "Tamale",
-      "description": "Fresh-made with our signature pulled pork in a house-made red chile sauce. Mondays only — all day, until we sell out.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "27YYY7UH6KHUXORAOHPVDN7X",
-          "name": "Regular",
-          "price_cents": 400
-        }
-      ]
-    },
-    {
       "square_id": "P5NVJPA6JUIZ5ELKM5F4P3PV",
       "section": "not-a-glizzy",
       "name": "Chicken Teriyaki",
@@ -309,7 +315,7 @@
     },
     {
       "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
-      "section": "not-a-glizzy",
+      "section": "small-plates",
       "name": "Nachos",
       "description": "Tortilla chips piled high in a boat, covered in queso. Add cold toppings from the bar.",
       "website": true,
@@ -324,7 +330,7 @@
     },
     {
       "square_id": "NEW_chili_nachos",
-      "section": "not-a-glizzy",
+      "section": "small-plates",
       "name": "Chili Nachos",
       "description": "Our Nachos, loaded with house-made bean-free chili.",
       "website": true,
@@ -338,7 +344,7 @@
     },
     {
       "square_id": "NEW_pulled_pork_nachos",
-      "section": "not-a-glizzy",
+      "section": "small-plates",
       "name": "Pulled Pork Nachos",
       "description": "Our Nachos, piled with slow-roasted pulled pork.",
       "website": true,
@@ -351,8 +357,22 @@
       ]
     },
     {
+      "square_id": "IANY56Y3X6MZYEHFH3B4PR2E",
+      "section": "small-plates",
+      "name": "Tamale",
+      "description": "Fresh-made with our signature pulled pork in a house-made red chile sauce. Mondays only — all day, until we sell out.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "27YYY7UH6KHUXORAOHPVDN7X",
+          "name": "Regular",
+          "price_cents": 400
+        }
+      ]
+    },
+    {
       "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
-      "section": "not-a-glizzy",
+      "section": "small-plates",
       "name": "Street Corn",
       "description": "Traditional Mexican street food — roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
       "website": true,
