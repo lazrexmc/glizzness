@@ -25,3 +25,12 @@ Running list of open action items. Add dated entries; check them off or delete w
   - **(d) Auto-reply** — send the customer a "thanks, we'll be in touch" confirmation on submit.
   - **(e) Where leads live day-to-day** — the operator's actual working view of the pipeline.
   *(added 2026-07-12)*
+
+- [ ] **Add niche event sources + event-type sorting to the vending map** — high-value niches food carts
+  can hit that aren't in the general festival lists:
+  - **Mountain-bike festivals** (booming in MO & AR) — sources: https://www.lokievents.com/ and
+    https://www.bikereg.com/events
+  - **Sports tournaments** (captive, hungry crowds) — source: https://www.tournamentlinks.com/
+  Mine these into the vending-circuit dataset, and add a **category / event-type filter** to the map
+  (festivals, concerts, music venues, mountain-bike events, sports tournaments, fairs, …) so we can sort by
+  type. *(added 2026-07-12)*
