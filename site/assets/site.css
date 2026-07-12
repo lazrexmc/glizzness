@@ -248,6 +248,8 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .band--cream .card { background: var(--cream-2); border-color: var(--line-l); box-shadow: none; }
 .band--cream .card h3 { color: var(--ink); }
 .band--cream .card p { color: var(--muted-l); }
+.band--cream .card__k { color: var(--gold-deep); }          /* number: readable dark-gold on cream */
+.band--cream .card .g-gold { color: var(--gold-deep); }     /* "Order now →" footer: same */
 
 .tag {
   display: inline-block; font-size: .7rem; font-weight: 800; text-transform: uppercase;
