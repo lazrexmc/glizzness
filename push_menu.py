@@ -8,8 +8,10 @@ section), and each variation's name + price. It also:
 Matches items + variations by square_id, so updates happen in place — never duplicates.
 
 Does NOT touch tax or modifier (add-on) settings on EXISTING items — those are
-preserved from the current export (managed by catalog_modifiers.py). New items are
-created taxed, at all locations, with no modifiers.
+preserved from the current export (managed by catalog_modifiers.py). New website
+items are created taxed, at all locations, visible + orderable on Square Online
+(ecom_visibility/ecom_available), with no modifiers. DoorDash channel membership is
+owned by the DoorDash integration (not the catalog API) — manage it there.
 
 Run order when you also fixed modifiers: catalog_modifiers.py --apply -> pull_catalog.py
 -> push_menu.py.
@@ -75,6 +77,12 @@ def build_create(mi, cat_id, tax_id):
     desc = mi.get("description", "") or ""
     item_data = {"name": mi["name"], "description": desc, "description_html": desc,
                  "variations": variations}
+    if mi.get("website", True):
+        # new website items default to visible + orderable on Square Online / Ordering.
+        # (POS is automatic; DoorDash channel membership is owned by the DoorDash integration,
+        #  not the catalog API, so it's still managed from the DoorDash channel manager.)
+        item_data["ecom_visibility"] = "VISIBLE"
+        item_data["ecom_available"] = True
     if tax_id:
         item_data["tax_ids"] = [tax_id]
     if cat_id:
