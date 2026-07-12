@@ -70,7 +70,7 @@ def render(doc, warn):
         rows = [i for i in doc["items"] if i.get("website") and i.get("section") == sec["key"]]
         if not rows:
             continue
-        rows.sort(key=lambda i: (min(prices_of(i)) if prices_of(i) else 10**9, i["name"].lower()))
+        # order follows menu.json (edit the "items" array to reorder within a section)
 
         out.append('        <div class="menu-sec">')
         out.append('          <div class="menu-sec__h">')

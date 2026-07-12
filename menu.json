@@ -78,7 +78,7 @@
       "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
       "section": "glizzy",
       "name": "Apple Brat",
-      "description": "One of our favorites from Patchwork Family Farms — this brat is infused with apples, like fall on a bun!",
+      "description": "One of our favorites from Patchwork Family Farms — this brat is infused with apples, like fall on a bun.",
       "website": true,
       "variations": [
         {
@@ -111,7 +111,7 @@
       "variations": [
         {
           "square_id": "GJDRV4AAD5JMPDZQIRVCQZLO",
-          "name": "Regular",
+          "name": "Glizzy",
           "price_cents": 700
         },
         {
@@ -130,12 +130,12 @@
       "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
       "section": "glizzy",
       "name": "Hog' N' Dog",
-      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our own tangy BBQ mustard.",
+      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
           "square_id": "VL7BDMS62Q7PG3YO5RWG3OV4",
-          "name": "Classic Glizzy",
+          "name": "Glizzy",
           "price_cents": 700
         },
         {
@@ -154,7 +154,7 @@
       "square_id": "TG66QACP6SGS7QERS4IXVPQP",
       "section": "glizzy",
       "name": "Something Fowl",
-      "description": "A Classic Glizzy topped with our honey BBQ chicken — a little sweet, a little salty, and it all pairs perfectly together.",
+      "description": "A Glizzy topped with our honey BBQ chicken — a little sweet, a little salty, and just right.",
       "website": true,
       "variations": [
         {
@@ -230,7 +230,7 @@
       "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
       "section": "not-a-glizzy",
       "name": "Pulled Pork",
-      "description": "Our Hog' N' Dog without the dog, and more pulled pork! Slow-roasted pulled pork piled high in the bun, drizzled with our tangy BBQ mustard.",
+      "description": "Our Hog' N' Dog without the dog — slow-roasted pulled pork piled high on a bun, drizzled with our tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -277,7 +277,7 @@
       "square_id": "ES2DDLQP4KRRHCFFCUXQTETW",
       "section": "sides",
       "name": "Chips",
-      "description": "Random bag of variety chips",
+      "description": "A random bag of variety chips.",
       "website": true,
       "variations": [
         {
@@ -358,7 +358,7 @@
     },
     {
       "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
-      "section": "sides",
+      "section": "not-a-glizzy",
       "name": "Street Corn",
       "description": "Traditional Mexican street food — roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
       "website": true,
@@ -401,7 +401,7 @@
     {
       "square_id": "RAN4UBWTUQFB7MFXSDXO42GR",
       "section": "drinks",
-      "name": "Dr. Pepper Can",
+      "name": "Dr Pepper",
       "description": "An ice-cold can of Dr Pepper.",
       "website": true,
       "variations": [
