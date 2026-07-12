@@ -75,16 +75,30 @@
       ]
     },
     {
-      "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
+      "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
       "section": "glizzy",
-      "name": "Apple Brat",
-      "description": "One of our favorites from Patchwork Family Farms — this brat is infused with apples, like fall on a bun.",
+      "name": "Chili Dog",
+      "description": "Our house-made bean-free chili poured over a Glizzy, topped with cheese and crispy onions.",
       "website": true,
       "variations": [
         {
-          "square_id": "JMI4AG25NJ4XG55C4O4VN3BF",
+          "square_id": "GJDRV4AAD5JMPDZQIRVCQZLO",
           "name": "Regular",
-          "price_cents": 600
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
+      "section": "glizzy",
+      "name": "Hog' N' Dog",
+      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our tangy BBQ mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "VL7BDMS62Q7PG3YO5RWG3OV4",
+          "name": "Regular",
+          "price_cents": 700
         }
       ]
     },
@@ -103,54 +117,6 @@
       ]
     },
     {
-      "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
-      "section": "glizzy",
-      "name": "Chili Dog",
-      "description": "Our house-made bean-free chili poured over your Glizzy, topped with secret-recipe cheese sauce.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "GJDRV4AAD5JMPDZQIRVCQZLO",
-          "name": "Glizzy",
-          "price_cents": 700
-        },
-        {
-          "square_id": "3RDTUJ5AKHZJ6FWWLUHZ7FMQ",
-          "name": "Pulled Pork",
-          "price_cents": 900
-        },
-        {
-          "square_id": "DTHG3GCD3X44VAM3HI57AJAK",
-          "name": "Brat",
-          "price_cents": 800
-        }
-      ]
-    },
-    {
-      "square_id": "SOY7Q67SHYAGH7P3HGRP3TGN",
-      "section": "glizzy",
-      "name": "Hog' N' Dog",
-      "description": "Slow-roasted pulled pork, piled on a Glizzy and drizzled with our tangy BBQ mustard.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "VL7BDMS62Q7PG3YO5RWG3OV4",
-          "name": "Glizzy",
-          "price_cents": 700
-        },
-        {
-          "square_id": "34TITOQCIGC3EKNP37GIC4AL",
-          "name": "Pulled Pork",
-          "price_cents": 900
-        },
-        {
-          "square_id": "SGI2GSWBZI4CB4DU23MJKF3N",
-          "name": "Brat",
-          "price_cents": 800
-        }
-      ]
-    },
-    {
       "square_id": "TG66QACP6SGS7QERS4IXVPQP",
       "section": "glizzy",
       "name": "Something Fowl",
@@ -165,6 +131,48 @@
       ]
     },
     {
+      "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
+      "section": "glizzy",
+      "name": "Apple Brat",
+      "description": "One of our favorites from Patchwork Family Farms — this brat is infused with apples, like fall on a bun.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "JMI4AG25NJ4XG55C4O4VN3BF",
+          "name": "Regular",
+          "price_cents": 600
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_chili_brat",
+      "section": "glizzy",
+      "name": "Chili Brat",
+      "description": "Our Patchwork apple brat, loaded with house-made bean-free chili, cheese, and crispy onions.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_chili_brat",
+          "name": "Regular",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_hog_n_brat",
+      "section": "glizzy",
+      "name": "Hog' N' Brat",
+      "description": "Our Patchwork apple brat topped with slow-roasted pulled pork and tangy BBQ mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_hog_n_brat",
+          "name": "Regular",
+          "price_cents": 800
+        }
+      ]
+    },
+    {
       "square_id": "ME2FHK3KF7AAIP3ZB6OK3F6J",
       "section": "glizzy",
       "name": "Half Pound Smoked Apple Brat",
@@ -175,6 +183,34 @@
           "square_id": "TTJKFYFAODPZVIEVBNMPFGFA",
           "name": "Regular",
           "price_cents": 1000
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_chili_half_pounder",
+      "section": "glizzy",
+      "name": "Chili Half Pounder",
+      "description": "The half-pound smoked apple brat, loaded with house-made chili, cheese, and crispy onions.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_chili_half_pounder",
+          "name": "Regular",
+          "price_cents": 1200
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_hog_n_half_pounder",
+      "section": "glizzy",
+      "name": "Hog' N' Half Pounder",
+      "description": "The half-pound smoked apple brat, piled with slow-roasted pulled pork and tangy BBQ mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_hog_n_half_pounder",
+          "name": "Regular",
+          "price_cents": 1200
         }
       ]
     },
@@ -227,25 +263,6 @@
       ]
     },
     {
-      "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
-      "section": "not-a-glizzy",
-      "name": "Pulled Pork",
-      "description": "Our Hog' N' Dog without the dog — slow-roasted pulled pork piled high on a bun, drizzled with our tangy BBQ mustard.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "AJE6KQR7GK4RLJZTNEAJ44PV",
-          "name": "Regular",
-          "price_cents": 700
-        },
-        {
-          "square_id": "62QBXCSDGLJHNPWMGMWKE5TL",
-          "name": "Chili and Cheese",
-          "price_cents": 900
-        }
-      ]
-    },
-    {
       "square_id": "744CFH6JFCF7QMLQRQ2WTV6B",
       "section": "not-a-glizzy",
       "name": "Sloppy Joe",
@@ -256,6 +273,90 @@
           "square_id": "HJDRWD2HLQKG6VABDCM7ZRZV",
           "name": "Regular",
           "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
+      "section": "not-a-glizzy",
+      "name": "Pulled Pork Sandwich",
+      "description": "Slow-roasted pulled pork piled high on a round bun, drizzled with our tangy BBQ mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "AJE6KQR7GK4RLJZTNEAJ44PV",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_pulled_pork_roll",
+      "section": "not-a-glizzy",
+      "name": "Pulled Pork Roll",
+      "description": "Slow-roasted pulled pork stuffed in a soft roll — our hog-style take on the lobster roll, drizzled with tangy BBQ mustard.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_pulled_pork_roll",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
+      "section": "not-a-glizzy",
+      "name": "Nachos",
+      "description": "Tortilla chips piled high in a boat, covered in queso. Add cold toppings from the bar.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "ID2VZ4BXG3FAO5C4N3QBNA3Z",
+          "name": "Regular",
+          "price_cents": 500
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_chili_nachos",
+      "section": "not-a-glizzy",
+      "name": "Chili Nachos",
+      "description": "Tortilla chips in a boat, queso, and our house-made bean-free chili. Add cold toppings from the bar.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_chili_nachos",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "NEW_pulled_pork_nachos",
+      "section": "not-a-glizzy",
+      "name": "Pulled Pork Nachos",
+      "description": "Tortilla chips in a boat, queso, and slow-roasted pulled pork. Add cold toppings from the bar.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "NEWVAR_pulled_pork_nachos",
+          "name": "Regular",
+          "price_cents": 700
+        }
+      ]
+    },
+    {
+      "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
+      "section": "not-a-glizzy",
+      "name": "Street Corn",
+      "description": "Traditional Mexican street food — roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
+      "website": true,
+      "variations": [
+        {
+          "square_id": "TCS5YH2ZYGV5ZNBGH2WW5GAX",
+          "name": "Regular",
+          "price_cents": 500
         }
       ]
     },
@@ -333,40 +434,30 @@
       "retired": true
     },
     {
-      "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
-      "section": "not-a-glizzy",
-      "name": "Nachos",
-      "description": "Tortilla chips piled high in a serving boat, covered in queso, then finished with your choice of cold toppings from the bar.",
+      "square_id": "JBP7NDEPI5446HWMVGOL7QWX",
+      "section": "sides",
+      "name": "Potato Salad",
+      "description": "Creamy house potato salad.",
       "website": true,
       "variations": [
         {
-          "square_id": "ZW3XWWRZBMW3CTNDSFM56L7U",
-          "name": "Chili",
-          "price_cents": 700
-        },
-        {
-          "square_id": "4II2ACIDCS2LH46GQWNT2RZC",
-          "name": "Pulled Pork",
-          "price_cents": 700
-        },
-        {
-          "square_id": "ID2VZ4BXG3FAO5C4N3QBNA3Z",
-          "name": "Normal",
-          "price_cents": 500
+          "square_id": "CUKEUSRJSDGK24646CZZFTM3",
+          "name": "Regular",
+          "price_cents": 300
         }
       ]
     },
     {
-      "square_id": "EECGJXKQT3GDN63IUXVCF7EX",
-      "section": "not-a-glizzy",
-      "name": "Street Corn",
-      "description": "Traditional Mexican street food — roasted, seasoned corn off the cob, piled on a bed of tortilla chips.",
+      "square_id": "FJOW3CHJPIQCPEWMM6XRKM4Y",
+      "section": "sides",
+      "name": "Cole Slaw",
+      "description": "Crisp, creamy cole slaw.",
       "website": true,
       "variations": [
         {
-          "square_id": "TCS5YH2ZYGV5ZNBGH2WW5GAX",
+          "square_id": "RRXRYHGJ3IMSBXEJGGEC7RQQ",
           "name": "Regular",
-          "price_cents": 500
+          "price_cents": 300
         }
       ]
     },
@@ -423,34 +514,6 @@
           "square_id": "BAWH4ZGIXIF73YPZSQMD2VAS",
           "name": "Regular",
           "price_cents": 500
-        }
-      ]
-    },
-    {
-      "square_id": "JBP7NDEPI5446HWMVGOL7QWX",
-      "section": "sides",
-      "name": "Potato Salad",
-      "description": "Creamy house potato salad.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "CUKEUSRJSDGK24646CZZFTM3",
-          "name": "Regular",
-          "price_cents": 300
-        }
-      ]
-    },
-    {
-      "square_id": "FJOW3CHJPIQCPEWMM6XRKM4Y",
-      "section": "sides",
-      "name": "Cole Slaw",
-      "description": "Crisp, creamy cole slaw.",
-      "website": true,
-      "variations": [
-        {
-          "square_id": "RRXRYHGJ3IMSBXEJGGEC7RQQ",
-          "name": "Regular",
-          "price_cents": 300
         }
       ]
     }
