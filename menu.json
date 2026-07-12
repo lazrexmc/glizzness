@@ -221,7 +221,7 @@
       "square_id": "IANY56Y3X6MZYEHFH3B4PR2E",
       "section": "not-a-glizzy",
       "name": "Tamale",
-      "description": "Fresh-made with our signature pulled pork and house-made puerco con chile sauce. Mondays only — all day, until we sell out.",
+      "description": "Fresh-made with our signature pulled pork in a house-made red chile sauce. Mondays only — all day, until we sell out.",
       "website": true,
       "variations": [
         {
@@ -255,7 +255,7 @@
       "square_id": "ACWKCTBNJ4F3TNZVWT6B7JW4",
       "section": "not-a-glizzy",
       "name": "Shredded Chicken",
-      "description": "Shredded chicken smothered in BBQ sauce and honey, piled high on a bun.",
+      "description": "Slow-cooked, hand-shredded chicken smothered in our honey-sweet BBQ, piled high on a bun.",
       "website": true,
       "variations": [
         {
@@ -269,7 +269,7 @@
       "square_id": "744CFH6JFCF7QMLQRQ2WTV6B",
       "section": "not-a-glizzy",
       "name": "Sloppy Joe",
-      "description": "A classic sloppy joe piled on a bun.",
+      "description": "The sloppy joe with a Glizzness twist — extra saucy, boldly seasoned, and unapologetically messy. Piled high on a bun; napkins not optional.",
       "website": true,
       "variations": [
         {
@@ -283,7 +283,7 @@
       "square_id": "QQOA4ZPYR7XMSZMNPTMZGTFA",
       "section": "not-a-glizzy",
       "name": "Pulled Pork Sandwich",
-      "description": "Slow-roasted pulled pork piled high on a round bun, drizzled with our tangy BBQ mustard.",
+      "description": "Slow-roasted pulled pork piled high on a bun, drizzled with our tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -297,13 +297,13 @@
       "square_id": "NEW_pulled_pork_roll",
       "section": "not-a-glizzy",
       "name": "Pulled Pork Roll",
-      "description": "Slow-roasted pulled pork stuffed in a soft roll — our hog-style take on the lobster roll, drizzled with tangy BBQ mustard.",
+      "description": "A hot-dog bun stuffed with a generous pile of slow-roasted pulled pork — our hog-style take on the lobster roll, drizzled with tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
           "square_id": "NEWVAR_pulled_pork_roll",
           "name": "Regular",
-          "price_cents": 700
+          "price_cents": 900
         }
       ]
     },
@@ -326,7 +326,7 @@
       "square_id": "NEW_chili_nachos",
       "section": "not-a-glizzy",
       "name": "Chili Nachos",
-      "description": "Tortilla chips in a boat, queso, and our house-made bean-free chili. Add cold toppings from the bar.",
+      "description": "Our Nachos, loaded with house-made bean-free chili.",
       "website": true,
       "variations": [
         {
@@ -340,7 +340,7 @@
       "square_id": "NEW_pulled_pork_nachos",
       "section": "not-a-glizzy",
       "name": "Pulled Pork Nachos",
-      "description": "Tortilla chips in a boat, queso, and slow-roasted pulled pork. Add cold toppings from the bar.",
+      "description": "Our Nachos, piled with slow-roasted pulled pork.",
       "website": true,
       "variations": [
         {
@@ -368,7 +368,7 @@
       "square_id": "FHYYWK6BPMBHGCZZA26FU7DJ",
       "section": "vegetarian",
       "name": "Jackfruit",
-      "description": "Jackfruit, seasoned and roasted to perfection, served on our bun.",
+      "description": "Seasoned and roasted jackfruit — have it on a bun, a hot-dog bun, over chips, or all on its own.",
       "website": true,
       "variations": [
         {
@@ -382,7 +382,7 @@
       "square_id": "ES2DDLQP4KRRHCFFCUXQTETW",
       "section": "sides",
       "name": "Chips",
-      "description": "A random bag of variety chips.",
+      "description": "A regularly rotating variety of bagged chips.",
       "website": true,
       "variations": [
         {
@@ -441,7 +441,7 @@
       "square_id": "JBP7NDEPI5446HWMVGOL7QWX",
       "section": "sides",
       "name": "Potato Salad",
-      "description": "Creamy house potato salad.",
+      "description": "Our house potato salad swings between rich-and-creamy and zippy mustard depending on the day — ask what's in the pan.",
       "website": true,
       "variations": [
         {
@@ -455,7 +455,7 @@
       "square_id": "FJOW3CHJPIQCPEWMM6XRKM4Y",
       "section": "sides",
       "name": "Cole Slaw",
-      "description": "Crisp, creamy cole slaw.",
+      "description": "Fresh-chopped slaw — some days cool and creamy, some days bright and vinegary. Ask what we're serving today.",
       "website": true,
       "variations": [
         {
