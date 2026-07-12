@@ -84,6 +84,27 @@ def main():
         print(f"  {t:15} {n}")
     print(f"\n  {len(cats)} categories, {len(mods)} modifier lists")
 
+    # ---- description coverage ----
+    # description_html is the CUSTOMER-FACING field (Square Online + DoorDash show it). The legacy
+    # `description` field is deprecated and is NOT shown to customers.
+    def _nm(o):     return o.get("item_data", {}).get("name") or o["id"]
+    def _html(o):   return (o.get("item_data", {}).get("description_html") or "").strip()
+    def _legacy(o): return (o.get("item_data", {}).get("description") or "").strip()
+    n_html  = sum(1 for o in items if _html(o))
+    blanked = sorted(_nm(o) for o in items if _legacy(o) and not _html(o))
+    no_desc = sorted(_nm(o) for o in items if not _html(o) and not _legacy(o))
+    print("\n== DESCRIPTION COVERAGE ==")
+    print(f"  customer-facing (description_html, shown on Square Online & DoorDash): {n_html}/{len(items)}")
+    if blanked:
+        print(f"  WARNING: {len(blanked)} item(s) have a legacy description but a BLANK description_html")
+        print( "           -> these render blank on DoorDash; re-run:  python push_menu.py --apply")
+        for x in blanked[:40]:
+            print(f"     - {x}")
+    if no_desc:
+        print(f"  {len(no_desc)} item(s) have no description at all:")
+        for x in no_desc[:40]:
+            print(f"     - {x}")
+
     # ---- triage flags ----
     name_counts = collections.Counter(
         (o.get("item_data", {}).get("name") or "").strip().lower() for o in items)
