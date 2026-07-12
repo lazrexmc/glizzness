@@ -48,6 +48,8 @@
   wire(".js-text", smsHref);
   wire(".js-email", mailHref);
   wire(".js-doordash", ddSet ? dd : "");
+  /* DoorDash is an external site -> open in a new tab (only when a real URL is set; the order.html fallback stays same-tab) */
+  document.querySelectorAll(".js-doordash").forEach(function (el) { if (ddSet) { el.target = "_blank"; el.rel = "noopener noreferrer"; } });
 
   /* Plain phone/email text targets */
   document.querySelectorAll(".js-phone-text").forEach(function (el) { if (phone) el.textContent = phone; });

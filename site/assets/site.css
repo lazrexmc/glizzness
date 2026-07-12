@@ -219,7 +219,7 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .status__label { font-weight: 800; text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--gold); }
 .status__text { color: var(--char); font-weight: 600; }
 .status__meta { color: var(--muted-d); font-size: .92rem; }
-.status a { margin-left: auto; }
+.status a { flex-basis: 100%; margin-top: 4px; justify-content: center; text-align: center; }
 
 /* ---- Section heading block ---- */
 .head { max-width: 62ch; }
