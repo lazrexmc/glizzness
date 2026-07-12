@@ -112,14 +112,14 @@
       "favorite": true
     },
     {
-      "square_id": "NEW_nacho_glizzy",
+      "square_id": "XJVFTYHV36GHU6WV6NOP22PU",
       "section": "glizzy",
       "name": "Nacho Glizzy",
       "description": "A Glizzy loaded with nacho cheese, our salsa blend, and crumbled cheese chips.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_nacho_glizzy",
+          "square_id": "YSH3DTDCO2DRO2RTJQFVT7E4",
           "name": "Regular",
           "price_cents": 700
         }
@@ -168,28 +168,28 @@
       ]
     },
     {
-      "square_id": "NEW_chili_brat",
+      "square_id": "RAVNSLW3KAVTYFXJZHLABC55",
       "section": "glizzy",
       "name": "Chili Brat",
       "description": "Our Patchwork apple brat, loaded with house-made bean-free chili, cheese, and crispy onions.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_chili_brat",
+          "square_id": "YY3I5CJPLRIVFOT6772ZVSH6",
           "name": "Regular",
           "price_cents": 800
         }
       ]
     },
     {
-      "square_id": "NEW_hog_n_brat",
+      "square_id": "WNEWZIIZEKM62RPZMNHRTETN",
       "section": "glizzy",
       "name": "Hog' N' Brat",
       "description": "Our Patchwork apple brat topped with slow-roasted pulled pork and tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_hog_n_brat",
+          "square_id": "POQXK52R4PA2FH5EDQ7R4PZM",
           "name": "Regular",
           "price_cents": 800
         }
@@ -210,28 +210,28 @@
       ]
     },
     {
-      "square_id": "NEW_chili_half_pounder",
+      "square_id": "CQ2MXWVMNRUYVAN45JIDOCEE",
       "section": "glizzy",
       "name": "Chili Half Pounder",
       "description": "The half-pound smoked apple brat, loaded with house-made chili, cheese, and crispy onions.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_chili_half_pounder",
+          "square_id": "MC4ISH4WYEEYADTJBM2LBUDO",
           "name": "Regular",
           "price_cents": 1200
         }
       ]
     },
     {
-      "square_id": "NEW_hog_n_half_pounder",
+      "square_id": "PHAARZ7A53BTMTZBQRNFNPB3",
       "section": "glizzy",
       "name": "Hog' N' Half Pounder",
       "description": "The half-pound smoked apple brat, piled with slow-roasted pulled pork and tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_hog_n_half_pounder",
+          "square_id": "QWHW2ZXRYF2TVYA2VCN657HO",
           "name": "Regular",
           "price_cents": 1200
         }
@@ -300,14 +300,14 @@
       ]
     },
     {
-      "square_id": "NEW_pulled_pork_roll",
+      "square_id": "I2WICKMZYTMPHFHGPIYTKYV4",
       "section": "not-a-glizzy",
       "name": "Pulled Pork Roll",
       "description": "A hot-dog bun stuffed with a generous pile of slow-roasted pulled pork — our hog-style take on the lobster roll, drizzled with tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_pulled_pork_roll",
+          "square_id": "22GBPZ6GDZJRD7BJGHVBUXLC",
           "name": "Regular",
           "price_cents": 900
         }
@@ -329,28 +329,28 @@
       "favorite": true
     },
     {
-      "square_id": "NEW_chili_nachos",
+      "square_id": "4XWRCDH5XQKQXHD72LGSBOXD",
       "section": "small-plates",
       "name": "Chili Nachos",
       "description": "Our Nachos, loaded with house-made bean-free chili.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_chili_nachos",
+          "square_id": "HXCIIV4I2LO6YWUZEX66ZBRW",
           "name": "Regular",
           "price_cents": 700
         }
       ]
     },
     {
-      "square_id": "NEW_pulled_pork_nachos",
+      "square_id": "H7I25Q4ZIIH6PW6XKARJFBTR",
       "section": "small-plates",
       "name": "Pulled Pork Nachos",
       "description": "Our Nachos, piled with slow-roasted pulled pork.",
       "website": true,
       "variations": [
         {
-          "square_id": "NEWVAR_pulled_pork_nachos",
+          "square_id": "IU76ZX5CGPK2M7IIQ62BMW4I",
           "name": "Regular",
           "price_cents": 700
         }
