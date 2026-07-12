@@ -3,7 +3,8 @@
 > **The master activation checklist.** Everything below is **built in the repo but not
 > yet live.** Work top-to-bottom — later steps assume earlier ones are done. Each step
 > says exactly what to click/run. Deep-dive docs are linked where they exist.
-> Last updated: 2026-07-10.
+> **Rebuilding from nothing after a disaster? See `REBUILD.md`.**
+> Last updated: 2026-07-12.
 
 ## What's already built (so you know the state)
 - **Website** — unified `site/` (Home, Menu, Order, Catering/Corporate, Where We Vend, 404). Browser-verified, **not deployed.**
