@@ -75,7 +75,8 @@ def render(doc, warn):
         out.append('        <div class="menu-sec">')
         out.append('          <div class="menu-sec__h">')
         out.append(f'            <h2>{sec["heading"]}</h2>')
-        out.append(f'            <p>{sec["blurb"]}</p>')
+        if (sec.get("blurb") or "").strip():
+            out.append(f'            <p>{sec["blurb"]}</p>')
         out.append("          </div>")
         out.append('          <div class="menu-list">')
         for i in rows:
