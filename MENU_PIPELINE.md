@@ -36,6 +36,19 @@ Never hand-edit `site/our-menu.html` between the markers — it gets overwritten
 - `"website": false` — hide from the site but keep selling it (Cart Only items, the generic "Sides" item).
 - `"retired": true` — remove it from Square on the next push.
 
+## Add-ons (toppings)
+
+The add-on / toppings card on the menu page is **also generated from `menu.json`** — the top-level
+`"addons"` block (`heading`, `blurb`, and `items[]` of `{name, price_cents, website, square_id}`).
+`gen_menu.py` renders it as a compact list **right after the Sides section** (`render_addons`). Set an
+add-on's `"website": false` to hide it from the site.
+
+> **Caveat — add-ons don't push to Square.** `push_menu.py` only manages items, not modifiers. Square's
+> **Add-Ons** modifier list is edited separately (`catalog_modifiers.py` / the dashboard). The `menu.json`
+> `addons` block currently **mirrors** the live Square list exactly (same 9, same prices, same IDs), but
+> changing an add-on price here updates the **website only** — update Square too, or the two drift.
+> (Future option: teach `catalog_modifiers.py` to read add-ons from `menu.json` so it's one source.)
+
 ## Why build-time and not a live Square fetch
 
 The Square Catalog API requires a **secret access token**, and Square exposes no anonymous catalog
@@ -52,22 +65,25 @@ because Square is down.
 
 Fix them in `menu.json`, then regenerate.
 
-## Open items
+## Current state (2026-07-13)
 
-`menu.json` is clean — 25 items, all website items described, `gen_menu.py` dry-run reports **no data
-problems**. (Something Fowl is now described; Taco/Turkey Link were removed.) The website menu is
-**already shipped**; only the Square push remains:
+Menu is **shipped and fully synced.** `menu.json` = **33 entries → 26 on the website, 7 hidden**
+(Classic Glizzy + Keychain are `website:false` POS/cart buttons; five are `retired` tombstones —
+Chicken Teriyaki, the generic Sides item, Walking Nachos, Pulled Pork Roll, Nacho Glizzy). `gen_menu.py`
+dry-run reports **no data problems**.
 
-1. **Website menu — done.** `site/our-menu.html` is already regenerated from `menu.json` and committed
-   (verified byte-identical to a fresh `gen_menu.py` render — `--write` is a no-op). Re-run only after
-   you edit `menu.json`.
-2. **Push the menu to Square (→ DoorDash):** `python push_menu.py` (dry run). Current diff: **22 updates,
-   0 creates, 0 deletes** — really just 5 description backfills (Sloppy Joe, Jackfruit, Chips, Water,
-   Keychain). The `retired` items (Chicken Teriyaki, generic **Sides**, **Walking Nachos**) are already
-   absent from Square, so the push deletes nothing. Then **Lance** runs `python push_menu.py --apply`
-   with `SQUARE_TOKEN`.
-   > **Walking Nachos** is intentionally **retired** (owner decision 2026-07-10) — off the site and
-   > already gone from Square, so the push deletes nothing. `Nachos` (the boat) is the live nachos item.
+- **Website — done.** `site/our-menu.html` *and* the home-page teaser both regenerate from `menu.json`
+  (`gen_menu.py --write`). Re-run only after editing `menu.json`; Cloudflare Pages redeploys on commit.
+- **Square — synced.** `pull_catalog.py` confirms **28 live items** (the 26 website items + the 2 hidden
+  POS buttons), every one `[1 var]`, **descriptions 28/28**. Website ↔ `menu.json` ↔ Square ↔ DoorDash are
+  in lockstep. Re-sync after a menu change: `pull_catalog.py` → `push_menu.py` (dry-run) → **Lance** runs
+  `push_menu.py --apply` with `SQUARE_TOKEN`.
+
+**Menu shape (2026-07-12/13 overhaul):** uniform single price per item (no more multi-price "Options:"
+display); pricing story = **"A Glizzy is $5 — premium dogs start at just $2 more."** Sections: Glizzy,
+Not-a-Glizzy (sandwiches), Small Plates (Nachos / Chili Nachos / Pulled Pork Nachos / Tamale / Street
+Corn), Vegetarian, Sides, Drinks. Chili items are **chili + cheese, no crispy onions** (owner removed).
+Nachos are individual items — the Square Item **Option** set was deleted so variation names are writable.
 
 ## Decisions already baked in
 
@@ -86,3 +102,7 @@ problems**. (Something Fowl is now described; Taco/Turkey Link were removed.) Th
   (Glizzy $5; Chili Dog / Hog' N' Dog $7 base; Brat $8 and Pulled Pork $9 stack above.)
 - Customer-visible typos fixed: `Glossy Classic`→`Glizzy Classic`, `Chilly`→`Chili`,
   `Pull Pork`→`Pulled Pork` (4 items).
+- **2026-07-12/13 menu overhaul:** uniform single-price items (dropped the multi-price "Options:"
+  display); new **Small Plates** section; **Pulled Pork Roll** and **Nacho Glizzy** retired; chili items
+  lost the crispy onions (chili + cheese only); **add-ons moved into `menu.json`** (`addons` block,
+  rendered after Sides — see the Add-ons section above).
