@@ -72,4 +72,33 @@ owner-provided — see rows above.)*
 Games, Diamond Council); whether Ballparks National / Scheels / Garmin sell outside-vendor spots; 2027 dates
 for the recurring series.
 
-<!-- runs 3–7 appended below as they complete -->
+## Run 3 — Rodeos · car shows · BBQ · air shows · balloons  ✅ *(104 agents, 24 verified claims; run 3 of 7)*
+
+> **Access pattern:** unlike bike races, these big events almost all **contract / jury their food vendors**
+> (you *apply*, often months ahead) or run exclusive concessions — fewer "just show up" spots, but the
+> crowds are the biggest yet. **Apply-early is the game.**
+
+| Event | City / venue | Date(s) | Category / crowd | Food access | Verdict |
+|---|---|---|---|---|---|
+| **Missouri State Fair** | Sedalia (~1 hr W) | **Aug 13–23, 2026** | fair + rodeo + BBQ, **~330k+** | **CONTRACTED** — apply `vendors@mda.mo.gov` (reviews Apr 1, prior-year priority) | ⭐ **TOP** — biggest crowd in range; spans 3 categories |
+| **American Royal World Series of BBQ** | Kansas City, **KS** (~2.5–3 hr, edge) | Sep 30–Oct 4, 2026 | BBQ, **55–60k**, open to public | apply — americanroyal.com (new campus, reduced 2026 capacity) | ✅ huge + public-facing |
+| **Birthplace of Route 66 Festival** | Springfield (~2.5 hr SW) | Aug 7–8, 2026 | car + motorcycle show, **65k+** | **JURIED + city limiting outside vendors** (centennial) → competitive | ✅/⚠️ big but hard to get in |
+| **PBR Outlaw Days** | Kansas City (T-Mobile Center, ~2 hr) | Oct 23–25, 2026 | bull riding + **free 3-day street festival** | vendor policy TBC | ✅ street-festival crowd |
+| **Sikeston Jaycee Bootheel Rodeo** | Sikeston (~3 hr SE, edge) | Aug 5–8, 2026 | rodeo, big regional | UNRESOLVED — access likely exists; confirm w/ Jaycees | ✅/⚠️ far but major |
+| **Show Me State Air Show** | **Jefferson City (~35 min!)** | Sep 12–13, 2026 | air + car show, kids zone | has vendors BUT **"not accepting food-vendor apps at this time"** | ⚠️ **closest, but likely closed** — ask anyway |
+| **My Car Swap Meet** | Sedalia (State Fairgrounds, ~1 hr) | Oct 16–17, 2026 | swap meet, smaller | **EASY** — $50 pre / $60 gate booths | ✅ low-barrier, close |
+| **MRCA county rodeos** | **Fulton/Callaway Co Fair (~25 min!)** Jul 24–25 · California/Moniteau Aug 5–6 · Sturgeon Aug 14–15 · Warrensburg Sep 11–12 · Pilot Grove Jul 17–18 | 2026 | local rodeos | per-event UNKNOWN — contact each organizer | ✅ **closest + local** |
+| **PBR Thunder Days** | Ridgedale (Thunder Ridge, ~3.5 hr) | Sep 4–6, 2026 | bull riding, outdoor | unknown | ⚠️ edge of range |
+| **Ozark Empire PRCA Rodeo** | Springfield | Mar 2026 *(passed)* | rodeo | booth request form | 🔁 2027 |
+| **Wings Over Whiteman** | Whiteman AFB, Knob Noster (close) | **no confirmed 2026 date** | air show, huge free draw | — | ⛔ watch for a 2026/2027 date |
+| **Spirit of St. Louis Air Show** | Chesterfield | passed; **returns 2029** | air show (Blue Angels) | — | ⛔ out of window |
+
+> ⚠️ **BALLOON CATEGORY = GAP.** The research verified **no** balloon festival beyond Centralia. But the
+> **Great Forest Park Balloon Race** (St. Louis, ~100k+, September) is a known giant that didn't surface a
+> confirmable 2026 date — **flag for a direct follow-up search** (plus mid-MO / Jeff City glows, Ozark rallies).
+
+**Open items:** food-vendor policy/fee for Sikeston, the PBR street festivals, and each MRCA county rodeo;
+whether the Jeff City air show ever opens vendor apps; Wings Over Whiteman 2026/2027 date; the whole balloon
+category (Great Forest Park especially).
+
+<!-- runs 4–7 appended below as they complete -->
