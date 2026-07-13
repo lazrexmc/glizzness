@@ -16,7 +16,11 @@ for the map filter. Legend: ⭐ top pick · ✅ actionable 2026 · 🔁 2027 rec
 | Event | City / venue | Date(s) | Crowd | Food situation | Verdict |
 |---|---|---|---|---|---|
 | **Show-Me State Games MTB** | Rock Bridge State Park, **Columbia** | **Sun Jul 19, 2026** (9am) | racers + families, multi-wave AM | UNKNOWN — call SMSG | ⭐ **home city, days away** |
-| **Missouri NICA** youth league | **5 venues TBA** | Aug 29–30 · Sep 12–13 · Sep 26–27 · Oct 10–11 · Oct 24–25 | hundreds of student-athletes + parents, all day | UNKNOWN (venues TBA) | ✅ **high** — watch missourimtb.org for locations |
+| **NICA #1 — Binder Lake Mini Bash** | Binder Lake, **Jefferson City** (~35 min) | Aug 29–30 | student-athletes + parents, all day | UNKNOWN | ✅ ⭐ **closest NICA — top pick** |
+| **NICA #2 — Escape from the Lion's Den** | **Rolla** (~1 hr 15) | Sep 12–13 | " (all day) | UNKNOWN | ✅ high — *note: same weekend as Loki Burnin at the Bluff (Sep 12)* |
+| **NICA #3 — Shawnee Bend Showdown** | **Warsaw** (~1.5 hr, Lake of the Ozarks) | Sep 26–27 | " (all day) | UNKNOWN | ✅ good |
+| **NICA #4 — Stocksdale Stampede** | **Liberty** (KC metro, ~2 hr) | Oct 10–11 | " (all day) | UNKNOWN | ✅ moderate (edge of range) |
+| **NICA #5 — Tussle at Two Rivers** | **Nixa** (Springfield area, ~2.5 hr) | Oct 24–25 | " (all day) | UNKNOWN | ✅ moderate (far edge) |
 | **Loki — Burnin at the Bluff** | Council Bluff Lake, Potosi (~2.5 hr SE) | Sep 12, 2026 | endurance field + crews | UNKNOWN | ✅ good (long dwell) |
 | **Loki — The Incinerator** | Route 66 State Park, Eureka (~2 hr E) | Sep 20, 2026 | enduro/XC | UNKNOWN | ✅ good |
 | **The Equalizer 50K/100K** (MO gravel state champ) | Marthasville (~1.5–2 hr E, Katy Trail) | **Sat Nov 7, 2026** | gravel field | **Has burger vendor (KT Caboose)** | ✅ moderate — differentiate (dogs vs burgers) or coordinate |
@@ -33,8 +37,9 @@ for the map filter. Legend: ⭐ top pick · ✅ actionable 2026 · 🔁 2027 rec
 | **Bentonville Bike Fest** | Bentonville, AR (~5 hr) | Jun 9–14, 2026 *(passed)* | ~15,000 | saturated vendor scene | ⛔ too far |
 | **Big Sugar Gravel** | Bentonville, AR (~5 hr) | Oct 17, 2026 | huge | own on-course/finish food | ⛔ too far |
 
-**Open items to confirm (from the research):** NICA venue locations; food-vendor policy + fees for
+**Open items to confirm (from the research):** food-vendor policy + fees for the NICA weekends,
 Show-Me State Games, both Loki fall races, and BT Epic; BT Epic's exact 2026 date; firm 2027 dates for
-Pedaler's Jamboree, The Big Rub, El Chupacabra, Furry Fifty.
+Pedaler's Jamboree, The Big Rub, El Chupacabra, Furry Fifty. *(NICA venues resolved 2026-07-13,
+owner-provided — see rows above.)*
 
 <!-- runs 2–7 appended below as they complete -->
