@@ -120,3 +120,38 @@ Running list of open action items. Add dated entries; check them off or delete w
 
   **Then automate** the manual build steps: Sam's receipt parsing (CSV/OCR → purchase lines), scheduled
   sales depletion, auto-generated reorder lists. *(added 2026-07-13)*
+
+- [ ] **Employee scheduling + staffing-to-demand system** — make sure Trint (cook) is at every event with
+  ENOUGH hands, and — the key philosophy — that the crew always works at the SAME sustainable pace: scale
+  volume by adding PEOPLE, never by making anyone cook faster or harder. *(Backlog.)*
+
+  **The philosophy (owner's — and it's a real ops concept, "labor standard / takt time"):** set a target
+  sustainable throughput per station (e.g. 1 cook comfortably makes ~X items/hr, 1 cashier ~Y orders/hr),
+  then staff each event to meet its expected demand AT that rate — so a bigger crowd means MORE
+  stations/people, not a faster or more stressed Trint. Consistent pressure, consistent pace, at any volume.
+
+  **Components:**
+  - **Staff roster** — people, roles/skills (cook / cashier / prep / runner), availability, contact.
+  - **Events to staff** — pulled from the confirmed vending schedule (`cart_schedule` / Google Calendar) +
+    confirmed catering bookings; each event carries a date/time, location, and expected crowd/volume.
+  - **Labor standards** — the sustainable per-station throughput rates (the pace we protect).
+  - **Demand → headcount** — estimate covers per event (crowd × capture% × items/order, or catering guest
+    count) ÷ per-person standard rate → required crew (cook/cashier/runner counts) + a buffer.
+  - **Assignment** — fill each event's required slots from available staff; flag **under-staffed** events and
+    double-booked people.
+  - **Staff view + notifications** — each person sees/accepts their shifts on mobile (same pattern as the
+    Scout board / Where-We-Vend page); reminders.
+
+  **Stack:** Supabase tables — `staff`, `staff_availability`, `staffing_standards` (throughput per role),
+  `shift_assignments`, and a computed `staffing_requirements` per event (events × demand × standards). Lance
+  builds/monitors in the Streamlit dashboard; staff use a mobile page. Integrates with the vending calendar +
+  catering bookings + the crowd estimates in `VENDING_PROSPECTS.md`.
+
+  **Build sequence:** (1) staff roster + availability; (2) define labor standards per station; (3) demand →
+  headcount model per event; (4) assignment engine (fill slots, flag gaps/conflicts); (5) staff-facing shift
+  view + Lance's scheduling view; (6) reminders; (7) later — auto-suggest staffing from event crowd
+  estimates, plus time tracking / labor-cost.
+
+  **Interlocks with the other backlog systems:** required headcount depends on event **crowd estimates**
+  (the prospect research) and menu **throughput** (the inventory/recipe BOM) — build them so they can share
+  data. *(added 2026-07-13)*
