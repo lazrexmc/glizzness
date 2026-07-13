@@ -42,4 +42,34 @@ Show-Me State Games, both Loki fall races, and BT Epic; BT Epic's exact 2026 dat
 Pedaler's Jamboree, The Big Rub, El Chupacabra, Furry Fifty. *(NICA venues resolved 2026-07-13,
 owner-provided — see rows above.)*
 
-<!-- runs 2–7 appended below as they complete -->
+## Run 2 — Sports tournaments  ✅ *(104 agents, 22 verified claims; run 2 of 7)*
+
+> ⚠️ **DECISIVE CROSS-CUTTING RULE (applies to every Columbia city-park event — all runs):** a **for-profit
+> cart cannot self-permit concessions in City of Columbia parks** (Cosmo Park, Antimi, A. Perry Philips,
+> Atkins) — concession permits go **only to non-profits**. You can legally vend there only if the **event
+> ORGANIZER invites/contracts you in under their Park Special Use Permit** (their site plan names the
+> food-vendor spots). **So the play everywhere is: get the organizer's invite — don't assume open access.**
+> (Source: como.gov park special-use permits.) Private complexes (Ballparks National, Scheels, Garmin) lean
+> the opposite way — **exclusive / approval-only concessions** — often closed regardless.
+
+| Event | City / venue | Date(s) | Sport / size | Food access | Verdict |
+|---|---|---|---|---|---|
+| **Show-Me State Games** | Columbia (MU-hosted, ~40 facilities) | **Jul 17–19 & Jul 24–26, 2026** | 28+ sports, **15,000+** | organizer-permit route; contact smsg@missouri.edu | ⭐ **TOP — home city** (dispersed + imminent) |
+| **USSSA July Diamond Challenge** | Lee's Summit (KC metro ~1.5–2 hr) | Jul 17–19, 2026 | baseball, **59 teams** | UNKNOWN | ✅ big field, but this weekend (imminent) |
+| **USSSA Season Finale** | Lee's Summit | Jul 24–26, 2026 | baseball, 36 teams | UNKNOWN | ✅ actionable (next weekend) |
+| **Mid MO Match Up 3** | **Boonville (~25–30 min!)** | Jul 19, 2026 | softball 12U–HS | UNKNOWN | ✅ very close, but 1-day + imminent |
+| **Diamond Council of Columbia** series | Columbia (Mizzou-affiliated) | 7 events Mar–Jun *(2026 passed)* | youth baseball/softball | Mizzou concession risk | 🔁 2027 — home city, verify concessions |
+| **Heartland Soccer** fall slate | **Swope Soccer Village, KC MO** (in-state) + Scheels/Garmin (KS) | Jul 31–Aug 2 · Aug 14–16 · Sep 4–6 · Sep 18–20 · Oct 2–4 · Nov 6–8 | soccer, huge | complexes approval-only | ✅/⛔ target the **Swope (MO)** dates; KS complexes likely closed |
+| **Heart of America Marathon** | Columbia (Nifong Park) | **Mon Sep 7, 2026** (Labor Day) | marathon/relay finish | city-park route | ✅ home city (smaller, time-concentrated) |
+| **Bear Creek Run Half** | Columbia | Oct 24, 2026 | half-marathon finish | post-race food provided | ✅ home city (small) |
+| **Shoreline Classic** | Ballparks National, Macks Creek (~1.75 hr) | Jul 24–26, 2026 | baseball + softball | **likely EXCLUSIVE** (own restaurant/bar) | ⛔ likely closed |
+| **Gold Ribbon Classic** | Ballparks National, Macks Creek | Sep 26–27, 2026 | softball | same complex | ⛔ likely closed |
+| **PG Midwest Super Select** | MU Taylor Stadium, Columbia | Jul 30–Aug 1/2, 2026 | baseball, only ~5 teams | Mizzou concessions | ⛔ low value (tiny + likely exclusive) |
+
+**Scope gaps (not resolved — candidates for a later targeted run):** AAU basketball/volleyball, lacrosse,
+7v7 football, wrestling (outside Show-Me State Games), disc golf, pickleball (pickleball source refuted).
+**Open items:** which organizers will invite a cart under their Columbia Special Use Permit (Show-Me State
+Games, Diamond Council); whether Ballparks National / Scheels / Garmin sell outside-vendor spots; 2027 dates
+for the recurring series.
+
+<!-- runs 3–7 appended below as they complete -->
