@@ -88,6 +88,14 @@ Running list of open action items. Add dated entries; check them off or delete w
 - [ ] **Inventory + reorder-point system** — track stock IN (purchases) vs OUT (sales) so we always know
   on-hand and when to reorder. *(Backlog — meaty; build incrementally.)*
 
+  **⚑ EVALUATE FIRST — Square-native vs custom (both options stay open):** Square is the home POS and has
+  **built-in inventory** (item-level stock counts, low-stock alerts, vendor management, and — in Square for
+  Retail — purchase orders + COGS), drivable from VS Code via the **Square Inventory + Catalog API**, exactly
+  like `push_menu.py` / `pull_catalog.py` already do. **Likely gap:** Square tracks stock of *sellable* items,
+  not the raw-ingredient **BOM depletion** described above (Chili Dog → dog + bun + chili) — so the recipe
+  layer may still need custom logic (or a Square add-on) on top. **Plan:** spike the Square Inventory API
+  first, use it for everything it covers, and build custom only for the recipe/ingredient math it can't do.
+
   **The core problem (owner's insight):** purchases, sales, and stock use THREE different vocabularies —
   Sam's/vendor receipt SKUs (what we BUY) ≠ Square POS menu items (what we SELL) ≠ raw inventory items
   (buns, dogs, brats, chili, cheese, chips, drinks, propane…). They must all map to one common **inventory
@@ -124,6 +132,14 @@ Running list of open action items. Add dated entries; check them off or delete w
 - [ ] **Employee scheduling + staffing-to-demand system** — make sure Trint (cook) is at every event with
   ENOUGH hands, and — the key philosophy — that the crew always works at the SAME sustainable pace: scale
   volume by adding PEOPLE, never by making anyone cook faster or harder. *(Backlog.)*
+
+  **⚑ EVALUATE FIRST — Square-native vs custom (both options stay open):** Square has **Team Management +
+  Square Shifts** (create/publish schedules, shift swaps, timecards), drivable from VS Code via the **Square
+  Labor / Team API** — that likely covers the scheduling *mechanics* (rosters, shifts, staff notifications)
+  out of the box. **Gap:** the staffing-to-demand / takt-time math (compute required headcount from an
+  event's crowd estimate at a fixed per-person pace) is NOT something Square does — that logic layers on top
+  of whichever scheduling backend we pick. **Plan:** spike Square Shifts/Labor API first; build custom only
+  for the demand → headcount model.
 
   **The philosophy (owner's — and it's a real ops concept, "labor standard / takt time"):** set a target
   sustainable throughput per station (e.g. 1 cook comfortably makes ~X items/hr, 1 cashier ~Y orders/hr),
