@@ -25,10 +25,26 @@ Running list of open action items. Add dated entries; check them off or delete w
   *(added 2026-07-12; notification shipped 2026-07-13)*
 
 - [ ] **Add niche event sources + event-type sorting to the vending map** — high-value niches food carts
-  can hit that aren't in the general festival lists:
-  - **Mountain-bike festivals** (booming in MO & AR) — sources: https://www.lokievents.com/ and
-    https://www.bikereg.com/events
-  - **Sports tournaments** (captive, hungry crowds) — source: https://www.tournamentlinks.com/
-  Mine these into the vending-circuit dataset, and add a **category / event-type filter** to the map
-  (festivals, concerts, music venues, mountain-bike events, sports tournaments, fairs, …) so we can sort by
-  type. *(added 2026-07-12)*
+  can hit that aren't in the general festival lists. **Deep-research in progress (2026-07-13):** a 7-run
+  serial sweep covering (1) MTB/gravel/cycling [lokievents, bikereg], (2) sports tournaments
+  [tournamentlinks], (3) rodeos/car-shows/BBQ/air-shows/hot-air-balloons, (4) dirt-track racing,
+  (5) wineries + MO wine trail, (6) motorcycle rallies/poker runs, (7) surrounding-county fairs + parish
+  festivals. (Serial, not parallel — parallel trips the web-search rate limiter.) Then: mine the results
+  into the vending-circuit dataset + add a **category / event-type filter** to the map so we can sort by
+  type. *(added 2026-07-12; research expanded 2026-07-13)*
+
+- [ ] **Unify everything under `glizzness.com` (one web address)** — consolidate the three properties so
+  there's a single front door. *(Backlog — do AFTER the Cloudflare domain switch and the niche research
+  runs; not urgent.)*
+  - **Festival / vending map** (`vending-map/`, currently `festivals.glizzness.com` on Netlify) — wire it
+    into the main site: embed `vending-map/embed.html` into the `site/events.html` placeholder ("Live map —
+    coming soon"), or host it at a clean path like `glizzness.com/festivals`. **Clean up first:** Phase-6
+    polish (event-type filter, defunct toggle, mobile), and confirm the prospecting map is meant to be
+    public (organizer contacts are visible — already accepted as public). Decide: keep the Netlify
+    subdomain vs. move the map into Cloudflare Pages as a subpath of the main site.
+  - **Accounting dashboard** (`glizzness.streamlit.app`) — internal, password-protected admin tool.
+    Optionally reachable at a memorable subdomain (e.g. `admin.glizzness.com`) via CNAME/Cloudflare — note
+    Streamlit Community Cloud has limited custom-domain support (may need a Cloudflare proxy/Worker; watch
+    the websocket). Keep it OUT of the public nav. Lowest priority of the three.
+  - Prereq: `glizzness.com` must be live on Cloudflare first (domain-switch task / `GO_LIVE.md §2`).
+  *(added 2026-07-13)*
