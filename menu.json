@@ -85,7 +85,7 @@
       "square_id": "6TVWLEFFDH2GBZKPZPVDGBSM",
       "section": "glizzy",
       "name": "Chili Dog",
-      "description": "Our house-made bean-free chili poured over a Glizzy, topped with cheese and crispy onions.",
+      "description": "Our house-made bean-free chili poured over a Glizzy, topped with cheese.",
       "website": true,
       "variations": [
         {
@@ -171,7 +171,7 @@
       "square_id": "RAVNSLW3KAVTYFXJZHLABC55",
       "section": "glizzy",
       "name": "Chili Brat",
-      "description": "Our Patchwork apple brat, loaded with house-made bean-free chili, cheese, and crispy onions.",
+      "description": "Our Patchwork apple brat, loaded with house-made bean-free chili and cheese.",
       "website": true,
       "variations": [
         {
@@ -213,7 +213,7 @@
       "square_id": "CQ2MXWVMNRUYVAN45JIDOCEE",
       "section": "glizzy",
       "name": "Chili Half Pounder",
-      "description": "The half-pound smoked apple brat, loaded with house-made chili, cheese, and crispy onions.",
+      "description": "The half-pound smoked apple brat, loaded with house-made chili and cheese.",
       "website": true,
       "variations": [
         {
@@ -304,14 +304,15 @@
       "section": "not-a-glizzy",
       "name": "Pulled Pork Roll",
       "description": "A hot-dog bun stuffed with a generous pile of slow-roasted pulled pork — our hog-style take on the lobster roll, drizzled with tangy BBQ mustard.",
-      "website": true,
+      "website": false,
       "variations": [
         {
           "square_id": "22GBPZ6GDZJRD7BJGHVBUXLC",
           "name": "Regular",
           "price_cents": 900
         }
-      ]
+      ],
+      "retired": true
     },
     {
       "square_id": "WKK27KC5VMJKSEE5I4UYZI5Z",
