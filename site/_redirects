@@ -7,6 +7,5 @@
 /delivery        /order            301
 /corporate       /catering         301
 /book            /catering#book    301
-/festivals       /events           301
 /where           /events           301
 /menu            /our-menu         301
