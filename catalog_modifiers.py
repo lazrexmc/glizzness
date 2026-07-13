@@ -28,9 +28,8 @@ HEADERS = {
 ITEM_MODLISTS = {
     "Glizzy":                        ["Add-Ons", "Topping Addition"],
     "Pulled Pork":                   ["Add-Ons"],
-    "Hog N' Dawg":                   ["Add-Ons"],
+    "Hog' N' Dog":                   ["Add-Ons"],
     "Nachos":                        ["Add-Ons"],
-    "Walking Chips":                 ["Add-Ons"],
     "Apple Brat":                    ["Add-Ons"],
     "Jackfruit":                     ["Add-Ons"],
     "Something Fowl":                ["Add-Ons"],

@@ -13,7 +13,7 @@ towing-proof, booked in advance. This is the lane that doesn't depend on foot tr
 **1 — Launch announcement (pin this)**
 > 🌭 You can now BOOK The Glizzness for your event in 60 seconds.
 > Grad parties, office lunches, game days, weddings, church events, team nights — we bring the
-> cart, the grill, and a chef-built menu right to you. Packages from $350.
+> cart, the grill, and a made-to-order menu right to you. Packages from $350.
 > 👉 Book now: {{BOOKING_URL}}  ·  or call/text {{PHONE}}
 
 **2 — Package spotlight (rotate weekly)**
@@ -21,13 +21,13 @@ towing-proof, booked in advance. This is the lane that doesn't depend on foot tr
 > house-made queso — $450, one hour of on-site service included. 🔥
 > Lock your date 👉 {{BOOKING_URL}}
 
-**3 — "We cater ANYTHING" (lean on Trint's culinary degree)**
-> Not just hot dogs. Trint is a culinary-school chef — tell us your vision and we'll build a
-> custom menu for your event. Nacho bars, brats & sausages, private chef dinners, and more.
+**3 — "We cater ANYTHING"**
+> Not just hot dogs — tell us your vision and we'll build a custom menu for your event.
+> Nacho bars, brats & sausages, full spreads, and more.
 > Fully customizable 👉 {{BOOKING_URL}}
 
 **4 — Seasonal / urgency (swap the occasion)**
-> Graduation season is here 🎓 — book The Glizzness before your date's gone. Chef-built, delivered
+> Graduation season is here 🎓 — book The Glizzness before your date's gone. Made to order, delivered
 > hot, zero cleanup for you. Dates fill fast in {month}. 👉 {{BOOKING_URL}}
 > _(Rotate the hook: grad parties → summer BBQs → back-to-school/Mizzou move-in → tailgates →
 >  holiday parties. Post 2–3×/week; boost the launch post with $20–30 targeted to Columbia + 25mi.)_
@@ -41,7 +41,7 @@ Columbia businesses book recurring lunches and events. One landed office account
 **Email / DM template**
 > Subject: Feeding your team or event? The Glizzness caters Columbia 🌭
 >
-> Hi {name} — I run The Glizzness, a Columbia food cart with a chef-built menu. We cater office
+> Hi {name} — I run The Glizzness, a Columbia food cart with a made-to-order menu. We cater office
 > lunches, client events, staff appreciation days, and parties — packages from $350, fully
 > customizable, delivered hot with on-site service.
 >

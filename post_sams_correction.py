@@ -24,9 +24,10 @@ WAVE_BUSINESS_ID = os.environ.get("WAVE_BUSINESS_ID", "")
 
 TAX_RATE = 0.05975  # Missouri reduced food rate
 
-# Wave account IDs
-SAMS_TAX_ID = "QWNjb3VudDoxOTU4MjYzNjk0NzIyOTAyOTM1O0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
-COGS_ID     = "QWNjb3VudDoxOTU4MjY0NTQ0MTQ0OTYwNDg5O0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg=="
+# Wave account IDs — env-overridable (WAVE_SAMS_TAX_ID / WAVE_COGS_ID); the defaults are the
+# current account references, kept so this annual one-off still runs without extra setup.
+SAMS_TAX_ID = os.environ.get("WAVE_SAMS_TAX_ID", "QWNjb3VudDoxOTU4MjYzNjk0NzIyOTAyOTM1O0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg==")
+COGS_ID     = os.environ.get("WAVE_COGS_ID",     "QWNjb3VudDoxOTU4MjY0NTQ0MTQ0OTYwNDg5O0J1c2luZXNzOmJhMmQwOGFkLTNhNzUtNDkxOC1iZDljLTc4MWFlZmFkMzczNg==")
 
 WAVE_GQL = "https://gql.waveapps.com/graphql/public"
 
