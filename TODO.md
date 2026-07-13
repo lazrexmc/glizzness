@@ -48,3 +48,39 @@ Running list of open action items. Add dated entries; check them off or delete w
     the websocket). Keep it OUT of the public nav. Lowest priority of the three.
   - Prereq: `glizzness.com` must be live on Cloudflare first (domain-switch task / `GO_LIVE.md §2`).
   *(added 2026-07-13)*
+
+- [ ] **Trint's event-triage app ("Scout board") — yes / no / maybe on prospect events** — the 7-run
+  vending research (`VENDING_PROSPECTS.md`) produces far too many events for Trint to sort out via the map.
+  Build him a dead-simple, phone-first decision tool. *(Backlog — build after the 7 research runs are
+  compiled; not urgent.)*
+
+  **Concept:** a private, mobile-first **card feed** (NOT the map) — one card per prospect event with big
+  **✅ Yes / 🤔 Maybe / ❌ No** buttons and an **"❓ Ask a question"** field. Grouped by date, and — unlike the
+  public "Where We Vend" list — it **must show multiple events on the same day**. Trint taps through; his
+  answers + questions land where Lance can act on them (Lance researches the questions, books the Yeses).
+
+  **Reuse the existing stack (same patterns as the catering form + Where We Vend):**
+  - **Data:** new Supabase tables — `event_prospects` (id, name, event_type, city, venue, lat/lng,
+    start/end date, crowd_estimate, food_policy [unknown/open/closed/competing], drive_time, distance,
+    description, source_url, `answer`) + `prospect_decisions` (prospect_id, decision enum yes/no/maybe,
+    question text, decided_by, created_at). RLS like `catering_leads`: anon INSERT/UPSERT, no public SELECT
+    of anything sensitive; Lance reads via service_role / the Streamlit dashboard.
+  - **Seed:** ETL the curated `VENDING_PROSPECTS.md` rows → `event_prospects` (a `gen_sql`-style loader,
+    same approach as the vending circuit).
+  - **Frontend:** a standalone mobile page (e.g. `scout.html` or a `scout/` folder), **unlinked from public
+    nav**, light passcode. Card feed grouped by date; huge tap targets; a decision saves instantly to
+    Supabase and marks the card; "undecided only" filter. Each card expands to full detail + source link +
+    Lance's answer to any question Trint asked.
+  - **Lance's side:** a "Prospect decisions" view (Streamlit dashboard page or a Supabase view) showing all
+    yes/maybe/no + questions; optional **Make.com webhook → Gmail alert** on a new decision/question (reuse
+    the `CATERING_LEADS.md` pipeline). Loop: Trint triages → Lance books the Yeses / researches the
+    questions & Maybes → answers flow back onto the card.
+
+  **Build sequence:** (1) finish + curate the 7-run research in `VENDING_PROSPECTS.md`; (2) schema migration
+  for the two tables; (3) ETL prospects → Supabase; (4) build the mobile card-feed page (date-grouped,
+  multi-event-per-day, Yes/No/Maybe + Ask, Supabase-wired); (5) decisions view for Lance + optional
+  Make→Gmail alert; (6) deploy privately, send Trint the link; (7) run the triage loop.
+
+  **Principles:** mobile-first / one-handed / huge buttons · zero-friction (private link + passcode, no real
+  login) · internal-only (never in public nav) · **multiple events per day is a hard requirement**.
+  *(added 2026-07-13)*
