@@ -101,4 +101,82 @@ for the recurring series.
 whether the Jeff City air show ever opens vendor apps; Wings Over Whiteman 2026/2027 date; the whole balloon
 category (Great Forest Park especially).
 
-<!-- runs 4–7 appended below as they complete -->
+## Run 4 — Dirt-track / speedway racing  ✅ *(run 4 of 7)*
+
+> **The lane:** recurring **weekly race nights** = the same grandstand crowd all season (great pattern) — BUT
+> most tracks run **their own concessions**, and vendor policy was **unverified** at the closest ones. One
+> (Double X) **sells hot dogs itself.** Proximity is the whole game; **call the two closest tracks.**
+
+| Track | City / dist | Cadence / marquee 2026 | Food access | Verdict |
+|---|---|---|---|---|
+| **Callaway Raceway** | Fulton (~25 mi E — closest) | active 2026 season (USRA/POWRi) | UNVERIFIED — **call** | ⭐ closest — confirm policy *(verify official site; the hyphenated "callaway-raceway.com" is wrong)* |
+| **Moberly Motorsports Park** (fka Randolph County Raceway) | Moberly (~40 min N) | dirt oval, 2026 season | UNVERIFIED — call | ✅ close — confirm |
+| **Double X Speedway** | California (~50 min SW) | weekly **Sunday** nights May 3–Aug 2 + themed specials | **sells its OWN hot dogs $1.50** — direct competition | ⛔ competes / likely blocked |
+| **Central Missouri Speedway** | Warrensburg (~1.5 hr W) | weekly **Saturday** series Apr–Sep | UNVERIFIED | ✅/⚠️ farther, confirm |
+| **Lucas Oil Speedway** | Wheatland (~2.5–3 hr SW) | MARQUEE nationals: Show-Me 100 ($75k, May 21–23), Diamond Nationals (Jul 10–11), Show-Me Shootout (Aug 7–8), Fall Nationals (Sep 29–Oct 3) | Midway booths **non-food only**; in-house concessions | ⛔ closed to standing vendors — only via special-event app (417-282-5984 / lisa@LucasOilSpeedway.com) |
+| **Federated Auto Parts Raceway at I-55** | Pevely (~2 hr E) | weekly Saturday + World of Outlaws (Apr 10–11, Aug 7–8, Sep 25–26) | UNVERIFIED | ⚠️ far |
+
+**Bottom line:** call **Callaway (~25 mi)** + **Moberly (~40 min)** — if either allows outside carts, a weekly
+race night is a recurring goldmine. Skip Double X (competes); Lucas Oil only via special-event approval.
+
+## Run 5 — Wineries & Missouri wine trail  ✅ *(run 5 of 7)*
+
+> **Strong lane — and it matches your own history** (Logboat proves drinks-venue + food-cart works). Most
+> wineries publish **no** food-truck policy → secure slots by **direct outreach** — but **Augusta explicitly
+> welcomes food trucks**, and **Rocheport has a confirmed open rotating-vendor slot 20 min from home.**
+
+| Venue / event | Where / dist | When 2026 | Food access | Verdict |
+|---|---|---|---|---|
+| **Rocheport "Second Saturdays"** | Rocheport (~20 min) | 2nd Sat, Apr–Oct | **CONFIRMED open** — rotating vendors incl. food trucks (Rocheport Area Merchants Assn) | ⭐ **best open door near home** |
+| **Les Bourgeois A-Frame Winegarden** | Rocheport (~20 min) | **FREE Summer Music, Fri 6–9pm, Jun–Aug** | serves own "light eats"; no published policy — **confirm** | ⭐ closest venue, weekly crowd |
+| **Augusta Harvest Festival** | Augusta (~1.5 hr) | Sep 19–20 | **explicit street food + vendor application** | ✅ cart-friendly |
+| **Augusta Bottoms Festival** | Augusta | Nov 7 | **explicit food trucks** | ✅ cart-friendly |
+| **Hermann Harvest Festival** | Hermann (~1.5–2 hr) | Sep 26 | **explicitly features food trucks** | ✅ big crowd, cart-friendly |
+| **Missouri Spirit Festival** | Augusta ball fields | ~late May *(2026 passed)* | 40+ vendors incl. food trucks | 🔁 2027 |
+| **OakGlenn Vineyards** | Hermann | live music most Sat/Sun Apr–Oct | no published policy — outreach | ✅ recurring, confirm |
+| **Hermann Oktoberfest** | Hermann | every weekend October | biggest crowds BUT winery/town stands may block outside carts | ⚠️ verify |
+| **Hermann Wine Trail** ticketed | 6 wineries | Berries & BarBQ Jul 25–26 · Holiday Fare Nov 21–22 · Say Cheese Dec 12 | food part of package — per-event confirm | ⚠️ ticketed |
+| **Serenity Valley Winery** | — | — | own kitchen, **no outside food** | ⛔ skip |
+
+*(Augusta Chamber vendor apps: 636-228-4005.)* **Bottom line:** Rocheport (Second Saturdays + Les Bourgeois)
+is the closest easy win; Augusta's festivals are the clearest "apply and you're in."
+
+## Run 6 — Motorcycle rallies / poker runs / bike nights  ✅ *(run 6 of 7)*
+
+> **Hungry, cash-friendly crowds.** Standout is a **home-city recurring** one + an **open-vendor rally** ~1.5 hr
+> out. The 125k mega-rally is real but gated behind insurance + a health inspection.
+
+| Event | Where / dist | When 2026 | Food access | Verdict |
+|---|---|---|---|---|
+| **Head's Blacktop Harley-Davidson** | **Columbia** (5704 Freedom Dr — home!) | weekly **Wed Night Ride & Social** + monthly 4th-Sat **Biker Swap Meet** (Jul 25, Aug 22) | confirm w/ dealership | ⭐ **home-city, recurring, zero travel** |
+| **FORR Show Me Rally / Bikers Homecoming** | Urich (~1.5 hr) | Aug 20–23 | **OPEN application-based vendors** + captive tent-city crowd | ⭐ **best open moto rally** |
+| **Lake of the Ozarks Bikefest** | Osage Beach area (~1.75 hr) | **Sep 15–20** (6 days), **125,000+** riders | **gated Vendor Village** — health inspection + **$500K liability insurance** (info@lakebikefest.com) | ⚠️ massive but real hurdle |
+| **FORR poker / memorial runs** | statewide Locals | Local 15 (Apr) · Local 10 (Jun) · Local 14 memorial (Jun) · Local 35 memorial (Aug) | dates/venues unpublished — contact the Local | ✅ chase the closest ones |
+| **Million Dollar Bike Show** | Columbia | Aug 1 | unknown | ✅ home-city |
+| **Santa's Helpers Memorial Toy Run** | Sedalia (~1 hr, Yeager's Cycle) | fall/holiday | riders eat on-site | ✅ fall target |
+
+**Bottom line:** **call Head's Blacktop HD in Columbia** — a weekly Wednesday ride + monthly swap meet in your
+backyard is the best recurring moto find. FORR's Show Me Rally (Aug 20–23) openly takes vendors.
+
+## Run 7 — County fairs + parish festivals  ✅ *(run 7 of 7)*
+
+> ⚠️ **CRITICAL CONSTRAINT (every fair):** your own **Boone County Fair bans corn dogs, cotton candy, lemonade,
+> and funnel cakes under a CARNIVAL EXCLUSIVITY agreement.** Carnival operators routinely lock out competing
+> foods — **check the exclusivity clause at every fair** before booking (your brats/dogs may be fine, or blocked).
+
+| Event | City / dist | When / crowd 2026 | Food access | Verdict |
+|---|---|---|---|---|
+| **Missouri State Fair** | Sedalia (~68 mi / 1 hr) | **Aug 13–23**, **325–350k** | apply-to-vend — indoor $750–1,100 / outdoor $75–105 per front-foot; **insurance due Jul 15**; apps post ~Feb, reviewed Apr 1 | ⭐ **#1 crowd** — apply-early (2027) |
+| **Cooper County Fair** | **Boonville (~25–30 min!)** | Jul 21–25 | apply-to-vend, **actively invites outside vendors** | ✅ **close + open — top near-term shot** |
+| **Moniteau County Fair** | California, MO (~50 min) | early–mid Aug | accepts outside vendors (no online form — **contact the board**) | ✅ close |
+| **Parish picnics** (Diocese of Jeff City) | Wardsville Jul 19 · Osage Bend Aug 2 · Rich Fountain Aug 9 · St. Thomas Aug 16 · Mokane Oct 11 · Monroe City Jul 19 | 2026 | **OWN-FOOD events** (parish chicken/roast dinners; some sell their own hot dogs) | ⛔ skip — they compete, don't host |
+
+**Bottom line:** **Cooper County Fair, Boonville (~25 min, actively invites vendors, Jul 21–25)** is the closest,
+most-open fair. Missouri State Fair is the giant — apply early for 2027. Parish picnics are a bust (own food).
+And **always check the carnival-exclusivity clause.**
+
+---
+
+**✅ ALL 7 RESEARCH RUNS COMPLETE (2026-07-13).** Cross-run shortlist of where to actually point the cart is in
+the session digest; next step is mining the ✅/⭐ rows into the `vending_*` dataset + the Scout board.
+<!-- ALL 7 RUNS COMPLETE 2026-07-13 -->
