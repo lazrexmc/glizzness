@@ -39,6 +39,6 @@ uses — was kept).
 `tests/test_accounting.py` (15 tests still pass), and `post_sams_correction.py` (annual Sam's-tax
 correction; its hardcoded Wave account IDs were made env-overridable in this pass).
 
-> ⚠️ **OWNER ACTION:** disable the `run_daily.ps1` Windows Task Scheduler job if it still exists —
-> it drove the now-archived SQLite pipeline. (Kept apart from the live path only by Wave's
-> `externalId` dedup; retiring the scripts means the scheduled task would now error.)
+> ✅ **RESOLVED 2026-07-13:** owner confirmed **no schedulers/tasks run for this project** — the
+> `run_daily.ps1` job is off. The dormant SQLite pipeline is fully retired; only the Streamlit app
+> (Supabase → Wave) posts now, so the dual-ledger double-post risk is closed.
