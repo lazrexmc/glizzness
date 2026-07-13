@@ -55,7 +55,7 @@ lines = [
  "**driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).",
  ">",
  f"> **Live versions:** normalized into Supabase (`vending_*` tables, {len(pub)} published) and visualized "
- "by a static map in `vending-map/` (filters incl. county). Normalization spec: `DATA_MODEL.md`.",
+ "by a static map in `site/festivals/` (Cloudflare Pages, /festivals; filters incl. county + event type). Normalization spec: `DATA_MODEL.md`.",
  ">",
  "> Regenerate data: `python vending_circuit_etl.py && python vending_circuit_geocode.py && "
  "python vending_circuit_gen_sql.py && python vending_circuit_gen_md.py`.",

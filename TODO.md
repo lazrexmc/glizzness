@@ -33,16 +33,15 @@ Running list of open action items. Add dated entries; check them off or delete w
   into the vending-circuit dataset + add a **category / event-type filter** to the map so we can sort by
   type. *(added 2026-07-12; research expanded 2026-07-13)*
 
-- [ ] **Unify everything under `glizzness.com` (one web address)** — consolidate the three properties so
-  there's a single front door. *(Backlog — do AFTER the Cloudflare domain switch and the niche research
-  runs; not urgent.)*
-  - **Festival / vending map** (`vending-map/`, currently `festivals.glizzness.com` on Netlify) — wire it
-    into the main site: embed `vending-map/embed.html` into the `site/events.html` placeholder ("Live map —
-    coming soon"), or host it at a clean path like `glizzness.com/festivals`. **Clean up first:** Phase-6
-    polish (event-type filter, defunct toggle, mobile), and confirm the prospecting map is meant to be
-    public (organizer contacts are visible — already accepted as public). Decide: keep the Netlify
-    subdomain vs. move the map into Cloudflare Pages as a subpath of the main site.
-  - **Accounting dashboard** (`glizzness.streamlit.app`) — internal, password-protected admin tool.
+- [ ] **Unify everything under `glizzness.com` (one web address)** — consolidate the properties so
+  there's a single front door. *(Backlog — the festival-map half is **DONE**; only the Streamlit
+  dashboard subdomain remains.)*
+  - **Festival / vending map — ✅ DONE (2026-07-13).** Moved from `vending-map/` (a standalone
+    `festivals.glizzness.com` site on Netlify) into **`site/festivals/`**, so it now ships with the main
+    Cloudflare Pages site and serves at **`glizzness.com/festivals`** (`glizzness.pages.dev/festivals`
+    until the custom domain switches). **Netlify is retired** (root `netlify.toml` archived to
+    `archive/2026-07-13/`). `site/events.html` links to it. Ships with the event-type filter + 442 events.
+  - **Accounting dashboard** (`glizzness.streamlit.app`) — *still open* — internal, password-protected admin tool.
     Optionally reachable at a memorable subdomain (e.g. `admin.glizzness.com`) via CNAME/Cloudflare — note
     Streamlit Community Cloud has limited custom-domain support (may need a Cloudflare proxy/Worker; watch
     the websocket). Keep it OUT of the public nav. Lowest priority of the three.

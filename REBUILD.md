@@ -18,7 +18,8 @@ The Glizzness runs on **one GitHub repo + one Supabase Postgres project + a few 
 subsystems: (1) the **public website** in `site/` on Cloudflare Pages; (2) the **menu pipeline**
 `menu.json → gen_menu.py → site/our-menu.html` and `menu.json → push_menu.py → Square → DoorDash`;
 (3) the **Where We Vend calendar** (Google Calendar → `sync_calendar.py` → Supabase → events page);
-(4) the **festival map** (`vending_*` tables → Leaflet map at festivals.glizzness.com); (5) the
+(4) the **festival map** (`vending_*` tables → Leaflet map in `site/festivals/`, served with the site at
+`glizzness.com/festivals`); (5) the
 **accounting** (Square → Supabase → Wave, via a Streamlit dashboard). Every browser file uses **one public
 `anon` Supabase key**; every server script uses **one secret `service_role` key**. Row-Level Security (RLS)
 is what makes the anon key safe.
@@ -27,8 +28,8 @@ is what makes the anon key safe.
 
 ## 0 · Premise & survivors
 
-- **Assume GONE:** the Supabase project, all hosted sites (Cloudflare Pages / Streamlit Cloud / legacy
-  Netlify), the working machine, every service login, and every **gitignored** local file —
+- **Assume GONE:** the Supabase project, all hosted sites (Cloudflare Pages / Streamlit Cloud), the
+  working machine, every service login, and every **gitignored** local file —
   `.streamlit/secrets.toml`, `glizzness.db`, `run_daily.ps1`, `catalog_export.json`, `past_cart_events.csv`.
 - **Assume SURVIVES:** the GitHub repo `github.com/lazrexmc/glizzness` **and** the **`..\PrivateData\`**
   folder — a *sibling* of the repo (in the parent `James Jason Trinton Johnson\` dir) that holds the Google
@@ -66,7 +67,7 @@ and it keeps secrets out of git.
 | **Wave** | accounting destination ledger | waveapps.com |
 | **DoorDash** | storefront `store/38788821` — a read-only mirror of Square | merchant portal |
 | **Streamlit Community Cloud** | hosts the accounting `dashboard.py` | share.streamlit.io |
-| **Netlify** *(legacy)* | old host of the map/catering — **being retired for Cloudflare**; don't rebuild | — |
+| **Netlify** *(retired)* | former host of the map/catering — **fully retired**; the map now ships with the Cloudflare Pages site (`site/festivals/`). Do **not** rebuild | — |
 | **Etsy**, **MyTax Missouri** | merch channel; sales-tax portal | logins/codes in `..\PrivateData\` |
 
 ---
@@ -78,7 +79,7 @@ master key that bypasses RLS and must never appear in any tracked/browser file.
 
 | Secret | Public? | Lives in | How to get / regenerate |
 |---|---|---|---|
-| `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `catering/config.js`, `vending-map/config.js` (committed) | Supabase → Project Settings → API → `anon public` |
+| `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `catering/config.js`, `site/festivals/config.js` (committed) | Supabase → Project Settings → API → `anon public` |
 | `SUPABASE_URL` | public | hardcoded in `db.py` (~line 8); the three `config.js`; env for `sync_calendar.py` | Supabase → Project Settings → API → Project URL |
 | `SUPABASE_SERVICE_KEY` | **SECRET** | `.streamlit/secrets.toml` (gitignored) + Streamlit Cloud Secrets + shell env | Supabase → Project Settings → API → `service_role` |
 | `SQUARE_TOKEN` | **SECRET** | shell `$env` (Lance's machine), `.streamlit/secrets.toml`, Streamlit Cloud, `run_daily.ps1` | Square Developer Dashboard → your app → **Production** Access Token (needs `ITEMS_READ`+`ITEMS_WRITE`) |
@@ -109,7 +110,8 @@ Everything reads Supabase, so build it first. Do these **in order**:
 5. **Calendar** — Google service account + `sync_calendar.py` → **§5.3**
 6. **Menu → Square → DoorDash** — `pull_catalog.py` → `gen_menu.py` → `push_menu.py` → **§5.4**
 7. **Accounting** — deploy the Streamlit dashboard, re-sync from Square/Wave → **§5.5**
-8. **Festival map** — load `vending_*` (442 events incl. 27 research prospects), deploy the map → **§5.6**
+8. **Festival map** — load `vending_*` (442 events incl. 27 research prospects); the map itself
+   (`site/festivals/`) already deployed with the site in step 4 — just verify → **§5.6**
 9. **Custom domain** — point glizzness.com at Pages (last, careful about email/MX) → **§5.7**
 
 ---
@@ -192,9 +194,9 @@ Everything reads Supabase, so build it first. Do these **in order**:
 7. **⚠ Fix on rebuild:** the current secrets had `WAVE_SALES_RETURNS_ID` == `WAVE_DISCOUNTS_ID` (should be two
    distinct Wave accounts) — re-derive both cleanly.
 
-### 5.6 Festival map — festivals.glizzness.com — detail: `vending-map/README.md`, `DATA_MODEL.md`
+### 5.6 Festival map — glizzness.com/festivals — detail: `site/festivals/README.md`, `DATA_MODEL.md`
 1. `vending_*` tables + data loaded in §5.1 (steps 3.5 + 3.6). Re-verify counts (31 markets / 442 events / ~430 published).
-2. Set `vending-map/config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). It reads the **raw** `vending_events`
+2. Set `site/festivals/config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). It reads the **raw** `vending_events`
    tables (client-side publish filter + an **event-type filter**), so those SELECT policies are load-bearing.
 3. To regenerate data from the master CSV: `python vending_circuit_etl.py` → `vending_circuit_geocode.py` →
    `vending_circuit_gen_sql.py` → `vending_circuit_gen_md.py`, then re-run the vending SQL. (`geocode` is a
@@ -205,9 +207,11 @@ Everything reads Supabase, so build it first. Do these **in order**:
    `supabase_vending_data.sql` automatically. Their new `event_type`s (mtb_gravel, sports_tournament, rodeo,
    car_show, air_show, dirt_track, winery, moto_rally) were added to the `event_type` CHECK enum in
    `supabase_vending_schema.sql` — extend that enum first if you add another type or the data load fails.
-4. Host: a **separate** Cloudflare Pages project (same repo), **Build output directory = `vending-map`**.
-   Then add the `festivals` subdomain (CNAME → the Pages target). **Not** Netlify (retired; `netlify.toml`
-   is obsolete — see `ARCHIVE_REVIEW.md`).
+4. **No separate deploy.** The map lives in `site/festivals/`, so it **ships with the main Cloudflare Pages
+   site** (§5.2) — it's served at `glizzness.com/festivals` (`glizzness.pages.dev/festivals` until the custom
+   domain switches). There is **no** separate Pages project, **no** `festivals` subdomain, and **no** Netlify
+   step (Netlify is retired; the old root `netlify.toml` was archived to `archive/2026-07-13/`). A push to
+   `master` redeploys it with the rest of the site. `site/events.html` links to it.
 
 ### 5.7 Custom domain (glizzness.com) — detail: `GO_LIVE.md §2 step 4`
 1. Verify on `*.pages.dev` first.
@@ -221,7 +225,8 @@ Everything reads Supabase, so build it first. Do these **in order**:
 ## 6 · Cross-cutting traps (read before you start)
 
 - **Cloudflare Pages ≠ Workers.** The CF UI pushes you to Workers/`wrangler`. For static sites use **Pages →
-  Connect to Git**, output dir `site` (or `vending-map`). Wrong path = failed/blank deploy.
+  Connect to Git**, output dir `site` (the festival map at `site/festivals/` rides that same deploy).
+  Wrong path = failed/blank deploy.
 - **Hardcoded Supabase ref.** `SUPABASE_URL` is baked into `db.py` (not read from env there; the one-time
   `migrate_to_supabase.py` that also carried it is now archived). A rebuilt project has a new ref — update
   `db.py` + all three `config.js` or everything silently points at a dead DB.
@@ -241,8 +246,6 @@ Everything reads Supabase, so build it first. Do these **in order**:
 - **Google SA is two-part:** the JSON key alone isn't enough — you must also (a) enable the Calendar API and
   (b) share the calendar read-only with the SA email.
 - **`..\PrivateData\` is a sibling** of the repo, not inside it. Restore it there.
-- **Netlify base-directory trap** (only if you ever use Netlify again): the root `netlify.toml` pins every
-  build to `vending-map`; a second site must set **Base directory** in the UI, not just the publish dir.
 - **Gitignored files never come back from git:** `run_daily.ps1` (live tokens), `glizzness.db`,
   `.streamlit/secrets.toml`, Wave transaction CSVs. Rebuild secrets from dashboards; rebuild data by re-syncing.
 - **Vending schema is destructive:** `supabase_vending_schema.sql` DROPs the `vending_*` tables — re-running it
@@ -263,7 +266,7 @@ Everything reads Supabase, so build it first. Do these **in order**:
 - [ ] Calendar: `sync_calendar.py --dry-run` prints "fetched N → M rows"; a Public event shows venue+location on the events page.
 - [ ] Menu: `gen_menu.py` → "No data problems"; after `push_menu.py --apply`, Square + DoorDash descriptions are **not blank**.
 - [ ] Accounting: `glizzness.streamlit.app` shows the password gate; the four status cards load; a Post to Wave doesn't duplicate.
-- [ ] Festival map: the map's `*.pages.dev` loads clustered dots.
+- [ ] Festival map: `*.pages.dev/festivals` (the main site) loads clustered dots.
 - [ ] `git ls-files | grep -Ei 'secrets.toml|service-account|run_daily'` returns **nothing** (no secret committed).
 
 ---
@@ -279,7 +282,7 @@ Everything reads Supabase, so build it first. Do these **in order**:
 | Menu pipeline | `MENU_PIPELINE.md`, `GO_LIVE.md §4` |
 | Catering lead pipeline | `CATERING_LEADS.md` |
 | Accounting (Square→Wave) | `ProjectContext.md`, `SETUP.md` |
-| Festival map | `vending-map/README.md`, `DATA_MODEL.md` |
+| Festival map | `site/festivals/README.md`, `DATA_MODEL.md` |
 | Vending prospects (7-run deep-research sweep, ids 500+) | `VENDING_PROSPECTS.md` (curated) → `build_prospects.py` → `data/prospects.csv` |
 | Event-history export (future demand baseline) | `pull_past_events.py` → gitignored `past_cart_events.csv` (analysis feeder, **not** a DR step) |
 | What's safe to archive | `ARCHIVE_REVIEW.md` |

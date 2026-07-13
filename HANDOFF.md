@@ -28,7 +28,7 @@ a pile of research/analysis tooling.
 | **Menu pipeline** | `menu.json` is the source of truth → website + Square + DoorDash | ✅ SHIPPED & SYNCED (26 web / 28 Square) | **`MENU_PIPELINE.md`** | `menu.json`, `gen_menu.py`, `push_menu.py`, `pull_catalog.py`, `catalog_modifiers.py` |
 | **Catering leads** | Booking form → DB → instant email alert | ✅ LIVE | **`CATERING_LEADS.md`** | `site/catering.html`, Supabase `catering_leads`, Make.com, Gmail |
 | **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED | `CALENDAR_SETUP.md` | `sync_calendar.py`, Supabase `cart_schedule`, `site/events.html` |
-| **Festival / vending map** | 442-event food-truck prospecting map | ✅ LIVE on Netlify (festivals.glizzness.com) | `vending-map/README.md`, `DATA_MODEL.md` | `vending-map/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
+| **Festival / vending map** | 442-event food-truck prospecting map | ✅ LIVE at `glizzness.pages.dev/festivals` (→ `glizzness.com/festivals` after the DNS switch; ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
 | **Event history / demand baseline** | Past calendar events, for future "how many people" modeling | 🟡 captured, analysis pending | `TODO.md` (demand baseline) | `pull_past_events.py` → `past_cart_events.csv` (local, gitignored) |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
@@ -57,7 +57,7 @@ before comparing — else apostrophe'd descriptions phantom-update on every push
 - **Menu → website + Square + DoorDash** → `MENU_PIPELINE.md`
 - **Catering lead pipeline (Supabase→Make→Gmail)** → `CATERING_LEADS.md`
 - **Where-We-Vend calendar** → `CALENDAR_SETUP.md`
-- **Festival/vending map + data model** → `vending-map/README.md`, `DATA_MODEL.md`
+- **Festival/vending map + data model** → `site/festivals/README.md`, `DATA_MODEL.md`
 - **Accounting (Square→Wave), business logic + gotchas** → `ProjectContext.md`, `SETUP.md`
 - **Latest full-repo audit** → `FOLDER_AUDIT_2026-07-13.md` (+ `archive/2026-07-13/ARCHIVE_MANIFEST.md`)
 - **What's safe to archive** → `ARCHIVE_REVIEW.md`
@@ -72,10 +72,11 @@ Every browser file uses only the **public** Supabase `anon` key. Secrets (`servi
 operators' shells / the hosting dashboards. `.claude/` (agent memory, holds a service-role key) and
 `..\PrivateData\` (PII) are **not tracked**. The full account + secret-location map is in `REBUILD.md`.
 
-Hosting: **Cloudflare Pages** (website, output dir `site/`), **Netlify** (vending map, publish `vending-map/`),
-**Streamlit Community Cloud** (accounting dashboard), **Supabase** (one project: accounting + `vending_*` +
-`catering_leads` + `cart_schedule` + `contacts`), **Make.com** (catering email), **Square** (POS→DoorDash),
-**Wave** (books), **GoDaddy** (domain registrar).
+Hosting: **Cloudflare Pages** (website **and** the festival map at `/festivals`, one project, output dir
+`site/`), **Streamlit Community Cloud** (accounting dashboard), **Supabase** (one project: accounting +
+`vending_*` + `catering_leads` + `cart_schedule` + `contacts`), **Make.com** (catering email),
+**Square** (POS→DoorDash), **Wave** (books), **GoDaddy** (domain registrar). **Netlify is retired** — the
+vending map moved off it into `site/festivals/`.
 
 ---
 
@@ -106,7 +107,8 @@ Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native 
   Square-Orders OUT.
 - **Employee scheduling (takt-time)** — staff to demand at a fixed pace; add people, not speed.
 - **Event-sales demand baseline** — match `past_cart_events.csv` to Square Orders (event capture done).
-- **Unify subdomains** (festivals + streamlit) under glizzness.com; **food supplier**; map polish.
+- **Unify the streamlit dashboard** under glizzness.com (the festival map is already unified — now
+  `site/festivals/`); **food supplier**; map polish.
 
 ---
 

@@ -4,7 +4,7 @@
 
 > **`VendingCircuit.csv` is the authoritative, database-ready master.** This markdown is a generated, human-readable view — regenerate with `python vending_circuit_gen_md.py`. Distances are approximate **driving miles** from Columbia. ⚠️ = `needs_confirmation` (verify dates/fit before relying).
 >
-> **Live versions:** normalized into Supabase (`vending_*` tables, 410 published) and visualized by a static map in `vending-map/` (filters incl. county + event type). Normalization spec: `DATA_MODEL.md`.
+> **Live versions:** normalized into Supabase (`vending_*` tables, 410 published) and visualized by a static map in `site/festivals/` (Cloudflare Pages, /festivals; filters incl. county + event type). Normalization spec: `DATA_MODEL.md`.
 >
 > **Note:** the live map also overlays **27 research "prospects"** (niche vending leads — MTB/gravel races, rodeos, wineries, dirt tracks, moto rallies, car/air shows, sports tournaments) from a 7-run deep-research sweep; they live separately in `data/prospects.csv` (ids 500+, see `VENDING_PROSPECTS.md`), so the map shows **442 events** total. This markdown covers only the 415 circuit events.
 >

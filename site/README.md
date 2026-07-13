@@ -19,7 +19,8 @@ has a front door. Built from the business north-star
 | `our-menu.html` | `/our-menu` | Full menu — rendered from `menu.json` by `gen_menu.py` (the source of truth; Square is downstream) |
 | `order.html` | `/order` | Delivery / pickup — DoorDash |
 | `catering.html` | `/catering` | Catering / workplace / events — 8 packages + booking form |
-| `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + map teaser (hidden/coming soon) + book-your-event/venue |
+| `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + a link to the **festival map** (`/festivals`) + book-your-event/venue |
+| `festivals/` | `/festivals` | **Festival / vending map** — the Leaflet vending-circuit map (442 events, reads Supabase `vending_*`). Moved here from the retired standalone Netlify site; see `festivals/README.md` |
 | `404.html` | any miss | Branded not-found |
 
 Shared, reused verbatim on every page: the top nav and the footer.
@@ -72,7 +73,8 @@ When ready to go live:
    record at GoDaddy. **Not done here** — this is the only step that touches GoDaddy,
    and it's left for when you're ready.
 
-`_redirects` handles friendly aliases (`/book`, `/delivery`, `/festivals`, …).
+`_redirects` handles friendly aliases (`/book`, `/delivery`, …). `/festivals` is **not** a redirect — the
+**festival map** is served directly from the `festivals/` folder (moved here from the retired Netlify site).
 
 ## Imagery
 
@@ -102,8 +104,8 @@ When ready to go live:
       "The Glizzness" (the Order page falls back to "search The Glizzness" if the
       link is unset).
 - [ ] **"Where's the cart"** on the home hero is static copy — decide whether to
-      wire it to live data later (the vending map data exists in Supabase, but the
-      **map stays hidden** for now per direction).
+      wire it to live data later (the vending map data exists in Supabase; the
+      **festival map is now live at `/festivals`**, served from `festivals/`).
 - [ ] **Retire the old pages** once this is live: root `menu.html`, `catering.html`,
       and the GoDaddy builder homepage.
 - [ ] Deploy to Cloudflare Pages, verify on `*.pages.dev`, **then** update DNS.

@@ -9,7 +9,7 @@
 ## What's already built (so you know the state)
 - **Website** — unified `site/` (Home, Menu, Order, **Catering & events**, Where We Vend, 404; "corporate" branding was dropped site-wide, and the home page now leads with Order / See-Our-Menu / Book buttons + a "three ways to get your Glizzy" section). **✅ DEPLOYED 2026-07-12** to Cloudflare Pages (glizzness.pages.dev); custom domain still pending (§2).
 - **Catering booking** — `site/catering.html` → Supabase `catering_leads` → **lead-notification pipeline LIVE** (Supabase Database Webhook → Make.com → Gmail; see `CATERING_LEADS.md`). The old standalone `catering/` page was **archived 2026-07-13**.
-- **Vending map** — `vending-map/` (Leaflet), **live on Netlify at `festivals.glizzness.com`**. Now **442 events** = 415 vending-circuit + **27 new research "prospects"** (7-run deep-research sweep — `VENDING_PROSPECTS.md`), with an **event-type filter** on the map. Reload steps in §1.
+- **Vending map** — `site/festivals/` (Leaflet), now **part of the main Cloudflare Pages site** — reachable at **`glizzness.com/festivals`** (`glizzness.pages.dev/festivals` until the custom domain switches). **Netlify is retired** (it used to host this at `festivals.glizzness.com`). Now **442 events** = 415 vending-circuit + **27 new research "prospects"** (7-run deep-research sweep — `VENDING_PROSPECTS.md`), with an **event-type filter** on the map. Reload steps in §1.
 - **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` + the home teaser (byte-identical, verified); `push_menu.py` (menu.json → Square → DoorDash) is built and **synced**. `menu.json` = **26 website items / 28 live in Square**, all described (see `MENU_PIPELINE.md`).
 - **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list (collapsible: next 3 + "Show all"). **✅ ACTIVATED 2026-07-11** — schema run, real sync done, page renders. Remaining: automate the sync (§7 Task Scheduler); it becomes publicly visible when the site deploys (§2).
 
@@ -47,7 +47,7 @@ GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**
    - Framework preset: **None** · Build command: **(empty)** · **Build output directory: `site`**.
 3. First deploy lands on `*.pages.dev`. **Verify there before any DNS change** — click every page, submit a test catering lead, check the Call/Text/DoorDash buttons and the top nav "Book the Cart" CTA (should be dark text on gold).
 4. **Then** (separate, deliberate) point the domain: add `glizzness.com` (and `www`) as a custom domain in CF Pages, and update the DNS record at **GoDaddy**. *This is the only step that touches GoDaddy.*
-5. `site/_redirects` handles friendly aliases (`/book`, `/delivery`, `/festivals`, …).
+5. `site/_redirects` handles friendly aliases (`/book`, `/delivery`, …). `/festivals` is **not** a redirect — it serves the festival map directly from `site/festivals/`.
 
 ## 3. "Where We Vend" calendar — ✅ ACTIVATED 2026-07-11
 **Done:** schema run, Google service account created + calendar shared read-only, real sync run (47 events
@@ -89,9 +89,9 @@ Once `site/` is live and verified:
 - ✅ **DONE (2026-07-13):** the **root `menu.html` / `catering.html`**, **`catering-hot-dogs-50.html`**, and
   the **standalone `catering/` folder** were archived to `archive/2026-07-13/` (superseded by `site/`; see
   `archive/2026-07-13/ARCHIVE_MANIFEST.md`).
-- Decide the **vending map**: migrate `vending-map/` into Cloudflare Pages / under `glizzness.com`, or keep it
-  on Netlify (`festivals.glizzness.com`) and link from `site/events.html` — *still open* (backlog: "unify
-  everything under glizzness.com", see `TODO.md`).
+- ✅ **DONE (2026-07-13):** the **vending map** was migrated off Netlify into the main Cloudflare Pages site —
+  it now lives at `site/festivals/` and serves at `glizzness.com/festivals` (Netlify retired; the old root
+  `netlify.toml` was archived to `archive/2026-07-13/`). `site/events.html` links to it.
 
 ## 6. Social & contact (already wired)
 `site/assets/config.js` already has Facebook + Instagram URLs, phone `314-266-8636`, email

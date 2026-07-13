@@ -239,7 +239,7 @@ to **NW Arkansas**.
 - [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (415 events, 0 dupes, 0 unmapped)
 - [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (415/415 geocoded)
 - [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (31 markets / 415 events / 415 schedules / 410 published). **With the prospects overlay folded in (2026-07-13) the loaded totals are 442 events / 442 schedules / ~433 published** — see the Prospects layer in §2.
-- [x] (Task 5) Leaflet map (`vending-map/`) — data path verified via anon key
+- [x] (Task 5) Leaflet map (`site/festivals/`) — data path verified via anon key
 - [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish
 - [x] (Map) **Zoom-based marker clustering** (Leaflet.markercluster) — replaced the two-tier
   hub→event→back model with colored dots that group/scatter by zoom (2026-06-18)
