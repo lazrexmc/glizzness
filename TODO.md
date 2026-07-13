@@ -84,3 +84,39 @@ Running list of open action items. Add dated entries; check them off or delete w
   **Principles:** mobile-first / one-handed / huge buttons · zero-friction (private link + passcode, no real
   login) · internal-only (never in public nav) · **multiple events per day is a hard requirement**.
   *(added 2026-07-13)*
+
+- [ ] **Inventory + reorder-point system** — track stock IN (purchases) vs OUT (sales) so we always know
+  on-hand and when to reorder. *(Backlog — meaty; build incrementally.)*
+
+  **The core problem (owner's insight):** purchases, sales, and stock use THREE different vocabularies —
+  Sam's/vendor receipt SKUs (what we BUY) ≠ Square POS menu items (what we SELL) ≠ raw inventory items
+  (buns, dogs, brats, chili, cheese, chips, drinks, propane…). They must all map to one common **inventory
+  item master** so "inventory IN" and "inventory OUT" reconcile despite coming from different sources.
+
+  **Two mapping layers (the crux):**
+  1. **Purchase SKU → inventory item** (+ units per pack). e.g. a Sam's "48-ct franks" case → 48 × `hot dog`.
+  2. **POS menu item → inventory items consumed** = a recipe / bill-of-materials. e.g. `Chili Dog` = 1 dog +
+     1 bun + ~4 oz chili + ~1 oz cheese. This is what lets Square SALES deplete raw stock.
+
+  **Flow:**
+  - **IN:** when processing a Sam's receipt in Wave (already coded to COGS), also log the items + qty into an
+    inventory ledger (IN). Same manual path for **non-Sam's vendors** (vendor, date, item, qty, cost).
+  - **OUT:** pull Square **item-level** sales (Square **Orders API** line items — richer than the payout /
+    settlement data the accounting pipeline posts today) → deplete raw stock via the recipe map.
+  - **On-hand = IN − OUT ± adjustments** (waste, physical-count corrections).
+  - **Reorder point / par level** per item → flag "reorder X" when on-hand < par; ideally project days-of-
+    supply from sales velocity → a generated shopping list.
+
+  **Stack:** Supabase tables — `inventory_items` (master + unit + par/reorder point), `vendor_skus`
+  (purchase SKU → inventory item + pack size), `inventory_purchases` (IN), `menu_recipes` (Square item →
+  inventory items + qty), `inventory_ledger` (all movements), `physical_counts` (periodic reconciliation).
+  Admin UI lives in the **Streamlit dashboard** (`dashboard.py`): log purchases, manage recipes, see on-hand
+  + reorder alerts. Reuses the existing Supabase + dashboard stack.
+
+  **Build sequence:** (1) define the inventory item master; (2) build the Sam's purchase catalog from
+  receipts (SKU→item + pack size); (3) build recipes/BOM for each Square menu item; (4) Supabase schema;
+  (5) dashboard pages to log purchases (Sam's + other vendors) + manage recipes; (6) Square item-level sales
+  sync → depletion; (7) reorder-point logic + generated reorder list; (8) physical-count reconciliation.
+
+  **Then automate** the manual build steps: Sam's receipt parsing (CSV/OCR → purchase lines), scheduled
+  sales depletion, auto-generated reorder lists. *(added 2026-07-13)*
