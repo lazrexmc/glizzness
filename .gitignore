@@ -25,11 +25,17 @@ gcal-*.json
 # Streamlit secrets — NEVER commit
 .streamlit/secrets.toml
 
-# Personal / sensitive documents — NEVER commit
+# Personal / sensitive documents — NEVER commit.
+# Keep each pattern and its comment on SEPARATE lines: a trailing "# ..." on the same line
+# becomes PART of the pattern, silently disabling it (this bug left *.docx/*.xlsx unignored).
 *.pdf
-*.docx          # resumes and other personal docs (PII)
-*.xlsx          # spreadsheets — financial data (e.g. SamsTransactions*.xlsx)
+# resumes and other personal docs (PII)
+*.docx
+# spreadsheets — financial data (e.g. SamsTransactions*.xlsx)
+*.xlsx
 Sales/
+# personal political essays (already covered by *.docx, listed for clarity)
+HelpingPeople/
 
 # Images / binary assets
 *.png
@@ -46,6 +52,7 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+.pytest_cache/
 
 # Chat logs — contain financial figures and business context
 CHATLOG.md
