@@ -18,7 +18,7 @@ has a front door. Built from the business north-star
 | `index.html` | `/` | Home — brand, "where's the cart," the four lanes, why-us, menu teaser |
 | `our-menu.html` | `/our-menu` | Full menu — rendered from `menu.json` by `gen_menu.py` (the source of truth; Square is downstream) |
 | `order.html` | `/order` | Delivery / pickup — DoorDash |
-| `catering.html` | `/catering` | Catering **and** corporate/workplace — 8 packages + booking form |
+| `catering.html` | `/catering` | Catering / workplace / events — 8 packages + booking form |
 | `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + map teaser (hidden/coming soon) + book-your-event/venue |
 | `404.html` | any miss | Branded not-found |
 
