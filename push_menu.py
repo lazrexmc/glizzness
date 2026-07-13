@@ -20,7 +20,7 @@ Run order when you also fixed modifiers: catalog_modifiers.py --apply -> pull_ca
     $env:SQUARE_TOKEN = "token_with_ITEMS_WRITE"
     python push_menu.py --apply
 """
-import os, sys, json, uuid, shutil, copy
+import os, sys, json, uuid, shutil, copy, html
 import requests
 
 EXPORT = "catalog_export.json"
@@ -97,7 +97,10 @@ def diff(sq, mi, cat_id, cat_name):
     cur = sq["item_data"]
     if (cur.get("name") or "") != mi["name"]:
         ch.append(f'name "{cur.get("name")}" -> "{mi["name"]}"')
-    cur_desc = cur.get("description_html") or cur.get("description") or ""
+    # Square HTML-escapes description_html on store ("'" -> "&#39;", "&" -> "&amp;", etc.), so the
+    # value it returns never byte-matches the raw text we send. Unescape before comparing, or every
+    # description with an apostrophe (Potato Salad, Cole Slaw, ...) reports a phantom change forever.
+    cur_desc = html.unescape(cur.get("description_html") or cur.get("description") or "")
     if cur_desc != (mi.get("description") or ""):
         ch.append("description")
     if cat_id and (cur.get("reporting_category") or {}).get("id") != cat_id:
