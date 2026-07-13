@@ -1,10 +1,10 @@
 # ProjectContext.md — Glizzness Accounting Automation
 ## LLM Handoff Document
 
-> **Start here.** Read this entire file before touching any code. It contains
-> hard-won business logic, critical gotchas, and incident history that are not
-> obvious from the code alone. The companion file `SETUP.md` has step-by-step
-> workflow instructions and CLI command reference.
+> **Whole-project onboarding starts at `HANDOFF.md`** (the master map of every subsystem). THIS file is the
+> deep-dive on the **accounting (Square→Wave)** subsystem — read it before touching any accounting code. It
+> contains hard-won business logic, critical gotchas, and incident history not obvious from the code alone.
+> The companion `SETUP.md` has the step-by-step workflow + CLI reference.
 
 > ⚠️ **DRIFT NOTICE (2026-07-13):** parts of this file have gone stale. Current truth lives in
 > `FOLDER_AUDIT_2026-07-13.md`, `MENU_PIPELINE.md`, and `CATERING_LEADS.md`. In short: the **menu**

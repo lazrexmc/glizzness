@@ -6,6 +6,10 @@ into numbered cluster bubbles when you zoom out and scatters into individual dot
 in — click a bubble to zoom in, click a dot for the detail drawer (with the event's homepage
 link shown only when one exists).
 
+The dataset is the full **vending circuit plus 27 research "prospects"** (niche vending leads —
+MTB/gravel races, rodeos, wineries, dirt tracks, moto rallies, car/air shows, sports tournaments —
+mined from a 7-run deep-research sweep, `VENDING_PROSPECTS.md`), all filterable by **event type**.
+
 No build step, no server, no framework. Plain HTML + Leaflet + Leaflet.markercluster + vanilla JS.
 
 ## Files
@@ -74,8 +78,18 @@ Reads two REST endpoints with the anon key:
   **client-side** so the defunct/excluded toggle can reveal the hidden ones on demand
 - `vending_event_schedules` (`event_id, month`) — powers the month filter
 
-All fetched once on load (small payload) into one `L.markerClusterGroup`. To change what's
-published, edit the rows in Supabase (or re-run the ETL + reload) — the map reflects it on refresh.
+All fetched once on load (small payload) into one `L.markerClusterGroup`. `vending_events` now holds
+both the **vending circuit** (ids < 500) and the **27 research prospects** (ids 500+, from
+`data/prospects.csv` / `VENDING_PROSPECTS.md`); the map treats them identically.
+
+To change what's published, edit the rows in Supabase, or regenerate + reload:
+1. `python build_prospects.py` — only if you edited the prospects table (rebuilds
+   `data/prospects.csv` + `data/prospect_schedules.csv`).
+2. `python vending_circuit_gen_sql.py` — rebuilds `supabase_vending_data.sql` with circuit +
+   prospects folded together (442 events / 442 schedules).
+3. Run that SQL in Supabase — it's an idempotent `truncate`-then-`insert`, so it fully refreshes.
+
+The map reflects it on the next refresh.
 (`vending_markets` is no longer read by the map; the cluster bubbles replace the old hub tier.)
 
 ## Architecture notes
@@ -92,10 +106,13 @@ published, edit the rows in Supabase (or re-run the ETL + reload) — the map re
   viewport, sorted by month then name. It updates as you pan/zoom (`map moveend`); each row opens that
   event's drawer and pans/zooms to its dot — so you can read an area's events instead of clicking dots
   one by one. Respects the active filters.
-- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, and **county**. Month uses
-  `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
-  filter keys on `(county, state)` (county names repeat across states) and lists only counties present
-  in the data, so it stays short.
+- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, **county**, and **event
+  type** (`f-type`). Month uses `vending_event_schedules.month`; year-round/recurring events (no month)
+  match any month. The county filter keys on `(county, state)` (county names repeat across states) and
+  lists only counties present in the data, so it stays short. The event-type dropdown is built from the
+  distinct `event_type` values present (pretty-labeled), so it covers both circuit types and the
+  research-prospect types (`mtb_gravel`, `dirt_track`, `winery`, `moto_rally`, `rodeo`, `car_show`,
+  `air_show`, `sports_tournament`).
 - **Upcoming-only by default (date awareness):** events are annual, so an event whose months have all
   already gone by *this calendar year* is treated as "passed this season" and **hidden by default** —
   users only see things they can still catch. A **Past events** toggle reveals them (dimmed dots, a

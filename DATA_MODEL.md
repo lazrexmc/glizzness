@@ -1,7 +1,7 @@
 # Vending Circuit — Data Model & Normalization Spec (LOCKED)
 
 > **Task 1 deliverable.** This is the contract the ETL/geocode/load phases build against.
-> Source of truth today: `VendingCircuit.csv` (403 rows, flat). Target: a normalized
+> Source of truth today: `VendingCircuit.csv` (415 rows, flat). Target: a normalized
 > relational model in Supabase Postgres feeding a clustered map UI.
 
 ---
@@ -100,6 +100,33 @@ event_id FK · fee_type · amount · unit · notes. Fees were intentionally defe
 captured incidentally (e.g., Nashville Oktoberfest ~$2,000, John C. Fremont $550, Branson $400,
 Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a fee pass runs.
 
+### Prospects layer — the 7-run research overlay (`data/prospects.csv`)
+
+A second, independently-maintained dataset of **27 niche vending "prospects"** mined from a 7-run
+deep-research sweep (`VENDING_PROSPECTS.md`, 2026-07-13): mountain-bike/gravel races, sports
+tournaments, rodeos, car/air shows, dirt tracks, wineries, and moto rallies. They load into the
+**same** `vending_events` / `vending_event_schedules` tables and render on the same map, but live in
+their own files so the vending-circuit ETL never touches them.
+
+- **`build_prospects.py`** → generates **`data/prospects.csv`** (event rows, same schema as
+  `data/events.csv`) + **`data/prospect_schedules.csv`**, from a curated `P` table of the research
+  findings. Re-run (`python build_prospects.py`) after editing that table.
+- **IDs start at 500** (circuit events top out at 415) so the two datasets never collide, and the ETL
+  (`VendingCircuit.csv` → `data/events.csv`) can regenerate the circuit without clobbering prospects.
+  Prospects are **not** produced by the ETL — they are a separate curated file.
+- **Loading:** `vending_circuit_gen_sql.py` folds `data/prospects.csv` + `data/prospect_schedules.csv`
+  into `supabase_vending_data.sql` right after the circuit rows, so one idempotent `truncate+insert`
+  reload refreshes both. Combined load = **442 events / 442 schedules / 31 markets** (415 circuit + 27
+  prospects), ~433 published (all but the `excluded` prospects).
+- **New `event_type`s** added to the schema CHECK enum (see §3): `mtb_gravel`, `sports_tournament`,
+  `rodeo`, `car_show`, `air_show`, `dirt_track`, `winery`, `moto_rally`. The map's event-type filter
+  (`f-type`) surfaces them.
+- **Food-access mapping** — the research's food-vendor verdicts map onto `food_truck_friendly`:
+  `explicit_yes` = venue is open / welcomes carts (e.g. Rocheport Second Saturdays, Augusta
+  festivals); `concession_friendly` = apply-to-vend / contracted booths; `unconfirmed` = policy
+  unstated, must call before committing; `excluded` = closed or directly competing (e.g. Double X
+  Speedway sells its own $1.50 hot dogs). `excluded` rows load but the publish gate hides them.
+
 ---
 
 ## 3. Controlled vocabularies (LOCKED enums)
@@ -107,8 +134,12 @@ Washington County Fair $300) live in `events.notes` / `food_vendor_fee` until a 
 **event_type:** `state_fair` · `county_fair` · `festival` · `food_truck_rally` · `farmers_market` ·
 `oktoberfest` · `craft_fair` · `art_fair` · `music_fest` · `bbq_fest` · `balloon_fest` ·
 `holiday_market` · `cultural_fest` · `venue` · `booking_platform`
+→ **extended 2026-07-13** for the 7-run research prospects (see "Prospects layer" in §2):
+`mtb_gravel` · `sports_tournament` · `rodeo` · `car_show` · `air_show` · `dirt_track` · `winery` ·
+`moto_rally`.
 
-**cadence:** `annual` · `multi_week` · `monthly` · `weekly` · `recurring` (intermittent) · `year_round`
+**cadence:** `annual` · `multi_week` · `monthly` · `weekly` · `recurring` (intermittent) · `year_round` ·
+`one_time` (single-date concerts/prospects)
 
 **food_truck_friendly:** `explicit_yes` · `concession_friendly` · `unconfirmed` · `excluded`
 
@@ -207,7 +238,7 @@ to **NW Arkansas**.
 - [x] Market hubs enumerated
 - [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (415 events, 0 dupes, 0 unmapped)
 - [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (415/415 geocoded)
-- [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (31 markets / 415 events / 415 schedules / 410 published)
+- [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (31 markets / 415 events / 415 schedules / 410 published). **With the prospects overlay folded in (2026-07-13) the loaded totals are 442 events / 442 schedules / ~433 published** — see the Prospects layer in §2.
 - [x] (Task 5) Leaflet map (`vending-map/`) — data path verified via anon key
 - [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish
 - [x] (Map) **Zoom-based marker clustering** (Leaflet.markercluster) — replaced the two-tier
@@ -256,10 +287,11 @@ to **NW Arkansas**.
     SE Kansas (+5), West Tennessee (+6) = **+23 lightweight leads**. Interior gap-fill now complete
     (all 9 regions across the footprint).
 
-> **Current totals (2026-06-18):** **403 events / 400 published / 31 hubs**; 0 unmapped, 0 missing
-> coords; `needs_confirmation` = 61 (3 prior holds + 58 gap-fill leads). The live default map
-> count is lower than 377 because the date-aware "past events" and "music fests" toggles hide some
-> rows by default (toggleable on).
+> **Current totals:** the vending circuit is **415 events / 410 published / 31 hubs**; 0 unmapped,
+> 0 missing coords; `needs_confirmation` = 61 (3 prior holds + 58 gap-fill leads). Adding the 7-run
+> research overlay (**+27 prospects**, ids 500+ — see the Prospects layer in §2) the map/DB now load
+> **442 events / 442 schedules / ~433 published**. The live default map count is lower because the
+> date-aware "past events" and "music fests" toggles hide some rows by default (toggleable on).
 
 ---
 
