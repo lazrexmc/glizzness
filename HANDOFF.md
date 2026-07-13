@@ -28,7 +28,7 @@ a pile of research/analysis tooling.
 | **Menu pipeline** | `menu.json` is the source of truth → website + Square + DoorDash | ✅ SHIPPED & SYNCED (26 web / 28 Square) | **`MENU_PIPELINE.md`** | `menu.json`, `gen_menu.py`, `push_menu.py`, `pull_catalog.py`, `catalog_modifiers.py` |
 | **Catering leads** | Booking form → DB → instant email alert | ✅ LIVE | **`CATERING_LEADS.md`** | `site/catering.html`, Supabase `catering_leads`, Make.com, Gmail |
 | **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED | `CALENDAR_SETUP.md` | `sync_calendar.py`, Supabase `cart_schedule`, `site/events.html` |
-| **Festival / vending map** | 442-event food-truck prospecting map | ✅ LIVE at `glizzness.pages.dev/festivals` (→ `glizzness.com/festivals` after the DNS switch; ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
+| **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.pages.dev/festivals` (→ `glizzness.com/festivals` after the DNS switch; ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
 | **Event history / demand baseline** | Past calendar events, for future "how many people" modeling | 🟡 captured, analysis pending | `TODO.md` (demand baseline) | `pull_past_events.py` → `past_cart_events.csv` (local, gitignored) |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
@@ -119,7 +119,8 @@ pipeline built; a **5-cluster full-repo audit** (`FOLDER_AUDIT_2026-07-13.md`) �
 **repo made private**, legacy web pages + the dormant **SQLite accounting pipeline archived** to
 `archive/2026-07-13/`, `run_daily.ps1` scheduler confirmed OFF; lots of site-copy fixes (See-Our-Menu button,
 "three ways", de-corporate, catering rewords); a **7-run deep-research vending sweep** →
-`VENDING_PROSPECTS.md` → **27 prospects mined onto the festival map** (442 events; the map's type filter
-is a **multi-select** — every niche an on/off checkbox — plus a **⭐ Research picks** toggle isolating the 27);
+`VENDING_PROSPECTS.md` → **27 prospects mined onto the map** (442 events). The map was then **rebranded to
+the public "Midwest Event Finder"** — research picks pulled OFF it to seed the Scout board, fit/past/defunct
+filters dropped, "trip type" → "Distance from Columbia", single gold markers;
 **294 past calendar events captured** (`past_cart_events.csv`) for demand modeling; a freelance **rate sheet**
 Artifact. See `git log` and `FOLDER_AUDIT_2026-07-13.md` for specifics.

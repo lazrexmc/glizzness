@@ -5,6 +5,21 @@ Running list of open action items. Add dated entries; check them off or delete w
 
 ## Open
 
+- [ ] **★ Private admin hub (login-gated) — TOP PRIORITY** — one page at `glizzness.com` (NOT in public
+  nav), behind a real user/pass gate, that is Trint's + Lance's cockpit: it houses the **Scout board**
+  (below) and **links out to** the **Streamlit Wave dashboard** (`glizzness.streamlit.app`). Goal:
+  "everything reachable from the Glizzness domain" without moving Streamlit itself.
+  - **The Streamlit dashboard is fine where it lives.** It's internal + password-protected already, so a
+    pretty URL buys little, and a Streamlit custom domain needs a fussy Cloudflare proxy for its
+    websockets. The hub just **links** to it — no reverse-proxy. (Supersedes the old "streamlit subdomain"
+    sub-task.)
+  - **Security (frank):** this gate fronts financial (Wave) + prospecting data, so it must be a REAL auth
+    wall, not client-side theater — the Scout board writes to Supabase, so it needs proper RLS + a
+    server-checked passcode, not a hidden `<div>`. Eggs-in-one-basket is accepted, but the basket has to
+    actually lock.
+  - **Build:** an `admin/` (or `hub/`) folder, unlinked from nav; passcode gate; tiles → Scout board + Wave
+    dashboard (+ future tools). *(added 2026-07-13)*
+
 - [ ] **Find Trint a verified food supplier that will deliver to us** — a distributor/wholesaler
   willing to deliver despite (a) currently **low volume** and (b) **no fixed home / commercial
   address** (cart + Flyover commissary, no brick-and-mortar). Most big distributors (Sysco, US Foods)
@@ -39,15 +54,16 @@ Running list of open action items. Add dated entries; check them off or delete w
 - [ ] **Unify everything under `glizzness.com` (one web address)** — consolidate the properties so
   there's a single front door. *(Backlog — the festival-map half is **DONE**; only the Streamlit
   dashboard subdomain remains.)*
-  - **Festival / vending map — ✅ DONE (2026-07-13).** Moved from `vending-map/` (a standalone
-    `festivals.glizzness.com` site on Netlify) into **`site/festivals/`**, so it now ships with the main
-    Cloudflare Pages site and serves at **`glizzness.com/festivals`** (`glizzness.pages.dev/festivals`
-    until the custom domain switches). **Netlify is retired** (root `netlify.toml` archived to
-    `archive/2026-07-13/`). `site/events.html` links to it. Ships with the event-type filter + 442 events.
-  - **Accounting dashboard** (`glizzness.streamlit.app`) — *still open* — internal, password-protected admin tool.
-    Optionally reachable at a memorable subdomain (e.g. `admin.glizzness.com`) via CNAME/Cloudflare — note
-    Streamlit Community Cloud has limited custom-domain support (may need a Cloudflare proxy/Worker; watch
-    the websocket). Keep it OUT of the public nav. Lowest priority of the three.
+  - **Midwest Event Finder (was the "festival / vending map") — ✅ DONE + REBRANDED (2026-07-13).** Moved
+    from Netlify into **`site/festivals/`** (still the `/festivals` URL — folder/URL rename deferred since
+    it needs redirects), and **rebranded from "The Glizzness Vending Circuit" into the public "Midwest
+    Event Finder"**: a tool to find events to vend at OR attend, not "our circuit." Private research picks
+    pulled off it (→ Scout board); Past/defunct/fit filters removed; "trip type" → "Distance from
+    Columbia"; single gold markers. **North-star (future): monetize it** — organizers pay to be featured /
+    kept 100% current (a paid Midwest event directory). `site/events.html` links to it (new tab).
+  - **Accounting dashboard** (`glizzness.streamlit.app`) — see the **admin hub** item at the top of this
+    list: the decision is to **leave Streamlit where it lives** and just link to it from the gated hub (no
+    custom-domain proxy). This sub-task is folded into that item.
   - Prereq: `glizzness.com` must be live on Cloudflare first (domain-switch task / `GO_LIVE.md §2`).
   *(added 2026-07-13)*
 
@@ -56,10 +72,17 @@ Running list of open action items. Add dated entries; check them off or delete w
   Build him a dead-simple, phone-first decision tool. *(Backlog — build after the 7 research runs are
   compiled; not urgent.)*
 
-  **Concept:** a private, mobile-first **card feed** (NOT the map) — one card per prospect event with big
-  **✅ Yes / 🤔 Maybe / ❌ No** buttons and an **"❓ Ask a question"** field. Grouped by date, and — unlike the
-  public "Where We Vend" list — it **must show multiple events on the same day**. Trint taps through; his
-  answers + questions land where Lance can act on them (Lance researches the questions, books the Yeses).
+  **Concept:** a private, mobile-first **board of cards** (NOT the map, and it lives behind the admin hub
+  above) — one big card per respectable event with **✅ Yes / 🤔 Maybe / ❌ No** buttons and an **"❓ Ask a
+  question"** field. **Design for Trint specifically:** he reads better through clear visual layout than
+  dense text, so each card is **big, visual, low-reading-burden** — icon-led facts he can grasp at a
+  glance: **distance, drive time, vending/application fee, application deadline/window, crowd size, date**.
+  This is a hard design constraint, not a nice-to-have. Grouped by date, and — unlike the public "Where We
+  Vend" list — it **must show multiple events on the same day**. Trint taps through; his answers +
+  questions land where Lance can act on them (Lance researches the questions, books the Yeses).
+
+  **Seed data is ready:** the 27 curated research picks were just pulled OFF the public Midwest Event
+  Finder (ids ≥ 500) precisely so they can become this board — they're Trint's picks, not the public's.
 
   **Reuse the existing stack (same patterns as the catering form + Where We Vend):**
   - **Data:** new Supabase tables — `event_prospects` (id, name, event_type, city, venue, lat/lng,

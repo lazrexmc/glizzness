@@ -1,14 +1,23 @@
-# Vending Circuit Map
+# Midwest Event Finder
 
-A self-contained, static web map of food-truck-vendable events for The Glizzness, reading
-live from Supabase. **Zoom-based marker clustering:** every event is a colored dot that groups
-into numbered cluster bubbles when you zoom out and scatters into individual dots when you zoom
-in — click a bubble to zoom in, click a dot for the detail drawer (with the event's homepage
-link shown only when one exists).
+A self-contained, static web map — a public tool to **find events worth vending at or attending
+across the Midwest** (festivals, fairs, breweries, races, and more), centered on Columbia, MO,
+reading live from Supabase. Formerly "The Glizzness Vending Circuit"; rebranded 2026-07-13 because
+it's a discovery tool, not a list of events we run. **Zoom-based marker clustering:** every event
+is a gold dot that groups into numbered cluster bubbles when you zoom out and scatters into
+individual dots when you zoom in — click a bubble to zoom in, click a dot for the detail drawer
+(with the event's homepage link shown only when one exists).
 
-The dataset is the full **vending circuit plus 27 research "prospects"** (niche vending leads —
-MTB/gravel races, rodeos, wineries, dirt tracks, moto rallies, car/air shows, sports tournaments —
-mined from a 7-run deep-research sweep, `VENDING_PROSPECTS.md`), all filterable by **event type**.
+**Shows only live, upcoming, published events**, filterable by **event type** (a multi-select —
+every niche on/off), **month**, **distance from Columbia**, and **county**. There is no
+food-truck-"fit" filter or color-coding anymore, and no past/defunct toggles — a finder shows what
+you can still catch. **North-star:** monetize it as a paid Midwest event directory (organizers pay
+to be featured / kept current).
+
+> **Trint's private "research picks" (ids ≥ 500) are deliberately excluded here** — they were the
+> 7-run prospecting leads, and they now feed the **Scout board** (see `../../TODO.md`), not this
+> public finder. `app.js` filters them out client-side, and `vending_circuit_gen_sql.py` no longer
+> loads them into `vending_events`.
 
 No build step, no server, no framework. Plain HTML + Leaflet + Leaflet.markercluster + vanilla JS.
 
@@ -41,7 +50,7 @@ output directory = `site`), so `site/festivals/` is served at **`glizzness.com/f
 (`glizzness.pages.dev/festivals` until the custom domain switches). Every `git push` to `master`
 redeploys it along with the rest of the site — nothing map-specific to do.
 
-`site/events.html` links here ("Open the map"). The committed `config.js` holds the real **anon** key —
+`site/events.html` links here ("Open the Event Finder", new tab). The committed `config.js` holds the real **anon** key —
 public-safe (the `vending_*` tables are read-only via RLS; accounting tables have no policy and stay
 blocked).
 
@@ -82,7 +91,7 @@ The map reflects it on the next refresh.
   divIcon dot (colored by food-truck-friendliness). The plugin groups/scatters them by zoom.
 - **Clicking a cluster** with more than 5 events zooms to its bounds; a cluster with **≤5 events
   fans out (spiderfies) in place** so you don't have to keep zooming in. **Clicking a dot** opens
-  the side drawer with dates, size, distance/trip-type, application method, contact, fee (if known),
+  the side drawer with dates, size, distance, application method, contact, fee (if known),
   notes, and a conditional **Event page** button.
 - A **filter change** rebuilds the cluster layer from the filtered events and fit-bounds to them.
 
@@ -91,31 +100,31 @@ The map reflects it on the next refresh.
   viewport, sorted by month then name. It updates as you pan/zoom (`map moveend`); each row opens that
   event's drawer and pans/zooms to its dot — so you can read an area's events instead of clicking dots
   one by one. Respects the active filters.
-- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, and **county**. Month uses
-  `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
-  filter keys on `(county, state)` (county names repeat across states) and lists only counties present
-  in the data, so it stays short.
+- **Filters** (filter bar): by **month**, **distance from Columbia** (`f-distance` — Any / within 50 /
+  100 / 150 / 250 mi, off `distance_from_columbia_mi`; unknown-distance events hide under a cap), and
+  **county**. Month uses `vending_event_schedules.month`; year-round/recurring events (no month) match any
+  month. The county filter keys on `(county, state)` (county names repeat across states) and lists only
+  counties present in the data, so it stays short. (The old food-truck-"fit" and hometown/day/overnight
+  "trip" filters were removed in the Event Finder rebrand.)
 - **Event-type multi-select** (`#ms-type`, the "All types ▾" button): a checkbox dropdown — **every
   niche is its own on/off toggle**, with **All / None** buttons — so you can show, say, just dirt tracks
   + wineries, or hide a category you don't work. The list is built from the distinct `event_type` values
   present (pretty-labeled), covering both circuit types and the research-prospect types (`mtb_gravel`,
   `dirt_track`, `winery`, `moto_rally`, `rodeo`, `car_show`, `air_show`, `sports_tournament`). All on by
   default; `FILT.types` holds the enabled Set. (This replaced the old single-select "Any type" dropdown.)
-- **⭐ Research picks toggle** (`f-picks`): isolates the 27 curated 7-run research prospects (ids ≥ 500)
-  and shows **all** of them — even past-season and excluded ones — so you can browse just the
-  opportunities you sourced, apart from the ~415-event general circuit.
-- **Upcoming-only by default (date awareness):** events are annual, so an event whose months have all
-  already gone by *this calendar year* is treated as "passed this season" and **hidden by default** —
-  users only see things they can still catch. A **Past events** toggle reveals them (dimmed dots, a
-  list note, and a drawer badge *"Passed this year · returns ~[Month] [next year]"* derived from the
-  event's month). This recomputes from the browser date every load — no manual monthly cleanup. Events
-  with no month (year-round/various) always count as upcoming.
+- **No research picks on the public finder.** The 27 curated 7-run prospects (ids ≥ 500) are Trint's
+  private picks and are filtered out here (`isProspect` in `app.js`); they feed the **Scout board**.
+- **Upcoming-only (date awareness):** events are annual, so an event whose months have all already gone
+  by *this calendar year* is treated as "passed this season" and **hidden** — a finder shows only what you
+  can still catch. (The old "Past events" toggle was removed in the rebrand; past-season events just don't
+  show.) This recomputes from the browser date every load — no manual monthly cleanup. Events with no
+  month (year-round/various) always count as upcoming; one-off `one_time` events expire on their exact date.
 - **Music fests are no longer special-cased.** The old hidden-by-default "Music fests" toggle was
   retired when the event-type multi-select shipped — `music_fest` is now just another checkbox in that
   list (shown by default, un-check to hide). Food-forward events that merely include music
   (wine/BBQ/food festivals) keep their real type as before.
-- **Defunct/excluded toggle:** all events are fetched; defunct + excluded are hidden by default and
-  shown (styled red, with a status badge in the drawer) when toggled on.
+- **Live events only:** defunct/excluded events are filtered out entirely (`isPublished` gate) — the old
+  "Show defunct/excluded" toggle was removed. Markers are a single brand-gold dot (no fit color-coding).
 - **Mobile polish:** full-width drawer, wrapping filter bar, condensed legend on small screens.
 
 The map used to be a two-tier render (market hubs → click → events → click → drawer). It was
