@@ -146,6 +146,10 @@ Running list of open action items. Add dated entries; check them off or delete w
   board) rank on real numbers instead of guesses. *(Backlog — feasibility confirmed; it's a data-analysis
   task, no new infra.)*
 
+  **✅ Capture done (2026-07-13):** `pull_past_events.py` exported **294 past events** (Oct 2023 → now) to the
+  local, gitignored `past_cart_events.csv` (raw, un-sanitized). Remaining work = the Square **Orders** match
+  + per-event rollup (revenue / order count / items / peak hour).
+
   **Feasible? Yes — both sources are timestamped:**
   - **Events:** pull past entries from Google Calendar (Calendar API accepts past `timeMin`/`timeMax`) — each
     has date, time window, location. (`sync_calendar.py` keeps only *upcoming* stops in `cart_schedule`, but
