@@ -141,6 +141,28 @@ Running list of open action items. Add dated entries; check them off or delete w
   of whichever scheduling backend we pick. **Plan:** spike Square Shifts/Labor API first; build custom only
   for the demand → headcount model.
 
+- [ ] **Event sales history → demand baseline** — match PAST Google-Calendar events to Square sales to learn
+  "how much did we actually sell at events like this," so the staffing-to-demand model above (and the Scout
+  board) rank on real numbers instead of guesses. *(Backlog — feasibility confirmed; it's a data-analysis
+  task, no new infra.)*
+
+  **Feasible? Yes — both sources are timestamped:**
+  - **Events:** pull past entries from Google Calendar (Calendar API accepts past `timeMin`/`timeMax`) — each
+    has date, time window, location. (`sync_calendar.py` keeps only *upcoming* stops in `cart_schedule`, but
+    the Google Calendar itself still holds the history.)
+  - **Sales:** pull Square sales with timestamps via the **Square Orders API** (richer than the payout data
+    the accounting pipeline posts) — filter to **in-person POS** to exclude DoorDash/online = true on-site sales.
+  - **Join:** bucket Square orders into each event by date/time-window overlap → per-event **revenue, order
+    count, items sold, peak hour**. (Single cart = one Square location, so date/time is the only matcher.)
+
+  **Caveats:** match quality depends on accurate event time windows; must exclude delivery orders; historical
+  depth is limited by how far back events were actually logged in the calendar — but it **accumulates going
+  forward**, so every logged event + its sales becomes a data point from now on.
+
+  **Why it matters:** empirical backbone for the employee-scheduling model above — turns "guess the crowd"
+  into "at events like this we did $X / N orders → need M hands," and tells the Scout board which event
+  *types* actually paid off (which to rebook). *(added 2026-07-13)*
+
   **The philosophy (owner's — and it's a real ops concept, "labor standard / takt time"):** set a target
   sustainable throughput per station (e.g. 1 cook comfortably makes ~X items/hr, 1 cashier ~Y orders/hr),
   then staff each event to meet its expected demand AT that rate — so a bigger crowd means MORE
