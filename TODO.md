@@ -20,7 +20,10 @@ Running list of open action items. Add dated entries; check them off or delete w
     a simple admin view, or just work them in the Supabase table).
   - **(c) Calendar** — *still open.* Should a *confirmed* booking become a Google Calendar event? (would then
     flow to Where-We-Vend via `sync_calendar.py` if marked Public). Decide manual vs. automatic.
-  - **(d) Auto-reply** — *still open.* Send the customer a "thanks, we'll be in touch" confirmation on submit.
+  - **(d) Auto-reply — ✅ SPEC'D / READY (2026-07-13).** Copy + Make steps in `CATERING_LEADS.md`
+    ("Auto-reply to the customer"): a 2nd Gmail module in the same scenario, **filtered on `record.email`
+    containing `@`** (email is optional on the form), emailing the customer a confirmation. Needs the Make
+    module added (owner-side, exactly like the notification was).
   - **(e) Where leads live day-to-day** — *still open.* The operator's actual working view of the pipeline.
   *(added 2026-07-12; notification shipped 2026-07-13)*
 

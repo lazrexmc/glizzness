@@ -41,6 +41,50 @@ logic lives server-side in Supabase + Make.
 5. Add a **Gmail › Send an email** module; connect the Gmail account (grant **all** requested scopes —
    see gotcha #1). Map Subject/Body from `record.*` leaves (gotcha #2). Save + turn the scenario **ON**.
 
+## Auto-reply to the customer (confirmation email)
+
+A **second** email in the SAME Make scenario — but instead of the shop inbox, it goes back to the
+person who submitted, so they instantly know we got them. **Email is OPTIONAL on the form** (only
+`name` + `phone` are required), so this must fire **only when an email was actually given**.
+
+**Make.com steps (append to the existing `catering-lead-notify` scenario — don't build a new one):**
+
+1. After the existing owner-notify **Gmail › Send an email** module, add **another** Gmail › Send an
+   email module (call it module 3).
+2. On the link feeding module 3, add a **Filter** (click the wrench/spanner on the connector). Set the
+   condition: **`record: email`  →  Contains  →  `@`**. An empty/blank email can't contain "@", so
+   no-email leads are simply skipped — no errors, no blank sends.
+3. In module 3: **To** = `record: email` (expand `record`, pick the `email` leaf — same gotcha #2 as
+   below). **Subject** + **Body** = the copy below; map `record: name` into the two `{{name}}` spots.
+   Body type = **"collection of contents (text)"**, same as the notify module.
+4. Save. The scenario is already **ON**.
+
+**The copy** (plain text — `{{name}}` is the `record: name` mapping):
+
+```
+Subject:  Thanks, {{name}} — we got your Glizzness request 🌭
+
+Hi {{name}},
+
+Thanks for reaching out to The Glizzness — your catering request just landed
+in our inbox and we're on it.
+
+Here's what's next: we'll get back to you by call or text, usually within a
+day, to lock in the details and build the right menu for your crowd. If your
+date is coming up fast, don't wait on us — give us a shout anytime.
+
+  Call or text:  314-266-8636
+  Email:         glizzness@gmail.com
+
+Can't wait to bring the fun to the bun for you.
+
+— Trint & the Glizzness crew
+```
+
+**Why "call or text," not "reply to this email":** phone is the required field and email is optional, so
+the real follow-up happens by phone — the copy sets that expectation. Replies still land in
+glizzness@gmail.com anyway (it sends from the connected Gmail), so a reply is fine too.
+
 ## Gotchas that cost us time
 
 1. **Gmail 403 "insufficient authentication scopes."** The first Gmail connection didn't grant send
@@ -68,5 +112,6 @@ Supabase webhook shows a 200 in its logs.
 - Make webhook URL + Gmail connection: inside Make / the Supabase webhook config — **not in git**.
 - See `REBUILD.md` and the private memory for the full credential map.
 
-> Still open (see `TODO.md`): lead **status tracking**, optional **calendar** on confirmed bookings,
-> customer **auto-reply**, and an operator **working view**. Only the notification is built so far.
+> Built: the **owner notification** + the customer **auto-reply** (see the section above — the auto-reply
+> just needs its Make module added per those steps). Still open (see `TODO.md`): lead **status tracking**,
+> optional **calendar** on confirmed bookings, and an operator **working view**.
