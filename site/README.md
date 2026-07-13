@@ -1,4 +1,4 @@
-# glizzness.com — the unified site (scaffold)
+# glizzness.com — the unified site
 
 The new, code-based **glizzness.com**: one cohesive site where every revenue lane
 has a front door. Built from the business north-star
@@ -6,8 +6,8 @@ has a front door. Built from the business north-star
 **replaces** the fragmented setup (GoDaddy builder homepage + loose `menu.html` /
 `catering.html` at the repo root + the Netlify map).
 
-> Status: **scaffold, not deployed.** GoDaddy DNS is intentionally untouched.
-> Nothing here is live until someone deploys it (see "Deploy" below).
+> Status: **LIVE** — deployed to Cloudflare Pages (glizzness.pages.dev) on 2026-07-12.
+> Custom domain glizzness.com via GoDaddy DNS is still pending (see "Deploy" below).
 
 ---
 

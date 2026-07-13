@@ -205,9 +205,9 @@ to **NW Arkansas**.
 - [x] Enums locked
 - [x] Status→fields map defined
 - [x] Market hubs enumerated
-- [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (127 events, 0 dupes, 0 unmapped)
-- [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (127/127 geocoded)
-- [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (17 markets / 127 events / 127 schedules / 124 published)
+- [x] (Task 2) Consolidate + assign `market_id` + normalize enums → `data/markets.csv`, `data/events.csv` via `vending_circuit_etl.py` (415 events, 0 dupes, 0 unmapped)
+- [x] (Task 3) Geocode lat/lng (city-level + jitter) + parse schedules → `data/event_schedules.csv` via `vending_circuit_geocode.py` (415/415 geocoded)
+- [x] (Task 4) Load to Supabase — schema + data run in SQL editor; validation gate confirmed (31 markets / 415 events / 415 schedules / 410 published)
 - [x] (Task 5) Leaflet map (`vending-map/`) — data path verified via anon key
 - [x] (Task 6) Filters (month/fit/trip/**county**), defunct-toggle, mobile polish
 - [x] (Map) **Zoom-based marker clustering** (Leaflet.markercluster) — replaced the two-tier

@@ -350,3 +350,20 @@ that is not an acceptable unattended risk profile.
     pass, with the golden-file fixtures from the test plan.
   - New/changed files: `tests/test_accounting.py` (new), `money.py` (new), `auth.py` (new),
     `sync.py`, `sync_wave.py`, `post_loan_payments.py`, `dashboard.py`. Run `pytest tests/`.
+
+- **2026-07-10 (full-repo audit, branch `audit-2026-07-10`).** Findings + archive plan recorded in
+  `ARCHIVE_REVIEW.md`; unambiguous fixes applied to master that session (`.gitignore` hardening,
+  doc-drift corrections, Veterans-United mislabel fix, `site/404.html` nav, `flyer` "Hoggin' Dog"→
+  "Hog' N' Dog"). Pipeline verified INTACT; no secrets committed.
+
+- **2026-07-13 (full-repo audit, 5-cluster; full report: `FOLDER_AUDIT_2026-07-13.md`).** Pipeline
+  INTACT (`site/our-menu.html` byte-identical to a fresh render), no committed secrets, `pytest tests/`
+  = 15 passed. **P0 = public-repo PII exposure** (`Contacts.md` / `CorporateProspects.md`) — remediated
+  by making the **GitHub repo private** and fixing the `.gitignore` inline-comment bug (`*.docx`/`*.xlsx`
+  were silently unignored). Corrections applied (batches A–E): archived the superseded web pages **and
+  the dormant SQLite accounting pipeline** to `archive/2026-07-13/` (see its `ARCHIVE_MANIFEST.md`);
+  removed dead `build_loan_entries`/batch `post_loan_payments` in `sync.py` (kept `post_single_loan_payment`);
+  fixed `catalog_modifiers.py` add-on keys + made `post_sams_correction.py` account IDs env-overridable;
+  de-credentialed `catering/MARKETING.md`; refreshed drift docs. **Deferred/Accepted:** the vending
+  "published-view = gate" is still cosmetic (Finding 6 above, unchanged — Accepted Risk); **owner action:
+  disable the `run_daily.ps1` scheduled task** now that the SQLite pipeline is archived.

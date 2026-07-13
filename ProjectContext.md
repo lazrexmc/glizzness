@@ -6,6 +6,13 @@
 > obvious from the code alone. The companion file `SETUP.md` has step-by-step
 > workflow instructions and CLI command reference.
 
+> ⚠️ **DRIFT NOTICE (2026-07-13):** parts of this file have gone stale. Current truth lives in
+> `FOLDER_AUDIT_2026-07-13.md`, `MENU_PIPELINE.md`, and `CATERING_LEADS.md`. In short: the **menu**
+> is 26 website / 28 Square items; the **website** deployed 2026-07-12 (glizzness.pages.dev); the
+> **Where-We-Vend calendar** activated 2026-07-11; the **catering lead-notification pipeline** is
+> built (Supabase → Make → Gmail); the **repo is now PRIVATE**; and the legacy **SQLite accounting
+> pipeline** was archived to `archive/2026-07-13/` (post via the Streamlit dashboard only).
+
 ---
 
 ## Project Overview

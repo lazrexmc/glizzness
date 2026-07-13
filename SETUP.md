@@ -317,14 +317,16 @@ WAVE_INTEREST_EXPENSE_ID = "..."
 3. If Square is stale → click **Sync Square**
 4. If Entries shows unbuilt → click **Build Entries**
 5. If Wave shows staged → click **Post to Wave**
-6. If Loan shows unposted → click **Post Loans**
+6. If Loan shows unposted → use **Log Loan** to enter each payment (there is no batch "Post Loans" button)
 7. Or click **Full Sync** to run all four in one shot
 
 ---
 
 ## Supabase (hosted database)
 
-All scripts can still use the local `glizzness.db` (SQLite) for CLI use.
+> **Note (2026-07-13):** the legacy SQLite CLI pipeline (`sync_square.py`, `post_to_wave.py`,
+> `post_loan_payments.py`, etc.) was **archived** to `archive/2026-07-13/`. Post via the Streamlit
+> dashboard (Supabase) only; the local `glizzness.db` is frozen/historical.
 The dashboard uses Supabase (Postgres) so it runs without a local database file.
 
 - **Project URL:** `https://ikhcbncnaojrndilmnnd.supabase.co`

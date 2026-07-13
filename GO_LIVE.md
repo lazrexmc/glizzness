@@ -1,16 +1,16 @@
 # GO_LIVE.md — Bringing The Glizzness online
 
-> **The master activation checklist.** Everything below is **built in the repo but not
-> yet live.** Work top-to-bottom — later steps assume earlier ones are done. Each step
-> says exactly what to click/run. Deep-dive docs are linked where they exist.
+> **The master activation checklist.** Most of this is now live — the **website is deployed**
+> (glizzness.pages.dev) and the **calendar is activated**. What's left: the **custom domain** and the
+> **DoorDash go-live**. Work top-to-bottom; each step says exactly what to click/run.
 > **Rebuilding from nothing after a disaster? See `REBUILD.md`.**
-> Last updated: 2026-07-12.
+> Last updated: 2026-07-13.
 
 ## What's already built (so you know the state)
-- **Website** — unified `site/` (Home, Menu, Order, Catering/Corporate, Where We Vend, 404). Browser-verified, **not deployed.**
-- **Catering booking** — `catering/` standalone page **and** the newer `site/catering.html` (both POST to Supabase `catering_leads`). Keep the `site/` one; retire the standalone.
+- **Website** — unified `site/` (Home, Menu, Order, Catering/Corporate, Where We Vend, 404). **✅ DEPLOYED 2026-07-12** to Cloudflare Pages (glizzness.pages.dev); custom domain still pending (§2).
+- **Catering booking** — `site/catering.html` → Supabase `catering_leads` → **lead-notification pipeline LIVE** (Make → Gmail; see `CATERING_LEADS.md`). The old standalone `catering/` page was **archived 2026-07-13**.
 - **Vending map** — `vending-map/` (415 events), was on Netlify at `festivals.glizzness.com`.
-- **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` (**already regenerated & committed** — the site shows the full 20-item menu, verified byte-identical to a fresh render); `push_menu.py` (menu.json → Square → DoorDash) **is built.** `menu.json` is clean (25 items, all website items described). Only the Square push is left (§4).
+- **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` + the home teaser (byte-identical, verified); `push_menu.py` (menu.json → Square → DoorDash) is built and **synced**. `menu.json` = **26 website items / 28 live in Square**, all described (see `MENU_PIPELINE.md`).
 - **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list (collapsible: next 3 + "Show all"). **✅ ACTIVATED 2026-07-11** — schema run, real sync done, page renders. Remaining: automate the sync (§7 Task Scheduler); it becomes publicly visible when the site deploys (§2).
 
 ---

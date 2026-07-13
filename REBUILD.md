@@ -5,7 +5,7 @@
 > hosted sites, the machine, every login. Each subsystem has a deeper doc (linked in §8); this file is the
 > **order to do things in**, the **account + secret map**, and the **cross-cutting traps**.
 >
-> This file is committed to a **public** GitHub repo — it contains **no secret values**, only where each
+> This file is committed to a **private** GitHub repo (made private 2026-07-13) — it still contains **no secret values**, only where each
 > secret lives and how to regenerate it. Keep it that way.
 >
 > Last updated: **2026-07-12**.
@@ -57,7 +57,7 @@ and it keeps secrets out of git.
 
 | Account | What it's for | Recover via |
 |---|---|---|
-| **GitHub** (`lazrexmc/glizzness`) | source of truth; triggers Cloudflare + Streamlit deploys | github.com login (public repo; only *push* needs a PAT/SSH key) |
+| **GitHub** (`lazrexmc/glizzness`) | source of truth; triggers Cloudflare + Streamlit deploys | github.com login (**private** repo — clone/pull/push all need a PAT/SSH key) |
 | **Supabase** | the Postgres DB behind everything | supabase.com login → recreate project if gone |
 | **Cloudflare** | Pages hosting for `site/` (and the migrated map) | dash.cloudflare.com |
 | **GoDaddy** | domain **registrar only** for glizzness.com (DNS) | godaddy.com — touched only for the custom-domain step |
@@ -265,6 +265,8 @@ Everything reads Supabase, so build it first. Do these **in order**:
 | Website | `site/README.md`, `GO_LIVE.md §2` |
 | Where We Vend calendar | `CALENDAR_SETUP.md`, `GO_LIVE.md §3` |
 | Menu pipeline | `MENU_PIPELINE.md`, `GO_LIVE.md §4` |
+| Catering lead pipeline | `CATERING_LEADS.md` |
 | Accounting (Square→Wave) | `ProjectContext.md`, `SETUP.md` |
 | Festival map | `vending-map/README.md`, `DATA_MODEL.md` |
 | What's safe to archive | `ARCHIVE_REVIEW.md` |
+| Latest full-repo audit | `FOLDER_AUDIT_2026-07-13.md` + `archive/2026-07-13/ARCHIVE_MANIFEST.md` |
