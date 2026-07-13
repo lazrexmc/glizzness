@@ -543,5 +543,65 @@
         }
       ]
     }
-  ]
+  ],
+  "addons": {
+    "heading": "Add-ons",
+    "blurb": "Pile it on — add any of these to any item.",
+    "items": [
+      {
+        "square_id": "UYGTGHNG34ZVK2X6DJ6RQF7X",
+        "name": "Chili",
+        "price_cents": 100,
+        "website": true
+      },
+      {
+        "square_id": "H5YE242E47LNR4MF4OW3CW37",
+        "name": "Cheese",
+        "price_cents": 100,
+        "website": true
+      },
+      {
+        "square_id": "XDX4XDQOBGZZDYM4N5OAQNMV",
+        "name": "Chili Cheese",
+        "price_cents": 200,
+        "website": true
+      },
+      {
+        "square_id": "32ZSIFX33SOYWQ3A6T7YOZJA",
+        "name": "Bacon",
+        "price_cents": 200,
+        "website": true
+      },
+      {
+        "square_id": "2XVWG7I55MCOOUBZSEDCSK7Y",
+        "name": "Pulled Pork",
+        "price_cents": 200,
+        "website": true
+      },
+      {
+        "square_id": "BEYEUYALW57S7MBYDKOREWNB",
+        "name": "Shredded Chicken",
+        "price_cents": 200,
+        "website": true
+      },
+      {
+        "square_id": "XFWJGDJHNYTH6AKBFMXKXX6F",
+        "name": "Chips",
+        "price_cents": 100,
+        "website": true
+      },
+      {
+        "square_id": "UFITYXI3RBIALANOQPQSZFYV",
+        "name": "Bomb-o-granate Molasses",
+        "price_cents": 100,
+        "website": true
+      },
+      {
+        "square_id": "RCQSLRNLUD6MXLNPVLTELCSB",
+        "name": "Pineapple Popper Cream Cheese",
+        "price_cents": 200,
+        "website": true
+      }
+    ]
+  }
 }

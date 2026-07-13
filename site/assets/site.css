@@ -274,6 +274,8 @@ h1, h2, h3 { line-height: 1.05; margin: 0; }
 .band--cream .mi__name { color: var(--ink); }
 .mi__price { font-family: var(--font-display); color: var(--gold); font-size: 1.15rem; letter-spacing: .02em; }
 .band--cream .mi__price { color: var(--gold-deep); }
+.addons-list { color: var(--muted-l); line-height: 2; margin: 4px 0 0; }
+.addons-list strong { color: var(--gold-deep); font-family: var(--font-display); font-weight: 400; letter-spacing: .02em; }
 .mi__desc { grid-column: 1 / -1; color: var(--muted-d); font-size: .95rem; margin: 0; }
 .band--cream .mi__desc { color: var(--muted-l); }
 

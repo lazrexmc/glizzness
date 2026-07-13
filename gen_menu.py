@@ -79,6 +79,24 @@ def render_teaser(doc):
     return "\n".join(mi_html(i, 10) for i in favs)
 
 
+def render_addons(doc):
+    """The add-ons / toppings block (menu.json 'addons'), rendered right after Sides."""
+    a = doc.get("addons") or {}
+    items = [i for i in a.get("items", []) if i.get("website", True)]
+    if not items:
+        return ""
+    pills = " · ".join(f'{html.escape(i["name"])} <strong>{money(i["price_cents"])}</strong>' for i in items)
+    out = ['        <div class="menu-sec menu-sec--addons">',
+           '          <div class="menu-sec__h">',
+           f'            <h2>{html.escape(a.get("heading", "Add-ons"))}</h2>']
+    if (a.get("blurb") or "").strip():
+        out.append(f'            <p>{html.escape(a["blurb"])}</p>')
+    out += ["          </div>",
+            f'          <p class="addons-list">{pills}</p>',
+            "        </div>"]
+    return "\n".join(out)
+
+
 def replace_block(path, start, end, block):
     """Rewrite the text between the start/end markers in `path`. Returns True if it changed."""
     src = open(path, encoding="utf-8").read()
@@ -119,6 +137,11 @@ def render(doc, warn):
         out.append("          </div>")
         out.append("        </div>")
         out.append("")
+        if sec["key"] == "sides":                 # add-ons live right after Sides
+            block = render_addons(doc)
+            if block:
+                out.append(block)
+                out.append("")
 
     known = {s["key"] for s in doc["sections"]}
     for i in doc["items"]:
