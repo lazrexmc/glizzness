@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <base href="/festivals/" />
-  <title>The Glizzness — Vending Circuit Map</title>
+  <title>Midwest Event Finder — The Glizzness</title>
+  <meta name="description" content="Find events worth vending at or attending across the Midwest — festivals, fairs, breweries, races and more, centered on Columbia, Missouri. Filter by month, distance, and event type." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
@@ -108,24 +109,19 @@
   <div id="app">
     <header>
       <span class="dog">🌭</span>
-      <h1>The Glizzness — Vending Circuit</h1>
+      <h1>Midwest Event Finder</h1>
       <button id="list-toggle" aria-label="List view">☰ List</button>
       <span id="crumb"></span>
     </header>
     <div id="filterbar">
       <span class="fb-label">Filter</span>
       <select id="f-month" aria-label="Month"><option value="all">Any month</option></select>
-      <select id="f-friendly" aria-label="Food-truck fit">
-        <option value="all">Any fit</option>
-        <option value="explicit_yes">Food-truck friendly</option>
-        <option value="concession_friendly">Concession friendly</option>
-        <option value="unconfirmed">Unconfirmed</option>
-      </select>
-      <select id="f-trip" aria-label="Trip type">
-        <option value="all">Any trip</option>
-        <option value="hometown">Hometown</option>
-        <option value="day_trip">Day trip</option>
-        <option value="overnight">Overnight</option>
+      <select id="f-distance" aria-label="Distance from Columbia">
+        <option value="all">Any distance</option>
+        <option value="50">Within 50 mi</option>
+        <option value="100">Within 100 mi</option>
+        <option value="150">Within 150 mi</option>
+        <option value="250">Within 250 mi</option>
       </select>
       <select id="f-county" aria-label="County"><option value="all">Any county</option></select>
       <div class="ms" id="ms-type">
@@ -135,19 +131,13 @@
           <div id="ms-list"></div>
         </div>
       </div>
-      <label><input type="checkbox" id="f-picks" /> ⭐ Research picks</label>
-      <label><input type="checkbox" id="f-past" /> Past events</label>
-      <label><input type="checkbox" id="f-hidden" /> Show defunct/excluded</label>
       <button id="f-reset">Reset</button>
     </div>
     <div id="main">
       <div id="map"></div>
       <div id="status">Loading…</div>
       <div class="legend">
-        <div class="row"><span class="dot" style="background:#5bbf6a"></span> Food-truck friendly</div>
-        <div class="row"><span class="dot" style="background:#5aa7e0"></span> Concession friendly</div>
-        <div class="row"><span class="dot" style="background:#e0b14a"></span> Unconfirmed — verify</div>
-        <div class="row"><span class="dot" style="background:#d0594f"></span> Defunct / excluded (toggle on)</div>
+        <div class="row"><span class="dot" style="background:#e8a33d"></span> Upcoming event</div>
         <div class="row" style="margin-top:6px; color:var(--muted); font-size:11px;">Zoom in to scatter, out to group. Pins show the city/area, not exact addresses.</div>
       </div>
       <aside id="listpanel">

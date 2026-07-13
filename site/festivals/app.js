@@ -1,9 +1,11 @@
-/* The Glizzness — Vending Circuit map (zoom-based marker clustering).
-   Every event is a colored dot in a single Leaflet.markercluster layer: dots group
+/* Midwest Event Finder (by The Glizzness) — zoom-based marker clustering.
+   A public tool to find events worth vending at or attending across the Midwest.
+   Every event is a gold dot in a single Leaflet.markercluster layer: dots group
    into numbered bubbles when zoomed out and scatter into individual dots when zoomed in.
    Click a bubble to zoom in; click a dot for the detail drawer.
    Reads Supabase REST with the public anon key (vending_* tables have public-read RLS).
-   Filters: month / friendliness / trip-type / county + a defunct/excluded toggle. */
+   Shows only live, upcoming, published events. Filters: month / distance / county / event types.
+   (Trint's private "research picks", ids >= 500, are excluded here — they feed the Scout board.) */
 
 const URL = window.SUPABASE_URL, KEY = window.SUPABASE_ANON_KEY;
 const HEADERS = { apikey: KEY, Authorization: "Bearer " + KEY };
@@ -18,8 +20,7 @@ const lpCount   = document.getElementById("lp-count");
 let listOpen = false;
 
 let EVENTS = [], monthsByEvent = {}, dateByEvent = {}, eventsById = {};
-const FILT = { month: "all", friendly: "all", trip: "all", county: "all", types: null,
-               showHidden: false, showPast: false, picksOnly: false };
+const FILT = { month: "all", distance: "all", county: "all", types: null };
 
 // ---------- date awareness ----------
 // Annual events: "passed" = the season is over this year; it returns next year.
@@ -88,15 +89,15 @@ const isHidden = e => !isPublished(e);
 
 function passesFilter(e) {
   if (e.lat == null || e.lng == null) return false;
-  if (FILT.picksOnly && !isProspect(e)) return false;
-  // "Research picks" shows ALL curated prospects (even past-season / excluded); else apply the hide toggles
-  if (!(FILT.picksOnly && isProspect(e))) {
-    if (!FILT.showHidden && isHidden(e)) return false;
-    if (!FILT.showPast && isPastSeason(e)) return false;   // already-passed-this-year off by default
-  }
+  if (isProspect(e)) return false;      // Trint's private research picks feed the Scout board, not this finder
+  if (!isPublished(e)) return false;    // only live, real events (no defunct/excluded)
+  if (isPastSeason(e)) return false;    // a finder shows only what's still catchable this year
   if (FILT.types && !FILT.types.has(e.event_type)) return false;   // per-niche on/off multi-select
-  if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
-  if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
+  if (FILT.distance !== "all") {
+    const raw = e.distance_from_columbia_mi;
+    const d = (raw == null || raw === "") ? NaN : Number(raw);
+    if (!Number.isFinite(d) || d > Number(FILT.distance)) return false;   // unknown distance hidden under a cap
+  }
   if (FILT.county !== "all" && (e.county || "") + "|" + (e.state || "") !== FILT.county) return false;
   if (FILT.month !== "all") {
     const ms = monthsByEvent[e.id] || [];
@@ -107,11 +108,7 @@ function passesFilter(e) {
 }
 const visibleEvents = () => EVENTS.filter(passesFilter);
 
-const friendlyColor = e => {
-  if (isHidden(e)) return "#d0594f";            // red — defunct / excluded
-  const f = e.food_truck_friendly;
-  return f === "explicit_yes" ? "#5bbf6a" : f === "unconfirmed" ? "#e0b14a" : "#5aa7e0";
-};
+const MARKER = "#e8a33d";   // single brand-gold dot — the finder no longer color-codes by "fit"
 const dotIcon = color => L.divIcon({
   className: "evt-dot", iconSize: [16, 16], iconAnchor: [8, 8],
   html: `<span style="background:${color}"></span>`
@@ -126,7 +123,7 @@ function render(fit) {
   const markers = [], pts = [];
   vis.forEach(e => {
     if (e.lat == null || e.lng == null) return;
-    const mk = L.marker([e.lat, e.lng], { icon: dotIcon(friendlyColor(e)) })
+    const mk = L.marker([e.lat, e.lng], { icon: dotIcon(MARKER) })
       .bindTooltip(esc(e.name), { direction: "top" });
     if (isPastSeason(e)) mk.setOpacity(0.45);   // dim events whose date already passed this year
     mk.on("click", () => openDrawer(e));
@@ -160,7 +157,7 @@ function renderList() {
               : ` · <span class="lp-passed">passed · returns ${esc(nextReturnLabel(e))}</span>`)
           : (isOneTime(e) ? ` · <span class="lp-onetime">one-time</span>` : "");
         return `<button class="lp-row${past ? " lp-past" : ""}" data-id="${esc(e.id)}">
-          <div class="nm"><span class="lp-dot" style="background:${friendlyColor(e)}"></span>${esc(e.name)}</div>
+          <div class="nm"><span class="lp-dot" style="background:${MARKER}"></span>${esc(e.name)}</div>
           <div class="sub">${esc(e.city)}, ${esc(e.state)}${when ? " · " + esc(when) : ""}${passed}</div>
         </button>`;
       }).join("")
@@ -179,27 +176,16 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ESC[c]);
 function badge(text, cls) { return `<span class="badge ${cls}">${esc(text)}</span>`; }
 
 function openDrawer(e) {
-  const friendly = {
-    explicit_yes:  badge("Food-truck friendly", "b-green"),
-    concession_friendly: badge("Concession friendly", "b-blue"),
-    unconfirmed:   badge("Food fit unconfirmed", "b-amber"),
-    excluded:      badge("Not food-truck", "b-red")
-  }[e.food_truck_friendly] || "";
-  const statusB = e.verification_status === "defunct" ? badge("Defunct", "b-red")
-    : (e.verification_status === "excluded" || e.food_truck_friendly === "excluded")
-      ? badge("Excluded — not vending", "b-red") : "";
   const verify = e.needs_confirmation === true || e.needs_confirmation === "true"
     ? badge("Verify before relying", "b-amber") : "";
-  const pastB = isOneTime(e)
-    ? badge(isPastSeason(e) ? "One-time · ended" : "One-time event", isPastSeason(e) ? "b-amber" : "b-blue")
-    : (isPastSeason(e) ? badge("Passed this year · returns " + nextReturnLabel(e), "b-amber") : "");
+  const oneTimeB = isOneTime(e) ? badge("One-time event", "b-blue") : "";
   const typeB = badge((e.event_type || "").replace(/_/g, " "), "b-grey");
 
   const rows = [];
   const add = (label, val) => { if (val) rows.push(`<dt>${esc(label)}</dt><dd>${esc(val)}</dd>`); };
   add("When", e.typical_dates || e.month);
   add("Size / attendance", e.attendance_text);
-  add("Distance from Columbia", e.distance_from_columbia_mi ? e.distance_from_columbia_mi + " mi (" + (e.trip_type || "").replace("_", " ") + ")" : "");
+  add("Distance from Columbia", e.distance_from_columbia_mi ? e.distance_from_columbia_mi + " mi" : "");
   add("Apply via", e.application_method);
   const contact = [e.contact_name, e.contact_email, e.contact_phone].filter(Boolean).join(" · ");
   add("Contact", contact);
@@ -216,7 +202,7 @@ function openDrawer(e) {
   drawerBody.innerHTML = `
     <h2>${esc(e.name)}</h2>
     <div class="loc">${esc(e.city)}, ${esc(e.state)}${countyTxt}</div>
-    <div>${typeB}${friendly}${statusB}${verify}${pastB}</div>
+    <div>${typeB}${verify}${oneTimeB}</div>
     <dl>${rows.join("")}</dl>
     ${home}`;
   drawer.classList.add("open");
@@ -304,29 +290,14 @@ function wireFilters() {
     el.addEventListener("change", () => { FILT[key] = el.value; applyFilters(); });
   };
   bind("f-month", "month");
-  bind("f-friendly", "friendly");
-  bind("f-trip", "trip");
+  bind("f-distance", "distance");
   bind("f-county", "county");
-  document.getElementById("f-hidden").addEventListener("change", e => {
-    FILT.showHidden = e.target.checked; applyFilters();
-  });
-  document.getElementById("f-past").addEventListener("change", e => {
-    FILT.showPast = e.target.checked; applyFilters();
-  });
-  document.getElementById("f-picks").addEventListener("change", e => {
-    FILT.picksOnly = e.target.checked; applyFilters();
-  });
   document.getElementById("f-reset").addEventListener("click", () => {
-    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all";
-    FILT.showHidden = false; FILT.showPast = false; FILT.picksOnly = false;
+    FILT.month = "all"; FILT.distance = "all"; FILT.county = "all";
     msSetAll(true);
     monthSel.value = "all";
-    document.getElementById("f-friendly").value = "all";
-    document.getElementById("f-trip").value = "all";
+    document.getElementById("f-distance").value = "all";
     countySel.value = "all";
-    document.getElementById("f-hidden").checked = false;
-    document.getElementById("f-past").checked = false;
-    document.getElementById("f-picks").checked = false;
     applyFilters();
   });
 }
