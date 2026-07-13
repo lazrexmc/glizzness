@@ -8,7 +8,7 @@
 > This file is committed to a **private** GitHub repo (made private 2026-07-13) — it still contains **no secret values**, only where each
 > secret lives and how to regenerate it. Keep it that way.
 >
-> Last updated: **2026-07-12**.
+> Last updated: **2026-07-13**.
 
 ---
 
@@ -29,7 +29,7 @@ is what makes the anon key safe.
 
 - **Assume GONE:** the Supabase project, all hosted sites (Cloudflare Pages / Streamlit Cloud / legacy
   Netlify), the working machine, every service login, and every **gitignored** local file —
-  `.streamlit/secrets.toml`, `glizzness.db`, `run_daily.ps1`, `catalog_export.json`.
+  `.streamlit/secrets.toml`, `glizzness.db`, `run_daily.ps1`, `catalog_export.json`, `past_cart_events.csv`.
 - **Assume SURVIVES:** the GitHub repo `github.com/lazrexmc/glizzness` **and** the **`..\PrivateData\`**
   folder — a *sibling* of the repo (in the parent `James Jason Trinton Johnson\` dir) that holds the Google
   service-account JSON key, tax-portal logins, Etsy backup codes, etc.
@@ -79,7 +79,7 @@ master key that bypasses RLS and must never appear in any tracked/browser file.
 | Secret | Public? | Lives in | How to get / regenerate |
 |---|---|---|---|
 | `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `catering/config.js`, `vending-map/config.js` (committed) | Supabase → Project Settings → API → `anon public` |
-| `SUPABASE_URL` | public | hardcoded in `db.py` (~line 8) + `migrate_to_supabase.py`; the three `config.js`; env for `sync_calendar.py` | Supabase → Project Settings → API → Project URL |
+| `SUPABASE_URL` | public | hardcoded in `db.py` (~line 8); the three `config.js`; env for `sync_calendar.py` | Supabase → Project Settings → API → Project URL |
 | `SUPABASE_SERVICE_KEY` | **SECRET** | `.streamlit/secrets.toml` (gitignored) + Streamlit Cloud Secrets + shell env | Supabase → Project Settings → API → `service_role` |
 | `SQUARE_TOKEN` | **SECRET** | shell `$env` (Lance's machine), `.streamlit/secrets.toml`, Streamlit Cloud, `run_daily.ps1` | Square Developer Dashboard → your app → **Production** Access Token (needs `ITEMS_READ`+`ITEMS_WRITE`) |
 | `WAVE_TOKEN` | **SECRET** | `.streamlit/secrets.toml`, Streamlit Cloud, `run_daily.ps1` | Wave → Settings → Developer → Manage API tokens (full access) |
@@ -109,7 +109,7 @@ Everything reads Supabase, so build it first. Do these **in order**:
 5. **Calendar** — Google service account + `sync_calendar.py` → **§5.3**
 6. **Menu → Square → DoorDash** — `pull_catalog.py` → `gen_menu.py` → `push_menu.py` → **§5.4**
 7. **Accounting** — deploy the Streamlit dashboard, re-sync from Square/Wave → **§5.5**
-8. **Festival map** — load `vending_*`, deploy the map → **§5.6**
+8. **Festival map** — load `vending_*` (442 events incl. 27 research prospects), deploy the map → **§5.6**
 9. **Custom domain** — point glizzness.com at Pages (last, careful about email/MX) → **§5.7**
 
 ---
@@ -126,13 +126,15 @@ Everything reads Supabase, so build it first. Do these **in order**:
    3. `supabase_contacts_schema.sql` (`contacts`; private)
    4. `supabase_schedule_schema.sql` (`cart_schedule`; anon **read-only**)
    5. `supabase_vending_schema.sql` (**DROPs+recreates** `vending_*`, the publish-gate view, RLS + SELECT policies)
-   6. `supabase_vending_data.sql` (idempotent load: 31 markets / 415 events / 415 schedules — run **after** #5)
-4. **⚠ Rewire the project ref** if the new URL differs from `ikhcbncnaojrndilmnnd`: update `db.py` (~line 8),
-   `migrate_to_supabase.py`, and all three `config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). The keys are
+   6. `supabase_vending_data.sql` (idempotent load: 31 markets / **442 events** = 415 circuit + 27 research
+      prospects / 442 schedules — run **after** #5)
+4. **⚠ Rewire the project ref** if the new URL differs from `ikhcbncnaojrndilmnnd`: update `db.py` (~line 8)
+   and all three `config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). The keys are
    JWTs bound to the project ref — old keys won't work on a new project, and the app silently talks to a dead
-   project if you miss one.
-5. Verify: in the SQL Editor, `select count(*) from vending_events;` → 415, `from vending_published_events;`
-   → ~410. With the **anon** key, a fetch of `payouts` or `contacts` must return **nothing** (RLS working).
+   project if you miss one. (The one-time `migrate_to_supabase.py` that also baked in the ref is **archived** —
+   see `archive/2026-07-13/` — so it's no longer part of the rewire.)
+5. Verify: in the SQL Editor, `select count(*) from vending_events;` → 442, `from vending_published_events;`
+   → ~430. With the **anon** key, a fetch of `payouts` or `contacts` must return **nothing** (RLS working).
 
 ### 5.2 Website (Cloudflare Pages) — detail: `site/README.md`, `GO_LIVE.md §2`
 1. Confirm `site/` has all pages + `_redirects` + `assets/`. There is **no build step** — no package.json, no
@@ -191,12 +193,18 @@ Everything reads Supabase, so build it first. Do these **in order**:
    distinct Wave accounts) — re-derive both cleanly.
 
 ### 5.6 Festival map — festivals.glizzness.com — detail: `vending-map/README.md`, `DATA_MODEL.md`
-1. `vending_*` tables + data loaded in §5.1 (steps 3.5 + 3.6). Re-verify counts (31/415/415/~410).
+1. `vending_*` tables + data loaded in §5.1 (steps 3.5 + 3.6). Re-verify counts (31 markets / 442 events / ~430 published).
 2. Set `vending-map/config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). It reads the **raw** `vending_events`
-   tables (client-side publish filter), so those SELECT policies are load-bearing.
+   tables (client-side publish filter + an **event-type filter**), so those SELECT policies are load-bearing.
 3. To regenerate data from the master CSV: `python vending_circuit_etl.py` → `vending_circuit_geocode.py` →
    `vending_circuit_gen_sql.py` → `vending_circuit_gen_md.py`, then re-run the vending SQL. (`geocode` is a
    built-in city→lat/lng dict, **not** an API — a brand-new city must be added to it or the event is dropped.)
+   The **27 research prospects** (ids 500+, curated in `VENDING_PROSPECTS.md` from a 7-run deep-research sweep)
+   come from a **separate loader**: `python build_prospects.py` writes `data/prospects.csv` +
+   `data/prospect_schedules.csv`, and `vending_circuit_gen_sql.py` **folds them into**
+   `supabase_vending_data.sql` automatically. Their new `event_type`s (mtb_gravel, sports_tournament, rodeo,
+   car_show, air_show, dirt_track, winery, moto_rally) were added to the `event_type` CHECK enum in
+   `supabase_vending_schema.sql` — extend that enum first if you add another type or the data load fails.
 4. Host: a **separate** Cloudflare Pages project (same repo), **Build output directory = `vending-map`**.
    Then add the `festivals` subdomain (CNAME → the Pages target). **Not** Netlify (retired; `netlify.toml`
    is obsolete — see `ARCHIVE_REVIEW.md`).
@@ -214,9 +222,9 @@ Everything reads Supabase, so build it first. Do these **in order**:
 
 - **Cloudflare Pages ≠ Workers.** The CF UI pushes you to Workers/`wrangler`. For static sites use **Pages →
   Connect to Git**, output dir `site` (or `vending-map`). Wrong path = failed/blank deploy.
-- **Hardcoded Supabase ref.** `SUPABASE_URL` is baked into `db.py` and `migrate_to_supabase.py` (not read from
-  env there). A rebuilt project has a new ref — update those + all three `config.js` or everything silently
-  points at a dead DB.
+- **Hardcoded Supabase ref.** `SUPABASE_URL` is baked into `db.py` (not read from env there; the one-time
+  `migrate_to_supabase.py` that also carried it is now archived). A rebuilt project has a new ref — update
+  `db.py` + all three `config.js` or everything silently points at a dead DB.
 - **RLS = on, no policies** for the 12 accounting tables + `contacts`. That's intentional: only `service_role`
   reads them. If you "helpfully" add a permissive policy you leak financials/PII; if you forget `ENABLE` the
   anon key exposes them.
@@ -239,12 +247,16 @@ Everything reads Supabase, so build it first. Do these **in order**:
   `.streamlit/secrets.toml`, Wave transaction CSVs. Rebuild secrets from dashboards; rebuild data by re-syncing.
 - **Vending schema is destructive:** `supabase_vending_schema.sql` DROPs the `vending_*` tables — re-running it
   wipes the data (reload via the data file). The `one_time` cadence CHECK must exist before the data inserts.
+- **Vending `event_type` is a fixed allow-list:** the `event_type` CHECK in `supabase_vending_schema.sql`
+  enumerates every valid type (music_fest, … + the 8 prospect types mtb_gravel, sports_tournament, rodeo,
+  car_show, air_show, dirt_track, winery, moto_rally). A CSV row with a type not in it fails the **whole**
+  data load — extend the CHECK before adding a new type.
 
 ---
 
 ## 7 · End-to-end verification
 
-- [ ] Supabase SQL Editor: `vending_events`=415, `vending_published_events`≈410, `catering_leads` returns a number.
+- [ ] Supabase SQL Editor: `vending_events`=442, `vending_published_events`≈430, `catering_leads` returns a number.
 - [ ] anon key is **blocked** on `payouts`/`contacts`; **allowed** on `cart_schedule`/`vending_events`.
 - [ ] `python -c "import db; db.get_client().table('payouts').select('payout_id').limit(1).execute()"` runs (service key OK).
 - [ ] Website: every page on `*.pages.dev` loads; catering form submits a row into `catering_leads`; Where We Vend renders.
@@ -268,5 +280,7 @@ Everything reads Supabase, so build it first. Do these **in order**:
 | Catering lead pipeline | `CATERING_LEADS.md` |
 | Accounting (Square→Wave) | `ProjectContext.md`, `SETUP.md` |
 | Festival map | `vending-map/README.md`, `DATA_MODEL.md` |
+| Vending prospects (7-run deep-research sweep, ids 500+) | `VENDING_PROSPECTS.md` (curated) → `build_prospects.py` → `data/prospects.csv` |
+| Event-history export (future demand baseline) | `pull_past_events.py` → gitignored `past_cart_events.csv` (analysis feeder, **not** a DR step) |
 | What's safe to archive | `ARCHIVE_REVIEW.md` |
-| Latest full-repo audit | `FOLDER_AUDIT_2026-07-13.md` + `archive/2026-07-13/ARCHIVE_MANIFEST.md` |
+| Latest full-repo audit + what got archived | `FOLDER_AUDIT_2026-07-13.md` + `archive/2026-07-13/ARCHIVE_MANIFEST.md` |

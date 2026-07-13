@@ -7,9 +7,9 @@
 > Last updated: 2026-07-13.
 
 ## What's already built (so you know the state)
-- **Website** — unified `site/` (Home, Menu, Order, Catering/Corporate, Where We Vend, 404). **✅ DEPLOYED 2026-07-12** to Cloudflare Pages (glizzness.pages.dev); custom domain still pending (§2).
-- **Catering booking** — `site/catering.html` → Supabase `catering_leads` → **lead-notification pipeline LIVE** (Make → Gmail; see `CATERING_LEADS.md`). The old standalone `catering/` page was **archived 2026-07-13**.
-- **Vending map** — `vending-map/` (415 events), was on Netlify at `festivals.glizzness.com`.
+- **Website** — unified `site/` (Home, Menu, Order, **Catering & events**, Where We Vend, 404; "corporate" branding was dropped site-wide, and the home page now leads with Order / See-Our-Menu / Book buttons + a "three ways to get your Glizzy" section). **✅ DEPLOYED 2026-07-12** to Cloudflare Pages (glizzness.pages.dev); custom domain still pending (§2).
+- **Catering booking** — `site/catering.html` → Supabase `catering_leads` → **lead-notification pipeline LIVE** (Supabase Database Webhook → Make.com → Gmail; see `CATERING_LEADS.md`). The old standalone `catering/` page was **archived 2026-07-13**.
+- **Vending map** — `vending-map/` (Leaflet), **live on Netlify at `festivals.glizzness.com`**. Now **442 events** = 415 vending-circuit + **27 new research "prospects"** (7-run deep-research sweep — `VENDING_PROSPECTS.md`), with an **event-type filter** on the map. Reload steps in §1.
 - **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` + the home teaser (byte-identical, verified); `push_menu.py` (menu.json → Square → DoorDash) is built and **synced**. `menu.json` = **26 website items / 28 live in Square**, all described (see `MENU_PIPELINE.md`).
 - **Where We Vend calendar** — `sync_calendar.py` + `cart_schedule` table + the `site/events.html` "Upcoming stops" list (collapsible: next 3 + "Show all"). **✅ ACTIVATED 2026-07-11** — schema run, real sync done, page renders. Remaining: automate the sync (§7 Task Scheduler); it becomes publicly visible when the site deploys (§2).
 
@@ -22,12 +22,17 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 |---|---|---|
 | `supabase_schema.sql` | accounting tables | already live (don't rerun casually) |
 | `supabase_catering_schema.sql` | `catering_leads` | needed for the booking form to save leads |
-| `supabase_vending_schema.sql` **then** `supabase_vending_data.sql` | vending map tables + 415 events | schema FIRST (has the `one_time` CHECK), then data. Reload = idempotent truncate+insert |
+| `supabase_vending_schema.sql` **then** `supabase_vending_data.sql` | vending map tables + **442 events** (415 circuit + 27 prospects) | schema FIRST (has the `one_time` CHECK + the extended `event_type` enum), then data. Reload = idempotent truncate+insert |
 | `supabase_contacts_schema.sql` | `contacts` (B2B) | only if you use the contacts pipeline |
 | `supabase_schedule_schema.sql` | `cart_schedule` | **NEW** — the Where We Vend calendar (§3) |
 
-**Verify:** after the vending reload, expect ~415 events / ~410 published. After catering,
+**Verify:** after the vending reload, expect **442 events / ~430 published**. After catering,
 `select count(*) from catering_leads;` returns a number (0 is fine).
+
+**Reload the vending data** (after editing the circuit *or* the research prospects): regenerate with
+`python build_prospects.py` (writes `data/prospects.csv` + `data/prospect_schedules.csv`) →
+`python vending_circuit_gen_sql.py` (folds the prospects into `supabase_vending_data.sql`) → re-run
+`supabase_vending_data.sql` in the SQL editor (idempotent truncate+insert). Full detail: `REBUILD.md §5.6`.
 
 ## 2. Website — deploy `site/` to Cloudflare Pages
 > **✅ DEPLOYED 2026-07-12** — live at **`glizzness.pages.dev`**, verified (home, menu from `menu.json`,
@@ -37,10 +42,10 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 
 GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**. Full notes: `site/README.md`.
 
-1. **Push** the repo to GitHub (remote already set: `github.com/lazrexmc/glizzness`).
+1. **Push** the repo to GitHub (remote already set: `github.com/lazrexmc/glizzness` — now a **private** repo, so clone/pull/push need a PAT or SSH key).
 2. **Cloudflare Pages → Create project → Connect to Git** → pick the repo.
    - Framework preset: **None** · Build command: **(empty)** · **Build output directory: `site`**.
-3. First deploy lands on `*.pages.dev`. **Verify there before any DNS change** — click every page, submit a test catering lead, check the Call/Text/DoorDash buttons and the top nav "Book Catering" (should be dark text on gold).
+3. First deploy lands on `*.pages.dev`. **Verify there before any DNS change** — click every page, submit a test catering lead, check the Call/Text/DoorDash buttons and the top nav "Book the Cart" CTA (should be dark text on gold).
 4. **Then** (separate, deliberate) point the domain: add `glizzness.com` (and `www`) as a custom domain in CF Pages, and update the DNS record at **GoDaddy**. *This is the only step that touches GoDaddy.*
 5. `site/_redirects` handles friendly aliases (`/book`, `/delivery`, `/festivals`, …).
 
@@ -66,40 +71,44 @@ Full detail: **`CALENDAR_SETUP.md`**. Short version:
 ## 4. Menu → Square → DoorDash
 DoorDash pulls its menu **from Square**, so Square is the push target. `menu.json` is the source of truth. Full flow: `MENU_PIPELINE.md`.
 1. **Website menu — already done.** `site/our-menu.html` was regenerated from `menu.json` and committed;
-   it renders the full 20 website items (verified byte-identical to a fresh `gen_menu.py` render). Only
+   it renders the full **26 website items** (verified byte-identical to a fresh `gen_menu.py` render). Only
    re-run `python gen_menu.py --write` if you edit `menu.json` again.
-2. **Push to Square (→ DoorDash):** `python push_menu.py` (dry run). As of this audit the diff is
-   **22 updates, 0 creates, 0 deletes** — in practice just 5 description backfills (Sloppy Joe, Jackfruit,
-   Chips, Water, Keychain). The three `retired` items (Chicken Teriyaki, the generic **Sides** item, and
-   **Walking Nachos**) are **already gone from Square**, so nothing is deleted. Then **Lance** runs
-   `python push_menu.py --apply` with `SQUARE_TOKEN`. If you changed add-ons, run order is
+2. **Push to Square (→ DoorDash):** `python push_menu.py` (dry run). The menu is currently **SYNCED** —
+   the latest dry-run shows **28 update (all "already in sync"), 0 create, 0 delete** (every item matched by
+   `square_id`, no orphans). So after a clean `pull_catalog.py` there's nothing to apply; only re-run
+   `python push_menu.py --apply` (as **Lance**, with `SQUARE_TOKEN`) after you actually edit `menu.json`.
+   Add-ons live in `menu.json`'s "addons" block and render on the website via `gen_menu.py`, but are **not**
+   pushed to Square — `catalog_modifiers.py` owns Square's Add-Ons. If you change add-ons, run order is
    `catalog_modifiers.py --apply` → `pull_catalog.py` → `push_menu.py`.
-   > **Note:** Walking Nachos is intentionally **retired** (owner decision 2026-07-10) — off the site and
-   > already gone from Square, so `--apply` deletes nothing. The live nachos item is `Nachos` (the boat).
 3. **DoorDash portal:** confirm the storefront `https://www.doordash.com/store/38788821` resolves
    and shows "The Glizzness"; **exclude the "Cart Only" category** from DoorDash.
 
 ## 5. Retire the old / fragmented web
 Once `site/` is live and verified:
-- Delete/redirect the **GoDaddy builder homepage**.
-- Retire the **root `menu.html` / `catering.html`**, **`catering-hot-dogs-50.html`**, and the
-  **standalone `catering/` folder** (superseded by `site/`).
-- Decide the **vending map**: migrate `vending-map/` to Cloudflare Pages (Netlify hit its cap),
-  or keep it where it is and link from `site/events.html`.
+- Delete/redirect the **GoDaddy builder homepage** — *still open* (do it during the domain switch, §2 step 4).
+- ✅ **DONE (2026-07-13):** the **root `menu.html` / `catering.html`**, **`catering-hot-dogs-50.html`**, and
+  the **standalone `catering/` folder** were archived to `archive/2026-07-13/` (superseded by `site/`; see
+  `archive/2026-07-13/ARCHIVE_MANIFEST.md`).
+- Decide the **vending map**: migrate `vending-map/` into Cloudflare Pages / under `glizzness.com`, or keep it
+  on Netlify (`festivals.glizzness.com`) and link from `site/events.html` — *still open* (backlog: "unify
+  everything under glizzness.com", see `TODO.md`).
 
 ## 6. Social & contact (already wired)
 `site/assets/config.js` already has Facebook + Instagram URLs, phone `314-266-8636`, email
 `glizzness@gmail.com`, DoorDash store `38788821`. Verify the links after deploy.
 
 ## 7. Post-launch
-- **Schedules:** calendar sync (§3), and the Square→Wave accounting sync (`run_daily.ps1` via Task Scheduler).
+- **Schedules:** the **calendar sync** (§3, Task Scheduler every 1–2h) is the only automation to stand up.
+  Accounting is **manual** now — post via the Streamlit dashboard (`glizzness.streamlit.app` → `dashboard.py`
+  → `sync.py` → Supabase → Wave); the old `run_daily.ps1` local-SQLite scheduler was **retired 2026-07-13**
+  (confirmed off; see `archive/2026-07-13/ARCHIVE_MANIFEST.md`).
 - **Marketing push:** `catering/MARKETING.md` (social + B2B outreach kit); `CorporateProspects.md` + `Contacts.md` for the corporate lane.
 - **Time-sensitive:** Show-Me State Games (call Jessie Sida 573-884-2946); Mizzou FY27 vending renewal (Casey Forbis / EHS).
 
 ---
 
 ## Quick smoke test (after deploy)
-- [ ] Every page loads; nav "Book Catering" is **dark-on-gold** (readable) on all pages.
+- [ ] Every page loads; nav "Book the Cart" CTA is **dark-on-gold** (readable) on all pages.
 - [ ] Menu page: grill hero shows grates/flames (not just the black base).
 - [ ] Catering: 8 packages in the 2-column base│upgrade layout; no price "bounce".
 - [ ] Catering booking form submits → a row lands in `catering_leads`.
