@@ -157,8 +157,8 @@
     {
       "square_id": "BMEYPJVX5OPVAQP6HDLX6BSM",
       "section": "glizzy",
-      "name": "Patchwork Brat",
-      "description": "A small-batch brat from Patchwork Family Farms — savory and satisfying, with just a faint apple note in the background.",
+      "name": "Brat",
+      "description": "A savory, small-batch brat with just a faint apple note in the background.",
       "website": true,
       "variations": [
         {
@@ -172,7 +172,7 @@
       "square_id": "RAVNSLW3KAVTYFXJZHLABC55",
       "section": "glizzy",
       "name": "Chili Brat",
-      "description": "Our Patchwork brat, loaded with house-made bean-free chili and cheese.",
+      "description": "Our brat, loaded with house-made bean-free chili and cheese.",
       "website": true,
       "variations": [
         {
@@ -186,7 +186,7 @@
       "square_id": "WNEWZIIZEKM62RPZMNHRTETN",
       "section": "glizzy",
       "name": "Hog' N' Brat",
-      "description": "Our Patchwork brat topped with slow-roasted pulled pork and tangy BBQ mustard.",
+      "description": "Our brat topped with slow-roasted pulled pork and tangy BBQ mustard.",
       "website": true,
       "variations": [
         {
@@ -199,8 +199,8 @@
     {
       "square_id": "ME2FHK3KF7AAIP3ZB6OK3F6J",
       "section": "glizzy",
-      "name": "Half Pound Smoked Patchwork Brat",
-      "description": "A hearty half-pound smoked brat from Patchwork Family Farms — rich and smoky, with a faint apple note underneath.",
+      "name": "Half Pound Smoked Brat",
+      "description": "A hearty half-pound smoked brat — rich and smoky, with a faint apple note underneath.",
       "website": true,
       "variations": [
         {
