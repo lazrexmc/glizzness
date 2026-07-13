@@ -1,0 +1,28 @@
+id,event_id,month,start_date,end_date,recurrence_text,display_text,year_specific
+500,500,,,,,"Weekly race nights, 2026 season",false
+501,501,,,,,"Weekly dirt oval, 2026 season",false
+502,502,5,,,,Sun nights May 3-Aug 2,false
+503,503,,,,,Weekly Sat series Apr-Sep,false
+504,504,5,,,,Show-Me 100 May 21-23; Fall Nationals Sep 29-Oct 3,false
+505,505,,,,,"2nd Sat, Apr-Oct",false
+506,506,6,,,,"Free Summer Music, Fri 6-9pm, Jun-Aug",false
+507,507,9,,,,"Sep 19-20, 2026",false
+508,508,11,,,,"Nov 7, 2026",false
+509,509,,,,,"Live music most Sat/Sun, Apr-Oct",false
+510,510,,,,,,false
+511,511,,,,,Wed Night Ride & Social (weekly) + Biker Swap Meet (4th Sat),false
+512,512,8,,,,"Aug 20-23, 2026",false
+513,513,9,,,,"Sep 15-20, 2026 (6 days)",false
+514,514,12,,,,Fall/holiday,false
+515,515,8,,,,Early-mid Aug 2026,false
+516,516,8,,,,"Aug 29-30, 2026",false
+517,517,9,,,,"Sep 12-13, 2026",false
+518,518,9,,,,"Sep 20, 2026",false
+519,519,11,,,,"Nov 7, 2026",false
+520,520,7,,,,"Jul 17-19, 2026",false
+521,521,9,,,,"Sep 12-13, 2026",false
+522,522,9,,,,"Sep 30-Oct 4, 2026",false
+523,523,8,,,,"Aug 7-8, 2026",false
+524,524,10,,,,"Oct 23-25, 2026",false
+525,525,8,,,,"Aug 5-8, 2026",false
+526,526,10,,,,"Oct 16-17, 2026",false

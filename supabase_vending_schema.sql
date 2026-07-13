@@ -36,7 +36,9 @@ create table vending_events (
   event_type        text check (event_type in
       ('state_fair','county_fair','festival','food_truck_rally','farmers_market',
        'oktoberfest','craft_fair','art_fair','music_fest','bbq_fest','balloon_fest',
-       'holiday_market','cultural_fest','venue','booking_platform')),
+       'holiday_market','cultural_fest','venue','booking_platform',
+       -- added 2026-07-13 for the 7-run niche prospects (data/prospects.csv):
+       'mtb_gravel','sports_tournament','rodeo','car_show','air_show','dirt_track','winery','moto_rally')),
   cadence           text check (cadence in
       ('annual','multi_week','monthly','weekly','recurring','year_round','one_time')),
   is_recurring_venue   boolean default false,
@@ -140,8 +142,8 @@ commit;
 
 -- VALIDATION (run after load; all should return sensible numbers):
 -- select count(*) from vending_markets;                       -- expect 31
--- select count(*) from vending_events;                        -- expect 415
--- select count(*) from vending_event_schedules;               -- expect 415
+-- select count(*) from vending_events;                        -- expect 442 (415 circuit + 27 prospects)
+-- select count(*) from vending_event_schedules;               -- expect 442
 -- select count(*) from vending_events where market_id is null;-- expect 0
 -- select count(*) from vending_events where lat is null;      -- expect 0
--- select count(*) from vending_published_events;              -- expect 410 (415 minus 1 defunct + 4 excluded)
+-- select count(*) from vending_published_events;              -- ~433 (410 circuit + 23 non-excluded prospects)

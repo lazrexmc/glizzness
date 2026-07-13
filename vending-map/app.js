@@ -18,7 +18,7 @@ const lpCount   = document.getElementById("lp-count");
 let listOpen = false;
 
 let EVENTS = [], monthsByEvent = {}, dateByEvent = {}, eventsById = {};
-const FILT = { month: "all", friendly: "all", trip: "all", county: "all",
+const FILT = { month: "all", friendly: "all", trip: "all", county: "all", type: "all",
                showHidden: false, showMusic: false, showPast: false };
 
 // ---------- date awareness ----------
@@ -92,6 +92,7 @@ function passesFilter(e) {
   if (!FILT.showPast && isPastSeason(e)) return false;    // already-passed-this-year off by default
   if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
   if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
+  if (FILT.type !== "all" && e.event_type !== FILT.type) return false;
   if (FILT.county !== "all" && (e.county || "") + "|" + (e.state || "") !== FILT.county) return false;
   if (FILT.month !== "all") {
     const ms = monthsByEvent[e.id] || [];
@@ -254,6 +255,14 @@ function wireFilters() {
     o.value = key; o.textContent = `${cty} (${st})`;
     countySel.appendChild(o);
   });
+  // Event-type options: distinct event_type present in the data, pretty-labeled.
+  const typeSel = document.getElementById("f-type");
+  const pretty = t => t.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  [...new Set(EVENTS.map(e => e.event_type).filter(Boolean))].sort().forEach(t => {
+    const o = document.createElement("option");
+    o.value = t; o.textContent = pretty(t);
+    typeSel.appendChild(o);
+  });
   const bind = (elId, key) => {
     const el = document.getElementById(elId);
     el.addEventListener("change", () => { FILT[key] = el.value; applyFilters(); });
@@ -262,6 +271,7 @@ function wireFilters() {
   bind("f-friendly", "friendly");
   bind("f-trip", "trip");
   bind("f-county", "county");
+  bind("f-type", "type");
   document.getElementById("f-hidden").addEventListener("change", e => {
     FILT.showHidden = e.target.checked; applyFilters();
   });
@@ -272,12 +282,13 @@ function wireFilters() {
     FILT.showPast = e.target.checked; applyFilters();
   });
   document.getElementById("f-reset").addEventListener("click", () => {
-    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all";
+    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all"; FILT.type = "all";
     FILT.showHidden = false; FILT.showMusic = false; FILT.showPast = false;
     monthSel.value = "all";
     document.getElementById("f-friendly").value = "all";
     document.getElementById("f-trip").value = "all";
     countySel.value = "all";
+    document.getElementById("f-type").value = "all";
     document.getElementById("f-hidden").checked = false;
     document.getElementById("f-music").checked = false;
     document.getElementById("f-past").checked = false;
