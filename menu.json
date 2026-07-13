@@ -116,14 +116,15 @@
       "section": "glizzy",
       "name": "Nacho Glizzy",
       "description": "A Glizzy loaded with nacho cheese, our salsa blend, and crumbled cheese chips.",
-      "website": true,
+      "website": false,
       "variations": [
         {
           "square_id": "YSH3DTDCO2DRO2RTJQFVT7E4",
           "name": "Regular",
           "price_cents": 700
         }
-      ]
+      ],
+      "retired": true
     },
     {
       "square_id": "KEGK7MC5OWI5O3EZ23446ZYC",
