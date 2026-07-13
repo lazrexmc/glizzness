@@ -61,6 +61,9 @@ chatlog.txt
 # Playwright MCP scratch (screenshots / snapshots from local smoke tests)
 .playwright-mcp/
 
+# Make.com run/history exports (may contain lead PII — names/emails/phones from submissions)
+MakeHistory/
+
 # Square catalog exports/backups (generated dumps of the live menu; regenerate via pull_catalog.py)
 catalog_export.json
 catalog_backup_*.json

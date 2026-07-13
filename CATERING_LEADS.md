@@ -54,6 +54,10 @@ person who submitted, so they instantly know we got them. **Email is OPTIONAL on
 2. On the link feeding module 3, add a **Filter** (click the wrench/spanner on the connector). Set the
    condition: **`record: email`  →  Contains  →  `@`**. An empty/blank email can't contain "@", so
    no-email leads are simply skipped — no errors, no blank sends.
+   - **⚠ GOTCHA (cost us a test):** the operator dropdown **defaults to "Text operators: Equal to"** — you
+     MUST change it to **Contains**. `email Equal to @` is always false, so it silently blocks *every*
+     auto-reply. **Tell-tale:** the Make run log shows only **2 operations** (webhook + owner email) instead
+     of **3**. A passing run = 3 operations.
 3. In module 3: **To** = `record: email` (expand `record`, pick the `email` leaf — same gotcha #2 as
    below). **Subject** + **Body** = the copy below; map `record: name` into the two `{{name}}` spots.
    Body type = **"collection of contents (text)"**, same as the notify module.
@@ -112,6 +116,6 @@ Supabase webhook shows a 200 in its logs.
 - Make webhook URL + Gmail connection: inside Make / the Supabase webhook config — **not in git**.
 - See `REBUILD.md` and the private memory for the full credential map.
 
-> Built: the **owner notification** + the customer **auto-reply** (see the section above — the auto-reply
-> just needs its Make module added per those steps). Still open (see `TODO.md`): lead **status tracking**,
-> optional **calendar** on confirmed bookings, and an operator **working view**.
+> Built & LIVE: the **owner notification** + the customer **auto-reply** (both verified end-to-end
+> 2026-07-13). Still open (see `TODO.md`): lead **status tracking**, optional **calendar** on confirmed
+> bookings, and an operator **working view**.
