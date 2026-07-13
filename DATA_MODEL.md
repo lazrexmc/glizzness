@@ -291,7 +291,9 @@ to **NW Arkansas**.
 > 0 missing coords; `needs_confirmation` = 61 (3 prior holds + 58 gap-fill leads). Adding the 7-run
 > research overlay (**+27 prospects**, ids 500+ — see the Prospects layer in §2) the map/DB now load
 > **442 events / 442 schedules / ~433 published**. The live default map count is lower because the
-> date-aware "past events" and "music fests" toggles hide some rows by default (toggleable on).
+> date-aware **"Past events"** toggle hides already-passed-this-season rows by default (toggleable on),
+> as do defunct/excluded rows. (Music fests are **no longer** hidden by default — `music_fest` is just a
+> checkbox in the event-type multi-select now.)
 
 ---
 

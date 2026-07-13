@@ -91,22 +91,29 @@ The map reflects it on the next refresh.
   viewport, sorted by month then name. It updates as you pan/zoom (`map moveend`); each row opens that
   event's drawer and pans/zooms to its dot — so you can read an area's events instead of clicking dots
   one by one. Respects the active filters.
-- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, **county**, and **event
-  type** (`f-type`). Month uses `vending_event_schedules.month`; year-round/recurring events (no month)
-  match any month. The county filter keys on `(county, state)` (county names repeat across states) and
-  lists only counties present in the data, so it stays short. The event-type dropdown is built from the
-  distinct `event_type` values present (pretty-labeled), so it covers both circuit types and the
-  research-prospect types (`mtb_gravel`, `dirt_track`, `winery`, `moto_rally`, `rodeo`, `car_show`,
-  `air_show`, `sports_tournament`).
+- **Filters** (filter bar): by month, food-truck-friendliness, trip-type, and **county**. Month uses
+  `vending_event_schedules.month`; year-round/recurring events (no month) match any month. The county
+  filter keys on `(county, state)` (county names repeat across states) and lists only counties present
+  in the data, so it stays short.
+- **Event-type multi-select** (`#ms-type`, the "All types ▾" button): a checkbox dropdown — **every
+  niche is its own on/off toggle**, with **All / None** buttons — so you can show, say, just dirt tracks
+  + wineries, or hide a category you don't work. The list is built from the distinct `event_type` values
+  present (pretty-labeled), covering both circuit types and the research-prospect types (`mtb_gravel`,
+  `dirt_track`, `winery`, `moto_rally`, `rodeo`, `car_show`, `air_show`, `sports_tournament`). All on by
+  default; `FILT.types` holds the enabled Set. (This replaced the old single-select "Any type" dropdown.)
+- **⭐ Research picks toggle** (`f-picks`): isolates the 27 curated 7-run research prospects (ids ≥ 500)
+  and shows **all** of them — even past-season and excluded ones — so you can browse just the
+  opportunities you sourced, apart from the ~415-event general circuit.
 - **Upcoming-only by default (date awareness):** events are annual, so an event whose months have all
   already gone by *this calendar year* is treated as "passed this season" and **hidden by default** —
   users only see things they can still catch. A **Past events** toggle reveals them (dimmed dots, a
   list note, and a drawer badge *"Passed this year · returns ~[Month] [next year]"* derived from the
   event's month). This recomputes from the browser date every load — no manual monthly cleanup. Events
   with no month (year-round/various) always count as upcoming.
-- **Music-fest toggle:** dedicated music festivals (`event_type = 'music_fest'`) are **hidden by
-  default** so they don't flood the map, and shown via the **Music fests** toggle. Food-forward events
-  that merely include music (wine/BBQ/food festivals) keep their real type and stay visible.
+- **Music fests are no longer special-cased.** The old hidden-by-default "Music fests" toggle was
+  retired when the event-type multi-select shipped — `music_fest` is now just another checkbox in that
+  list (shown by default, un-check to hide). Food-forward events that merely include music
+  (wine/BBQ/food festivals) keep their real type as before.
 - **Defunct/excluded toggle:** all events are fetched; defunct + excluded are hidden by default and
   shown (styled red, with a status badge in the drawer) when toggled on.
 - **Mobile polish:** full-width drawer, wrapping filter bar, condensed legend on small screens.

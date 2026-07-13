@@ -77,6 +77,18 @@
     .leaflet-popup-content { font-size:13px; }
     #status { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:var(--panel);
               border:1px solid #000; border-radius:8px; padding:8px 14px; font-size:13px; z-index:1100; }
+    /* multi-select event-type dropdown */
+    .ms { position:relative; }
+    .ms-btn[aria-expanded="true"] { border-color:var(--accent); }
+    .ms-panel { position:absolute; top:calc(100% + 4px); left:0; z-index:1300; background:var(--panel);
+                border:1px solid #3a342c; border-radius:8px; padding:8px; min-width:210px; max-height:320px;
+                overflow-y:auto; box-shadow:0 8px 26px rgba(0,0,0,.55); }
+    .ms-panel[hidden] { display:none; }
+    .ms-actions { display:flex; gap:8px; margin:0 0 6px; }
+    .ms-actions button { flex:1; }
+    #ms-list label { display:flex; align-items:center; gap:7px; padding:4px; font-size:13px; color:var(--ink);
+                     white-space:nowrap; cursor:pointer; border-radius:4px; }
+    #ms-list label:hover { background:#2a241c; }
     /* mobile polish */
     @media (max-width:560px) {
       header { padding:8px 10px; gap:8px; }
@@ -116,8 +128,14 @@
         <option value="overnight">Overnight</option>
       </select>
       <select id="f-county" aria-label="County"><option value="all">Any county</option></select>
-      <select id="f-type" aria-label="Event type"><option value="all">Any type</option></select>
-      <label><input type="checkbox" id="f-music" /> Music fests</label>
+      <div class="ms" id="ms-type">
+        <button type="button" class="ms-btn" id="ms-btn" aria-expanded="false">All types ▾</button>
+        <div class="ms-panel" id="ms-panel" hidden>
+          <div class="ms-actions"><button type="button" id="ms-all">All</button><button type="button" id="ms-none">None</button></div>
+          <div id="ms-list"></div>
+        </div>
+      </div>
+      <label><input type="checkbox" id="f-picks" /> ⭐ Research picks</label>
       <label><input type="checkbox" id="f-past" /> Past events</label>
       <label><input type="checkbox" id="f-hidden" /> Show defunct/excluded</label>
       <button id="f-reset">Reset</button>

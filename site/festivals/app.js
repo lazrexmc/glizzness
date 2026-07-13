@@ -18,8 +18,8 @@ const lpCount   = document.getElementById("lp-count");
 let listOpen = false;
 
 let EVENTS = [], monthsByEvent = {}, dateByEvent = {}, eventsById = {};
-const FILT = { month: "all", friendly: "all", trip: "all", county: "all", type: "all",
-               showHidden: false, showMusic: false, showPast: false };
+const FILT = { month: "all", friendly: "all", trip: "all", county: "all", types: null,
+               showHidden: false, showPast: false, picksOnly: false };
 
 // ---------- date awareness ----------
 // Annual events: "passed" = the season is over this year; it returns next year.
@@ -31,6 +31,7 @@ const TODAY_ISO = `${NOW.getFullYear()}-${pad2(NOW_M)}-${pad2(NOW.getDate())}`;
 const MONTH_FULL = ["", "January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"];
 const isMusic   = e => e.event_type === "music_fest";
+const isProspect = e => Number(e.id) >= 500;   // the 7-run research "prospects" (ids 500+)
 const isOneTime = e => e.cadence === "one_time";
 
 function isPastSeason(e) {
@@ -87,12 +88,15 @@ const isHidden = e => !isPublished(e);
 
 function passesFilter(e) {
   if (e.lat == null || e.lng == null) return false;
-  if (!FILT.showHidden && isHidden(e)) return false;
-  if (!FILT.showMusic && isMusic(e)) return false;        // music fests off by default
-  if (!FILT.showPast && isPastSeason(e)) return false;    // already-passed-this-year off by default
+  if (FILT.picksOnly && !isProspect(e)) return false;
+  // "Research picks" shows ALL curated prospects (even past-season / excluded); else apply the hide toggles
+  if (!(FILT.picksOnly && isProspect(e))) {
+    if (!FILT.showHidden && isHidden(e)) return false;
+    if (!FILT.showPast && isPastSeason(e)) return false;   // already-passed-this-year off by default
+  }
+  if (FILT.types && !FILT.types.has(e.event_type)) return false;   // per-niche on/off multi-select
   if (FILT.friendly !== "all" && e.food_truck_friendly !== FILT.friendly) return false;
   if (FILT.trip !== "all" && e.trip_type !== FILT.trip) return false;
-  if (FILT.type !== "all" && e.event_type !== FILT.type) return false;
   if (FILT.county !== "all" && (e.county || "") + "|" + (e.state || "") !== FILT.county) return false;
   if (FILT.month !== "all") {
     const ms = monthsByEvent[e.id] || [];
@@ -255,14 +259,46 @@ function wireFilters() {
     o.value = key; o.textContent = `${cty} (${st})`;
     countySel.appendChild(o);
   });
-  // Event-type options: distinct event_type present in the data, pretty-labeled.
-  const typeSel = document.getElementById("f-type");
+  // Event types: a multi-select dropdown — every niche is a checkbox, on/off. All on by default.
   const pretty = t => t.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-  [...new Set(EVENTS.map(e => e.event_type).filter(Boolean))].sort().forEach(t => {
-    const o = document.createElement("option");
-    o.value = t; o.textContent = pretty(t);
-    typeSel.appendChild(o);
+  const ALL_TYPES = [...new Set(EVENTS.map(e => e.event_type).filter(Boolean))].sort();
+  FILT.types = new Set(ALL_TYPES);
+  const msBtn = document.getElementById("ms-btn");
+  const msPanel = document.getElementById("ms-panel");
+  const msList = document.getElementById("ms-list");
+  const msLabel = () => {
+    msBtn.textContent = (FILT.types.size === ALL_TYPES.length ? "All types"
+      : FILT.types.size === 0 ? "No types" : `${FILT.types.size}/${ALL_TYPES.length} types`) + " ▾";
+  };
+  ALL_TYPES.forEach(t => {
+    const lab = document.createElement("label");
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = true;
+    cb.addEventListener("change", () => {
+      cb.checked ? FILT.types.add(t) : FILT.types.delete(t);
+      msLabel(); applyFilters();
+    });
+    lab.appendChild(cb); lab.appendChild(document.createTextNode(" " + pretty(t)));
+    msList.appendChild(lab);
   });
+  const msSetAll = on => {
+    FILT.types = on ? new Set(ALL_TYPES) : new Set();
+    msList.querySelectorAll("input").forEach(cb => { cb.checked = on; });
+    msLabel(); applyFilters();
+  };
+  document.getElementById("ms-all").addEventListener("click", () => msSetAll(true));
+  document.getElementById("ms-none").addEventListener("click", () => msSetAll(false));
+  msBtn.addEventListener("click", () => {
+    const willOpen = msPanel.hasAttribute("hidden");
+    msPanel.toggleAttribute("hidden", !willOpen);
+    msBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+  });
+  document.addEventListener("click", ev => {
+    if (!document.getElementById("ms-type").contains(ev.target) && !msPanel.hasAttribute("hidden")) {
+      msPanel.setAttribute("hidden", ""); msBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+  msLabel();
   const bind = (elId, key) => {
     const el = document.getElementById(elId);
     el.addEventListener("change", () => { FILT[key] = el.value; applyFilters(); });
@@ -271,27 +307,26 @@ function wireFilters() {
   bind("f-friendly", "friendly");
   bind("f-trip", "trip");
   bind("f-county", "county");
-  bind("f-type", "type");
   document.getElementById("f-hidden").addEventListener("change", e => {
     FILT.showHidden = e.target.checked; applyFilters();
-  });
-  document.getElementById("f-music").addEventListener("change", e => {
-    FILT.showMusic = e.target.checked; applyFilters();
   });
   document.getElementById("f-past").addEventListener("change", e => {
     FILT.showPast = e.target.checked; applyFilters();
   });
+  document.getElementById("f-picks").addEventListener("change", e => {
+    FILT.picksOnly = e.target.checked; applyFilters();
+  });
   document.getElementById("f-reset").addEventListener("click", () => {
-    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all"; FILT.type = "all";
-    FILT.showHidden = false; FILT.showMusic = false; FILT.showPast = false;
+    FILT.month = "all"; FILT.friendly = "all"; FILT.trip = "all"; FILT.county = "all";
+    FILT.showHidden = false; FILT.showPast = false; FILT.picksOnly = false;
+    msSetAll(true);
     monthSel.value = "all";
     document.getElementById("f-friendly").value = "all";
     document.getElementById("f-trip").value = "all";
     countySel.value = "all";
-    document.getElementById("f-type").value = "all";
     document.getElementById("f-hidden").checked = false;
-    document.getElementById("f-music").checked = false;
     document.getElementById("f-past").checked = false;
+    document.getElementById("f-picks").checked = false;
     applyFilters();
   });
 }

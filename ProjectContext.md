@@ -558,7 +558,10 @@ are cleared but show an amber food dot via notes. See CHATLOG Session 7. The lat
 **Map updates since this section was written:** Phase 6 filters shipped (month / food-truck-fit /
 trip-type / **county**), the two-tier model was replaced by **zoom-based marker clustering**, and
 **date-aware toggles** were added — a "Past events" toggle (annual events past their season, hidden by
-default) and a "Music fests" toggle. On **2026-07-06** a **`one_time` cadence** was added for true
+default). (The event-type filter later became a **multi-select** — every niche an on/off checkbox — and
+the old special-cased "Music fests" hide-toggle was retired; `music_fest` is now just one of those
+checkboxes. A **⭐ Research picks** toggle isolates the 27 curated research prospects.) On **2026-07-06**
+a **`one_time` cadence** was added for true
 one-off events (concert nights, Show Me State Games): they carry an exact `start_date`/`end_date` in
 the schedule, show "One-time · <date>", and read "One-time · ended" once past (no annual "returns next
 year"). Code-complete; needs a DB reload (schema+data) before it renders on the live map.

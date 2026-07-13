@@ -119,6 +119,7 @@ pipeline built; a **5-cluster full-repo audit** (`FOLDER_AUDIT_2026-07-13.md`) �
 **repo made private**, legacy web pages + the dormant **SQLite accounting pipeline archived** to
 `archive/2026-07-13/`, `run_daily.ps1` scheduler confirmed OFF; lots of site-copy fixes (See-Our-Menu button,
 "three ways", de-corporate, catering rewords); a **7-run deep-research vending sweep** →
-`VENDING_PROSPECTS.md` → **27 prospects mined onto the festival map** (442 events, new event-type filter);
+`VENDING_PROSPECTS.md` → **27 prospects mined onto the festival map** (442 events; the map's type filter
+is a **multi-select** — every niche an on/off checkbox — plus a **⭐ Research picks** toggle isolating the 27);
 **294 past calendar events captured** (`past_cart_events.csv`) for demand modeling; a freelance **rate sheet**
 Artifact. See `git log` and `FOLDER_AUDIT_2026-07-13.md` for specifics.
