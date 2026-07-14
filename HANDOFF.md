@@ -62,6 +62,7 @@ before comparing — else apostrophe'd descriptions phantom-update on every push
 - **Latest full-repo audit** → `FOLDER_AUDIT_2026-07-13.md` (+ `archive/2026-07-13/ARCHIVE_MANIFEST.md`)
 - **What's safe to archive** → `ARCHIVE_REVIEW.md`
 - **Open work / gameplans** → `TODO.md`
+- **How the backlog systems tie into ONE platform** (the chassis/spine, the loop, build order) → `OPS_PLATFORM.md`
 
 ---
 

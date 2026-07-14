@@ -3,6 +3,10 @@
 Running list of open action items. Add dated entries; check them off or delete when done.
 (For the full go-live sequence see `GO_LIVE.md`; for strategy see the north-star spec.)
 
+> **The six backlog systems — Finder · Scout · demand baseline · staffing · inventory · scheduling — are
+> ONE integrated platform, not six features.** How they tie together (the shared spine, the loop, the
+> build order, the open integration decisions) lives in **`OPS_PLATFORM.md`**. Read that first.
+
 ## Open
 
 - [ ] **★ Private admin hub (login-gated) — TOP PRIORITY** — one page at `glizzness.com` (NOT in public
