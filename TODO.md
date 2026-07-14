@@ -188,6 +188,21 @@ Running list of open action items. Add dated entries; check them off or delete w
   depth is limited by how far back events were actually logged in the calendar — but it **accumulates going
   forward**, so every logged event + its sales becomes a data point from now on.
 
+  **Owner's refinement (2026-07-13) — the Google Calendar is NOT the complete event list; the SALES are
+  the spine.** A huge recurring revenue stream — **school-year late-night (~10 PM) downtown Columbia, the
+  bar crowd** — is mostly NOT on the calendar. So expect **many dates with sales and no event**, and the
+  join must NOT be driven off the calendar (that would erase the highest-value trade). Flip it:
+  - **Cluster the Square orders first** (date + time window) — that's ground truth.
+  - **Attach a calendar event where one matches**; leftover clusters are **unlabeled sales days** to classify.
+  - **Classify orphans by signature:** many small orders + late-night + school-year weekends = the
+    **bar-district walk-up trade** (a first-class recurring "event type" with no calendar entry); a single
+    large order at close = a **private party, client covered the whole tab** (batch/close-out billing, not
+    walk-up — ties to the `service_mode` split above); steady daytime = a regular gig nobody logged.
+  - **Hard limit — Square is ONE location, so it tells you WHEN, not WHERE.** Every in-person sale sits
+    under the single cart location no matter where it parked, so downtown-vs-brewery can only come from the
+    calendar (when present) or be inferred from the time/day fingerprint. Plan for a **human-in-the-loop
+    labeling pass** on the orphans, not a clean auto-sort.
+
   **Why it matters:** empirical backbone for the employee-scheduling model above — turns "guess the crowd"
   into "at events like this we did $X / N orders → need M hands," and tells the Scout board which event
   *types* actually paid off (which to rebook). *(added 2026-07-13)*
