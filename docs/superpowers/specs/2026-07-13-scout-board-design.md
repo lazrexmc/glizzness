@@ -11,8 +11,9 @@ this reuses), the memory `project-admin-hub-scout`, and the Midwest Event Finder
 ## 1. Purpose
 
 Turn the 27 curated research "prospects" (from the 7-run deep-research sweep) into **booked gigs**.
-Prospects are **prescreened first** — Lance (later, with deep-research help) fills the missing details
-so Trint only ever sees vetted, complete cards and decides on good info, not guesses.
+Prospects are **prescreened first** — a one-click **deep-research assist** drafts the missing details
+(fee, deadline, crowd, food policy) and Lance confirms them, so Trint only ever sees vetted, complete
+cards and decides on good info, not guesses.
 Give **Trint** — the owner/cook, who reads better through clear visual layout than dense text — a
 dead-simple, phone-first way to triage each prospect **✅ Yes / 🤔 Maybe / ❌ No** and ask a question;
 give **Lance** a desk to answer those questions, fill in missing event details, work the Yeses, and
@@ -69,6 +70,9 @@ Seeded once from `data/prospects.csv`, then **edited in-app by Lance**. One row 
 | `id` (pk) | seed rows keep `id` (500+); desk-added leads get fresh ids (see seed note) |
 | `source` (text, default `research`) | `research` for the 27 seed rows; `inbound` for desk-added email/call leads |
 | `stage` (text: `researching`/`ready`, default `researching`) | prescreen gate: Trint's board shows **only `ready`**; Lance enriches `researching` rows, then marks them ready |
+| `research_requested_at` (nullable) | set when Lance taps "🔎 Research this" — queues the row for the deep-research runner |
+| `research_filled_at` (nullable) | set by the runner once it has written drafts; UI shows "researched — confirm me" until Lance vets |
+| `research_summary` (text, nullable) | the runner's short findings + sources, for Lance to sanity-check |
 | `name`, `event_type`, `city`, `state`, `county` | direct |
 | `distance_mi` (int) | `distance_from_columbia_mi` |
 | `drive_time_min` (int) | **computed** at seed: `round(distance_mi / 50 * 60)` (rough estimate) |
@@ -165,11 +169,22 @@ A compact list/table of all prospects with Trint's decision + latest question. L
 - **Prescreen → mark ready** → work the `researching` queue (the ~23 seed + any inbound leads): fill the
   gaps (fee / deadline / crowd / food policy), then hit **"Ready → send to Trint"** (`stage = ready`).
   Only then does the card reach Trint's board. **This is the quality gate.**
+- **🔎 Research this** → queues the prospect for the deep-research assist (sets `research_requested_at`);
+  drafts come back for you to confirm (see the auto-fill note below).
 - **Answer** a question → inserts `prospect_thread` (`author = lance`); it appears on Trint's card.
 - **Edit** a prospect → updates `event_prospects` (fill fee, deadline, crowd, food policy, notes).
   This is how the "needs checking" gaps get filled.
 - **Mark booked** → sets `event_prospects.booked = true`, `booked_at = now`.
 - **Sort/filter by decision** (Yes / Maybe / No / undecided) so the Yeses are easy to work.
+
+**Deep-research auto-fill (the 🔎 button).** A browser button can't *run* deep research — this is a static
+site with no backend. So the honest design: the button **queues** the prospect; a **Claude-side runner**
+(`scout_research.py`, which Lance runs from his Claude Code session — it has the deep-research tooling +
+the service-role key) picks up queued rows, runs a deep-research pass per prospect (reusing the 7-run
+sweep tooling), and **writes drafts back** to `event_prospects` (fee / deadline / crowd / food_policy /
+source + `research_summary`), setting `research_filled_at`. Lance then **confirms** the drafts (flagged
+"researched — confirm me", never auto-trusted) and marks the card ready. So "one click" = request now,
+fields fill in when the runner next runs — hands-off, not instant.
 
 ## 8. Alerts (Make → Gmail, reuse the catering pipeline)
 
@@ -194,18 +209,18 @@ linked from the public site nav.
 2. Seed loader (`scout_seed_gen_sql.py`) → run the generated SQL to load ~23 prospects.
 3. Shared auth/login + supabase-js wiring (`hub/` login).
 4. Trint's card board (`scout/`).
-5. Lance's desk (`hub/desk`).
-6. Make→Gmail alert (webhook + scenario, per `CATERING_LEADS.md`).
-7. Hub launcher tiles.
-8. Deploy (rides the Cloudflare Pages deploy), confirm the gate blocks logged-out access, send Trint
+5. Lance's desk (`hub/desk`) + the 🔎 "Research this" queue button.
+6. Deep-research runner (`scout_research.py`, Claude-side) → drafts back to `event_prospects` for confirm.
+7. Make→Gmail alert (webhook + scenario, per `CATERING_LEADS.md`).
+8. Hub launcher tiles.
+9. Deploy (rides the Cloudflare Pages deploy), confirm the gate blocks logged-out access, send Trint
    the link.
 
 ## 11. Non-goals (v1 YAGNI)
 
-- **Automated deep-research auto-fill** — a "Research this" button that runs a deep-research pass to
-  *draft* a prospect's missing fee/deadline/crowd for Lance to confirm — is a **fast-follow, not v1**.
-  v1 prescreening = Lance fills the fields manually from the desk; the schema is built so the auto-fill
-  slots in later (it writes the same `event_prospects` fields, then Lance confirms + marks ready).
+- The deep-research runner is **manual-trigger** in v1 (Lance runs `scout_research.py` from his session),
+  not a scheduled/always-on service — a cron/auto-run is a later nicety. (The one-click auto-fill itself
+  *is* in v1; only the "run it on a schedule without Lance" part is deferred.)
 - No user roles/permissions beyond "logged in" (both users can do everything).
 - No push/SMS notifications — email only.
 - No native app — mobile web.
@@ -220,7 +235,11 @@ linked from the public site nav.
 - **The prescreen gate trades immediacy for quality:** the seed data is thin (fee/deadline/crowd often
   blank), and Trint only sees `ready` cards — so **his board starts empty until Lance vets the ~23**.
   Lance's upfront prescreen pass is the gating work; the payoff is Trint decides on good info, not
-  guesses. The deep-research auto-fill fast-follow (§11) is what will make that prescreen pass fast.
+  guesses. The one-click deep-research auto-fill (§7) is what makes that prescreen pass fast.
+- **"One-click deep research" is request-now, fill-later — not instant, and not from the browser.** A
+  static site has no backend to run deep research, so the button queues the prospect and the Claude-side
+  runner fills it in on its next run. Drafts are always **flagged for Lance's confirmation**, never
+  auto-marked ready — deep research can be wrong, so a human vets before Trint sees it.
 - **supabase-js from CDN** is a new client dependency on the gated pages (the public site doesn't use
   it). Acceptable — it's the clean way to manage the auth session; if CDN/CSP is ever a concern we can
   self-host the one file.
