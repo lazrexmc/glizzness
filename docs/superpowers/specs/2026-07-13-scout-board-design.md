@@ -232,12 +232,13 @@ linked from the public site nav.
   blank), and Trint only sees `ready` cards — so **his board starts empty until Lance vets the ~23**.
   Lance's upfront prescreen pass is the gating work; the payoff is Trint decides on good info, not
   guesses. Building the cards with Claude in the CLI (§7) is what makes that prescreen pass fast.
-- **"Crew needed" is an estimate until the demand baseline exists.** A trustworthy, *automated* headcount
-  needs the **event-sales demand baseline** (past Square sales per event type) + the **staffing-to-demand
-  model** — both in `TODO.md`, NOT built yet. So v1 cards carry *our best estimate* of crew (crowd ×
-  capture × sustainable pace); it goes data-driven once those two are built. For brand-new event types
-  we've never vended (dirt tracks, wineries), it's a judgment call until we have real numbers from
-  actually working them. The `suggested_crew` field is the slot those systems will fill automatically.
+- **"Crew needed" is an estimate until the demand baseline exists.** The staffing *math* is
+  **venue-agnostic** — 1 order = 1 order — so crew = expected orders/hr ÷ a sustainable per-person pace
+  (+ buffer). The **demand baseline** (past Square sales; in `TODO.md`, not built yet) only sharpens the
+  *inputs* to the order estimate (capture rate + items/order); the pace is a fixed labor standard. So even
+  a never-worked venue gets a real crew number from an order estimate (crowd × capture × items/order) —
+  history just makes it more accurate. v1 cards carry our best estimate; `suggested_crew` is the slot the
+  staffing model auto-fills later.
 - **supabase-js from CDN** is a new client dependency on the gated pages (the public site doesn't use
   it). Acceptable — it's the clean way to manage the auth session; if CDN/CSP is ever a concern we can
   self-host the one file.

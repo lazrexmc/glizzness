@@ -197,6 +197,14 @@ Running list of open action items. Add dated entries; check them off or delete w
   then staff each event to meet its expected demand AT that rate — so a bigger crowd means MORE
   stations/people, not a faster or more stressed Trint. Consistent pressure, consistent pace, at any volume.
 
+  **Owner's refinement (2026-07-13) — the staffing math is VENUE-AGNOSTIC: 1 order = 1 order.** Crew =
+  expected orders/hr ÷ the sustainable per-person pace (+ buffer), full stop — a dirt track and a wedding
+  with the same order rate need the same hands. So the staffing **engine is universal (build once, reuse
+  everywhere)**; the venue only shapes the *demand estimate* (crowd × capture × items/order), and that is
+  the ONLY thing the demand baseline learns from history (capture rate + items/order — the pace is a fixed
+  labor standard). Upshot: even a never-worked venue gets a real crew number from an order estimate, not
+  "no data" — history just sharpens the capture/items inputs.
+
   **Components:**
   - **Staff roster** — people, roles/skills (cook / cashier / prep / runner), availability, contact.
   - **Events to staff** — pulled from the confirmed vending schedule (`cart_schedule` / Google Calendar) +
