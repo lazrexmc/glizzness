@@ -20,6 +20,26 @@ Running list of open action items. Add dated entries; check them off or delete w
   - **Build:** an `admin/` (or `hub/`) folder, unlinked from nav; passcode gate; tiles → Scout board + Wave
     dashboard (+ future tools). *(added 2026-07-13)*
 
+- [ ] **Online ordering — Square Online + DoorDash: what's actually viable for a roaming cart?**
+  *(added 2026-07-13)* Owner wants to allow online order / pickup / delivery. The blocker: a cart has **no
+  fixed pickup address**, and Square Online's delivery/pickup wants a set store location. DoorDash lets us
+  operate as a store (we're live on the DoorDash **Marketplace**, store 38788821) — but that's DoorDash's
+  OWN storefront, not Square's.
+  - **The hoped-for hack — "use Square Online ordering, let DoorDash do the delivery" — probably does NOT
+    dodge the address problem.** Square Online's on-demand delivery *is* powered by **DoorDash Drive**, so
+    the courier can be DoorDash — but the **pickup/origin address still lives in Square** (a fixed store
+    location), so a daily-moving cart can't set a dynamic origin. Changing the courier doesn't change
+    *where* they pick up. **VERIFY** — Square's mobile/dynamic-address support changes; confirm before
+    ruling it out (web research or Square support).
+  - **What likely DOES work + is worth it: order-ahead PICKUP at the cart.** No delivery, no address
+    problem (pickup = walk to the cart window), and it **cuts the line at busy lunch/late-night rushes** —
+    directly helping the demand-surge/staffing pain. Needs the cart's live location surfaced (ties to
+    Where-We-Vend).
+  - **Delivery is already handled** by the DoorDash Marketplace — that IS "let DoorDash do the work."
+    Duplicating it through Square Online adds little.
+  - **Next step:** verify Square's current mobile-pickup capability + the Square↔DoorDash Drive setup, then
+    decide: (a) Square Online order-ahead pickup, (b) lean on DoorDash Marketplace for delivery, (c) both.
+
 - [ ] **Find Trint a verified food supplier that will deliver to us** — a distributor/wholesaler
   willing to deliver despite (a) currently **low volume** and (b) **no fixed home / commercial
   address** (cart + Flyover commissary, no brick-and-mortar). Most big distributors (Sysco, US Foods)
