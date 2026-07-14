@@ -84,13 +84,18 @@ vending map moved off it into `site/festivals/`.
 ## 6. HARD RULES (do not violate — these are owner decisions)
 
 - Spelling: always **"Dog"**, never "Dawg". The item is **"Hog' N' Dog"**.
-- **NEVER say we "cook on-site."** As a licensed **mobile food establishment**, ALL food is prepared at the
-  **commissary** (Flyover); the cart **reheats / holds hot and serves**. The four real service shapes:
-  (1) cook at commissary → reheat + serve from the cart on site; (2) cook at commissary → deliver/drop off;
-  (3) cook at commissary → reheat in cart → drop off; (4) cook at commissary → cart on site → reheat → serve.
-  **Correct copy:** *"prepared fresh in our licensed commissary kitchen, then held hot and served — from the
-  cart at your event, or delivered ready to serve."* Claiming on-site cooking is both **false** and a
-  **health-code red flag**. (Fixed site-wide 2026-07-14; it was wrong on catering.html + our-menu.html.)
+- **Food copy: say the OUTCOME, never the logistics.** Two failure modes, both banned:
+  1. ❌ **NEVER claim we "cook on-site"** / "cook fresh on the spot." It's **false** (we're a licensed
+     **mobile food establishment** — all food is prepared at the **commissary**; the cart reheats/holds hot,
+     finishes to order, and serves) **and** it's a health-code red flag.
+  2. ❌ **NEVER narrate the commissary/reheating either** — "prepared in our commissary kitchen," "held hot,"
+     "reheated." It's true, but it reads as a **back-of-house disclosure** and it **sells against us**:
+     nobody paying $650 for catering wants to read that their food was reheated.
+  ✅ **Correct:** just don't mention where it's cooked. *"Made fresh and served hot," "hot off the cart,"
+  "served hot and fresh to your crowd," "made to order"* (assembly at the cart IS accurate). Customers
+  assume food is cooked somewhere; they only care that it arrives **hot, fresh, and made for them**.
+  *(Same principle as: never write "everything comes separate" on a catering menu — that's just how catering
+  works. Don't put the mechanics in the sales copy.)* Fixed site-wide 2026-07-14.
 - **Never invent menu ingredients/descriptions.** Never add operator-credentialing ("culinary-school chef").
   Never mention **the Elks** (dead deal). No "corporate" branding ("Catering & events", not "& corporate").
 - **Imagery:** real photos only for anything depicting the product (cart/food); AI only for abstract
