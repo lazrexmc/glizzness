@@ -11,9 +11,9 @@ this reuses), the memory `project-admin-hub-scout`, and the Midwest Event Finder
 ## 1. Purpose
 
 Turn the 27 curated research "prospects" (from the 7-run deep-research sweep) into **booked gigs**.
-Prospects are **prescreened first** — a one-click **deep-research assist** drafts the missing details
-(fee, deadline, crowd, food policy) and Lance confirms them, so Trint only ever sees vetted, complete
-cards and decides on good info, not guesses.
+Prospects are **prescreened first** — Lance builds and enriches each card **in the Claude Code CLI**
+(Claude does the deep research and drafts the fields; Lance reviews and approves), then marks it
+**ready**. Trint only ever sees vetted, complete cards and decides on good info, not guesses.
 Give **Trint** — the owner/cook, who reads better through clear visual layout than dense text — a
 dead-simple, phone-first way to triage each prospect **✅ Yes / 🤔 Maybe / ❌ No** and ask a question;
 give **Lance** a desk to answer those questions, fill in missing event details, work the Yeses, and
@@ -70,15 +70,14 @@ Seeded once from `data/prospects.csv`, then **edited in-app by Lance**. One row 
 | `id` (pk) | seed rows keep `id` (500+); desk-added leads get fresh ids (see seed note) |
 | `source` (text, default `research`) | `research` for the 27 seed rows; `inbound` for desk-added email/call leads |
 | `stage` (text: `researching`/`ready`, default `researching`) | prescreen gate: Trint's board shows **only `ready`**; Lance enriches `researching` rows, then marks them ready |
-| `research_requested_at` (nullable) | set when Lance taps "🔎 Research this" — queues the row for the deep-research runner |
-| `research_filled_at` (nullable) | set by the runner once it has written drafts; UI shows "researched — confirm me" until Lance vets |
-| `research_summary` (text, nullable) | the runner's short findings + sources, for Lance to sanity-check |
+| `research_note` (text, nullable) | Claude's short findings + sources from building the card in the CLI, for Lance's reference |
 | `name`, `event_type`, `city`, `state`, `county` | direct |
 | `distance_mi` (int) | `distance_from_columbia_mi` |
 | `drive_time_min` (int) | **computed** at seed: `round(distance_mi / 50 * 60)` (rough estimate) |
 | `date_text` | `typical_dates` |
 | `month` (int, nullable) | `month` |
 | `crowd_text`, `crowd_estimate` (int, nullable) | `attendance_text`, `attendance_estimate` |
+| `suggested_crew` (text, nullable) | recommended hands for Trint, e.g. "2–3" — our estimate now, data-driven once the demand baseline + staffing model exist (§12) |
 | `fee_text` | `food_vendor_fee` (often blank → shows "not yet known") |
 | `application_method` | `application_method` |
 | `application_deadline` (text, nullable) | **not in source** → null; Lance fills from the desk |
@@ -134,6 +133,7 @@ same day** — unlike the public "Where We Vend" list). Big type, icons, one fac
 │  📍  26 mi    ·    ~30 min       │
 │  📅  Weekly race nights          │
 │  👥  Grandstand crowd            │
+│  🧑‍🍳  Crew: 2–3 (estimate)        │
 │  💵  Fee — not yet known         │
 │  🌭  Food — needs checking       │
 │                                  │
@@ -169,22 +169,18 @@ A compact list/table of all prospects with Trint's decision + latest question. L
 - **Prescreen → mark ready** → work the `researching` queue (the ~23 seed + any inbound leads): fill the
   gaps (fee / deadline / crowd / food policy), then hit **"Ready → send to Trint"** (`stage = ready`).
   Only then does the card reach Trint's board. **This is the quality gate.**
-- **🔎 Research this** → queues the prospect for the deep-research assist (sets `research_requested_at`);
-  drafts come back for you to confirm (see the auto-fill note below).
 - **Answer** a question → inserts `prospect_thread` (`author = lance`); it appears on Trint's card.
 - **Edit** a prospect → updates `event_prospects` (fill fee, deadline, crowd, food policy, notes).
   This is how the "needs checking" gaps get filled.
 - **Mark booked** → sets `event_prospects.booked = true`, `booked_at = now`.
 - **Sort/filter by decision** (Yes / Maybe / No / undecided) so the Yeses are easy to work.
 
-**Deep-research auto-fill (the 🔎 button).** A browser button can't *run* deep research — this is a static
-site with no backend. So the honest design: the button **queues** the prospect; a **Claude-side runner**
-(`scout_research.py`, which Lance runs from his Claude Code session — it has the deep-research tooling +
-the service-role key) picks up queued rows, runs a deep-research pass per prospect (reusing the 7-run
-sweep tooling), and **writes drafts back** to `event_prospects` (fee / deadline / crowd / food_policy /
-source + `research_summary`), setting `research_filled_at`. Lance then **confirms** the drafts (flagged
-"researched — confirm me", never auto-trusted) and marks the card ready. So "one click" = request now,
-fields fill in when the runner next runs — hands-off, not instant.
+**Where cards come from.** The research-built cards are drafted **in the Claude Code CLI** — Claude runs
+the deep research and presents each card; Lance reviews, tweaks, and when he likes it, it's written to
+`event_prospects` as `stage = ready` (via a small loader Lance runs, same idea as the vending load).
+Inbound leads added from the desk start as `researching` and can be enriched the same way. **There is no
+in-app research button** — the CLI is the workshop; the web app is just where Trint triages and Lance
+reviews.
 
 ## 8. Alerts (Make → Gmail, reuse the catering pipeline)
 
@@ -209,8 +205,8 @@ linked from the public site nav.
 2. Seed loader (`scout_seed_gen_sql.py`) → run the generated SQL to load ~23 prospects.
 3. Shared auth/login + supabase-js wiring (`hub/` login).
 4. Trint's card board (`scout/`).
-5. Lance's desk (`hub/desk`) + the 🔎 "Research this" queue button.
-6. Deep-research runner (`scout_research.py`, Claude-side) → drafts back to `event_prospects` for confirm.
+5. Lance's desk (`hub/desk`).
+6. Card-building loader — CLI-drafted cards → `event_prospects` (`stage = ready`), same pattern as the vending load.
 7. Make→Gmail alert (webhook + scenario, per `CATERING_LEADS.md`).
 8. Hub launcher tiles.
 9. Deploy (rides the Cloudflare Pages deploy), confirm the gate blocks logged-out access, send Trint
@@ -218,9 +214,9 @@ linked from the public site nav.
 
 ## 11. Non-goals (v1 YAGNI)
 
-- The deep-research runner is **manual-trigger** in v1 (Lance runs `scout_research.py` from his session),
-  not a scheduled/always-on service — a cron/auto-run is a later nicety. (The one-click auto-fill itself
-  *is* in v1; only the "run it on a schedule without Lance" part is deferred.)
+- **No in-app deep-research button.** Research + card-building happen in the Claude Code CLI (Lance +
+  Claude), not via the web app — so there's no runner/queue/backend to build. The web app only triages +
+  reviews. (An in-app or scheduled research trigger is a possible later nicety, not v1.)
 - No user roles/permissions beyond "logged in" (both users can do everything).
 - No push/SMS notifications — email only.
 - No native app — mobile web.
@@ -235,11 +231,13 @@ linked from the public site nav.
 - **The prescreen gate trades immediacy for quality:** the seed data is thin (fee/deadline/crowd often
   blank), and Trint only sees `ready` cards — so **his board starts empty until Lance vets the ~23**.
   Lance's upfront prescreen pass is the gating work; the payoff is Trint decides on good info, not
-  guesses. The one-click deep-research auto-fill (§7) is what makes that prescreen pass fast.
-- **"One-click deep research" is request-now, fill-later — not instant, and not from the browser.** A
-  static site has no backend to run deep research, so the button queues the prospect and the Claude-side
-  runner fills it in on its next run. Drafts are always **flagged for Lance's confirmation**, never
-  auto-marked ready — deep research can be wrong, so a human vets before Trint sees it.
+  guesses. Building the cards with Claude in the CLI (§7) is what makes that prescreen pass fast.
+- **"Crew needed" is an estimate until the demand baseline exists.** A trustworthy, *automated* headcount
+  needs the **event-sales demand baseline** (past Square sales per event type) + the **staffing-to-demand
+  model** — both in `TODO.md`, NOT built yet. So v1 cards carry *our best estimate* of crew (crowd ×
+  capture × sustainable pace); it goes data-driven once those two are built. For brand-new event types
+  we've never vended (dirt tracks, wineries), it's a judgment call until we have real numbers from
+  actually working them. The `suggested_crew` field is the slot those systems will fill automatically.
 - **supabase-js from CDN** is a new client dependency on the gated pages (the public site doesn't use
   it). Acceptable — it's the clean way to manage the auth session; if CDN/CSP is ever a concern we can
   self-host the one file.
