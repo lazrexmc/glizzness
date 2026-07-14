@@ -18,10 +18,28 @@
   </style>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
 
   <div class="preview-bar">
-    ⚠️ PREVIEW ONLY — not linked, not indexed. <span>The live catering page is untouched.</span>
+    ⚠️ PREVIEW — full page, exactly as it will ship. <span>The live catering page is untouched until you say "merge."</span>
   </div>
+
+  <header class="nav">
+    <div class="wrap nav__in">
+      <a class="nav__brand" href="index.html">The&nbsp;<b>Glizzness</b></a>
+      <button class="nav__toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="nav__links" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="our-menu.html">Menu</a>
+        <a href="order.html">Order</a>
+        <a href="catering.html" aria-current="page">Catering</a>
+        <a href="events.html">Where We Vend</a>
+        <a class="nav__cta btn btn--gold" href="#book">Book the Cart</a>
+      </nav>
+    </div>
+  </header>
 
   <main id="main">
 
@@ -33,18 +51,18 @@
         <p class="g-lead mt-s">A full portable kitchen rolled up to your party, wedding, or workplace — a real local crew serving hot and fresh to your headcount, fully customizable. Book ahead, and if you can dream the menu, we can make it.</p>
         <div class="btn-row mt-m">
           <a class="btn btn--gold btn--lg" href="#book">Request catering</a>
-          <a class="btn btn--ghost btn--lg" href="#book">Call or text</a>
+          <a class="btn btn--ghost btn--lg js-call" href="#">Call or text</a>
         </div>
       </div>
     </section>
 
-    <!-- THE CATERING MENU — one menu, everything on it -->
+    <!-- THE CATERING MENU -->
     <section class="band band--ink2">
       <div class="wrap">
         <div class="head">
           <p class="g-eyebrow">Event packages</p>
           <h2 class="g-title">Pick a package, or we'll build one.</h2>
-          <p class="g-lead mt-s">Every package is made fresh and served hot — from the cart at your event, or delivered ready to serve. Includes one hour of on-site catering support, and everything's customizable with a little advance notice. Sides: potato salad, coleslaw, or chips.</p>
+          <p class="g-lead mt-s">Every package is made fresh and served hot — from the cart at your event, or delivered ready to serve. On-site packages include one hour of catering support, and everything's customizable with a little advance notice. Sides: potato salad, coleslaw, or chips.</p>
         </div>
 
         <div class="grid grid--2 mt-m">
@@ -54,7 +72,7 @@
             <p>Ham, turkey, and chicken sandwiches on Hawaiian rolls, with your choice of side. Ready to eat, no plates required. <b>Drop-off only — delivered ready to serve; no on-site service.</b></p>
             <div class="pkg__price"><span class="pkg__total">$250</span>
               <div class="pkg__unit"><b>25 guests</b><span>$10 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Desk Job">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -62,7 +80,7 @@
             <p>Ham, turkey, and chicken roll-ups, sliced and ready to serve, with your choice of side. Tidy, easy to hand out, and it travels clean. <b>Drop-off only — delivered ready to serve; no on-site service.</b></p>
             <div class="pkg__price"><span class="pkg__total">$250</span>
               <div class="pkg__unit"><b>25 guests</b><span>$10 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Roll Call">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -70,7 +88,7 @@
             <p>50 of our 1/4&nbsp;lb dogs with a customizable condiments station, delivered hot with polished on-site service.</p>
             <div class="pkg__price"><span class="pkg__total">$350</span>
               <div class="pkg__unit"><b>50 guests</b><span>$7 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Glizzy Gobbler">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -78,7 +96,7 @@
             <p>A full nacho-bar experience — loaded nachos and a build-your-own toppings station. Plain, or loaded with pulled pork or Southern BBQ pulled chicken. Ask about veggie options.</p>
             <div class="pkg__price"><span class="pkg__total">$350</span>
               <div class="pkg__unit"><b>25 guests</b><span>$14 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Nacho Party">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -86,7 +104,7 @@
             <p>35 dogs plus your choice of brats and sausages, with hot toppings — chili, pulled pork, house queso, chicken, and more.</p>
             <div class="pkg__price"><span class="pkg__total">$350</span>
               <div class="pkg__unit"><b>35 guests</b><span>$10 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Glizzy Feast">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -94,7 +112,7 @@
             <p>50 signature dogs upgraded with brats, sausages, and a full spread of premium hot toppings. Maximum variety, better per-person value.</p>
             <div class="pkg__price"><span class="pkg__total">$450</span>
               <div class="pkg__unit"><b>50 guests</b><span>$9 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Glizzy Beast">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -102,7 +120,7 @@
             <p>25 dogs with brats and sausages, hot toppings, plus chips and soft drinks. An unforgettable spread with on-site service.</p>
             <div class="pkg__price"><span class="pkg__total">$350</span>
               <div class="pkg__unit"><b>25 guests</b><span>$14 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Glizzness Throwdown">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -110,7 +128,7 @@
             <p>50 signature dogs with the full premium topping spread, chips, and soft drinks. Built for a crowd that wants it all.</p>
             <div class="pkg__price"><span class="pkg__total">$600</span>
               <div class="pkg__unit"><b>50 guests</b><span>$12 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Glizzness Showdown">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -118,7 +136,7 @@
             <p>Pulled pork served with fresh buns, BBQ sauce, and sandwich pickles, plus your choice of side. Hearty, crowd-proof, and it holds beautifully across a long lunch window.</p>
             <div class="pkg__price"><span class="pkg__total">$700</span>
               <div class="pkg__unit"><b>50 guests</b><span>$14 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Hog Down">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -126,7 +144,7 @@
             <p>Our Southern BBQ pulled chicken with buns, BBQ sauce, and sandwich pickles, plus your choice of side. Lighter than the pork — and just as filling.</p>
             <div class="pkg__price"><span class="pkg__total">$700</span>
               <div class="pkg__unit"><b>50 guests</b><span>$14 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Yardbird">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -134,7 +152,7 @@
             <p>Both, side by side — pulled pork and Southern BBQ pulled chicken with buns, BBQ sauce, sandwich pickles, and your choice of side. The spread nobody gets bored of.</p>
             <div class="pkg__price"><span class="pkg__total">$750</span>
               <div class="pkg__unit"><b>50 guests</b><span>$15 / guest</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Double Down">Request this →</button>
           </article>
 
           <article class="pkg">
@@ -142,15 +160,15 @@
             <p>A private, custom-built dinner designed with you — for an intimate table of 15 or a full-scale celebration. You dream the menu, we make it happen. Parties of 15 and up.</p>
             <div class="pkg__price"><span class="pkg__total">Starts at $350</span>
               <div class="pkg__unit"><b>15+ guests</b><span>Custom — quoted to your event</span></div></div>
-            <button type="button" class="btn pkg__btn">Request this →</button>
+            <button type="button" class="btn pkg__btn pkg-btn" data-package="The Daddy Warbucks">Request this →</button>
           </article>
 
         </div>
       </div>
     </section>
 
-    <!-- WAYS TO BOOK — below the menu -->
-    <section class="band band--cream" id="book">
+    <!-- WAYS TO BOOK -->
+    <section class="band band--cream">
       <div class="wrap">
         <div class="head">
           <p class="g-eyebrow">Ways to book the cart</p>
@@ -181,6 +199,100 @@
       </div>
     </section>
 
+    <!-- BOOKING FORM -->
+    <section class="band band--dark" id="book">
+      <div class="wrap">
+        <div class="head">
+          <p class="g-eyebrow">Book The Glizzness</p>
+          <h2 class="g-title">Tell us about your event.</h2>
+          <p class="g-lead mt-s">We'll get right back to you to lock it in. Everything's customizable — name what you need.</p>
+        </div>
+
+        <div class="book mt-m">
+          <div class="contact-actions" style="margin-bottom:22px;">
+            <a class="obtn js-call" href="#">📞 Call</a>
+            <a class="obtn js-text" href="#">💬 Text</a>
+            <a class="obtn js-email" href="#">✉️ Email</a>
+            <a class="obtn dd js-doordash" href="#" target="_blank" rel="noopener" hidden>🛵 DoorDash</a>
+          </div>
+
+          <form id="book-form" data-source="site_catering" novalidate>
+            <div class="form-grid">
+              <div class="field"><label for="f-name">Your name *</label><input id="f-name" name="name" autocomplete="name" required /></div>
+              <div class="field"><label for="f-phone">Phone (call / text) *</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required /></div>
+              <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" /></div>
+              <div class="field"><label for="f-date">Event date</label><input id="f-date" name="event_date" type="date" /></div>
+              <div class="field"><label for="f-guests">Estimated guests</label><input id="f-guests" name="guest_count" type="number" min="1" inputmode="numeric" /></div>
+              <div class="field">
+                <label for="f-package">Package</label>
+                <select id="f-package" name="package">
+                  <option value="Custom / help me choose">Custom / help me choose</option>
+                  <option value="Workplace cart day / boxed lunches">Workplace cart day / boxed lunches</option>
+                  <option value="The Desk Job">The Desk Job — 25 guests · $250 (drop-off)</option>
+                  <option value="The Roll Call">The Roll Call — 25 guests · $250 (drop-off)</option>
+                  <option value="The Glizzy Gobbler">The Glizzy Gobbler — 50 guests · $350</option>
+                  <option value="The Nacho Party">The Nacho Party — 25 guests · $350</option>
+                  <option value="The Glizzy Feast">The Glizzy Feast — 35 guests · $350</option>
+                  <option value="The Glizzy Beast">The Glizzy Beast — 50 guests · $450</option>
+                  <option value="The Glizzness Throwdown">The Throwdown — 25 guests · $350</option>
+                  <option value="The Glizzness Showdown">The Showdown — 50 guests · $600</option>
+                  <option value="The Hog Down">The Hog Down — 50 guests · $700</option>
+                  <option value="The Yardbird">The Yardbird — 50 guests · $700</option>
+                  <option value="The Double Down">The Double Down — 50 guests · $750</option>
+                  <option value="The Daddy Warbucks">The Daddy Warbucks — custom, from $350</option>
+                </select>
+              </div>
+              <div class="field full"><label for="f-location">Event location / city</label><input id="f-location" name="location" autocomplete="address-level2" /></div>
+              <div class="field full"><label for="f-message">Anything else? (menu ideas, dietary needs, budget)</label><textarea id="f-message" name="message"></textarea></div>
+            </div>
+            <div class="book__actions">
+              <button class="btn btn--gold btn--lg" type="submit" id="book-submit">Send my request</button>
+              <p class="book__note">Prefer to talk? Call or text <a class="js-phone-link" href="tel:3142668636">314-266-8636</a> · email <a class="js-email-link" href="mailto:glizzness@gmail.com">glizzness@gmail.com</a>.</p>
+            </div>
+            <div class="book__status" id="book-status" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot__grid">
+        <div>
+          <img class="foot__logo" src="assets/img/logo.jpg" alt="The Glizzness" />
+          <p>Columbia, Missouri's hot-dog cart. Home of the Glizzy — fresh flavors, bold Columbia style.</p>
+          <div class="contact-actions mt-s">
+            <a class="obtn js-call" href="#">📞 Call</a>
+            <a class="obtn js-text" href="#">💬 Text</a>
+            <a class="obtn dd js-doordash" href="#" target="_blank" rel="noopener" hidden>🛵 DoorDash</a>
+            <a class="obtn js-fb" href="#" target="_blank" rel="noopener" hidden>📘 Facebook</a>
+            <a class="obtn js-ig" href="#" target="_blank" rel="noopener" hidden>📸 Instagram</a>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="our-menu.html">Menu</a>
+          <a href="order.html">Order delivery</a>
+          <a href="catering.html">Catering &amp; events</a>
+          <a href="events.html">Where we vend</a>
+        </div>
+        <div>
+          <h4>Reach us</h4>
+          <a class="js-phone-link" href="tel:3142668636">314-266-8636</a>
+          <a class="js-email-link" href="mailto:glizzness@gmail.com">glizzness@gmail.com</a>
+        </div>
+      </div>
+      <div class="foot__bar">
+        <span>© <span id="yr">2026</span> The Glizzness LLC · Columbia, MO</span>
+        <span>Home of the Glizzy 🌭</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/config.js"></script>
+  <script src="assets/site.js"></script>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
 </body>
 </html>
