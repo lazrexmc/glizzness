@@ -9,6 +9,23 @@ Running list of open action items. Add dated entries; check them off or delete w
 
 ## Open
 
+- [ ] **★★ Catering menu expansion — "not everyone wants to eat wieners"** *(added 2026-07-14 — ACTIVE,
+  revenue-critical)* Widen the catering menu so a mixed crowd can actually be fed. New items:
+  - **Pulled Pork** — pan of pulled pork + buns + BBQ sauce + sandwich pickles, served as a station.
+  - **Southern BBQ Pulled Chicken** — same format as the pork.
+  - **Nachos** (already on the catering menu) — now plain, or topped with pulled pork or pulled chicken.
+  - **Deli sandwiches** — ham / turkey / chicken on Hawaiian rolls (or standard rolls), Sam's-sourced.
+  - **Roll-ups** — same deli meats, rolled instead of sandwiched.
+  - **Sides** — potato salad / coleslaw / chips (already on the menu).
+  - **COPY RULE (owner):** never write it as "everything comes separate" — a pan + buns + fixings IS how
+    catering works; it's implied, never announced. Standard catering phrasing only.
+  - **STRATEGIC:** the deli sandwich / roll-up tray is a **cold drop-off product — no cart, no cooking, low
+    food cost, high margin.** That's exactly the "boxed-lunch drop-off" the corporate lane
+    (`CorporateProspects.md`) calls for, and the cheapest catering product to fulfill when cash is tight.
+    Two lanes now: **hot BBQ bars** (on-site/cart) and **cold trays** (drop-off, no cart).
+  - **BLOCKED ON:** owner pricing (per-guest + tray prices). Then build the package cards into
+    `site/catering.html` (8 existing packages, $7–$22/guest range) and update the catering menu.
+
 - [ ] **★ Private admin hub (login-gated) — TOP PRIORITY** — one page at `glizzness.com` (NOT in public
   nav), behind a real user/pass gate, that is Trint's + Lance's cockpit: it houses the **Scout board**
   (below) and **links out to** the **Streamlit Wave dashboard** (`glizzness.streamlit.app`). Goal:
