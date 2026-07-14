@@ -84,6 +84,13 @@ vending map moved off it into `site/festivals/`.
 ## 6. HARD RULES (do not violate — these are owner decisions)
 
 - Spelling: always **"Dog"**, never "Dawg". The item is **"Hog' N' Dog"**.
+- **NEVER say we "cook on-site."** As a licensed **mobile food establishment**, ALL food is prepared at the
+  **commissary** (Flyover); the cart **reheats / holds hot and serves**. The four real service shapes:
+  (1) cook at commissary → reheat + serve from the cart on site; (2) cook at commissary → deliver/drop off;
+  (3) cook at commissary → reheat in cart → drop off; (4) cook at commissary → cart on site → reheat → serve.
+  **Correct copy:** *"prepared fresh in our licensed commissary kitchen, then held hot and served — from the
+  cart at your event, or delivered ready to serve."* Claiming on-site cooking is both **false** and a
+  **health-code red flag**. (Fixed site-wide 2026-07-14; it was wrong on catering.html + our-menu.html.)
 - **Never invent menu ingredients/descriptions.** Never add operator-credentialing ("culinary-school chef").
   Never mention **the Elks** (dead deal). No "corporate" branding ("Catering & events", not "& corporate").
 - **Imagery:** real photos only for anything depicting the product (cart/food); AI only for abstract
