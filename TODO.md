@@ -35,8 +35,14 @@ Running list of open action items. Add dated entries; check them off or delete w
     problem (pickup = walk to the cart window), and it **cuts the line at busy lunch/late-night rushes** —
     directly helping the demand-surge/staffing pain. Needs the cart's live location surfaced (ties to
     Where-We-Vend).
-  - **Delivery is already handled** by the DoorDash Marketplace — that IS "let DoorDash do the work."
-    Duplicating it through Square Online adds little.
+  - **Delivery is already handled by the DoorDash Marketplace — and it IS the roaming-cart answer.**
+    DoorDash's merchant **tablet lets you update the pickup address**, so when Trint opens the cart at a
+    new spot for the night he sets that address and drivers come to the current location. **Square can't do
+    this** (fixed store address) — which is exactly why DoorDash, not Square Online, is the online/delivery
+    channel for a moving cart. Duplicating it through Square adds little.
+    - **Operational must:** the address is only right if Trint **sets it every time the cart opens** —
+      forget once and drivers roll to last night's spot. Checklist item, and a clean candidate to tie to
+      **Where-We-Vend** so the night's location is set in one place.
   - **Next step:** verify Square's current mobile-pickup capability + the Square↔DoorDash Drive setup, then
     decide: (a) Square Online order-ahead pickup, (b) lean on DoorDash Marketplace for delivery, (c) both.
 
