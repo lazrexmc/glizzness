@@ -7,7 +7,7 @@ has a front door. Built from the business north-star
 `catering.html` at the repo root + the Netlify map).
 
 > Status: **LIVE** — deployed to Cloudflare Pages (glizzness.pages.dev) on 2026-07-12.
-> Custom domain glizzness.com via GoDaddy DNS is still pending (see "Deploy" below).
+> **✅ LIVE at glizzness.com** (+ www) — custom domain switched to Cloudflare on 2026-07-14. GoDaddy = registrar only; nameservers on Cloudflare.
 
 ---
 

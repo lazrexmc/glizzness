@@ -24,11 +24,11 @@ a pile of research/analysis tooling.
 
 | Subsystem | What it does | Status | Deep-dive doc | Key files |
 |---|---|---|---|---|
-| **Website** | The public `glizzness.com` site | ✅ **DEPLOYED** to Cloudflare Pages (glizzness.pages.dev); custom domain pending | `site/README.md`, `GO_LIVE.md §2` | `site/` (6 pages, `assets/site.css`, `site.js`, `config.js`) |
+| **Website** | The public `glizzness.com` site | ✅ **LIVE** at `glizzness.com` + `www` (Cloudflare Pages; custom domain switched 2026-07-14) | `site/README.md`, `GO_LIVE.md §2` | `site/` (6 pages, `assets/site.css`, `site.js`, `config.js`) |
 | **Menu pipeline** | `menu.json` is the source of truth → website + Square + DoorDash | ✅ SHIPPED & SYNCED (26 web / 28 Square) | **`MENU_PIPELINE.md`** | `menu.json`, `gen_menu.py`, `push_menu.py`, `pull_catalog.py`, `catalog_modifiers.py` |
 | **Catering leads** | Booking form → DB → instant email alert | ✅ LIVE | **`CATERING_LEADS.md`** | `site/catering.html`, Supabase `catering_leads`, Make.com, Gmail |
 | **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED | `CALENDAR_SETUP.md` | `sync_calendar.py`, Supabase `cart_schedule`, `site/events.html` |
-| **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.pages.dev/festivals` (→ `glizzness.com/festivals` after the DNS switch; ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
+| **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.com/festivals` (ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
 | **Event history / demand baseline** | Past calendar events, for future "how many people" modeling | 🟡 captured, analysis pending | `TODO.md` (demand baseline) | `pull_past_events.py` → `past_cart_events.csv` (local, gitignored) |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
@@ -99,8 +99,9 @@ vending map moved off it into `site/festivals/`.
 
 ## 7. Open work (gameplans all live in `TODO.md`)
 
-Near-term (owner): **custom domain** `glizzness.com` → Cloudflare (nameserver route; owner uses plain gmail
-so no MX to preserve); **DoorDash go-live** + digital marketing push.
+Near-term (owner): the **custom domain is LIVE** — `glizzness.com` + `www` on Cloudflare (switched
+2026-07-14; nameservers moved off GoDaddy, apex = proxied CNAME-flatten to `glizzness.pages.dev`).
+**DoorDash go-live** + digital marketing push remain.
 
 Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native first"**):
 - **Trint's "Scout board"** — a phone-first yes/no/maybe triage feed over the vending prospects.

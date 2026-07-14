@@ -7,7 +7,7 @@
 > Last updated: 2026-07-13.
 
 ## What's already built (so you know the state)
-- **Website** — unified `site/` (Home, Menu, Order, **Catering & events**, Where We Vend, 404; "corporate" branding was dropped site-wide, and the home page now leads with Order / See-Our-Menu / Book buttons + a "three ways to get your Glizzy" section). **✅ DEPLOYED 2026-07-12** to Cloudflare Pages (glizzness.pages.dev); custom domain still pending (§2).
+- **Website** — unified `site/` (Home, Menu, Order, **Catering & events**, Where We Vend, 404; "corporate" branding was dropped site-wide, and the home page now leads with Order / See-Our-Menu / Book buttons + a "three ways to get your Glizzy" section). **✅ LIVE** at `glizzness.com` + `www` (Cloudflare Pages; custom domain switched 2026-07-14).
 - **Catering booking** — `site/catering.html` → Supabase `catering_leads` → **lead-notification pipeline LIVE** (Supabase Database Webhook → Make.com → Gmail; see `CATERING_LEADS.md`). The old standalone `catering/` page was **archived 2026-07-13**.
 - **Vending map** — `site/festivals/` (Leaflet), now **part of the main Cloudflare Pages site** — reachable at **`glizzness.com/festivals`** (`glizzness.pages.dev/festivals` until the custom domain switches). **Netlify is retired** (it used to host this at `festivals.glizzness.com`). Now **442 events** = 415 vending-circuit + **27 new research "prospects"** (7-run deep-research sweep — `VENDING_PROSPECTS.md`), with a **multi-select event-type filter** (every niche an on/off checkbox) plus a **⭐ Research picks** toggle on the map. Reload steps in §1.
 - **Menu source of truth** — `menu.json` → `gen_menu.py` renders `site/our-menu.html` + the home teaser (byte-identical, verified); `push_menu.py` (menu.json → Square → DoorDash) is built and **synced**. `menu.json` = **26 website items / 28 live in Square**, all described (see `MENU_PIPELINE.md`).
@@ -38,7 +38,7 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 > **✅ DEPLOYED 2026-07-12** — live at **`glizzness.pages.dev`**, verified (home, menu from `menu.json`,
 > live Where-We-Vend calendar + collapse, `_redirects` clean URLs, social/DoorDash wired). Deployed via
 > **Cloudflare Pages → Connect to Git** (output dir `site`; the Workers/`wrangler` flow was the wrong path).
-> **Remaining: custom domain** — point `glizzness.com` at Pages (step 4) once you're ready (careful: MX/email).
+> **✅ Custom domain DONE (2026-07-14):** `glizzness.com` + `www` live on Cloudflare — nameservers moved off GoDaddy; apex is a proxied CNAME-flattened record to `glizzness.pages.dev`. Gmail unaffected.
 
 GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**. Full notes: `site/README.md`.
 
