@@ -224,6 +224,11 @@ Running list of open action items. Add dated entries; check them off or delete w
     **bar-district walk-up trade** (a first-class recurring "event type" with no calendar entry); a single
     large order at close = a **private party, client covered the whole tab** (batch/close-out billing, not
     walk-up — ties to the `service_mode` split above); steady daytime = a regular gig nobody logged.
+  - **Transaction-shape tells (owner, 2026-07-13):** **catering = a large single ticket, usually an
+    Invoice** (Channel `Invoice Sales` / big `Custom Amount`) — a booked job; a **single transaction with a
+    huge line-item count** = a **private party where one person settled the whole tab at close**
+    (walk-up-style ordering, one payer, batch service); **many small separate tickets** clustered in time =
+    individual **walk-up** trade. Validate against `Sales/items-*.csv` (top tickets by item-count and by $).
   - **Hard limit — Square is ONE location, so it tells you WHEN, not WHERE.** Every in-person sale sits
     under the single cart location no matter where it parked, so downtown-vs-brewery can only come from the
     calendar (when present) or be inferred from the time/day fingerprint. Plan for a **human-in-the-loop
