@@ -94,7 +94,7 @@ Running list of open action items. Add dated entries; check them off or delete w
   - **Accounting dashboard** (`glizzness.streamlit.app`) — see the **admin hub** item at the top of this
     list: the decision is to **leave Streamlit where it lives** and just link to it from the gated hub (no
     custom-domain proxy). This sub-task is folded into that item.
-  - Prereq: `glizzness.com` must be live on Cloudflare first (domain-switch task / `GO_LIVE.md §2`).
+  - Prereq: `glizzness.com` live on Cloudflare — ✅ **DONE 2026-07-14** (domain switched; site + www live, SSL enabled).
   *(added 2026-07-13)*
 
 - [ ] **Trint's event-triage app ("Scout board") — yes / no / maybe on prospect events** — the 7-run

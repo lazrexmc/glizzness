@@ -1,8 +1,10 @@
 # GO_LIVE.md — Bringing The Glizzness online
 
 > **The master activation checklist.** Most of this is now live — the **website is deployed**
-> (glizzness.pages.dev) and the **calendar is activated**. What's left: the **custom domain** and the
-> **DoorDash go-live**. Work top-to-bottom; each step says exactly what to click/run.
+> **🚀 LAUNCHED 2026-07-14** — the site is **LIVE at `glizzness.com` (+ www)**, the old GoDaddy builder is
+> unpublished, and the catering pipeline is **verified end-to-end** (owner alert + customer auto-reply).
+> **DoorDash go-live + the social/marketing rollout are underway.** (This runbook is now mostly historical;
+> work top-to-bottom only if rebuilding.)
 > **Rebuilding from nothing after a disaster? See `REBUILD.md`.**
 > Last updated: 2026-07-13.
 

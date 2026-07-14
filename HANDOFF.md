@@ -99,9 +99,13 @@ vending map moved off it into `site/festivals/`.
 
 ## 7. Open work (gameplans all live in `TODO.md`)
 
-Near-term (owner): the **custom domain is LIVE** — `glizzness.com` + `www` on Cloudflare (switched
-2026-07-14; nameservers moved off GoDaddy, apex = proxied CNAME-flatten to `glizzness.pages.dev`).
-**DoorDash go-live** + digital marketing push remain.
+**🚀 LAUNCHED 2026-07-14:** site **LIVE at `glizzness.com` + `www`** (Cloudflare; nameservers moved off
+GoDaddy, apex = proxied CNAME-flatten to `glizzness.pages.dev`), **old GoDaddy builder down**, **catering
+pipeline verified end-to-end**. **DoorDash go-live + social/marketing rollout in progress.**
+Marketing approach: schedule + cross-post FB/IG via **Meta Business Suite** (free — one post to both);
+**Google Business Profile** already live for local discovery + reviews. **Imagery hard-rule reaffirmed
+2026-07-14: real photos only, NEVER AI-generated food/cart** (the RTX-3080 / IBTP genai pipeline is for
+abstract backgrounds only — an AI hot dog on a real food brand reads as fake and erodes trust).
 
 Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native first"**):
 - **Trint's "Scout board"** — a phone-first yes/no/maybe triage feed over the vending prospects.
