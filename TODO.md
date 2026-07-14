@@ -7,6 +7,109 @@ Running list of open action items. Add dated entries; check them off or delete w
 > ONE integrated platform, not six features.** How they tie together (the shared spine, the loop, the
 > build order, the open integration decisions) lives in **`OPS_PLATFORM.md`**. Read that first.
 
+---
+
+# 🔥 OWNER ACTION LIST — work top to bottom *(2026-07-14)*
+
+*Cash is tight ($120). Everything below is ordered by "what puts money in the account soonest."
+The engineering backlog is BELOW this and is **parked** until revenue is stable.*
+
+## 🔴 1. CASH THIS WEEK — calls & emails
+
+- [ ] **Show-Me State Games — CALL TODAY.** Jessie Sida **573-884-2946** (main 573-882-2101).
+      Food-vendor slot, **Jul 17–19 and Jul 24–26**. High foot traffic. Fastest cash on this page.
+- [ ] **Venues — weekend cart nights** (open all summer, don't care that MU is out):
+  - Bur Oak Brewing — **events@buroakbeer.com** (*explicitly allows food trucks*)
+  - Cooper's Landing — **573-657-1299** / info@cooperslandingmo.com (*hosts vendors most weekends*)
+  - Logboat — logboatbrewing.com/contact (**was 38% of all past gigs — the anchor account**)
+  - Rose Music Hall / The Blue Note — 573-874-1944 / booking@thebluenote.com
+- [ ] **Corporate lunch outreach** (offices are FULLY STAFFED in July — this lane is MU-independent):
+  - **Veterans United** — 573-876-2600 — ⚠️ **REPEAT CLIENT, reconnect, don't cold-pitch.** Prior invoice
+    on file: **$1,376.68**. Pull the old events contact.
+  - **MBS** — Mark Nistendirk, HR — humanresources@mbsbooks.com
+  - **Boone County** — Angela Wehmeyer, HR Dir — hr@boonemo.gov — 573-886-4395 *(verified)*
+  - **Boone Health** — Jenny Workman — Jenny.Workman@boone.health
+  - **CPS** — Laina Fullum — lunch@cpsk12.org
+  - **City of Columbia** — HR@CoMo.gov
+  - EquipmentShare · Watlow (573-474-9402) · Central Bank · MidwayUSA · Eurofins · Schneider
+  - **Pitch two options:** (a) *sponsored appreciation lunch* — they prepay (GUARANTEED cash), or
+    (b) *zero cost to them* — you park, they announce it internally, employees buy their own.
+    **Never "park and pray."**
+- [ ] **🟠 NEW VEIN — apartment-complex property managers.** The Domain + Elements **already bought**
+      (pool parties). Property managers are STAFF with event budgets, Columbia is packed with complexes,
+      and they're prepping **August move-in / resident events** right now. Nobody is working this lane.
+
+## 🔴 2. BEFORE THE SOCIAL CAMPAIGN POSTS
+
+- [ ] **Facebook Sharing Debugger — RE-SCRAPE.** developers.facebook.com/tools/debug/ → paste
+      `https://glizzness.com` → **"Scrape Again."** Repeat for `/catering` and `/order`.
+      ⚠️ **Facebook caches old link previews. Skip this and your launch post shows NO IMAGE** even though
+      the og:image fix is already live.
+- [ ] **Update IG + FB bio link → `glizzness.com`** (links aren't clickable in IG captions — the bio link
+      is the only clickable one, so IG CTAs must say "link in bio").
+- [ ] **Schedule the launch posts in Meta Business Suite** (free; cross-posts FB + IG in one action).
+
+## 🔴 3. GOOGLE BUSINESS PROFILE — free catering leads
+
+- [ ] **Add "Caterer" as a category.** ⚠️ Food/restaurant categories require a visitable address —
+      **fix by switching the profile to a SERVICE-AREA BUSINESS** (caterers travel to the customer, so
+      Google allows it with no address).
+- [ ] **Set service area = Columbia / Boone County; hide the address.**
+      ⛔ **NEVER fake an address** (commissary, home, mailbox) — that's a fast track to **suspension**, and
+      you'd lose the reviews/history you already have.
+- [ ] **Website field → `glizzness.com`** (verify it's not the old GoDaddy site). Add the **order link**
+      (DoorDash) and the **appointment/quote link** (`glizzness.com/catering`).
+- [ ] **Paste the new 710-char business description** (leads with "caterer" — it's the money search).
+- [ ] **Add real photos** (loaded Glizzy, the cart). GBP heavily rewards fresh photos.
+- [ ] **Post the relaunch to GBP** — links **are** clickable there (unlike Instagram).
+- [ ] **Push reviews** — biggest local ranking + trust factor. QR at the cart; ask regulars.
+- [ ] Turn on attributes: **delivery, takeout, catering.**
+
+## 🟠 4. CATERING MENU EXPANSION
+
+- [ ] **Review the preview: `glizzness.com/tempcatering.html`** (unlinked, noindex, live page untouched).
+      Pulled Pork $650/50 ($13) · Pulled Chicken $650/50 ($13) · Pork & Chicken $700/50 ($14) ·
+      Sandwich Tray $250/25 ($10) · Roll-Up Tray $250/25 ($10) · nacho copy updated · 25-guest minimum ·
+      **no deposit language** (held per owner).
+- [ ] **Approve or adjust prices/names** → then merge into live `catering.html` + delete the preview.
+- [ ] Decide on the **deposit requirement** (held off for now).
+
+## 🟡 5. SEED FOR AUGUST — Mizzou (the fall calendar gets set in JULY)
+
+*Students are gone, but the STAFF who book catering are at their desks planning fall. Wait until August
+and the vendors are already chosen.*
+
+- [ ] **Mizzou Residence Life** (your $4,000 account — a DEPARTMENT, not students)
+- [ ] **Campus Activities** · **MU Athletics** (welcome-back)
+- [ ] **Office of Fraternity & Sorority Life — get on the APPROVED-CATERER LIST.** This is the master key:
+      stop chasing rotating chapter treasurers; make the chapters find *you*, every year.
+- [ ] **`mugreekweekoperations@missouri.edu`** (a ROLE email — survives officer turnover)
+- [ ] **MU vending agreement FY27 renewal** (Casey Forbis, Finance & Business Services) + **MU EHS food
+      permit** (573-882-7018 / muehssanitarian@missouri.edu) — both needed before fall.
+
+## 🟢 6. QUICK TECH (dashboard actions — 5 min each)
+
+- [ ] **Cloudflare → Rules → Redirect Rules:** `www.glizzness.com/*` → `https://glizzness.com/$1` (301).
+- [ ] **Google Search Console** — add glizzness.com, submit `https://glizzness.com/sitemap.xml`.
+- [ ] **DoorDash op-must:** Trint **sets the tablet address EVERY time the cart opens** — forget once and
+      drivers roll to last night's spot.
+
+## 🔵 7. MONEY / OPS DISCIPLINE
+
+- [ ] **Enforce a 50% deposit** on catering bookings — that's cash in hand *before* you buy food. The
+      fastest, cheapest money available and it needs nobody's permission.
+- [ ] **STOP volume-discounting.** Realized prices on big gigs have been **$3.50–$6/guest** (MU Athletics
+      $3.50, MSA $4.40, Business Week $4.50) against a **$7 list price and $22 premium**. Those are the
+      longest days and the most food. That leak costs more than any menu change.
+- [ ] **Square Capital / Loans** — check the Square dashboard. They underwrite on your **processing
+      history** (~$186K through them); often instant, no credit pull. Likely faster than a bank.
+- [ ] **Callaway Bank line of credit** — bring **Square sales reports + P&L + the Weenie Wagon loan
+      payment history**. Ask for a **specific, self-liquidating amount** ("$X to fulfill $Y in booked
+      catering"). ⛔ **Do NOT mention the overdraft history as leverage — to an underwriter it's a red
+      flag, not loyalty.** Borrow to *fulfill booked work*, never to cover a slow week.
+
+---
+
 ## Open
 
 - [ ] **★★ Catering menu expansion — "not everyone wants to eat wieners"** *(added 2026-07-14 — ACTIVE,
