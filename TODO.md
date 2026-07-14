@@ -205,6 +205,22 @@ Running list of open action items. Add dated entries; check them off or delete w
   labor standard). Upshot: even a never-worked venue gets a real crew number from an order estimate, not
   "no data" — history just sharpens the capture/items inputs.
 
+  **Owner's refinement 2 (2026-07-13) — demand SHAPE matters, not just volume: staff to the demand
+  *curve*, not the total.**
+  - **Rolling / made-to-order** (guests order as they arrive — normal cart vending): steady-state
+    throughput, crew = order-rate ÷ sustainable pace. A queue you keep pace with.
+  - **Batch / all-at-once** (the whole headcount served at a fixed time — plated catering, a synchronized
+    meal): a *produce-N-by-a-deadline* problem, not a queue — driven by total item count, per-item time,
+    lead time, and prep-ahead/hold capacity. Usually wants a short SURGE of hands or a make-ahead assembly
+    line, NOT the steady crew a rolling window needs.
+  - These are two ends of a **demand-concentration spectrum**: flat curve (rolling) → peaks/rushes
+    (intermission, halftime, parade lets out) → a single spike (everything at t=T). The real tradeoff is
+    staffing to the **peak vs. the average** (over-staff = idle hands; under-staff = blown-out lines at
+    the rush); all-at-once is just the extreme where peak = 100%.
+  - So the model needs a per-event **service_mode** input (rolling vs. batch, or a rush profile) and the
+    crew math **branches on it**. The demand baseline can read the actual rush-curve from Square order
+    **timestamps** (not just daily totals) per event type → feeds peak staffing.
+
   **Components:**
   - **Staff roster** — people, roles/skills (cook / cashier / prep / runner), availability, contact.
   - **Events to staff** — pulled from the confirmed vending schedule (`cart_schedule` / Google Calendar) +
