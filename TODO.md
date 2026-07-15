@@ -51,6 +51,12 @@ The engineering backlog is BELOW this and is **parked** until revenue is stable.
     the rep's face in front of the doctor. That's what wins and keeps them.
   - **Next:** (a) list on ezCater (+ verify best-fit platforms); (b) pull a Columbia medical-clinic list to
     target for the caterer list. *(Claude can research both — paced search.)*
+  - ✅ **RESEARCH DONE 2026-07-15 → see [PharmaLunch.md](PharmaLunch.md)**: platforms (ezCater primary —
+    free listing, **15% + 2.75%** per order; CaterCow + Cater Nation secondary), the ezCater signup steps
+    (+price the menu +15–20% to absorb the cut), the Columbia target clinics/clusters (Nifong Plaza, Keene
+    corridor, Broadway Bluffs, Berrywood endocrine; Boone Clinic, University Physicians Specialty Clinic,
+    Cosmopolitan Diabetes/Endo, Cayce Derm), and the rep-proof operational bar. **Owner action: create the
+    free ezCater account (~30 min, needs LLC/EIN/commissary addr).**
 
 ## 🔴 2. BEFORE THE SOCIAL CAMPAIGN POSTS
 
