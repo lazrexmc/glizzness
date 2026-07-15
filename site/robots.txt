@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
 
-# Internal preview — not for indexing
-Disallow: /tempcatering.html
-
 Sitemap: https://glizzness.com/sitemap.xml
