@@ -39,6 +39,19 @@ The engineering backlog is BELOW this and is **parked** until revenue is stable.
       (pool parties). Property managers are STAFF with event budgets, Columbia is packed with complexes,
       and they're prepping **August move-in / resident events** right now. Nobody is working this lane.
 
+- [ ] **★★ PHARMA REP LUNCHES — the premium recurring vein (owner, 2026-07-14).** Pharma sales reps buy
+  catered lunches for medical offices/clinics to get physician face-time: **big budgets, price-insensitive,
+  RECURRING** (same offices on a weekly/monthly rotation). Maps PERFECTLY onto the **drop-off trays** (Desk
+  Job / Roll Call) — it's a deliver-to-the-clinic product, no cart. Difficult, demanding buyers, but deep
+  pockets; **reliability > price.**
+  - **Access — do NOT cold-chase field reps.** Get where they already book: **list on ezCater** (dominant
+    office/catering marketplace reps search + it gives them the expense/compliance receipt). Also get on
+    **medical-office "approved caterer" lists** (office managers keep a shortlist reps pull from).
+  - **Rep-proof the product:** individually packed, **name-labeled**, on-time-to-the-minute delivery — it's
+    the rep's face in front of the doctor. That's what wins and keeps them.
+  - **Next:** (a) list on ezCater (+ verify best-fit platforms); (b) pull a Columbia medical-clinic list to
+    target for the caterer list. *(Claude can research both — paced search.)*
+
 ## 🔴 2. BEFORE THE SOCIAL CAMPAIGN POSTS
 
 - [ ] **Facebook Sharing Debugger — RE-SCRAPE.** developers.facebook.com/tools/debug/ → paste
