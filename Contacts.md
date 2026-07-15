@@ -56,6 +56,24 @@
 | **Logboat Brewing** (+ Rose Music Hall relationship) | ✅ web form at logboatbrewing.com/contact · ⚠️ directory 573-397-6786 / help@logboatbrewing.com (not on their page) | TO CALL |
 *Other event organizers + contacts live in `VendingCircuit.csv` (415 events).*
 
+## 🏊 Student housing / apartment complexes (pool parties + resident / move-in events)
+*Warm ones already booked us (from Square customer data); cold ones sourced 2026-07-15. **Many use a web
+contact FORM, not a public email — fill the form (no phone call needed) or use the leasing line.** Pitch:
+resident pool party now + move-in / resident-appreciation events in August. The PROPERTY pays (event budget)
+= invoiceable, deposit-able money.*
+
+| Complex | Contact | Status |
+|---|---|---|
+| **Elements** ⭐ (did a pool party) | ✅ **cm@elementcolumbia.com** (community manager) · elementcolumbia.com | **REPEAT — re-book** (2 gigs) |
+| **The Domain** ⭐ (did a pool party) | ✅ **dstark@clsliving.com** (Dylan Stark, CLS Living mgmt) · clsliving.com | **REPEAT — re-book** (2 gigs) |
+| **Central House** ⭐ | ✅ **leasing@livecentralhousecolumbia.com · 573-256-1128** | **REPEAT — re-book** (1 gig) |
+| **Campus Lodge** | ✅ **leasing@campuslodgeatcomo.com · 573-443-2950** · 2900 Old 63 S | TO EMAIL |
+| **Brookside Downtown** | **573-815-7458** · 219 S 9th St 65201 · contact form @ liveatbrookside.com (no public email) | TO EMAIL / FORM |
+| **The Reserve at Columbia** | **573-412-5188** · 2500 Old Hwy 63 S · form only | TO EMAIL / FORM |
+| **The Grayson** (was The Cottages of Columbia) | **573-256-0070** · thegraysoncomo.com · 2400 E Nifong · form | TO EMAIL / FORM |
+*Sites found, contacts not yet pulled (ask Claude for another pass): RISE on 9th (riseon9th.com),
+The Quarters (thequarterscolumbia.com), The State / fmr Collective-Aspen Heights (stateoncampus.com/columbia).*
+
 ## 🌿 Cannabis (staff feeds + customer-appreciation events)
 | Dispensary | Contact | Status |
 |---|---|---|
