@@ -30,6 +30,8 @@ a pile of research/analysis tooling.
 | **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED | `CALENDAR_SETUP.md` | `sync_calendar.py`, Supabase `cart_schedule`, `site/events.html` |
 | **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.com/festivals` (ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
+| **Admin hub + Scout board** | Gated cockpit (`/hub`) → Trint's phone-first event-triage card board (`/scout`, Yes/Maybe/No + ask) + Lance's review desk (`/hub/desk`) | ✅ **BUILT v1 + audited & Phase-A-hardened 2026-07-16**; NOT yet deployed (needs Lance's Supabase steps) | **`SCOUT_BOARD.md`**, `SCOUT_AUDIT.md`, `docs/.../2026-07-13-scout-board-design.md` | `site/hub/`, `site/scout/`, `assets/scout.js`+`scout.css`, `assets/vendor/supabase.js`, `supabase_scout_schema.sql`, `scout_seed_gen_sql.py` |
+| **Signal Net (events crawler)** | Always-on GitHub Actions aggregator polls curated local sources every 4h → finds → Signals feed (`/hub/signals`); Keep = a Scout prospect | ✅ **BUILT v1 2026-07-16**; NOT yet deployed (needs schema SQL + the `SUPABASE_SERVICE_KEY` GitHub secret) | **`SIGNAL_NET.md`**, `docs/.../2026-07-16-signal-net-design.md` | `crawler/`, `.github/workflows/crawler.yml`, `supabase_signals_schema.sql`, `site/hub/signals.html` |
 | **Event history / demand baseline** | Past calendar events, for future "how many people" modeling | 🟡 captured, analysis pending | `TODO.md` (demand baseline) | `pull_past_events.py` → `past_cart_events.csv` (local, gitignored) |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
 | **Freelance rate sheet** | Lance's own pricing collateral (not repo content) | ✅ published as a claude.ai Artifact | — | (scratchpad `rate-sheet.html`; do NOT commit to this repo) |
@@ -58,6 +60,8 @@ before comparing — else apostrophe'd descriptions phantom-update on every push
 - **Catering lead pipeline (Supabase→Make→Gmail)** → `CATERING_LEADS.md`
 - **Where-We-Vend calendar** → `CALENDAR_SETUP.md`
 - **Festival/vending map + data model** → `site/festivals/README.md`, `DATA_MODEL.md`
+- **Admin hub + Scout board (Trint's triage + Lance's desk)** → `SCOUT_BOARD.md` (+ audit `SCOUT_AUDIT.md`)
+- **Signal Net events crawler (GitHub Actions → Signals feed)** → `SIGNAL_NET.md`
 - **Accounting (Square→Wave), business logic + gotchas** → `ProjectContext.md`, `SETUP.md`
 - **Latest full-repo audit** → `FOLDER_AUDIT_2026-07-13.md` (+ `archive/2026-07-13/ARCHIVE_MANIFEST.md`)
 - **What's safe to archive** → `ARCHIVE_REVIEW.md`
@@ -68,16 +72,24 @@ before comparing — else apostrophe'd descriptions phantom-update on every push
 
 ## 5. Secrets & accounts (values are NOT in git — see `REBUILD.md`)
 
-Every browser file uses only the **public** Supabase `anon` key. Secrets (`service_role`, `SQUARE_TOKEN`,
-`WAVE_TOKEN`, Google service-account JSON, Streamlit `APP_PASSWORD`) live only in gitignored files / the
-operators' shells / the hosting dashboards. `.claude/` (agent memory, holds a service-role key) and
+Every **public** browser file uses only the **public** Supabase `anon` key. Secrets (`service_role`,
+`SQUARE_TOKEN`, `WAVE_TOKEN`, Google service-account JSON, Streamlit `APP_PASSWORD`, and the crawler's
+`SUPABASE_SERVICE_KEY` **GitHub Actions secret**) live only in gitignored files / the operators' shells /
+the hosting dashboards / GitHub repo secrets. `.claude/` (agent memory, holds a service-role key) and
 `..\PrivateData\` (PII) are **not tracked**. The full account + secret-location map is in `REBUILD.md`.
 
-Hosting: **Cloudflare Pages** (website **and** the festival map at `/festivals`, one project, output dir
-`site/`), **Streamlit Community Cloud** (accounting dashboard), **Supabase** (one project: accounting +
-`vending_*` + `catering_leads` + `cart_schedule` + `contacts`), **Make.com** (catering email),
-**Square** (POS→DoorDash), **Wave** (books), **GoDaddy** (domain registrar). **Netlify is retired** — the
-vending map moved off it into `site/festivals/`.
+The **gated admin pages** (`/hub`, `/scout`, `/hub/desk`, `/hub/signals`) instead use **Supabase Auth**
+(email+password, two hand-created users: Trint + Lance) and load supabase-js from the **self-hosted**
+`site/assets/vendor/supabase.js` — no CDN dependency. Their tables have RLS granting only the
+`authenticated` role (anon revoked), so the public anon key can't touch them.
+
+Hosting/infra: **Cloudflare Pages** (website **and** the festival map at `/festivals` **and** the gated
+hub/scout/signals pages, one project, output dir `site/`), **GitHub Actions** (runs the Signal Net
+crawler on a 4-hour cron), **Streamlit Community Cloud** (accounting dashboard), **Supabase** (one
+project: accounting + `vending_*` + `catering_leads` + `cart_schedule` + `contacts` + the Scout tables
+`event_prospects`/`prospect_decisions`/`prospect_thread` + the Signal Net `event_signals`),
+**Make.com** (catering email), **Square** (POS→DoorDash), **Wave** (books), **GoDaddy** (domain
+registrar). **Netlify is retired** — the vending map moved off it into `site/festivals/`.
 
 ---
 
@@ -119,8 +131,17 @@ Marketing approach: schedule + cross-post FB/IG via **Meta Business Suite** (fre
 2026-07-14: real photos only, NEVER AI-generated food/cart** (the RTX-3080 / IBTP genai pipeline is for
 abstract backgrounds only — an AI hot dog on a real food brand reads as fake and erodes trust).
 
+**🆕 BUILT 2026-07-16 (v1, code in repo — pending Lance's credentialed deploy steps):**
+- **Admin hub + Scout board** (`SCOUT_BOARD.md`) — the gated cockpit + Trint's phone-first Yes/Maybe/No
+  card board + Lance's review desk. Deep-audited + hardened (`SCOUT_AUDIT.md`). **To go live:** run
+  `supabase_scout_schema.sql`, create the two Supabase Auth users, run the seed SQL, push.
+- **The Signal Net** (`SIGNAL_NET.md`) — always-on GitHub Actions crawler → the Signals feed
+  (`/hub/signals`) → Keep = a Scout prospect. **To go live:** run `supabase_signals_schema.sql`, set the
+  `SUPABASE_SERVICE_KEY` GitHub secret, enable + trigger the workflow.
+
 Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native first"**):
-- **Trint's "Scout board"** — a phone-first yes/no/maybe triage feed over the vending prospects.
+- **Signal Net → Event Finder promote (v1.1)** — one-click curated promote of an approved signal to the
+  public map, plus auto-flagging detail updates (never auto-publish; the map is a validated gate).
 - **Inventory + reorder-point system** — common item master; purchase-SKU + recipe/BOM mapping; Wave IN /
   Square-Orders OUT.
 - **Employee scheduling (takt-time)** — staff to demand at a fixed pace; add people, not speed.

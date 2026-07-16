@@ -18,12 +18,27 @@ has a front door. Built from the business north-star
 | `index.html` | `/` | Home — brand, "where's the cart," the four lanes, why-us, menu teaser |
 | `our-menu.html` | `/our-menu` | Full menu — rendered from `menu.json` by `gen_menu.py` (the source of truth; Square is downstream) |
 | `order.html` | `/order` | Delivery / pickup — DoorDash |
-| `catering.html` | `/catering` | Catering / workplace / events — 8 packages + booking form |
+| `catering.html` | `/catering` | Catering / workplace / events — 12 packages (trays first) + booking form |
 | `events.html` | `/events` | Where we vend — **"Upcoming stops" calendar** (live from Supabase `cart_schedule`) + a link to the **festival map** (`/festivals`) + book-your-event/venue |
 | `festivals/` | `/festivals` | **Festival / vending map** — the Leaflet vending-circuit map (442 events, reads Supabase `vending_*`). Moved here from the retired standalone Netlify site; see `festivals/README.md` |
 | `404.html` | any miss | Branded not-found |
 
 Shared, reused verbatim on every page: the top nav and the footer.
+
+### Gated admin pages (PRIVATE — not in nav, reached by bookmark)
+
+These ride the same Cloudflare Pages deploy but are **not** public: they sit behind a **Supabase Auth**
+login and their tables have `authenticated`-only RLS (anon revoked). `noindex` + `robots.txt` Disallow.
+
+| File | URL | Purpose |
+|---|---|---|
+| `hub/index.html` | `/hub` | Login gate + tiles → Signals · Scout Board · My Desk · Wave Dashboard |
+| `hub/signals.html` | `/hub/signals` | **Signals feed** — the Signal Net crawler's fresh finds; Keep (→ Scout prospect) / Dismiss / paste-add. See `../SIGNAL_NET.md` |
+| `scout/index.html` | `/scout` | **Scout Board** — Trint's phone-first Yes/Maybe/No card triage. See `../SCOUT_BOARD.md` |
+| `hub/desk.html` | `/hub/desk` | **Lance's desk** — review, enrich, approve (Ready→Trint), add leads |
+
+Shared auth + helpers: `assets/scout.js` (+ `scout.css`); supabase-js is **self-hosted** at
+`assets/vendor/supabase.js` (no CDN dependency). Design tokens reuse `site.css`.
 
 ## Design system — `assets/site.css`
 

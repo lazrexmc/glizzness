@@ -2,6 +2,14 @@
 
 **Date:** 2026-07-13 · **Status:** architecture blueprint (design phase; parts spec'd/scoped separately).
 
+> **UPDATE 2026-07-16 — the front doors are BUILT (v1, pending Lance's deploy).** The **Scout board**
+> (triage) shipped + was audited/hardened (`SCOUT_BOARD.md`, `SCOUT_AUDIT.md`), and a new automated
+> discovery spoke — **The Signal Net** (`SIGNAL_NET.md`) — now feeds it: an always-on GitHub Actions
+> crawler that finds local events and drops them in a **Signals feed** Lance triages, Keeping the good
+> ones onto the Scout board. So the *discover → triage* half of the loop is real code now; the
+> *demand baseline → staffing/inventory/scheduling* half is still the backlog. Net: **seven spokes**,
+> the Signal Net being the automated intake ahead of the Finder + Scout.
+
 This is the **connective tissue** the rest of the docs don't have. Each part is scoped on its own
 (`docs/superpowers/specs/2026-07-13-scout-board-design.md` for the Scout board; `TODO.md` for the rest).
 **This doc is the chassis** — how the six parts share data and tie into one working system.
@@ -90,8 +98,9 @@ Both land on the same `events` spine; they just enter from different doors.
 
 | Current system / data | Role in the platform |
 |---|---|
+| `event_signals` (Supabase) + `crawler/` + GitHub Actions (**BUILT v1**) | **automated discovery** — the Signal Net crawler drops finds here; Lance triages the Signals feed |
 | `vending_events` / `vending_event_schedules` (Supabase) | Finder discovery layer |
-| `event_prospects` / `prospect_decisions` / `prospect_thread` (planned — Scout spec) | Scout triage + committed events |
+| `event_prospects` / `prospect_decisions` / `prospect_thread` (Supabase, **BUILT v1** — Scout board) | Scout triage + committed events (a Keep on the Signals feed creates a prospect here) |
 | `cart_schedule` (Supabase, from Google Calendar) | the *committed schedule* (where the cart WILL be) |
 | `catering_leads` (Supabase) | catering bookings — one source of committed events |
 | `Sales/items-*.csv` (local, gitignored) | the `orders` ground truth (feeds the baseline) |

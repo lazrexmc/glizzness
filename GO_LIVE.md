@@ -26,7 +26,9 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 | `supabase_catering_schema.sql` | `catering_leads` | needed for the booking form to save leads |
 | `supabase_vending_schema.sql` **then** `supabase_vending_data.sql` | vending map tables + **442 events** (415 circuit + 27 prospects) | schema FIRST (has the `one_time` CHECK + the extended `event_type` enum), then data. Reload = idempotent truncate+insert |
 | `supabase_contacts_schema.sql` | `contacts` (B2B) | only if you use the contacts pipeline |
-| `supabase_schedule_schema.sql` | `cart_schedule` | **NEW** — the Where We Vend calendar (§3) |
+| `supabase_schedule_schema.sql` | `cart_schedule` | the Where We Vend calendar (§3) |
+| `supabase_scout_schema.sql` | `event_prospects` / `prospect_decisions` / `prospect_thread` | **Scout board** (§8). Then `python scout_seed_gen_sql.py` → run `supabase_scout_data.sql` to seed 23 prospects |
+| `supabase_signals_schema.sql` | `event_signals` (+ allows `event_prospects.source='signal'`) | **Signal Net** (§8). Run *after* the scout schema |
 
 **Verify:** after the vending reload, expect **442 events / ~430 published**. After catering,
 `select count(*) from catering_leads;` returns a number (0 is fine).
@@ -106,6 +108,20 @@ Once `site/` is live and verified:
   (confirmed off; see `archive/2026-07-13/ARCHIVE_MANIFEST.md`).
 - **Marketing push:** `catering/MARKETING.md` (social + B2B outreach kit); `CorporateProspects.md` + `Contacts.md` for the corporate lane.
 - **Time-sensitive:** Show-Me State Games (call Jessie Sida 573-884-2946); Mizzou FY27 vending renewal (Casey Forbis / EHS).
+
+## 8. Admin hub + Scout board + Signal Net — bring online (BUILT 2026-07-16, not yet deployed)
+Gated private tools at `glizzness.com/hub` (login), `/scout` (Trint's triage), `/hub/desk` (Lance's
+review), `/hub/signals` (crawler finds). Full detail: **`SCOUT_BOARD.md`** + **`SIGNAL_NET.md`**.
+1. **Tables:** run `supabase_scout_schema.sql`, then `supabase_signals_schema.sql` (§1).
+2. **Auth users:** Supabase → Authentication → Users → **Add user** ×2 (Trint + Lance, Auto-Confirm).
+   Use emails starting `trint`/`lance` so the Q&A labels itself.
+3. **Seed the board:** `python scout_seed_gen_sql.py` → run the generated `supabase_scout_data.sql`.
+4. **Crawler secret:** repo → Settings → Secrets and variables → Actions → **New repository secret**
+   `SUPABASE_SERVICE_KEY` = the Supabase **service_role** key.
+5. **Deploy** rides the normal Cloudflare Pages push. Then GitHub → **Actions** → enable, and run
+   **"Signal Net crawler" → Run workflow** once to seed the Signals feed.
+6. **Verify:** open `/scout` logged-out → it bounces to `/hub` login (the gate works). Log in → the
+   tiles, board, desk, and signals pages load. First crawler finds appear on `/hub/signals`.
 
 ---
 

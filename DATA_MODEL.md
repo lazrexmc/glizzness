@@ -3,6 +3,12 @@
 > **Task 1 deliverable.** This is the contract the ETL/geocode/load phases build against.
 > Source of truth today: `VendingCircuit.csv` (415 rows, flat). Target: a normalized
 > relational model in Supabase Postgres feeding a clustered map UI.
+>
+> **Scope note:** this doc covers ONLY the public **festival/vending** tables (`vending_*`). Other
+> tables in the same Supabase project are documented with their own subsystems: the **Scout board**
+> (`event_prospects` / `prospect_decisions` / `prospect_thread`) → `SCOUT_BOARD.md`; the **Signal Net**
+> crawler (`event_signals`) → `SIGNAL_NET.md`; `catering_leads` → `CATERING_LEADS.md`; `cart_schedule`
+> → `CALENDAR_SETUP.md`; the accounting tables → `ProjectContext.md`.
 
 ---
 

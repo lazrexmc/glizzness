@@ -81,7 +81,8 @@ master key that bypasses RLS and must never appear in any tracked/browser file.
 |---|---|---|---|
 | `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `catering/config.js`, `site/festivals/config.js` (committed) | Supabase → Project Settings → API → `anon public` |
 | `SUPABASE_URL` | public | hardcoded in `db.py` (~line 8); the three `config.js`; env for `sync_calendar.py` | Supabase → Project Settings → API → Project URL |
-| `SUPABASE_SERVICE_KEY` | **SECRET** | `.streamlit/secrets.toml` (gitignored) + Streamlit Cloud Secrets + shell env | Supabase → Project Settings → API → `service_role` |
+| `SUPABASE_SERVICE_KEY` | **SECRET** | `.streamlit/secrets.toml` (gitignored) + Streamlit Cloud Secrets + shell env + **GitHub Actions repo secret** (the Signal Net crawler) | Supabase → Project Settings → API → `service_role` |
+| Scout/Signals **Auth users** (Trint + Lance) | **SECRET** | Supabase Auth (email+password) — not in any file | Supabase → Authentication → Users → Add user ×2 (Auto-Confirm); emails starting `trint`/`lance` so the Q&A self-labels |
 | `SQUARE_TOKEN` | **SECRET** | shell `$env` (Lance's machine), `.streamlit/secrets.toml`, Streamlit Cloud, `run_daily.ps1` | Square Developer Dashboard → your app → **Production** Access Token (needs `ITEMS_READ`+`ITEMS_WRITE`) |
 | `WAVE_TOKEN` | **SECRET** | `.streamlit/secrets.toml`, Streamlit Cloud, `run_daily.ps1` | Wave → Settings → Developer → Manage API tokens (full access) |
 | `WAVE_BUSINESS_ID` | env-specific | same as above | Wave → Settings → Business (copy from URL) |
@@ -112,7 +113,9 @@ Everything reads Supabase, so build it first. Do these **in order**:
 7. **Accounting** — deploy the Streamlit dashboard, re-sync from Square/Wave → **§5.5**
 8. **Festival map** — load `vending_*` (442 events incl. 27 research prospects); the map itself
    (`site/festivals/`) already deployed with the site in step 4 — just verify → **§5.6**
-9. **Custom domain** — point glizzness.com at Pages (last, careful about email/MX) → **§5.7**
+9. **Gated tools + crawler** — Scout board + Signal Net: create the 2 Auth users, set the
+   `SUPABASE_SERVICE_KEY` GitHub Actions secret, enable + run the crawler workflow → **§5.8**
+10. **Custom domain** — point glizzness.com at Pages (last, careful about email/MX) → **§5.7**
 
 ---
 
@@ -130,6 +133,11 @@ Everything reads Supabase, so build it first. Do these **in order**:
    5. `supabase_vending_schema.sql` (**DROPs+recreates** `vending_*`, the publish-gate view, RLS + SELECT policies)
    6. `supabase_vending_data.sql` (idempotent load: 31 markets / **442 events** = 415 circuit + 27 research
       prospects / 442 schedules — run **after** #5)
+   7. `supabase_scout_schema.sql` (Scout board: `event_prospects`/`prospect_decisions`/`prospect_thread`;
+      RLS **authenticated-only**, anon revoked) — then `python scout_seed_gen_sql.py` → run the generated
+      `supabase_scout_data.sql` (23 prospects)
+   8. `supabase_signals_schema.sql` (Signal Net: `event_signals`, authenticated-only + anon revoked; also
+      allows `event_prospects.source='signal'`) — run **after** #7
 4. **⚠ Rewire the project ref** if the new URL differs from `ikhcbncnaojrndilmnnd`: update `db.py` (~line 8)
    and all three `config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). The keys are
    JWTs bound to the project ref — old keys won't work on a new project, and the app silently talks to a dead
@@ -220,6 +228,18 @@ Everything reads Supabase, so build it first. Do these **in order**:
    blanket-replace the zone, or email to glizzness@gmail.com / the domain breaks. This is the only step that
    touches GoDaddy. *(Still PENDING as of 2026-07-12 — site lives at glizzness.pages.dev.)*
 
+### 5.8 Admin hub + Scout board + Signal Net (gated tools + crawler) — detail: `SCOUT_BOARD.md`, `SIGNAL_NET.md`
+1. Tables + seed already run in §5.1 (steps 3.7 + 3.8). Recreate the two **Supabase Auth users** (§3).
+2. The gated pages (`site/hub/`, `site/scout/`, `site/hub/signals.html`) ship with the Cloudflare Pages
+   site (§5.2) — they load the **self-hosted** `site/assets/vendor/supabase.js` (no CDN), so confirm that
+   file is present. Refresh `site/assets/config.js` if Supabase was rebuilt.
+3. **Signal Net crawler:** set the `SUPABASE_SERVICE_KEY` **GitHub Actions repo secret** (Settings →
+   Secrets and variables → Actions). `.github/workflows/crawler.yml` then runs `crawler/` on a 4h cron
+   (`pip install -r crawler/requirements.txt`; feedparser). Enable Actions, then **Run workflow** once to
+   seed the Signals feed. Reddit may 403 from the runner's datacenter IP (handled gracefully).
+4. Verify: `/scout` logged-out bounces to `/hub` login; logged in, the board/desk/signals load; a crawler
+   run writes rows to `event_signals`.
+
 ---
 
 ## 6 · Cross-cutting traps (read before you start)
@@ -235,6 +255,10 @@ Everything reads Supabase, so build it first. Do these **in order**:
   anon key exposes them.
 - **anon vs service_role.** anon is safe in the browser *only* because RLS limits it (INSERT `catering_leads`,
   read `cart_schedule` + `vending_*`). service_role bypasses RLS — never in a `config.js`/tracked file.
+- **Three RLS patterns now, don't mix them up.** (a) accounting + `contacts` = RLS on, **no policies**
+  (service_role only); (b) public site tables = anon INSERT/SELECT policies; (c) **Scout + Signal Net tables**
+  = **`authenticated`-only policies + `revoke all … from anon`** — reached via Supabase Auth login, never the
+  anon key. The gated pages send the logged-in user's JWT (role `authenticated`); logged out = zero access.
 - **`description_html`** is what Square Online + DoorDash show (not legacy `description`). `push_menu.py` must
   set it. `catalog_desc.py` only sets the legacy field — don't rely on it for the storefront.
 - **`catalog_export.json` is gitignored** — absent after a clone. Run `pull_catalog.py` before any catalog/push
@@ -281,6 +305,8 @@ Everything reads Supabase, so build it first. Do these **in order**:
 | Where We Vend calendar | `CALENDAR_SETUP.md`, `GO_LIVE.md §3` |
 | Menu pipeline | `MENU_PIPELINE.md`, `GO_LIVE.md §4` |
 | Catering lead pipeline | `CATERING_LEADS.md` |
+| Admin hub + Scout board (gated triage tools) | `SCOUT_BOARD.md`, audit `SCOUT_AUDIT.md` |
+| Signal Net (events crawler → Signals feed) | `SIGNAL_NET.md` |
 | Accounting (Square→Wave) | `ProjectContext.md`, `SETUP.md` |
 | Festival map | `site/festivals/README.md`, `DATA_MODEL.md` |
 | Vending prospects (7-run deep-research sweep, ids 500+) | `VENDING_PROSPECTS.md` (curated) → `build_prospects.py` → `data/prospects.csv` |
