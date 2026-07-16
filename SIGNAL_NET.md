@@ -4,8 +4,18 @@ An always-on aggregator that polls curated local sources every 4 hours and drops
 finds into a **Signals feed** Lance skims. What he keeps flows onto the **Scout Board** as a
 prospect (→ enrich → send to Trint). It's the automated intake for the Scout pipeline.
 
+> ## ✅ STATUS: LIVE (2026-07-16)
+> Deployed and **running on its own** — GitHub Actions, every 4h. First real run inserted **178
+> signals** from 10 live sources. Lance verified the feed in the browser. The "ONE-TIME SETUP" section
+> below is **DONE** — kept for disaster recovery, not as a to-do.
+>
+> **Two bugs fixed on the first real run** (don't reintroduce): PostgREST rejects a bulk insert whose
+> rows have **differing key sets** (`to_row()` was dropping None fields → bare `HTTP 400`), and
+> `store.py` was **discarding PostgREST's error body**, making that 400 undiagnosable. Lesson:
+> `--dry-run` never exercises the write, so the write was the one untested inch.
+
 - **Design spec:** `docs/superpowers/specs/2026-07-16-signal-net-design.md`
-- **Live URL** (once deployed): `glizzness.com/hub/signals` (gated; 4th tile on the hub)
+- **Live URL:** `glizzness.com/hub/signals` (gated; 1st tile on the hub)
 
 ---
 
@@ -29,7 +39,7 @@ HTTP to RSS/APIs, so nothing to rate-limit and nothing to pay.
 
 ---
 
-## ONE-TIME SETUP (Lance — credentialed steps)
+## ONE-TIME SETUP — ✅ ALL DONE 2026-07-16 (kept for disaster recovery)
 
 ### 1. Create the table
 Supabase → **SQL Editor** → paste all of `supabase_signals_schema.sql` → **Run**. (Run

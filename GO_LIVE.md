@@ -103,31 +103,35 @@ Once `site/` is live and verified:
 `glizzness@gmail.com`, DoorDash store `38788821`. Verify the links after deploy.
 
 ## 7. Post-launch
-- **Schedules:** the **calendar sync** now runs on **GitHub Actions every 2h**
-  (`.github/workflows/calendar.yml`) — *not* Task Scheduler (a local job dies exactly while Trint is out
-  vending). **To switch it on:** add the `GOOGLE_SA_JSON`, `GOOGLE_CALENDAR_ID`, and
-  `SUPABASE_SERVICE_KEY` repo secrets (`CALENDAR_SETUP.md`), then Actions → "Calendar sync" → Run
-  workflow. Until then it skips cleanly (green, no spam) and **`glizzness.com/events` may be stale — so
-  don't drive marketing traffic there yet.** The Signal Net crawler (every 4h) behaves the same way.
+- **Schedules — ✅ BOTH LIVE (2026-07-16):** the **calendar sync** runs on **GitHub Actions every 2h**
+  and the **Signal Net crawler** every 4h (*not* Task Scheduler — a local job dies exactly while Trint is
+  out vending). Secrets are set; both **skip cleanly** if a secret ever goes missing, so they can't spam
+  failures. **`glizzness.com/events` self-updates → the marketing "check the website" CTA is SAFE.**
+  Manual override: `PrivateData\sync-calendar.ps1` pushes calendar changes live immediately.
   Accounting is **manual** now — post via the Streamlit dashboard (`glizzness.streamlit.app` → `dashboard.py`
   → `sync.py` → Supabase → Wave); the old `run_daily.ps1` local-SQLite scheduler was **retired 2026-07-13**
   (confirmed off; see `archive/2026-07-13/ARCHIVE_MANIFEST.md`).
 - **Marketing push:** `catering/MARKETING.md` (social + B2B outreach kit); `CorporateProspects.md` + `Contacts.md` for the corporate lane.
 - **Time-sensitive:** Show-Me State Games (call Jessie Sida 573-884-2946); Mizzou FY27 vending renewal (Casey Forbis / EHS).
 
-## 8. Admin hub + Scout board + Signal Net — bring online (BUILT 2026-07-16, not yet deployed)
-Gated private tools at `glizzness.com/hub` (login), `/scout` (Trint's triage), `/hub/desk` (Lance's
-review), `/hub/signals` (crawler finds). Full detail: **`SCOUT_BOARD.md`** + **`SIGNAL_NET.md`**.
-1. **Tables:** run `supabase_scout_schema.sql`, then `supabase_signals_schema.sql` (§1).
-2. **Auth users:** Supabase → Authentication → Users → **Add user** ×2 (Trint + Lance, Auto-Confirm).
-   Use emails starting `trint`/`lance` so the Q&A labels itself.
-3. **Seed the board:** `python scout_seed_gen_sql.py` → run the generated `supabase_scout_data.sql`.
-4. **Crawler secret:** repo → Settings → Secrets and variables → Actions → **New repository secret**
-   `SUPABASE_SERVICE_KEY` = the Supabase **service_role** key.
-5. **Deploy** rides the normal Cloudflare Pages push. Then GitHub → **Actions** → enable, and run
-   **"Signal Net crawler" → Run workflow** once to seed the Signals feed.
-6. **Verify:** open `/scout` logged-out → it bounces to `/hub` login (the gate works). Log in → the
-   tiles, board, desk, and signals pages load. First crawler finds appear on `/hub/signals`.
+## 8. Admin hub + Scout board + Signal Net — ✅ LIVE (2026-07-16)
+Gated private tools at `glizzness.com/hub` (login), `/hub/signals` (crawler finds), `/scout` (Trint's
+triage), `/hub/desk` (Lance's review). Full detail: **`SCOUT_BOARD.md`** + **`SIGNAL_NET.md`**.
+**All steps below were completed + verified 2026-07-16** — kept as the re-run/DR guide.
+1. ✅ **Tables:** `supabase_scout_schema.sql`, then `supabase_signals_schema.sql` (§1).
+2. ✅ **Auth users:** Supabase → Authentication → Users → **Add user** ×2 (Trint + Lance, Auto-Confirm).
+   Emails starting `trint`/`lance` so the Q&A labels itself.
+3. ✅ **Seed the board:** `python scout_seed_gen_sql.py` → run `supabase_scout_data.sql`
+   (23 prospects; the trailing `setval` returns **526** = the max seeded id — that's success, not an error).
+4. ✅ **Secrets:** repo → Settings → Secrets and variables → Actions: `SUPABASE_SERVICE_KEY`,
+   `GOOGLE_SA_JSON`, `GOOGLE_CALENDAR_ID` (the last two also drive the calendar sync, §7).
+5. ✅ **Deploy** rides the Cloudflare Pages push; both Actions workflows run on cron
+   (crawler 4h, calendar 2h) and **skip cleanly if a secret is ever missing** (no failure spam).
+6. ✅ **Verified:** logged-out `/scout` bounces to `/hub` login; logged in, all pages render;
+   crawler inserted **178 signals**; anon key gets `42501` on every private table.
+
+> **Operating note:** Trint's board shows only `stage = ready` cards. Everything seeds as
+> `researching`, so push cards through **"Ready → Trint"** from the Desk or his board looks empty.
 
 ---
 

@@ -2,13 +2,25 @@
 
 **Date:** 2026-07-13 · **Status:** architecture blueprint (design phase; parts spec'd/scoped separately).
 
-> **UPDATE 2026-07-16 — the front doors are BUILT (v1, pending Lance's deploy).** The **Scout board**
-> (triage) shipped + was audited/hardened (`SCOUT_BOARD.md`, `SCOUT_AUDIT.md`), and a new automated
-> discovery spoke — **The Signal Net** (`SIGNAL_NET.md`) — now feeds it: an always-on GitHub Actions
-> crawler that finds local events and drops them in a **Signals feed** Lance triages, Keeping the good
-> ones onto the Scout board. So the *discover → triage* half of the loop is real code now; the
-> *demand baseline → staffing/inventory/scheduling* half is still the backlog. Net: **seven spokes**,
-> the Signal Net being the automated intake ahead of the Finder + Scout.
+> **UPDATE 2026-07-16 — the front doors are LIVE and RUNNING.** The **Scout board** (triage) shipped,
+> was audited/hardened, and is **deployed + verified** (`SCOUT_BOARD.md`, `SCOUT_AUDIT.md`). A new
+> automated discovery spoke — **The Signal Net** (`SIGNAL_NET.md`) — feeds it: a GitHub Actions crawler
+> running **every 4h** that dropped **178 real finds** into the **Signals feed** on its first run. The
+> calendar sync also went cloud-automatic (every 2h). Net: **seven spokes**, the Signal Net being the
+> automated intake ahead of the Finder + Scout.
+>
+> **So the `discover → triage` half of the loop is DONE and operating.** The
+> `demand baseline → staffing / inventory / scheduling` half is still the backlog — and the baseline is
+> now the single highest-leverage thing left, because:
+> - It is **buildable today**: both inputs already exist (`past_cart_events.csv` 294 events +
+>   `Sales/items-*.csv` ~25,200 line items). No new infrastructure, no new data collection.
+> - The live calendar sync means **every event worked from now on feeds it automatically** — the
+>   flywheel is already turning even though the brain isn't built.
+> - The Scout card already carries an empty **`suggested_crew`** slot, reserved for exactly this.
+> - **Owner insight worth keeping straight (2026-07-16):** staffing does NOT need recipes. Staffing =
+>   orders/hr ÷ sustainable pace (venue-agnostic). **Recipes/BOM belong to inventory** — a separate,
+>   heavier track. So the fastest path to staffing-on-demand is `baseline → staffing`, with inventory
+>   as its own later lane. Don't bundle them.
 
 This is the **connective tissue** the rest of the docs don't have. Each part is scoped on its own
 (`docs/superpowers/specs/2026-07-13-scout-board-design.md` for the Scout board; `TODO.md` for the rest).

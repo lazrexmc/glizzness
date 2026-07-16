@@ -9,6 +9,16 @@ data layer (schema/RLS/seed pipeline) — cross-checked and synthesized, plus au
 tool is **pre-deployment** (Lance hasn't run the SQL, created users, or pushed yet), so every fix
 below can land before first real use.
 
+> **UPDATE 2026-07-16 — SHIPPED AND LIVE.** Phase A (all 7 P0+P1) landed *before* first deploy, exactly
+> as intended. The tool is now deployed, seeded, and in use, and the security fix is **verified in
+> production**: the public anon key gets `42501 permission denied` on all four private tables — proving
+> Finding #2's `revoke ... from anon` backstop works (RLS alone would return `200 []`).
+>
+> **Phase B/C remain open** (see the game plan at the bottom). One addition to Phase B from the Signal
+> Net's first real run — the **same class of bug** as Finding #3 (swallowed errors): `crawler/store.py`
+> discarded PostgREST's error body, turning a self-explaining `400` into an undiagnosable stack trace.
+> Fixed there; worth auditing any other client we write for the same blindness.
+
 **Overall verdict:** the build is **solid and shippable after a short fix pass**. No data-loss or
 data-exposure bug exists *today* (RLS is correctly on; XSS escaping is thorough). The real issues are
 (1) one genuine security bug — an open-redirect in the login gate, (2) a missing defense-in-depth

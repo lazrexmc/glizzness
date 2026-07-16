@@ -7,11 +7,18 @@ The browser never touches Google — only public-safe rows.
 > **STATUS — ✅ ACTIVATED 2026-07-11:** schema run, service account + calendar share done, real sync run
 > (events populate `cart_schedule`), `events.html` renders the collapsible list.
 >
-> **AUTO-REFRESH BUILT 2026-07-16 (not yet switched on):** the sync now runs on **GitHub Actions every
-> 2h** (`.github/workflows/calendar.yml`) instead of the old Windows Task Scheduler plan — so the page
-> stays current even while Lance's PC is off and he's out at the cart. **Remaining (Lance):** add the
-> three repo secrets and trigger the first run — see §"Keep it fresh" below. Until then the schedule is
-> only as fresh as the last manual run, so **don't point marketing at `glizzness.com/events` yet.**
+> **✅ AUTO-REFRESH IS ON (2026-07-16).** The sync runs on **GitHub Actions every 2h**
+> (`.github/workflows/calendar.yml`) — verified in the cloud (`synced 45 event(s)`, 30 public). It keeps
+> working while Lance's PC is off and he's out at the cart, which is exactly when it matters.
+> **`glizzness.com/events` is now trustworthy → the "check the website" marketing CTA is SAFE to use.**
+>
+> **Two ways to sync, both valid:**
+> 1. **Automatic** — every 2h, hands-off. Nothing to do.
+> 2. **Right now** — `PrivateData\sync-calendar.ps1` (right-click → Run with PowerShell). Use when you
+>    just changed the calendar and don't want to wait up to 2h. Add `-DryRun` from a terminal to preview.
+>
+> *(The old Windows Task Scheduler plan was rejected — a local job dies exactly while Trint is out
+> vending. See §"Keep it fresh".)*
 
 ```
 Google Calendar (one business calendar)
@@ -82,8 +89,8 @@ python sync_calendar.py               # sync the next 180 days
 > working the cart** and customers are checking `glizzness.com/events`. That's the one moment it has
 > to be right. Actions runs regardless of any local machine.
 
-The workflow needs **three repo secrets** — GitHub → repo **Settings → Secrets and variables →
-Actions → New repository secret**:
+**✅ These three secrets are SET (2026-07-16) and the workflow is running.** Listed for disaster
+recovery — GitHub → repo **Settings → Secrets and variables → Actions → New repository secret**:
 
 | Secret | Value |
 |---|---|

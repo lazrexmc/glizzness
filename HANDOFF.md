@@ -27,11 +27,11 @@ a pile of research/analysis tooling.
 | **Website** | The public `glizzness.com` site | ✅ **LIVE** at `glizzness.com` + `www` (Cloudflare Pages; custom domain switched 2026-07-14) | `site/README.md`, `GO_LIVE.md §2` | `site/` (6 pages, `assets/site.css`, `site.js`, `config.js`) |
 | **Menu pipeline** | `menu.json` is the source of truth → website + Square + DoorDash | ✅ SHIPPED & SYNCED (26 web / 28 Square) | **`MENU_PIPELINE.md`** | `menu.json`, `gen_menu.py`, `push_menu.py`, `pull_catalog.py`, `catalog_modifiers.py` |
 | **Catering leads** | Booking form → DB → instant email alert | ✅ LIVE | **`CATERING_LEADS.md`** | `site/catering.html`, Supabase `catering_leads`, Make.com, Gmail |
-| **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED (manual sync). **Auto-refresh BUILT 2026-07-16** (GitHub Actions, every 2h) but **OFF until its 3 repo secrets are set** → until then `/events` can be stale, so don't drive marketing traffic to it | **`CALENDAR_SETUP.md`** | `sync_calendar.py`, `.github/workflows/calendar.yml`, `requirements-calendar.txt`, Supabase `cart_schedule`, `site/events.html` |
+| **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ **LIVE + SELF-UPDATING** (GitHub Actions every 2h; verified in cloud 2026-07-16). `/events` is trustworthy → **the "check the website" marketing CTA is SAFE.** `PrivateData\sync-calendar.ps1` = the manual "push it live NOW" button | **`CALENDAR_SETUP.md`** | `sync_calendar.py`, `.github/workflows/calendar.yml`, `requirements-calendar.txt`, Supabase `cart_schedule`, `site/events.html` |
 | **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.com/festivals` (ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
-| **Admin hub + Scout board** | Gated cockpit (`/hub`) → Trint's phone-first event-triage card board (`/scout`, Yes/Maybe/No + ask) + Lance's review desk (`/hub/desk`) | ✅ **BUILT v1 + audited & Phase-A-hardened 2026-07-16**; NOT yet deployed (needs Lance's Supabase steps) | **`SCOUT_BOARD.md`**, `SCOUT_AUDIT.md`, `docs/.../2026-07-13-scout-board-design.md` | `site/hub/`, `site/scout/`, `assets/scout.js`+`scout.css`, `assets/vendor/supabase.js`, `supabase_scout_schema.sql`, `scout_seed_gen_sql.py` |
-| **Signal Net (events crawler)** | Always-on GitHub Actions aggregator polls curated local sources every 4h → finds → Signals feed (`/hub/signals`); Keep = a Scout prospect | ✅ **BUILT v1 2026-07-16**; NOT yet deployed (needs schema SQL + the `SUPABASE_SERVICE_KEY` GitHub secret) | **`SIGNAL_NET.md`**, `docs/.../2026-07-16-signal-net-design.md` | `crawler/`, `.github/workflows/crawler.yml`, `supabase_signals_schema.sql`, `site/hub/signals.html` |
+| **Admin hub + Scout board** | Gated cockpit (`/hub`) → Trint's phone-first event-triage card board (`/scout`, Yes/Maybe/No + ask) + Lance's review desk (`/hub/desk`) | ✅ **LIVE 2026-07-16** — audited + Phase-A-hardened, deployed, Lance logged in and verified. 23 prospects seeded. **RLS verified live:** anon key gets `42501` on all private tables | **`SCOUT_BOARD.md`**, `SCOUT_AUDIT.md`, `docs/.../2026-07-13-scout-board-design.md` | `site/hub/`, `site/scout/`, `assets/scout.js`+`scout.css`, `assets/vendor/supabase.js`, `supabase_scout_schema.sql`, `scout_seed_gen_sql.py` |
+| **Signal Net (events crawler)** | Always-on GitHub Actions aggregator polls 10 curated local sources every 4h → finds → Signals feed (`/hub/signals`); Keep = a Scout prospect | ✅ **LIVE 2026-07-16** — running in the cloud; first real run inserted **178 signals** from 10 sources (Cooper's Landing, Mizzou, Blue Note, Rose, Stephens, Bur Oak, KOMU/Missourian/Vox, r/columbiamo) | **`SIGNAL_NET.md`**, `docs/.../2026-07-16-signal-net-design.md` | `crawler/`, `.github/workflows/crawler.yml`, `supabase_signals_schema.sql`, `site/hub/signals.html` |
 | **Event history / demand baseline** | Past calendar events, for future "how many people" modeling | 🟡 captured, analysis pending | `TODO.md` (demand baseline) | `pull_past_events.py` → `past_cart_events.csv` (local, gitignored) |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
 | **Freelance rate sheet** | Lance's own pricing collateral (not repo content) | ✅ published as a claude.ai Artifact | — | (scratchpad `rate-sheet.html`; do NOT commit to this repo) |
@@ -132,13 +132,20 @@ Marketing approach: schedule + cross-post FB/IG via **Meta Business Suite** (fre
 2026-07-14: real photos only, NEVER AI-generated food/cart** (the RTX-3080 / IBTP genai pipeline is for
 abstract backgrounds only — an AI hot dog on a real food brand reads as fake and erodes trust).
 
-**🆕 BUILT 2026-07-16 (v1, code in repo — pending Lance's credentialed deploy steps):**
-- **Admin hub + Scout board** (`SCOUT_BOARD.md`) — the gated cockpit + Trint's phone-first Yes/Maybe/No
-  card board + Lance's review desk. Deep-audited + hardened (`SCOUT_AUDIT.md`). **To go live:** run
-  `supabase_scout_schema.sql`, create the two Supabase Auth users, run the seed SQL, push.
-- **The Signal Net** (`SIGNAL_NET.md`) — always-on GitHub Actions crawler → the Signals feed
-  (`/hub/signals`) → Keep = a Scout prospect. **To go live:** run `supabase_signals_schema.sql`, set the
-  `SUPABASE_SERVICE_KEY` GitHub secret, enable + trigger the workflow.
+**🚀 WENT LIVE 2026-07-16 — the whole private ops platform is running:**
+- **Admin hub + Scout board** (`SCOUT_BOARD.md`) — gated cockpit + Trint's Yes/Maybe/No card board +
+  Lance's review desk. Deep-audited + hardened (`SCOUT_AUDIT.md`); Lance logged in and verified.
+- **The Signal Net** (`SIGNAL_NET.md`) — the crawler runs itself every 4h; **178 signals** from 10 live
+  sources on the first real run.
+- **Calendar auto-sync** (`CALENDAR_SETUP.md`) — every 2h in the cloud; `/events` self-updates.
+- **The loop is closed:** crawler finds → Lance Keeps → enriches → **Ready → Trint** → Trint decides on
+  his phone → Lance books. *(Demo gotcha: Trint's board looks empty until cards are marked Ready.)*
+
+**Next up (not built):** the **demand baseline** — the "brain" that turns the Scout card's empty
+`suggested_crew` slot into real math (orders/hr ÷ sustainable pace). Both inputs already exist on disk:
+`past_cart_events.csv` (294 events) + `Sales/items-*.csv` (~25,200 line items). Staffing needs only the
+sales half — **recipes/BOM are for inventory, a separate + heavier track.** Order: baseline → staffing →
+inventory. See `OPS_PLATFORM.md`.
 
 Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native first"**):
 - **Signal Net → Event Finder promote (v1.1)** — one-click curated promote of an approved signal to the

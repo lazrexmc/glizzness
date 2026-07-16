@@ -8,7 +8,10 @@
 > This file is committed to a **private** GitHub repo (made private 2026-07-13) — it still contains **no secret values**, only where each
 > secret lives and how to regenerate it. Keep it that way.
 >
-> Last updated: **2026-07-13**.
+> Last updated: **2026-07-16** — added the gated tools (hub/Scout/Signals), the **Signal Net crawler**,
+> and the **cloud calendar sync**. Note a new dependency class: **GitHub Actions repo secrets** now run
+> two cron jobs (calendar 2h, crawler 4h). They are NOT in `..\PrivateData\` and do NOT come back from
+> git — after a rebuild you must re-add all three (§3) or the site's schedule silently stops updating.
 
 ---
 
@@ -88,8 +91,10 @@ master key that bypasses RLS and must never appear in any tracked/browser file.
 | `WAVE_BUSINESS_ID` | env-specific | same as above | Wave → Settings → Business (copy from URL) |
 | `WAVE_*_ID` (11 account IDs) | env-specific | same as above | run `python sync_wave.py --sync-accounts`, then map each account **name** → id (names in `SETUP.md §3`) |
 | `APP_PASSWORD` | **SECRET** | `.streamlit/secrets.toml` + Streamlit Cloud | operator-chosen (Lance + James). Unset ⇒ dashboard fails closed |
-| `GOOGLE_SA_KEYFILE` | **SECRET** | `..\PrivateData\gcal-service-account.json` (outside repo); path via `$env` | Google Cloud → IAM → Service Accounts → Keys → Add key → JSON |
-| `GOOGLE_CALENDAR_ID` | not secret | shell `$env` | Google Calendar → Settings and sharing → Integrate calendar → Calendar ID (glizzness@gmail.com) |
+| `GOOGLE_SA_KEYFILE` | **SECRET** | `..\PrivateData\gcal-service-account.json` (outside repo); path via `$env`, or set by `..\PrivateData\sync-calendar.ps1` | Google Cloud → IAM → Service Accounts → Keys → Add key → JSON |
+| `GOOGLE_SA_JSON` | **SECRET** | **GitHub Actions repo secret** — the *entire contents* of that JSON key (the cloud calendar sync writes it to a temp file on the runner) | same key as above, pasted whole. Scope is **read-only calendar** (`calendar.readonly`), so blast radius = "read the cart calendar", not the DB/money. Revoke: delete the key in Google Cloud, add a fresh one |
+| `GOOGLE_CALENDAR_ID` | not secret | shell `$env`, `sync-calendar.ps1`, **+ a GitHub Actions repo secret** | Google Calendar → Settings and sharing → Integrate calendar → Calendar ID (glizzness@gmail.com) |
+| `..\PrivateData\sync-calendar.ps1` | **holds a live secret** | outside the repo *on purpose* (git can't see it — stronger than .gitignore). Sets the 4 env vars + runs the sync; the manual "push calendar live NOW" button | recreate from `CALENDAR_SETUP.md`; paste the service_role key in. **Pure ASCII only** — a UTF-8 em-dash breaks it (see traps) |
 | GitHub push PAT/SSH | **SECRET** | OS credential manager / SSH agent | GitHub → Settings → Developer settings |
 
 **Where secret *values* are NOT:** never in tracked files. `.gitignore` blocks `.streamlit/secrets.toml`,
@@ -277,6 +282,20 @@ Everything reads Supabase, so build it first. Do these **in order**:
 - **`..\PrivateData\` is a sibling** of the repo, not inside it. Restore it there.
 - **Gitignored files never come back from git:** `run_daily.ps1` (live tokens), `glizzness.db`,
   `.streamlit/secrets.toml`, Wave transaction CSVs. Rebuild secrets from dashboards; rebuild data by re-syncing.
+  **Nor do GitHub Actions secrets** — re-add all three (§3) or the crawler + calendar sync silently stop.
+- **Scripts must be PURE ASCII** (`.ps1`, `.py`). Windows PowerShell 5.1 reads `.ps1` as **cp1252**, not
+  UTF-8. A UTF-8 em-dash `—` (`E2 80 94`) becomes `â€"` — and that trailing `0x94` is a **curly quote `”`
+  that PowerShell treats as a real string terminator**, so a string closes early, every later quote flips
+  in/out of string context, and it explodes far away with a nonsense error (`The term 'exit' is not
+  recognized`). Bit us 2026-07-16 on `sync-calendar.ps1`. **A parser check does NOT catch this** —
+  `[Parser]::ParseFile()` passed while the script failed at runtime. Check with
+  `grep -nP "[^\x00-\x7F]" file.ps1`. Python that prints feed data also needs
+  `sys.stdout.reconfigure(encoding="utf-8")` (done in `crawler/run.py`).
+- **PostgREST bulk inserts need UNIFORM KEYS.** Every object in the batch must have the same key set, or
+  you get a bare `HTTP 400 Bad Request` with no explanation. Don't "helpfully" drop empty fields — send
+  `null`. Bit us 2026-07-16 in `crawler/normalize.py::to_row()`. Also: **urllib discards the response
+  body**, which is exactly where PostgREST explains itself — `crawler/store.py` now surfaces it. If you
+  write another PostgREST client, do the same or you'll be debugging blind.
 - **Vending schema is destructive:** `supabase_vending_schema.sql` DROPs the `vending_*` tables — re-running it
   wipes the data (reload via the data file). The `one_time` cadence CHECK must exist before the data inserts.
 - **Vending `event_type` is a fixed allow-list:** the `event_type` CHECK in `supabase_vending_schema.sql`
@@ -296,7 +315,15 @@ Everything reads Supabase, so build it first. Do these **in order**:
 - [ ] Menu: `gen_menu.py` → "No data problems"; after `push_menu.py --apply`, Square + DoorDash descriptions are **not blank**.
 - [ ] Accounting: `glizzness.streamlit.app` shows the password gate; the four status cards load; a Post to Wave doesn't duplicate.
 - [ ] Festival map: `*.pages.dev/festivals` (the main site) loads clustered dots.
-- [ ] `git ls-files | grep -Ei 'secrets.toml|service-account|run_daily'` returns **nothing** (no secret committed).
+- [ ] **Gated tools:** logged-out `/scout` bounces to `/hub` login; logged in, Signals/Board/Desk render.
+- [ ] **Private tables are sealed:** with the **anon** key, `event_prospects` / `event_signals` /
+      `prospect_decisions` / `prospect_thread` all return **HTTP 401 `42501`** (permission denied — the
+      `revoke ... from anon` backstop), while `cart_schedule` returns **200**. If a private table returns
+      `200 []` instead, the REVOKE is missing and only RLS is holding the door.
+- [ ] **Cron jobs:** Actions → "Calendar sync" prints `synced N event(s)`; "Signal Net crawler" prints
+      `NEW inserted to event_signals: N`. Both should **skip green** (not fail) if a secret is absent.
+- [ ] `git ls-files | grep -Ei 'secrets.toml|service-account|run_daily|sync-calendar.ps1'` returns
+      **nothing** (no secret committed).
 
 ---
 

@@ -3,10 +3,20 @@
 Trint's phone-first event-triage tool + Lance's review desk, behind a login gate. Turns the
 27 curated research picks (and any inbound vend requests) into booked gigs.
 
+> ## ✅ STATUS: LIVE (2026-07-16)
+> Deployed, seeded (**23 prospects**), and verified — Lance logged in and the Board/Desk/Signals all
+> render. **Security verified live:** the public anon key gets `42501 permission denied` on all four
+> private tables (the audit's `revoke ... from anon` backstop), while public tables still read fine.
+> The "ONE-TIME SETUP" section below is **DONE** — kept for disaster recovery, not as a to-do.
+>
+> **⚠️ Demo gotcha:** Trint's board looks **EMPTY** until you push cards through **"Ready → Trint"**
+> from the Desk — everything seeds as `researching` by design (that gate is the whole point: he only
+> ever sees vetted cards). Push 2–3 through before showing him, or it reads as broken.
+
 - **Design spec:** `docs/superpowers/specs/2026-07-13-scout-board-design.md`
 - **Pattern reused:** `CATERING_LEADS.md` (the Supabase + Make→Gmail pipeline)
-- **Live URLs** (once deployed): `glizzness.com/hub` · `glizzness.com/scout` · `glizzness.com/hub/desk`
-  — none are in the public nav; reach them by bookmark.
+- **Live URLs:** `glizzness.com/hub` · `glizzness.com/scout` · `glizzness.com/hub/desk` ·
+  `glizzness.com/hub/signals` — none are in the public nav; reach them by bookmark.
 
 ---
 
@@ -30,7 +40,7 @@ public anon key (already in `assets/config.js`) can read/write **nothing** here.
 
 ---
 
-## ONE-TIME SETUP (Lance — these need the Supabase dashboard / your credentials)
+## ONE-TIME SETUP — ✅ ALL DONE 2026-07-16 (kept for disaster recovery)
 
 ### 1. Create the tables
 Supabase → **SQL Editor** → paste all of `supabase_scout_schema.sql` → **Run**. (Safe alongside the
