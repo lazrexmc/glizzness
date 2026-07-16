@@ -13,7 +13,7 @@ import sys
 from . import config, store
 from .normalize import looks_like_event, looks_local
 from .sources import SOURCES
-from .adapters import rss, reddit, venue_watch
+from .adapters import rss, reddit, venue_watch, tribe
 
 # make unicode titles safe to print on a Windows cp1252 console
 try:
@@ -21,7 +21,7 @@ try:
 except Exception:
     pass
 
-ADAPTERS = {"rss": rss, "reddit": reddit, "venue": venue_watch}
+ADAPTERS = {"rss": rss, "reddit": reddit, "venue": venue_watch, "tribe": tribe}
 
 
 def keep(sig, src):

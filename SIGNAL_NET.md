@@ -63,6 +63,23 @@ After that it runs itself every 4 hours.
 
 ---
 
+## LIVE SOURCES (v1 — all verified 2026-07-16, no API key)
+
+| Source | Type | Yield (first run) |
+|---|---|---|
+| **Cooper's Landing** (`tribe:coopers`) | Tribe API | ~50 — the most vending-relevant venue (riverside, food vendors, bands) |
+| **Mizzou calendar** (`rss:mizzou`) | LiveWhale RSS | ~80 (event-filtered from 512 campus items) — catches the big-foot-traffic events |
+| **Stephens College** (`tribe:stephens`) | Tribe API | ~23 |
+| **The Blue Note** / **Rose Music Hall** (`rss:*`) | event RSS | ~10 each — ticketed shows |
+| **Bur Oak Brewing** (`tribe:buroak`) | Tribe API | 0 today (allows food trucks; fills when they post) |
+| **KOMU · Missourian · Vox** (`rss:*`) | BLOX news RSS | event-ish headlines only (low, but catches announcements) |
+| **r/columbiamo** (`reddit:columbiamo`) | Reddit `.rss` | ~6 (may 403 on the CI runner; fine) |
+
+First run ≈ **182 candidates**; after that it's incremental (dedup means each event appears once). Use
+the **source filter** on the Signals feed to skim source-by-source. **Verified-but-not-added** (keys or
+stale): Ticketmaster Discovery, Bandsintown/Songkick (→ Eastside Tavern dive/punk), The District, City
+of Columbia / CVB (Cloudflare-blocked) — see the notes at the bottom of `crawler/sources.py`.
+
 ## MANAGING SOURCES
 
 Add one in `crawler/sources.py` (then commit — the next scheduled run picks it up):
