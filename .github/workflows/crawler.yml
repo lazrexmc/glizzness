@@ -7,8 +7,16 @@ name: Signal Net crawler
 # It starts working by itself the moment the secret is added — nothing else to switch on.
 
 on:
-  schedule:
-    - cron: "0 */4 * * *"   # every 4 hours (UTC)
+  # ---------------------------------------------------------------------------------
+  # CRON IS PARKED ON PURPOSE (2026-07-16). The Signal Net's `event_signals` table does
+  # not exist yet, so a scheduled run would fail every 4h and email the owner — even
+  # though SUPABASE_SERVICE_KEY is now set (it's shared with the calendar sync).
+  #
+  # TO TURN THE CRAWLER ON: run supabase_scout_schema.sql then supabase_signals_schema.sql,
+  # then UNCOMMENT the two lines below and push. See SIGNAL_NET.md.
+  # ---------------------------------------------------------------------------------
+  # schedule:
+  #   - cron: "0 */4 * * *"   # every 4 hours (UTC)
   workflow_dispatch: {}       # manual "Run workflow" button in the Actions tab
 
 permissions:
