@@ -166,8 +166,13 @@ Everything reads Supabase, so build it first. Do these **in order**:
    then `python sync_calendar.py --dry-run` → `python sync_calendar.py`.
 5. **Public trigger = event Visibility "Public"** (open event → Edit → "Default visibility" → Public). Not a
    color. Everything else renders "Booked — Unavailable".
-6. **Automate it:** a small gitignored `.ps1` that sets the 4 env vars + runs the sync, registered in Windows
-   Task Scheduler every 1–2h. Env vars don't persist, so the scheduled script must set them itself.
+6. **Automate it — GitHub Actions, not Task Scheduler.** `.github/workflows/calendar.yml` runs the sync
+   every 2h in the cloud. Set three repo secrets (Settings → Secrets and variables → Actions):
+   **`GOOGLE_SA_JSON`** (the whole SA JSON key, pasted), **`GOOGLE_CALENDAR_ID`**, and
+   **`SUPABASE_SERVICE_KEY`** (shared with the crawler). The workflow writes the JSON to a temp file on
+   the runner and points `GOOGLE_SA_KEYFILE` at it, so the script needs no changes.
+   *(A local Task-Scheduler job was the old plan — rejected: it only fires when Lance's PC is awake, so
+   the public schedule would go stale exactly while he's out vending.)*
 
 ### 5.4 Menu pipeline (site + Square + DoorDash) — detail: `MENU_PIPELINE.md`, `GO_LIVE.md §4`
 1. `SQUARE_TOKEN` = Production token (`ITEMS_READ`+`ITEMS_WRITE`) in **Lance's** PowerShell only.

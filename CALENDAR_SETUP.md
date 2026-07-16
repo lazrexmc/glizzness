@@ -5,8 +5,13 @@ a **sanitized mirror** of the business Google Calendar from Supabase (`cart_sche
 The browser never touches Google — only public-safe rows.
 
 > **STATUS — ✅ ACTIVATED 2026-07-11:** schema run, service account + calendar share done, real sync run
-> (events populate `cart_schedule`), `events.html` renders the collapsible list. Remaining: put the sync on
-> a timer (§"Keep it fresh"), and it goes public when the site deploys. Steps below are the reference / re-run guide.
+> (events populate `cart_schedule`), `events.html` renders the collapsible list.
+>
+> **AUTO-REFRESH BUILT 2026-07-16 (not yet switched on):** the sync now runs on **GitHub Actions every
+> 2h** (`.github/workflows/calendar.yml`) instead of the old Windows Task Scheduler plan — so the page
+> stays current even while Lance's PC is off and he's out at the cart. **Remaining (Lance):** add the
+> three repo secrets and trigger the first run — see §"Keep it fresh" below. Until then the schedule is
+> only as fresh as the last manual run, so **don't point marketing at `glizzness.com/events` yet.**
 
 ```
 Google Calendar (one business calendar)
@@ -67,14 +72,43 @@ python sync_calendar.py --dry-run     # preview — writes nothing
 python sync_calendar.py               # sync the next 180 days
 ```
 
-## Keep it fresh (schedule it)
-Run it on a timer so the site stays current — e.g. **Windows Task Scheduler** every
-1–2 hours (mirror `run_daily.ps1`'s pattern), or any cron. The sync is idempotent
-(delete-future + insert), so re-running is always safe.
+## Keep it fresh — automated via GitHub Actions (every 2h)
+
+**`.github/workflows/calendar.yml` runs `sync_calendar.py` in the cloud every 2 hours** (+ a manual
+"Run workflow" button). The sync is idempotent (delete-future + insert), so re-running is always safe.
+
+> **Why Actions and not Windows Task Scheduler** (the old plan): Task Scheduler only fires when
+> Lance's PC is on and awake — which means the schedule would go **stale exactly while he's out
+> working the cart** and customers are checking `glizzness.com/events`. That's the one moment it has
+> to be right. Actions runs regardless of any local machine.
+
+The workflow needs **three repo secrets** — GitHub → repo **Settings → Secrets and variables →
+Actions → New repository secret**:
+
+| Secret | Value |
+|---|---|
+| `GOOGLE_SA_JSON` | the **entire contents** of the service-account JSON key file (open it in a text editor, copy all of it, paste) |
+| `GOOGLE_CALENDAR_ID` | the Calendar ID from step 4 above (often `glizzness@gmail.com`) |
+| `SUPABASE_SERVICE_KEY` | the Supabase **service_role** key (Project Settings → API). *Shared with the Signal Net crawler — set it once.* |
+
+The workflow writes `GOOGLE_SA_JSON` to a temp file on the ephemeral runner and points
+`GOOGLE_SA_KEYFILE` at it, so **`sync_calendar.py` needs no changes** and no key is ever committed.
+
+**First run:** GitHub → **Actions** → "Calendar sync" → **Run workflow** → the log should print
+`fetched N event(s) -> M row(s): X public, Y unavailable` then `synced M event(s) to cart_schedule`.
+Then check `glizzness.com/events`.
+
+**Cost:** ~720 Actions minutes/month (+ ~360 for the crawler) against the **2,000 free** private-repo
+minutes. Comfortable. If you ever need to trim, widen the cron to `0 */4 * * *`.
 
 ## Security
 - The service-account JSON key grants read access to the calendar — **never commit it.**
   Keep it in `..\PrivateData\` (or anywhere outside the repo). `.gitignore` also blocks
   `*service-account*.json` / `gcal-*.json` as a backstop.
+- It **also** lives as the `GOOGLE_SA_JSON` **GitHub Actions secret** (encrypted at rest, masked in
+  logs, private repo) so the cloud sync can run. That's a deliberate, accepted tradeoff: the key is
+  **read-only and scoped to the calendar** (`calendar.readonly`, no project roles), so its blast
+  radius is "someone could read the cart calendar" — not the DB, not the money. To revoke: Google
+  Cloud → IAM → Service Accounts → Keys → delete the key, then add a fresh one to the secret.
 - The site only ever reads the **sanitized** `cart_schedule` (anon key, read-only).
   Private event titles/locations are never stored there.

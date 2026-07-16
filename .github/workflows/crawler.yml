@@ -2,6 +2,9 @@ name: Signal Net crawler
 
 # Always-on local-events aggregator. Polls curated sources and writes new finds to Supabase
 # (event_signals). Lance reviews them on the gated Signals feed. See SIGNAL_NET.md.
+#
+# NOT SET UP YET? This job SKIPS cleanly (green, no email) until SUPABASE_SERVICE_KEY exists.
+# It starts working by itself the moment the secret is added — nothing else to switch on.
 
 on:
   schedule:
@@ -20,16 +23,36 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Guard FIRST (before checkout/install) so an unconfigured repo burns ~2s, not ~40s,
+      # and — the point — reports SUCCESS instead of spamming failure emails every 4 hours.
+      - name: Check setup
+        id: cfg
+        env:
+          KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Signal Net not set up yet::SUPABASE_SERVICE_KEY is not set, so there is nowhere to write finds. Skipping this run — this is NOT a failure. Finish setup per SIGNAL_NET.md (run supabase_signals_schema.sql, then add the secret) and this starts working automatically."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.cfg.outputs.configured == 'true'
 
       - uses: actions/setup-python@v5
+        if: steps.cfg.outputs.configured == 'true'
         with:
           python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: crawler/requirements.txt
 
       - name: Install dependencies
+        if: steps.cfg.outputs.configured == 'true'
         run: pip install -r crawler/requirements.txt
 
       - name: Run the crawler
+        if: steps.cfg.outputs.configured == 'true'
         env:
           SUPABASE_URL: https://ikhcbncnaojrndilmnnd.supabase.co
           # Set this in: repo Settings -> Secrets and variables -> Actions -> New repository secret

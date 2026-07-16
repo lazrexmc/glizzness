@@ -1,0 +1,6 @@
+# Deps for sync_calendar.py (run by .github/workflows/calendar.yml every 2h).
+# Kept separate from the crawler's requirements so each Actions job installs only what it needs
+# (and so setup-python's pip cache can key off this file).
+google-api-python-client>=2.0
+google-auth>=2.0
+requests>=2.28
