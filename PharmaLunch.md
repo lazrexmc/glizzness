@@ -18,12 +18,18 @@ product for this — made fresh, delivered hot and labeled, walk away.
 
 ---
 
+## ⛔ UPDATE 2026-07-15: ezCater REJECTED us — food carts / mobile vendors only, they require a
+## brick-and-mortar location. So the marketplace door is CLOSED. The lane is NOT dead — it just
+## runs **direct to office managers** now (see below), which is actually a warmer, no-commission
+## path. CaterCow/Cater Nation likely have the same B&M bias; try, but lead with direct outreach.
+
 ## The platforms (how reps find caterers)
 
-### 1. ezCater — THE primary door ⭐
-The dominant marketplace pharma reps use to find and order office lunches. Handles the
-compliance/expense receipts they need, filters by facility + dietary, lets them reorder in
-two taps. If we're on ONE platform, it's this one.
+### 1. ezCater — ❌ CLOSED TO US (tried 7/15; rejects mobile/cart vendors, B&M only)
+Was the dominant marketplace pharma reps use to find/order office lunches. Would have been the
+primary door — but they only list brick-and-mortar caterers, so we can't get on. Skip.
+*(If we ever get a fixed commissary/kitchen address they'll accept, revisit — the 15% + 2.75%
+economics still hold. Until then, direct-to-office is the play.)*
 
 - **Free** to create an account + online menu. (Professional/licensed caterers only — no home
   cooks. We qualify: LLC + commissary + Square.)
@@ -113,11 +119,11 @@ mouth to the others:
 ---
 
 ## Status / next actions
-- [ ] Create ezCater caterer account (free) — Lance (needs LLC/EIN/commissary addr, ~30 min).
-- [ ] Build ezCater menu (trays first, +15–20% pricing) + turn on order text alerts.
-- [ ] One-pager for office managers (reuse catering flyer + "reps: order from us" line + ezCater link).
-- [ ] Canvass Nifong Plaza + Keene corridor office managers by email; leave cards at front desks.
-- [ ] After 3–5 good reviews: enroll ezCater Preferred Partner/ezRewards; apply CaterCow + Cater Nation.
+- [x] ~~Create ezCater account~~ — **REJECTED 7/15: ezCater is brick-and-mortar only, no carts.** Skip.
+- [ ] **PRIMARY PLAY → direct office-manager email** (no marketplace, no commission). One-pager +
+      "reps: order from us / give our card to reps" note, sent to Nifong Plaza + Keene corridor +
+      Berrywood endocrine office managers; leave cards at front desks.
+- [ ] Try CaterCow + Cater Nation (may also be B&M-biased — attempt, but don't count on it).
 
 ## Sources
 - ezCater caterer signup + commission: [catering.ezcater.com/help](https://catering.ezcater.com/en/help), [ezcater.com](https://www.ezcater.com/)
