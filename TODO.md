@@ -14,35 +14,35 @@ Running list of open action items. Add dated entries; check them off or delete w
 *Cash is tight ($120). Everything below is ordered by "what puts money in the account soonest."
 The engineering backlog is BELOW this and is **parked** until revenue is stable.*
 
-## 🟣 0. ⚠️ NOT LIVE YET — ASK CLAUDE TO WALK YOU THROUGH IT *(added 2026-07-16)*
+## 🟢 0. ✅ IT'S ALL LIVE — set up + verified by the owner *(2026-07-16)*
 
-> **Status check, honestly stated:** the **Scout board** + **Signal Net** are **CODE IN THE REPO ONLY**.
-> Lance has **not opened any of it, has not created a login, has not run a single SQL file, has not set
-> the GitHub secret, has never seen the hub.** Nothing is live to him. Do not describe these as "live"
-> or "ready" — they are *built and untested by the owner.*
+> **Status, honestly stated:** Lance ran every credentialed step himself and **confirmed it working in
+> his browser.** This is no longer "built but untouched" — it is **running**.
+>
+> - **Supabase:** all 3 SQL files run (`scout_schema` → `signals_schema` → `scout_data`, 23 prospects
+>   seeded, `setval` returned 526 = correct). Auth users created. **Security verified live:** the public
+>   anon key gets `42501 permission denied` on all 4 private tables (the `revoke ... from anon` backstop
+>   working), while `cart_schedule` still reads fine.
+> - **Hub:** Lance logged in at `glizzness.com/hub` — Signals / Scout Board / Desk all render with data.
+> - **Calendar sync:** ✅ **AUTOPILOT** — GitHub Actions every 2h, verified in the cloud
+>   (`synced 45 event(s)`, 30 public incl. a new Bur Oak stop). `/events` is now trustworthy →
+>   **the "check the website" CTA is SAFE to use in marketing.** The `PrivateData\sync-calendar.ps1`
+>   launcher remains as the manual "push it live right now" button.
+> - **Signal Net:** ✅ **AUTOPILOT** — GitHub Actions every 4h; first real run inserted **178 signals**
+>   from 10 live sources. (Reddit works from the runner after all.)
 
-- [ ] **Say to Claude: "walk me through the Scout board + Signal Net setup."** He guides it **one step at
-      a time**, waits for you at each step, and verifies before moving on. Do NOT just hand over a runbook.
-      The rough shape (all owner-credentialed, ~30–40 min total):
-  1. Supabase SQL editor → run `supabase_scout_schema.sql`, then `supabase_signals_schema.sql`.
-  2. Supabase → Authentication → **create 2 users** (Trint + Lance) → *this is your hub login.*
-  3. `python scout_seed_gen_sql.py` → run the generated `supabase_scout_data.sql` (23 prospects).
-  4. GitHub → repo Settings → Secrets → Actions → add **`SUPABASE_SERVICE_KEY`** (the Supabase
-     service_role key).
-  5. GitHub → Actions → enable → **Run workflow** ("Signal Net crawler") → seeds the Signals feed.
-  6. Open **glizzness.com/hub** → log in → check Signals / Scout Board / Desk actually work.
-- [ ] **🔴 CALENDAR SYNC — do this one FIRST if marketing is the priority** (it unblocks the
-      "check the website" CTA; see the posting-cadence plan). Same GitHub Secrets screen as step 4:
-      add **`GOOGLE_SA_JSON`** (paste the whole service-account JSON file contents),
-      **`GOOGLE_CALENDAR_ID`** (usually glizzness@gmail.com), and **`SUPABASE_SERVICE_KEY`** →
-      then Actions → **"Calendar sync" → Run workflow** → check `glizzness.com/events` is current.
-      Runbook: `CALENDAR_SETUP.md`. **Until this is on, `/events` can be stale — do NOT send social
-      traffic there.**
-- [ ] Then decide the **v1.1 "→ Event Finder" promote** (spec §9.5) once you've actually used the feed.
+**Next actions now that it's real:**
+- [ ] **Demo it to Trint** — but first push 2–3 prospects through **"Ready → Trint"** from the Desk, or
+      his board looks empty (correct-but-confusing: everything seeds as `researching`).
+- [ ] Work the **Signals feed**: Keep the good finds → they become Scout prospects → enrich → Ready → Trint.
+- [ ] Decide the **v1.1 "→ Event Finder" promote** (spec §9.5) now that the feed is real.
+- [ ] Marketing: the posting cadence (night-before / morning-of feed posts + arrival Story + weekly
+      schedule post) — **unblocked**, since `/events` self-updates now.
 
-> **Note (2026-07-16):** both Actions workflows now **skip cleanly (green, no email)** until their
-> secrets exist — an earlier version hard-failed every 4h and spammed the owner's inbox. They
-> auto-activate the moment the secrets are added; nothing else to switch on.
+> **Gotchas fixed along the way (don't reintroduce):** workflows now **skip cleanly** when a secret is
+> absent (an earlier version hard-failed every 4h and spammed the inbox); `.ps1`/`.py` must be **pure
+> ASCII** (a UTF-8 em-dash broke the launcher — see the ascii-only memory); PostgREST bulk inserts need
+> **uniform keys** across rows (dropping None fields caused an HTTP 400).
 
 ## 🔴 1. CASH THIS WEEK — calls & emails
 
