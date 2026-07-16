@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Glizzness — Post Cards</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%93%A3</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/scout.css" />
+  <style>
+    .pc { background: var(--ink-2); border: 1px solid var(--line-d); border-radius: var(--radius-sm);
+          padding: 16px; display: grid; gap: 10px; }
+    .pc.is-done { opacity: .5; }
+    .pc__when { font-family: var(--font-display); font-size: 19px; letter-spacing: .4px; }
+    .pc__sub { color: var(--muted-d); font-size: 13px; margin-top: -6px; }
+    .pc__send { background: var(--ink-3); border-radius: var(--radius-sm); padding: 8px 12px;
+                font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .pc__send b { color: var(--gold); }
+    .copyblock { background: var(--ink); border: 1px solid var(--line-d); border-radius: var(--radius-sm);
+                 padding: 10px 12px; display: grid; gap: 4px; }
+    .copyblock__hd { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+                     font-size: 11px; letter-spacing: .6px; text-transform: uppercase; color: var(--muted-d); }
+    .copyblock p { margin: 0; font-size: 14.5px; white-space: pre-wrap; }
+    .minibtn { font: inherit; font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+               background: transparent; border: 1px solid var(--line-d); color: var(--muted-d);
+               border-radius: var(--radius-pill); padding: 3px 10px; cursor: pointer; }
+    .minibtn:hover { border-color: var(--gold); color: var(--gold); }
+    .minibtn.ok { border-color: #34c463; color: #34c463; }
+    .weekhd { font-family: var(--font-display); font-size: 15px; letter-spacing: .8px; text-transform: uppercase;
+              color: var(--gold); margin: 22px 0 2px; padding-top: 14px; border-top: 1px solid var(--line-d); }
+    .weekhd:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+    .pc__photo { font-size: 13px; color: var(--muted-d); }
+    .pc textarea { min-height: 66px; }
+  </style>
+</head>
+<body class="scout-body">
+  <header class="scout-top">
+    <div class="scout-top__brand">📣 Post Cards</div>
+    <div class="scout-top__links">
+      <a href="/hub/signals">Signals</a>
+      <a href="/scout/">Board</a>
+      <a href="/hub/">Hub</a>
+      <a href="#" id="logout">Log out</a>
+    </div>
+  </header>
+
+  <main class="scout-shell scout-shell--wide">
+    <h1 class="scout-h1">Post Cards</h1>
+    <p class="scout-sub" id="sub">Loading…</p>
+    <div class="desk-bar">
+      <div class="filters" id="filters">
+        <button type="button" data-f="todo" class="is-active">To review</button>
+        <button type="button" data-f="approved">Approved</button>
+        <button type="button" data-f="all">All</button>
+      </div>
+    </div>
+    <div class="rows" id="rows" aria-live="polite"><p class="empty">Loading…</p></div>
+  </main>
+
+  <script src="/assets/vendor/supabase.js"></script><!-- supabase-js 2.110.6 UMD, self-hosted -->
+  <script src="/assets/config.js"></script>
+  <script src="/assets/scout.js"></script>
+  <script>
+  (function () {
+    var session, db;
+    var esc = Scout.esc;
+    var rowsEl = document.getElementById("rows");
+    var subEl = document.getElementById("sub");
+    var filtersEl = document.getElementById("filters");
+    var filter = "todo";
+
+    // ---- REAL photos only (hard rule: never AI imagery for product/cart). Rotated per card. ----
+    var PHOTOS = ["glizzy.jpg", "cart-mizzou.jpg"];
+
+    // ---- copy pools. Rotated by a hash of the event ref so a card is STABLE across reloads
+    // (not reshuffling under you) but repeat venues don't post identical text every week. ----
+    var NIGHT = [
+      "Tomorrow: we're posted up at {venue}, {time} til we sell out. Come get a Glizzy. 🌭",
+      "Tomorrow — {venue}, {time}. Hot dogs done right. Roll through. 🌭",
+      "Cart's headed to {venue} tomorrow at {time}. Bring an appetite. 🌭",
+      "{venue} tomorrow, {time}. You know what to do. 🌭",
+      "Set your reminder: {venue} tomorrow, {time}. 🌭",
+      "Tomorrow we're at {venue} from {time}. Come hungry. 🌭",
+      "{venue}, tomorrow, {time}. Fresh, hot, and worth the walk. 🌭",
+      "Rolling into {venue} tomorrow at {time}. See you in line. 🌭"
+    ];
+    var MORNING = [
+      "Today: {venue}, {time}. {addr} — see you there. 🌭",
+      "We're at {venue} today from {time}. Come say hey. 🌭",
+      "Today's the day — {venue}, {time}. {addr} 🌭",
+      "Glizzy o'clock: {venue}, {time} today. 🌭",
+      "Cart's up at {venue} today, {time}. {addr} 🌭",
+      "Today — {venue} from {time}. Get one before they're gone. 🌭",
+      "{venue}, today at {time}. Pull up. 🌭",
+      "We're rolling to {venue} today, {time}. {addr} 🌭"
+    ];
+    var FB_TAIL = "\n\nFull schedule → glizzness.com/events";
+    var IG_TAIL = "\n\nFull schedule — link in bio.";
+
+    function hash(s) { var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return Math.abs(h); }
+    function pick(pool, ref) { return pool[hash(ref) % pool.length]; }
+    function fill(t, v) { return t.replace(/{venue}/g, v.venue).replace(/{time}/g, v.time).replace(/{addr}/g, v.addr || "").replace(/\s+—\s*$/, "").trim(); }
+
+    function fmtTime(d) {
+      var h = d.getHours(), m = d.getMinutes(), ap = h >= 12 ? "PM" : "AM";
+      h = h % 12 || 12;
+      return h + (m ? ":" + String(m).padStart(2, "0") : "") + " " + ap;
+    }
+    function fmtDay(d) {
+      return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    }
+    function fmtSend(d) {
+      return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }) + ", " + fmtTime(d);
+    }
+    function isoWeek(d) {
+      var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      var day = t.getUTCDay() || 7;
+      t.setUTCDate(t.getUTCDate() + 4 - day);
+      var y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+      var wk = Math.ceil((((t - y0) / 86400000) + 1) / 7);
+      return t.getUTCFullYear() + "-W" + String(wk).padStart(2, "0");
+    }
+
+    // ---- build the cards from public upcoming stops -------------------------------------
+    function buildCards(stops) {
+      var cards = [];
+      stops.forEach(function (s) {
+        var start = new Date(s.starts_at);
+        var venue = s.title || "the cart";
+        var addr = (s.location || "").split(",").slice(0, 2).join(",").trim();
+        var v = { venue: venue, time: fmtTime(start), addr: addr };
+
+        var nightSend = new Date(start); nightSend.setDate(nightSend.getDate() - 1); nightSend.setHours(18, 0, 0, 0);
+        var mornSend = new Date(start); mornSend.setHours(10, 0, 0, 0);
+
+        [["night_before", NIGHT, nightSend], ["morning_of", MORNING, mornSend]].forEach(function (t) {
+          if (t[2] <= new Date()) return;               // don't offer a post whose send time already passed
+          var body = fill(pick(t[1], s.gcal_event_id + t[0]), v);
+          cards.push({
+            ref: s.gcal_event_id, touch: t[0], send_at: t[2],
+            stop_title: venue, starts_at: start, addr: s.location || "",
+            body_fb: body + FB_TAIL, body_ig: body + IG_TAIL,
+            photo: PHOTOS[hash(s.gcal_event_id + t[0]) % PHOTOS.length]
+          });
+        });
+      });
+
+      // ---- the weekly roundup: one card per ISO week that has public stops ----
+      var byWeek = {};
+      stops.forEach(function (s) {
+        var d = new Date(s.starts_at);
+        (byWeek[isoWeek(d)] = byWeek[isoWeek(d)] || []).push(s);
+      });
+      Object.keys(byWeek).forEach(function (wk) {
+        var list = byWeek[wk].slice().sort(function (a, b) { return new Date(a.starts_at) - new Date(b.starts_at); });
+        var first = new Date(list[0].starts_at);
+        var send = new Date(first); send.setDate(send.getDate() - (send.getDay() || 7)); send.setHours(18, 0, 0, 0);
+        if (send <= new Date()) return;
+        var lines = list.map(function (s) {
+          var d = new Date(s.starts_at);
+          return "• " + d.toLocaleDateString(undefined, { weekday: "short" }).toUpperCase() + " — " +
+                 (s.title || "the cart") + ", " + fmtTime(d);
+        }).join("\n");
+        var head = "Where to find us this week 🌭\n\n" + lines;
+        cards.push({
+          ref: "week:" + wk, touch: "weekly", send_at: send,
+          stop_title: "Week of " + fmtDay(first), starts_at: first, addr: "",
+          body_fb: head + FB_TAIL, body_ig: head + IG_TAIL,
+          photo: PHOTOS[hash(wk) % PHOTOS.length]
+        });
+      });
+
+      cards.sort(function (a, b) { return a.send_at - b.send_at; });
+      return cards;
+    }
+
+    var cards = [], decided = {};
+
+    async function load() {
+      var today = new Date(); today.setHours(0, 0, 0, 0);
+      var sRes = await db.from("cart_schedule")
+        .select("gcal_event_id,starts_at,title,location,is_public")
+        .eq("is_public", true).gte("starts_at", today.toISOString())
+        .order("starts_at", { ascending: true }).limit(300);
+      if (sRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(sRes.error.message) + "</p>"; return; }
+      var dRes = await db.from("post_drafts").select("*");
+      if (dRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(dRes.error.message) + "</p>"; return; }
+
+      decided = {};
+      (dRes.data || []).forEach(function (d) { decided[d.event_ref + "|" + d.touch] = d; });
+      cards = buildCards(sRes.data || []);
+      render();
+    }
+
+    var TOUCH_LABEL = { night_before: "📅 Night before", morning_of: "☀️ Morning of", weekly: "🗓️ Weekly roundup" };
+
+    function render() {
+      var todo = cards.filter(function (c) { return !decided[c.ref + "|" + c.touch]; });
+      subEl.textContent = todo.length + " to review · " + cards.length +
+        " upcoming posts. Approve → paste into Meta Business Suite at the send time shown.";
+
+      var list = cards.filter(function (c) {
+        var d = decided[c.ref + "|" + c.touch];
+        if (filter === "todo") return !d;
+        if (filter === "approved") return d && d.status === "approved";
+        return true;
+      });
+      if (!list.length) {
+        rowsEl.innerHTML = '<div class="empty"><div class="big">🎉</div>' +
+          (filter === "todo" ? "All caught up — every upcoming post reviewed." : "Nothing here.") + "</div>";
+        return;
+      }
+
+      var html = "", lastWeek = "";
+      list.forEach(function (c, i) {
+        var wk = isoWeek(c.send_at);
+        if (wk !== lastWeek) { html += '<div class="weekhd">Week of ' + esc(fmtDay(weekStart(c.send_at))) + "</div>"; lastWeek = wk; }
+        html += cardHtml(c, i);
+      });
+      rowsEl.innerHTML = html;
+    }
+    function weekStart(d) { var x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+
+    function cardHtml(c, i) {
+      var d = decided[c.ref + "|" + c.touch];
+      var done = !!d;
+      var fb = d ? (d.body_fb || c.body_fb) : c.body_fb;
+      var ig = d ? (d.body_ig || c.body_ig) : c.body_ig;
+      var badge = done
+        ? '<span class="chip chip--' + (d.status === "approved" ? "ready" : "none") + '">' + d.status + (d.edited ? " · edited" : "") + "</span>"
+        : '<span class="chip chip--researching">' + esc(TOUCH_LABEL[c.touch] || c.touch) + "</span>";
+
+      return '<div class="pc' + (done ? " is-done" : "") + '" data-i="' + i + '">' +
+        '<div class="row__top"><span class="pc__when">' + esc(c.stop_title) +
+          (c.touch === "weekly" ? "" : " · " + esc(fmtDay(c.starts_at)) + " " + esc(fmtTime(c.starts_at))) +
+          "</span>" + badge + "</div>" +
+        (c.addr ? '<div class="pc__sub">' + esc(c.addr) + "</div>" : "") +
+        '<div class="pc__send"><span>📅 <b>Schedule for: ' + esc(fmtSend(c.send_at)) + "</b></span>" +
+          '<span class="pc__photo">📸 ' + esc(c.photo) + "</span></div>" +
+        copyBlock("Facebook", fb, i, "fb") +
+        copyBlock("Instagram", ig, i, "ig") +
+        (done ? '<div class="row__actions"><button class="btn btn--ghost" data-act="undo" data-i="' + i + '">↩ Undo</button></div>'
+              : '<div class="row__actions">' +
+                '<button class="btn btn--gold" data-act="approve" data-i="' + i + '">✅ Approve</button>' +
+                '<button class="btn btn--ghost" data-act="edit" data-i="' + i + '">✏️ Edit</button>' +
+                '<button class="btn btn--ghost" data-act="skip" data-i="' + i + '">❌ Skip</button></div>') +
+      "</div>";
+    }
+
+    function copyBlock(label, body, i, kind) {
+      return '<div class="copyblock"><div class="copyblock__hd"><span>' + label + "</span>" +
+        '<button class="minibtn" data-act="copy" data-i="' + i + '" data-kind="' + kind + '">copy</button></div>' +
+        "<p>" + esc(body) + "</p></div>";
+    }
+
+    // ---- actions --------------------------------------------------------------------
+    rowsEl.addEventListener("click", async function (e) {
+      var btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      var c = cards[parseInt(btn.getAttribute("data-i"), 10)];
+      if (!c) return;
+      var act = btn.getAttribute("data-act");
+
+      if (act === "copy") {
+        var d = decided[c.ref + "|" + c.touch];
+        var kind = btn.getAttribute("data-kind");
+        var text = kind === "fb" ? (d && d.body_fb || c.body_fb) : (d && d.body_ig || c.body_ig);
+        try { await navigator.clipboard.writeText(text); btn.textContent = "copied ✓"; btn.classList.add("ok");
+              setTimeout(function () { btn.textContent = "copy"; btn.classList.remove("ok"); }, 1400); }
+        catch (err) { alert("Couldn't copy — select the text manually."); }
+        return;
+      }
+      if (act === "edit") return openEdit(c);
+      if (act === "undo") return undo(c, btn);
+      if (act === "approve" || act === "skip") return decide(c, act === "approve" ? "approved" : "skipped", btn, false);
+    });
+
+    async function decide(c, status, btn, edited, bodies) {
+      if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+      var row = {
+        event_ref: c.ref, touch: c.touch, send_at: c.send_at.toISOString(),
+        stop_title: c.stop_title, starts_at: c.starts_at.toISOString(),
+        body_fb: (bodies && bodies.fb) || c.body_fb, body_ig: (bodies && bodies.ig) || c.body_ig,
+        photo: c.photo, edited: !!edited, status: status, reviewed_at: new Date().toISOString()
+      };
+      var res = await db.from("post_drafts").upsert(row, { onConflict: "event_ref,touch" }).select("*");
+      if (res.error) { alert("Couldn't save: " + res.error.message); if (btn) { btn.disabled = false; btn.textContent = "✅ Approve"; } return; }
+      decided[c.ref + "|" + c.touch] = (res.data && res.data[0]) || row;
+      render();
+    }
+
+    async function undo(c, btn) {
+      if (btn) btn.disabled = true;
+      var res = await db.from("post_drafts").delete().eq("event_ref", c.ref).eq("touch", c.touch);
+      if (res.error) { alert(res.error.message); if (btn) btn.disabled = false; return; }
+      delete decided[c.ref + "|" + c.touch];
+      render();
+    }
+
+    function openEdit(c) {
+      var back = document.createElement("div");
+      back.className = "modal-back is-open";
+      back.innerHTML = '<div class="modal"><h2>Edit — ' + esc(c.stop_title) + "</h2>" +
+        '<label class="field"><span>Facebook (links work)</span><textarea class="textarea" id="e-fb"></textarea></label>' +
+        '<label class="field"><span>Instagram (say &ldquo;link in bio&rdquo; — captions aren&rsquo;t clickable)</span><textarea class="textarea" id="e-ig"></textarea></label>' +
+        '<div class="modal__actions"><button class="btn btn--gold btn--block" id="e-save" type="button">Save &amp; approve</button>' +
+        '<button class="btn btn--ghost" id="e-cancel" type="button">Cancel</button></div></div>';
+      document.body.appendChild(back);
+      var d = decided[c.ref + "|" + c.touch];
+      document.getElementById("e-fb").value = (d && d.body_fb) || c.body_fb;
+      document.getElementById("e-ig").value = (d && d.body_ig) || c.body_ig;
+      function close() { back.remove(); }
+      back.addEventListener("click", function (e) { if (e.target === back) close(); });
+      document.getElementById("e-cancel").onclick = close;
+      document.getElementById("e-save").onclick = async function () {
+        var btn = document.getElementById("e-save");
+        btn.disabled = true; btn.textContent = "Saving…";
+        await decide(c, "approved", null, true, {
+          fb: document.getElementById("e-fb").value.trim(),
+          ig: document.getElementById("e-ig").value.trim()
+        });
+        close();
+      };
+    }
+
+    filtersEl.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-f]");
+      if (!b) return;
+      filter = b.getAttribute("data-f");
+      [].forEach.call(filtersEl.querySelectorAll("button"), function (x) { x.classList.toggle("is-active", x === b); });
+      render();
+    });
+
+    (async function () {
+      try {
+        session = await Scout.requireSession();
+        if (!session) return;
+        Scout.wireLogout();
+        db = Scout.client();
+        await load();
+      } catch (e) {
+        if (window.console) console.error(e);
+        rowsEl.innerHTML = '<p class="empty">⚠️ Couldn’t load — check your connection and reload.</p>';
+      }
+    })();
+  })();
+  </script>
+</body>
+</html>
