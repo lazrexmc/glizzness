@@ -14,6 +14,25 @@ Running list of open action items. Add dated entries; check them off or delete w
 *Cash is tight ($120). Everything below is ordered by "what puts money in the account soonest."
 The engineering backlog is BELOW this and is **parked** until revenue is stable.*
 
+## 🟣 0. ⚠️ NOT LIVE YET — ASK CLAUDE TO WALK YOU THROUGH IT *(added 2026-07-16)*
+
+> **Status check, honestly stated:** the **Scout board** + **Signal Net** are **CODE IN THE REPO ONLY**.
+> Lance has **not opened any of it, has not created a login, has not run a single SQL file, has not set
+> the GitHub secret, has never seen the hub.** Nothing is live to him. Do not describe these as "live"
+> or "ready" — they are *built and untested by the owner.*
+
+- [ ] **Say to Claude: "walk me through the Scout board + Signal Net setup."** He guides it **one step at
+      a time**, waits for you at each step, and verifies before moving on. Do NOT just hand over a runbook.
+      The rough shape (all owner-credentialed, ~30–40 min total):
+  1. Supabase SQL editor → run `supabase_scout_schema.sql`, then `supabase_signals_schema.sql`.
+  2. Supabase → Authentication → **create 2 users** (Trint + Lance) → *this is your hub login.*
+  3. `python scout_seed_gen_sql.py` → run the generated `supabase_scout_data.sql` (23 prospects).
+  4. GitHub → repo Settings → Secrets → Actions → add **`SUPABASE_SERVICE_KEY`** (the Supabase
+     service_role key).
+  5. GitHub → Actions → enable → **Run workflow** ("Signal Net crawler") → seeds the Signals feed.
+  6. Open **glizzness.com/hub** → log in → check Signals / Scout Board / Desk actually work.
+- [ ] Then decide the **v1.1 "→ Event Finder" promote** (spec §9.5) once you've actually used the feed.
+
 ## 🔴 1. CASH THIS WEEK — calls & emails
 
 - [ ] **Show-Me State Games — CALL TODAY.** Jessie Sida **573-884-2946** (main 573-882-2101).
