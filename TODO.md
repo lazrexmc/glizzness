@@ -31,7 +31,18 @@ The engineering backlog is BELOW this and is **parked** until revenue is stable.
      service_role key).
   5. GitHub → Actions → enable → **Run workflow** ("Signal Net crawler") → seeds the Signals feed.
   6. Open **glizzness.com/hub** → log in → check Signals / Scout Board / Desk actually work.
+- [ ] **🔴 CALENDAR SYNC — do this one FIRST if marketing is the priority** (it unblocks the
+      "check the website" CTA; see the posting-cadence plan). Same GitHub Secrets screen as step 4:
+      add **`GOOGLE_SA_JSON`** (paste the whole service-account JSON file contents),
+      **`GOOGLE_CALENDAR_ID`** (usually glizzness@gmail.com), and **`SUPABASE_SERVICE_KEY`** →
+      then Actions → **"Calendar sync" → Run workflow** → check `glizzness.com/events` is current.
+      Runbook: `CALENDAR_SETUP.md`. **Until this is on, `/events` can be stale — do NOT send social
+      traffic there.**
 - [ ] Then decide the **v1.1 "→ Event Finder" promote** (spec §9.5) once you've actually used the feed.
+
+> **Note (2026-07-16):** both Actions workflows now **skip cleanly (green, no email)** until their
+> secrets exist — an earlier version hard-failed every 4h and spammed the owner's inbox. They
+> auto-activate the moment the secrets are added; nothing else to switch on.
 
 ## 🔴 1. CASH THIS WEEK — calls & emails
 

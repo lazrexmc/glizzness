@@ -56,8 +56,9 @@ GoDaddy stays the **registrar only**; the site is hosted on **Cloudflare Pages**
 ## 3. "Where We Vend" calendar — ✅ ACTIVATED 2026-07-11
 **Done:** schema run, Google service account created + calendar shared read-only, real sync run (47 events
 flow into `cart_schedule`), and `events.html` renders the collapsible "Upcoming stops" list. **Public
-trigger = event Visibility "Public"** (not color). **Remaining:** automate the sync on a timer (§7); note it
-only becomes *publicly* visible once the site is deployed (§2). Steps below kept for reference / re-running.
+trigger = event Visibility "Public"** (not color). **Remaining:** switch on the automated sync — it's
+**built** (GitHub Actions, every 2h) but needs its three repo secrets; see §7 + `CALENDAR_SETUP.md`.
+Steps below kept for reference / re-running.
 Full detail: **`CALENDAR_SETUP.md`**. Short version:
 1. Run `supabase_schedule_schema.sql` (done in §1 if you ran it).
 2. **Google service account:** Cloud Console → enable **Google Calendar API** → create a
@@ -102,7 +103,12 @@ Once `site/` is live and verified:
 `glizzness@gmail.com`, DoorDash store `38788821`. Verify the links after deploy.
 
 ## 7. Post-launch
-- **Schedules:** the **calendar sync** (§3, Task Scheduler every 1–2h) is the only automation to stand up.
+- **Schedules:** the **calendar sync** now runs on **GitHub Actions every 2h**
+  (`.github/workflows/calendar.yml`) — *not* Task Scheduler (a local job dies exactly while Trint is out
+  vending). **To switch it on:** add the `GOOGLE_SA_JSON`, `GOOGLE_CALENDAR_ID`, and
+  `SUPABASE_SERVICE_KEY` repo secrets (`CALENDAR_SETUP.md`), then Actions → "Calendar sync" → Run
+  workflow. Until then it skips cleanly (green, no spam) and **`glizzness.com/events` may be stale — so
+  don't drive marketing traffic there yet.** The Signal Net crawler (every 4h) behaves the same way.
   Accounting is **manual** now — post via the Streamlit dashboard (`glizzness.streamlit.app` → `dashboard.py`
   → `sync.py` → Supabase → Wave); the old `run_daily.ps1` local-SQLite scheduler was **retired 2026-07-13**
   (confirmed off; see `archive/2026-07-13/ARCHIVE_MANIFEST.md`).

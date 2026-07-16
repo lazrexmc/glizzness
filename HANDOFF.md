@@ -27,7 +27,7 @@ a pile of research/analysis tooling.
 | **Website** | The public `glizzness.com` site | ✅ **LIVE** at `glizzness.com` + `www` (Cloudflare Pages; custom domain switched 2026-07-14) | `site/README.md`, `GO_LIVE.md §2` | `site/` (6 pages, `assets/site.css`, `site.js`, `config.js`) |
 | **Menu pipeline** | `menu.json` is the source of truth → website + Square + DoorDash | ✅ SHIPPED & SYNCED (26 web / 28 Square) | **`MENU_PIPELINE.md`** | `menu.json`, `gen_menu.py`, `push_menu.py`, `pull_catalog.py`, `catalog_modifiers.py` |
 | **Catering leads** | Booking form → DB → instant email alert | ✅ LIVE | **`CATERING_LEADS.md`** | `site/catering.html`, Supabase `catering_leads`, Make.com, Gmail |
-| **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED | `CALENDAR_SETUP.md` | `sync_calendar.py`, Supabase `cart_schedule`, `site/events.html` |
+| **Where We Vend calendar** | Google Calendar → sanitized Supabase → events page | ✅ ACTIVATED (manual sync). **Auto-refresh BUILT 2026-07-16** (GitHub Actions, every 2h) but **OFF until its 3 repo secrets are set** → until then `/events` can be stale, so don't drive marketing traffic to it | **`CALENDAR_SETUP.md`** | `sync_calendar.py`, `.github/workflows/calendar.yml`, `requirements-calendar.txt`, Supabase `cart_schedule`, `site/events.html` |
 | **Midwest Event Finder** | Public finder for Midwest events to vend at / attend (rebranded from the "vending circuit map"; private research picks excluded → they seed the Scout board) | ✅ LIVE at `glizzness.com/festivals` (ships with the Cloudflare Pages site) | `site/festivals/README.md`, `DATA_MODEL.md` | `site/festivals/`, Supabase `vending_*`, `data/*.csv`, `VendingCircuit.csv` |
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
 | **Admin hub + Scout board** | Gated cockpit (`/hub`) → Trint's phone-first event-triage card board (`/scout`, Yes/Maybe/No + ask) + Lance's review desk (`/hub/desk`) | ✅ **BUILT v1 + audited & Phase-A-hardened 2026-07-16**; NOT yet deployed (needs Lance's Supabase steps) | **`SCOUT_BOARD.md`**, `SCOUT_AUDIT.md`, `docs/.../2026-07-13-scout-board-design.md` | `site/hub/`, `site/scout/`, `assets/scout.js`+`scout.css`, `assets/vendor/supabase.js`, `supabase_scout_schema.sql`, `scout_seed_gen_sql.py` |
@@ -85,7 +85,8 @@ The **gated admin pages** (`/hub`, `/scout`, `/hub/desk`, `/hub/signals`) instea
 
 Hosting/infra: **Cloudflare Pages** (website **and** the festival map at `/festivals` **and** the gated
 hub/scout/signals pages, one project, output dir `site/`), **GitHub Actions** (runs the Signal Net
-crawler on a 4-hour cron), **Streamlit Community Cloud** (accounting dashboard), **Supabase** (one
+crawler every 4h + the **calendar sync** every 2h — both skip cleanly until their secrets exist),
+**Streamlit Community Cloud** (accounting dashboard), **Supabase** (one
 project: accounting + `vending_*` + `catering_leads` + `cart_schedule` + `contacts` + the Scout tables
 `event_prospects`/`prospect_decisions`/`prospect_thread` + the Signal Net `event_signals`),
 **Make.com** (catering email), **Square** (POS→DoorDash), **Wave** (books), **GoDaddy** (domain
