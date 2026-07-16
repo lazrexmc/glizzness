@@ -46,6 +46,7 @@ VENDOR_TERMS = [
 VENDOR_NAMES = [
     "smash & dash", "smash and dash",   # confirmed: also books as "Smash & Dash Grill"
     "the munchbox", "munchbox",
+    "delias",                            # confirmed a food vendor (owner, 2026-07-16)
 ]
 
 # Words that mean "this is an EVENT" and override the vendor terms above.
