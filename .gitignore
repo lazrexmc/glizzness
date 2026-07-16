@@ -78,3 +78,7 @@ Thumbs.db
 # (e.g. the Supabase service-role key). settings.local.json is machine-specific.
 # Do not rely on a global gitignore for this: it won't exist on another machine.
 .claude/
+
+# Demand baseline outputs - derived, and they carry revenue detail (regenerate with demand_baseline.py)
+demand_baseline.md
+data/demand_profiles.json
