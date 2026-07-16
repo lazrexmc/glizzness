@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Glizzness — Signals</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%93%A1</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/scout.css" />
+</head>
+<body class="scout-body">
+  <header class="scout-top">
+    <div class="scout-top__brand">📡 Signals</div>
+    <div class="scout-top__links">
+      <a href="/scout/">Board</a>
+      <a href="/hub/desk">Desk</a>
+      <a href="/hub/">Hub</a>
+      <a href="#" id="logout">Log out</a>
+    </div>
+  </header>
+
+  <main class="scout-shell scout-shell--wide">
+    <h1 class="scout-h1">Signals</h1>
+    <p class="scout-sub">Fresh finds from around town. Keep the good ones (→ Trint's pipeline), dismiss the rest.</p>
+    <div class="desk-bar">
+      <div class="filters" id="filters"><button data-f="all" class="is-active">All sources</button></div>
+      <label class="toggle"><input type="checkbox" id="showdis" /> Show dismissed</label>
+      <button class="btn btn--gold" id="add-find" type="button">+ Add a find</button>
+    </div>
+    <div class="rows" id="rows" aria-live="polite"><p class="empty">Loading…</p></div>
+  </main>
+
+  <div class="modal-back" id="modal-back"><div class="modal" id="modal"></div></div>
+
+  <script src="/assets/vendor/supabase.js"></script><!-- supabase-js 2.110.6 UMD, self-hosted -->
+  <script src="/assets/config.js"></script>
+  <script src="/assets/scout.js"></script>
+  <script>
+  (function () {
+    var session, db;
+    var esc = Scout.esc;
+    var rowsEl = document.getElementById("rows");
+    var filtersEl = document.getElementById("filters");
+    var showDis = document.getElementById("showdis");
+    var modalBack = document.getElementById("modal-back");
+    var modal = document.getElementById("modal");
+    var signals = [];
+    var srcFilter = "all";
+
+    function ago(iso) {
+      if (!iso) return "";
+      var s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+      if (s < 3600) return Math.round(s / 60) + "m ago";
+      if (s < 86400) return Math.round(s / 3600) + "h ago";
+      return Math.round(s / 86400) + "d ago";
+    }
+    function sourceLabel(s) { return (s || "").replace(/^reddit:/, "r/").replace(/^rss:/, "").replace(/^venue:/, ""); }
+
+    async function load() {
+      var res = await db.from("event_signals").select("*").order("found_at", { ascending: false }).limit(500);
+      if (res.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(res.error.message) + "</p>"; return; }
+      signals = res.data || [];
+      buildFilters();
+      render();
+    }
+
+    function buildFilters() {
+      var srcs = [];
+      signals.forEach(function (s) { if (srcs.indexOf(s.source) < 0) srcs.push(s.source); });
+      srcs.sort();
+      filtersEl.innerHTML = '<button data-f="all"' + (srcFilter === "all" ? ' class="is-active"' : "") + ">All sources</button>" +
+        srcs.map(function (s) {
+          return '<button data-f="' + esc(s) + '"' + (srcFilter === s ? ' class="is-active"' : "") + ">" + esc(sourceLabel(s)) + "</button>";
+        }).join("");
+    }
+
+    function render() {
+      var want = showDis.checked ? "dismissed" : "new";
+      var list = signals.filter(function (s) {
+        return s.status === want && (srcFilter === "all" || s.source === srcFilter);
+      });
+      var newCount = signals.filter(function (s) { return s.status === "new"; }).length;
+      document.querySelector(".scout-sub").textContent =
+        newCount + " new to review. Keep the good ones (→ Trint's pipeline), dismiss the rest.";
+
+      if (!list.length) {
+        rowsEl.innerHTML = '<div class="empty"><div class="big">' + (showDis.checked ? "🗑️" : "🎉") + "</div>" +
+          (showDis.checked ? "No dismissed signals." : "All caught up — nothing new to review.") + "</div>";
+        return;
+      }
+      rowsEl.innerHTML = list.map(function (s) {
+        var when = [s.starts_text, s.location_text].filter(Boolean).map(esc).join(" · ");
+        var link = s.url ? ' <a href="' + esc(s.url) + '" target="_blank" rel="noopener">open ↗</a>' : "";
+        var desc = s.description ? '<div class="row__meta">' + esc(s.description.slice(0, 200)) + (s.description.length > 200 ? "…" : "") + "</div>" : "";
+        var actions = s.status === "new"
+          ? '<button class="btn btn--gold" data-act="keep" data-id="' + s.id + '">✅ Keep → Trint</button>' +
+            '<button class="btn btn--ghost" data-act="dismiss" data-id="' + s.id + '">❌ Dismiss</button>'
+          : '<span class="chip chip--none">dismissed</span> <button class="btn btn--ghost" data-act="restore" data-id="' + s.id + '">↩ Restore</button>';
+        return '<div class="row">' +
+          '<div class="row__top"><span class="row__name">' + esc(s.title) + link + "</span>" +
+            '<span class="chip chip--inbound">' + esc(sourceLabel(s.source)) + "</span></div>" +
+          (when ? '<div class="row__meta">' + when + "</div>" : "") +
+          desc +
+          '<div class="row__meta muted">found ' + ago(s.found_at) + "</div>" +
+          '<div class="row__actions">' + actions + "</div>" +
+        "</div>";
+      }).join("");
+    }
+
+    rowsEl.addEventListener("click", function (e) {
+      var btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute("data-id"), 10);
+      var s = signals.filter(function (x) { return x.id === id; })[0];
+      if (!s) return;
+      var act = btn.getAttribute("data-act");
+      if (act === "keep") return keep(s, btn);
+      if (act === "dismiss") return setStatus(s, "dismissed", btn);
+      if (act === "restore") return setStatus(s, "new", btn);
+    });
+
+    async function keep(s, btn) {
+      btn.disabled = true; btn.textContent = "Keeping…";
+      var prospect = {
+        source: "signal", stage: "researching", name: s.title,
+        date_text: s.starts_text || null, city: s.city || null,
+        notes: s.description || null, source_url: s.url || null
+      };
+      var ins = await db.from("event_prospects").insert(prospect).select("id");
+      if (ins.error) { alert("Couldn't create prospect: " + ins.error.message); btn.disabled = false; btn.textContent = "✅ Keep → Trint"; return; }
+      var pid = ins.data && ins.data[0] ? ins.data[0].id : null;
+      var upd = await db.from("event_signals").update({ status: "kept", promoted_prospect_id: pid, reviewed_at: new Date().toISOString() }).eq("id", s.id);
+      if (upd.error) { alert("Prospect made, but couldn't mark the signal: " + upd.error.message); }
+      s.status = "kept"; render();
+    }
+
+    async function setStatus(s, status, btn) {
+      if (btn) { btn.disabled = true; }
+      var patch = { status: status, reviewed_at: status === "new" ? null : new Date().toISOString() };
+      var res = await db.from("event_signals").update(patch).eq("id", s.id);
+      if (res.error) { alert(res.error.message); if (btn) btn.disabled = false; return; }
+      s.status = status; render();
+    }
+
+    // ---- manual paste-a-link add (fills the Facebook/Insta hole) ----
+    function openModal(html) { modal.innerHTML = html; modalBack.classList.add("is-open"); }
+    function closeModal() { modalBack.classList.remove("is-open"); modal.innerHTML = ""; }
+    modalBack.addEventListener("click", function (e) { if (e.target === modalBack) closeModal(); });
+
+    document.getElementById("add-find").addEventListener("click", function () {
+      openModal(
+        "<h2>Add a find</h2>" +
+        '<p class="muted" style="margin-top:-8px;margin-bottom:14px;font-size:13px">Spotted something on Facebook/Instagram or heard about it? Drop it here — it joins your Signals feed.</p>' +
+        '<label class="field"><span>Title *</span><input class="input" id="f-title" /></label>' +
+        '<label class="field"><span>Link (optional)</span><input class="input" id="f-url" placeholder="https://…" /></label>' +
+        '<label class="field"><span>When / where / notes (optional)</span><textarea class="textarea" id="f-note"></textarea></label>' +
+        '<p class="msg msg--err" id="m-msg"></p>' +
+        '<div class="modal__actions"><button class="btn btn--gold btn--block" id="m-save" type="button">Add to feed</button>' +
+        '<button class="btn btn--ghost" id="m-cancel" type="button">Cancel</button></div>'
+      );
+      document.getElementById("m-cancel").onclick = closeModal;
+      document.getElementById("m-save").onclick = async function () {
+        var btn = document.getElementById("m-save");
+        var title = document.getElementById("f-title").value.trim();
+        var url = document.getElementById("f-url").value.trim();
+        var note = document.getElementById("f-note").value.trim();
+        var msg = document.getElementById("m-msg");
+        if (!title) { msg.textContent = "A title is required."; return; }
+        btn.disabled = true; btn.textContent = "Adding…";
+        var row = {
+          source: "manual", dedup_hash: "manual:" + (url || title) + ":" + Date.now(),
+          title: title, url: url || null, description: note || null, status: "new"
+        };
+        var res = await db.from("event_signals").insert(row).select("*");
+        if (res.error) { msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Add to feed"; return; }
+        if (res.data && res.data[0]) signals.unshift(res.data[0]);
+        closeModal(); buildFilters(); render();
+      };
+    });
+
+    filtersEl.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-f]");
+      if (!b) return;
+      srcFilter = b.getAttribute("data-f");
+      [].forEach.call(filtersEl.querySelectorAll("button"), function (x) { x.classList.toggle("is-active", x === b); });
+      render();
+    });
+    showDis.addEventListener("change", render);
+
+    (async function () {
+      try {
+        session = await Scout.requireSession();
+        if (!session) return;
+        Scout.wireLogout();
+        db = Scout.client();
+        await load();
+      } catch (e) {
+        if (window.console) console.error(e);
+        rowsEl.innerHTML = '<p class="empty">⚠️ Couldn’t load — check your connection and reload.</p>';
+      }
+    })();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+name: Signal Net crawler
+
+# Always-on local-events aggregator. Polls curated sources and writes new finds to Supabase
+# (event_signals). Lance reviews them on the gated Signals feed. See SIGNAL_NET.md.
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # every 4 hours (UTC)
+  workflow_dispatch: {}       # manual "Run workflow" button in the Actions tab
+
+permissions:
+  contents: read
+
+concurrency:
+  group: signal-net
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r crawler/requirements.txt
+
+      - name: Run the crawler
+        env:
+          SUPABASE_URL: https://ikhcbncnaojrndilmnnd.supabase.co
+          # Set this in: repo Settings -> Secrets and variables -> Actions -> New repository secret
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python -m crawler.run

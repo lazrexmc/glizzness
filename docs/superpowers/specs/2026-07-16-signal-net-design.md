@@ -166,6 +166,36 @@ the post-audit Scout pages.
 6. `site/hub/signals.html` + hub tile + `noindex`/robots.
 7. Runbook `SIGNAL_NET.md`; deploy (git push) + Lance's credentialed steps.
 
+## 9.5 Event Finder integration (v1.1 fast-follow — Lance requested 2026-07-16)
+
+Lance wants the crawler to also feed the **public Midwest Event Finder** (`site/festivals/`,
+Supabase `vending_events` → `vending_published_events` view): add new events, and update details
+on existing ones as fresh info arrives.
+
+**Frank constraint that shapes the design:** the Event Finder is **public**, and its map only shows
+rows that pass a **validation gate** — `vending_published_events` requires `verification_status in
+('verified','partial')`, `food_truck_friendly <> 'excluded'`, a `market_id`, **and non-null
+lat/lng**. That gate is exactly what makes the map trustworthy and monetizable. So the crawler
+**cannot and must not auto-publish** raw finds to it — a find has no coordinates, no region/market,
+no valid `event_type` enum value, and hasn't been verified. Auto-dumping crawler noise onto a public,
+for-revenue directory would wreck the thing that gives it value.
+
+**So the flow mirrors the Scout promotion, to a different destination:**
+- The crawler writes to `event_signals` as designed (private).
+- On the Signals feed, alongside **Keep** (→ Scout prospect) and **Dismiss**, add **"→ Event
+  Finder"**: a small form where Lance picks the **market/region** + **event_type** (from the enum),
+  the tool **geocodes** the location to lat/lng (free Nominatim/OSM), stamps
+  `verification_status='partial'`, assigns the next `id`, and inserts a `vending_events` row. Two
+  clicks, curated — the map stays accurate.
+- **Updating existing events** = a later enrichment: the crawler fuzzy-matches a find to an existing
+  `vending_events` row (name + city/date), and if it finds new detail (a fee, a firm date, a URL),
+  raises it as a **"possible update to <event>"** signal for Lance to apply — never an automatic edit
+  to the public map.
+
+**Why v1.1, not v1:** it needs a geocoder, the market/type promotion form, id assignment, and (for
+updates) fuzzy matching — all real work, and it depends on the v1 Signals pipeline existing first.
+v1 ships the crawler → Signals → Scout core; the "→ Event Finder" action is the immediate next step.
+
 ## 10. Non-goals (v1 — YAGNI)
 
 - **No LLM/AI** in the crawler (v2 could add targeted extraction on high-value messy pages).

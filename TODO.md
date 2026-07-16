@@ -244,6 +244,18 @@ and the vendors are already chosen.*
   (4) `git push` deploys it, (5) then the ongoing CLI loop = enrich `researching` cards with Claude →
   **Ready → Trint**. Make→Gmail alerts are optional phase-2. *Original design below for reference.*
 
+- [~] **The Signal Net — always-on events crawler → ✅ v1 BUILT 2026-07-16 → runbook [SIGNAL_NET.md](SIGNAL_NET.md).**
+  GitHub Actions polls curated local sources every 4h → writes finds to Supabase `event_signals` →
+  Lance skims the gated **Signals feed** (`/hub/signals`, 4th hub tile) → **Keep** (→ Scout prospect)
+  / **Dismiss**. Code: `crawler/` (run.py + rss/reddit/venue adapters, tested — r/columbiamo pulls
+  real events), `.github/workflows/crawler.yml`, `supabase_signals_schema.sql`, `site/hub/signals.html`.
+  Spec: `docs/.../2026-07-16-signal-net-design.md`. **REMAINING — Lance:** (1) run the schema SQL,
+  (2) set the `SUPABASE_SERVICE_KEY` GitHub Actions secret, (3) enable + manually trigger the workflow,
+  (4) skim `/hub/signals`. **v1.1 fast-follow (Lance asked):** a **"→ Event Finder"** promote action —
+  push an approved signal to the PUBLIC map (`vending_events`) with a region/type pick + geocode
+  (curated, never auto-publish, because the map is a validated public gate) + auto-flag updates to
+  existing events. See spec §9.5. Also later: auto-ranking, Make→Gmail digest, free-keyed APIs.
+
 - [ ] **Trint's event-triage app ("Scout board") — yes / no / maybe on prospect events** — the 7-run
   vending research (`VENDING_PROSPECTS.md`) produces far too many events for Trint to sort out via the map.
   Build him a dead-simple, phone-first decision tool. *(Backlog — build after the 7 research runs are
