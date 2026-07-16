@@ -32,6 +32,11 @@ The engineering backlog is BELOW this and is **parked** until revenue is stable.
 >   from 10 live sources. (Reddit works from the runner after all.)
 
 **Next actions now that it's real:**
+- [ ] **🆕 3 SQL runs to light up crew+prep+lunch-lane (2026-07-16 build):** in the Supabase SQL editor run
+      (1) `supabase_demand_schema.sql`, (2) the generated `supabase_demand_data.sql` (regenerate anytime
+      with `python demand_baseline.py --sql`; gitignored — carries revenue), (3) `supabase_lunch_prospects.sql`
+      (17 lunch-rush/worksite employer prospects → the Desk, incl. the Paris Rd 4-plant corridor + I-70
+      night crews). Then every card shows **Crew + Prep from 4 years of real sales** (`DEMAND_BASELINE.md`).
 - [ ] **Demo it to Trint** — but first push 2–3 prospects through **"Ready → Trint"** from the Desk, or
       his board looks empty (correct-but-confusing: everything seeds as `researching`).
 - [ ] Work the **Signals feed**: Keep the good finds → they become Scout prospects → enrich → Ready → Trint.

@@ -29,6 +29,9 @@ Supabase SQL editor → run these. Project: `https://ikhcbncnaojrndilmnnd.supaba
 | `supabase_schedule_schema.sql` | `cart_schedule` | the Where We Vend calendar (§3) |
 | `supabase_scout_schema.sql` | `event_prospects` / `prospect_decisions` / `prospect_thread` | **Scout board** (§8). Then `python scout_seed_gen_sql.py` → run `supabase_scout_data.sql` to seed 23 prospects |
 | `supabase_signals_schema.sql` | `event_signals` (+ allows `event_prospects.source='signal'`) | **Signal Net** (§8). Run *after* the scout schema |
+| `supabase_posts_schema.sql` | `post_drafts` | **Post Cards** (`POST_CARDS.md`) — ✅ run 2026-07-16 |
+| `supabase_demand_schema.sql` **then** the generated `supabase_demand_data.sql` | `demand_profiles` (crew + prep numbers on the Scout cards) | **Demand baseline** (`DEMAND_BASELINE.md`). Data file is gitignored (revenue) — regenerate with `python demand_baseline.py --sql` |
+| `supabase_lunch_prospects.sql` | 17 lunch-rush / worksite prospects → the Scout desk | idempotent (insert-where-not-exists); run after the scout schema |
 
 **Verify:** after the vending reload, expect **442 events / ~430 published**. After catering,
 `select count(*) from catering_leads;` returns a number (0 is fine).

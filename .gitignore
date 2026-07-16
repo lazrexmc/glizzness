@@ -80,5 +80,6 @@ Thumbs.db
 .claude/
 
 # Demand baseline outputs - derived, and they carry revenue detail (regenerate with demand_baseline.py)
-demand_baseline.md
+demand_baseline_report.md
 data/demand_profiles.json
+supabase_demand_data.sql

@@ -25,14 +25,14 @@
   <main class="scout-shell scout-shell--wide">
     <div class="desk-bar">
       <div class="filters" id="filters">
-        <button data-f="all" class="is-active">All</button>
-        <button data-f="researching">Researching</button>
-        <button data-f="ready">Ready</button>
-        <button data-f="undecided">Undecided</button>
-        <button data-f="yes">Yes</button>
-        <button data-f="maybe">Maybe</button>
-        <button data-f="no">No</button>
-        <button data-f="booked">Booked</button>
+        <button type="button" data-f="all" class="is-active">All</button>
+        <button type="button" data-f="researching">Researching</button>
+        <button type="button" data-f="ready">Ready</button>
+        <button type="button" data-f="undecided">Undecided</button>
+        <button type="button" data-f="yes">Yes</button>
+        <button type="button" data-f="maybe">Maybe</button>
+        <button type="button" data-f="no">No</button>
+        <button type="button" data-f="booked">Booked</button>
       </div>
       <button class="btn btn--gold" id="add-lead" type="button">+ Add lead</button>
     </div>
@@ -48,6 +48,7 @@
   <script src="/assets/vendor/supabase.js"></script><!-- supabase-js 2.110.6 UMD, self-hosted -->
   <script src="/assets/config.js"></script>
   <script src="/assets/scout.js"></script>
+  <script src="/assets/demand.js"></script>
   <script>
   (function () {
     var session, db;
@@ -105,6 +106,21 @@
                     p.distance_mi != null ? p.distance_mi + " mi" : null,
                     p.date_text].filter(Boolean).join(" · ");
 
+        // Demand estimate (crew / prep / typical take) — full detail lives here on the desk;
+        // Trint's card gets the short version. gross_median stays desk-only (revenue detail).
+        // Lance's manual suggested_crew ALWAYS leads; the model's number demotes to a suffix.
+        var est = window.Demand ? Demand.estimate(p) : null;
+        var crewBit = p.suggested_crew
+          ? "Crew: " + esc(p.suggested_crew) + " (manual)" +
+            (est ? " · model: " + esc(est.crew) + (est.fromHistory ? "" : " (est.)") : "")
+          : (est ? esc(est.crewLabel) : "");
+        var demandLine = crewBit
+          ? '<div class="row__meta">🧑‍🍳 ' + crewBit +
+            (est ? " — " + esc(est.basis) +
+              (est.grossMedian != null ? " · typically ~$" + Math.round(est.grossMedian) : "") : "") +
+            "</div>"
+          : "";
+
         var q = lastTrint
           ? '<div class="row__q">❓ ' + esc(lastTrint.body) + (lanceAnswered ? "  ✅ answered" : "  — needs a reply") + "</div>"
           : "";
@@ -118,6 +134,7 @@
         return '<div class="row">' +
           '<div class="row__top"><span class="row__name">' + esc(p.name) + '</span><span>' + chips + "</span></div>" +
           '<div class="row__meta">' + esc(meta) + "</div>" +
+          demandLine +
           q +
           '<div class="row__actions">' + actions + "</div>" +
         "</div>";
@@ -208,6 +225,7 @@
     }
 
     function editModal(p) {
+      var est = window.Demand ? Demand.estimate(p) : null;
       openModal(
         "<h2>Edit — " + esc(p.name) + "</h2>" +
         field("Name", "f-name", p.name) +
@@ -215,6 +233,10 @@
         '<div class="grid-2">' + field("Distance (mi)", "f-dist", p.distance_mi, "number") + field("Month (1-12)", "f-month", p.month, "number") + "</div>" +
         field("Dates", "f-date", p.date_text) +
         '<div class="grid-2">' + field("Crowd", "f-crowd", p.crowd_text) + field("Suggested crew", "f-crew", p.suggested_crew) + "</div>" +
+        (est ? '<p class="muted" style="font-size:12.5px;margin:-6px 0 14px">🧑‍🍳 ' +
+               (est.fromHistory ? "History" : "Estimate") + ': <b>' + esc(est.crewLabel) +
+               "</b> — " + esc(est.basis) +
+               ' &nbsp;<a href="#" id="f-crew-use">use</a></p>' : "") +
         '<div class="grid-2">' + field("Fee", "f-fee", p.fee_text) + field("Apply by", "f-deadline", p.application_deadline) + "</div>" +
         field("Application method", "f-appmethod", p.application_method) +
         foodSelect(p.food_policy) +
@@ -224,6 +246,11 @@
         '<div class="modal__actions"><button class="btn btn--gold btn--block" id="m-save" type="button">Save</button>' +
         '<button class="btn btn--ghost" id="m-cancel" type="button">Cancel</button></div>'
       );
+      var useBtn = document.getElementById("f-crew-use");
+      if (useBtn) useBtn.onclick = function (e) {
+        e.preventDefault();
+        document.getElementById("f-crew").value = est.crew;
+      };
       document.getElementById("m-cancel").onclick = closeModal;
       document.getElementById("m-save").onclick = async function () {
         var dist = v("f-dist"), month = v("f-month");
@@ -293,6 +320,8 @@
         if (!session) return;
         Scout.wireLogout();
         db = Scout.client();
+        // best-effort: guard the global — a bare identifier would ReferenceError and blank the page
+        if (window.Demand) await Demand.load(db);
         await load();
       } catch (e) {
         if (window.console) console.error(e);

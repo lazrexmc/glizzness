@@ -9,9 +9,15 @@
 > calendar sync also went cloud-automatic (every 2h). Net: **seven spokes**, the Signal Net being the
 > automated intake ahead of the Finder + Scout.
 >
-> **So the `discover → triage` half of the loop is DONE and operating.** The
-> `demand baseline → staffing / inventory / scheduling` half is still the backlog — and the baseline is
-> now the single highest-leverage thing left, because:
+> **UPDATE 2 (2026-07-16, later): the BRAIN IS BUILT.** `demand_baseline.py` + the `demand_profiles`
+> table + `assets/demand.js` now put **crew + prep on the Scout cards** from 4 years of real sales
+> (`DEMAND_BASELINE.md`). The measured proof of the sales-are-the-spine call: only 27% of sessions
+> match the calendar; the orphan 73% carry **69% of revenue**. Staffing math = owner-set 15 orders/hr
+> per person +15% buffer. So `discover → triage → staff/prep estimate` is now end-to-end; still
+> backlog: scheduling (who works it), inventory depletion/reorder, rush-curve peak staffing.
+>
+> **So the `discover → triage` half of the loop is DONE and operating.** The original rationale
+> below (kept for the record) — the baseline was the highest-leverage piece because:
 > - It is **buildable today**: both inputs already exist (`past_cart_events.csv` 294 events +
 >   `Sales/items-*.csv` ~25,200 line items). No new infrastructure, no new data collection.
 > - The live calendar sync means **every event worked from now on feeds it automatically** — the
