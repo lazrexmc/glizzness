@@ -54,6 +54,8 @@ before comparing — else apostrophe'd descriptions phantom-update on every push
 
 ## 4. Runbooks index (which doc for what)
 
+- **Explain this system to a NON-technical person** (client/prospect-facing, zero jargon) → **`SYSTEM_PLAIN_ENGLISH.md`**
+- **Build this pattern again for a DIFFERENT business** (the reusable decisions + traps) → **`REPLICATION_PLAYBOOK.md`**
 - **Bring it all online / activate** → `GO_LIVE.md`
 - **Rebuild from nothing after a disaster** (accounts, secrets, order) → `REBUILD.md`
 - **Menu → website + Square + DoorDash** → `MENU_PIPELINE.md`
