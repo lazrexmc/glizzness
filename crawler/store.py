@@ -4,6 +4,7 @@ Uses the service_role key (bypasses RLS) via the PostgREST endpoint. Inserts wit
 on_conflict=dedup_hash + resolution=ignore-duplicates, so re-runs never create duplicates and
 the returned representation contains ONLY the newly-inserted rows (→ an accurate 'new' count)."""
 import json
+import urllib.error
 import urllib.request
 
 from . import config
@@ -32,6 +33,15 @@ def insert_signals(rows):
     req = urllib.request.Request(
         config.SUPABASE_URL + _ENDPOINT, data=data, headers=_headers(), method="POST"
     )
-    with urllib.request.urlopen(req, timeout=45) as resp:
-        body = resp.read().decode("utf-8")
+    try:
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            body = resp.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        # PostgREST explains itself in the response BODY. urllib throws that away, which left
+        # the first real failure as a bare "HTTP Error 400: Bad Request" with no clue why.
+        # Surface it so the Actions log says what's actually wrong.
+        detail = e.read().decode("utf-8", "replace").strip()[:600]
+        raise RuntimeError(
+            "Supabase insert failed: HTTP %s %s\n  %s" % (e.code, e.reason, detail or "(no body)")
+        ) from None
     return json.loads(body) if body.strip() else []

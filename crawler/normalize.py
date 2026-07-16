@@ -56,5 +56,16 @@ class Signal:
         return " ".join(filter(None, [self.title, self.description, self.location_text, self.city]))
 
     def to_row(self) -> dict:
-        """DB row: drop None so table defaults apply."""
-        return {k: v for k, v in asdict(self).items() if v is not None}
+        """DB row for a BULK insert.
+
+        Every row must carry the SAME key set: PostgREST rejects a bulk insert whose objects
+        have differing keys with a bare `400 Bad Request` ("All object keys must match").
+        So keep None -> JSON null; do NOT drop empty fields. (Dropping them is what broke the
+        first real run: a Cooper's event has event_date/starts_text/location_text, a Reddit
+        post has none, so the batch had mixed key sets.)
+
+        Safe to send explicit nulls: every Signal field is nullable in `event_signals`, and the
+        columns that actually have defaults (status, found_at) are not Signal fields at all,
+        so they're absent from the payload and their defaults still apply.
+        """
+        return asdict(self)
