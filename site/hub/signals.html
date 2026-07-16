@@ -49,7 +49,9 @@
     var modalBack = document.getElementById("modal-back");
     var modal = document.getElementById("modal");
     var signals = [];
-    var srcFilter = "all";
+    // MULTI-SELECT (owner, 2026-07-16: "select multiple top bubbles at a time rather than one or all").
+    // Empty set = show everything. Click a source to toggle it in/out of the set.
+    var picked = new Set();
 
     function ago(iso) {
       if (!iso) return "";
@@ -69,19 +71,30 @@
     }
 
     function buildFilters() {
-      var srcs = [];
-      signals.forEach(function (s) { if (srcs.indexOf(s.source) < 0) srcs.push(s.source); });
-      srcs.sort();
-      filtersEl.innerHTML = '<button data-f="all"' + (srcFilter === "all" ? ' class="is-active"' : "") + ">All sources</button>" +
+      // count per source, on the rows currently in view (new vs dismissed) - so the bubbles
+      // tell you where the volume is before you click.
+      var want = showDis.checked ? "dismissed" : "new";
+      var counts = {};
+      signals.forEach(function (s) {
+        if (s.status !== want) return;
+        counts[s.source] = (counts[s.source] || 0) + 1;
+      });
+      var srcs = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+      var total = srcs.reduce(function (n, s) { return n + counts[s]; }, 0);
+
+      filtersEl.innerHTML =
+        '<button type="button" data-f="__all"' + (picked.size === 0 ? ' class="is-active"' : "") +
+          ">All sources <b>" + total + "</b></button>" +
         srcs.map(function (s) {
-          return '<button data-f="' + esc(s) + '"' + (srcFilter === s ? ' class="is-active"' : "") + ">" + esc(sourceLabel(s)) + "</button>";
+          return '<button type="button" data-f="' + esc(s) + '"' + (picked.has(s) ? ' class="is-active"' : "") +
+            ">" + esc(sourceLabel(s)) + " <b>" + counts[s] + "</b></button>";
         }).join("");
     }
 
     function render() {
       var want = showDis.checked ? "dismissed" : "new";
       var list = signals.filter(function (s) {
-        return s.status === want && (srcFilter === "all" || s.source === srcFilter);
+        return s.status === want && (picked.size === 0 || picked.has(s.source));
       });
       var newCount = signals.filter(function (s) { return s.status === "new"; }).length;
       document.querySelector(".scout-sub").textContent =
@@ -185,11 +198,14 @@
     filtersEl.addEventListener("click", function (e) {
       var b = e.target.closest("button[data-f]");
       if (!b) return;
-      srcFilter = b.getAttribute("data-f");
-      [].forEach.call(filtersEl.querySelectorAll("button"), function (x) { x.classList.toggle("is-active", x === b); });
+      var f = b.getAttribute("data-f");
+      if (f === "__all") { picked.clear(); }        // "All sources" = clear the selection
+      else if (picked.has(f)) { picked.delete(f); }  // toggle off
+      else { picked.add(f); }                        // toggle on (adds to the set)
+      buildFilters();                                // re-render chips (active states)
       render();
     });
-    showDis.addEventListener("change", render);
+    showDis.addEventListener("change", function () { buildFilters(); render(); });
 
     (async function () {
       try {

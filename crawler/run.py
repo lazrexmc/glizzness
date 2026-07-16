@@ -33,6 +33,34 @@ def keep(sig, src):
     return is_event and is_local
 
 
+def apply_source_rules(items, src):
+    """Post-filter a source's items as a SET (some rules need to see the whole feed).
+
+    1. Drop dead entries (CANCELLED / postponed / sold out).
+    2. Drop other food vendors' bookings — a rival cart's slot is not an opportunity, it's a
+       slot that's taken. (Owner, 2026-07-16.)
+    3. `vendor_booked_venue` — for a venue that BOOKS its own food vendors (Cooper's Landing:
+       "there will never be a POP UP thing we just show up for"). There, the ONLY opening is a
+       music night with NO food partner attached. So: find every date that already has a vendor
+       booked, and drop the events on those dates. What survives is a crowd with no food —
+       i.e. someone to PITCH, not somewhere to show up.
+    """
+    items = [s for s in items if not config.is_dead(s.text_blob())]
+
+    competitors = [s for s in items if config.is_competitor(s.text_blob())]
+    items = [s for s in items if not config.is_competitor(s.text_blob())]
+
+    if src.get("vendor_booked_venue"):
+        taken = {s.event_date for s in competitors if s.event_date}
+        items = [s for s in items if not (s.event_date and s.event_date in taken)]
+        # Make the card say what it actually is: an opening to pitch, not a gig to attend.
+        note = ("NO food partner listed for this date at %s — they book their vendors, so this is a "
+                "PITCH (they may need someone last minute), not a show-up." % (src.get("venue") or "this venue"))
+        for s in items:
+            s.description = (note + " — " + (s.description or "")).strip(" —")
+    return items
+
+
 def main():
     ap = argparse.ArgumentParser(description="Glizzness Signal Net crawler")
     ap.add_argument("--dry-run", action="store_true", help="print finds, do not write to the DB")
@@ -54,6 +82,7 @@ def main():
         except Exception as ex:  # a dead source must never kill the run
             per_source.append((src["id"], "ERROR %s" % type(ex).__name__, 0))
             continue
+        items = apply_source_rules(items, src)
         kept = [s for s in items if keep(s, src)]
         for s in kept:
             by_hash[s.dedup_hash] = s

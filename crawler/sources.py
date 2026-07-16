@@ -17,10 +17,16 @@ real User-Agent (set in config.py) but NO API key. To add a source, drop in one 
 
 SOURCES = [
     # ---- Tribe (WordPress "The Events Calendar") REST API — no key, REAL event dates ----
-    # Cooper's Landing = the most vending-relevant venue (riverside, hosts food vendors). 157 events.
+    # Cooper's Landing — they BOOK their food vendors; there is never a pop-up to just show up to
+    # (owner, 2026-07-16). Their calendar pairs a music act with a food vendor per date. So the ONLY
+    # opening is a music night with NO food partner -> `vendor_booked_venue` drops every date that
+    # already has a vendor booked, and annotates whatever survives as a PITCH, not a gig.
+    # Expect this source to be SILENT most of the time. That's correct: it's a watchdog for a rare
+    # opening, not a firehose.
     {"id": "tribe:coopers", "type": "tribe",
      "url": "https://cooperslandingmo.com/wp-json/tribe/events/v1/events?per_page=50",
-     "local": True, "is_event_feed": True, "venue": "Cooper's Landing", "city": "Columbia"},
+     "local": True, "is_event_feed": True, "vendor_booked_venue": True,
+     "venue": "Cooper's Landing", "city": "Columbia"},
     {"id": "tribe:stephens", "type": "tribe",
      "url": "https://www.stephens.edu/wp-json/tribe/events/v1/events?per_page=50",
      "local": True, "is_event_feed": True, "venue": "Stephens College", "city": "Columbia"},
