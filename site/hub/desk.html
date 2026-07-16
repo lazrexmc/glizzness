@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Glizzness — My Desk</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%97%82%EF%B8%8F</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/scout.css" />
+</head>
+<body class="scout-body">
+  <header class="scout-top">
+    <div class="scout-top__brand">🗂️ My Desk</div>
+    <div class="scout-top__links">
+      <a href="/scout/">Board</a>
+      <a href="/hub/">Hub</a>
+      <a href="#" id="logout">Log out</a>
+    </div>
+  </header>
+
+  <main class="scout-shell scout-shell--wide">
+    <div class="desk-bar">
+      <div class="filters" id="filters">
+        <button data-f="all" class="is-active">All</button>
+        <button data-f="researching">Researching</button>
+        <button data-f="ready">Ready</button>
+        <button data-f="undecided">Undecided</button>
+        <button data-f="yes">Yes</button>
+        <button data-f="maybe">Maybe</button>
+        <button data-f="no">No</button>
+        <button data-f="booked">Booked</button>
+      </div>
+      <button class="btn btn--gold" id="add-lead" type="button">+ Add lead</button>
+    </div>
+    <div class="rows" id="rows" aria-live="polite">
+      <p class="empty">Loading…</p>
+    </div>
+  </main>
+
+  <div class="modal-back" id="modal-back">
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/config.js"></script>
+  <script src="/assets/scout.js"></script>
+  <script>
+  (function () {
+    var session, db;
+    var esc = Scout.esc;
+    var rowsEl = document.getElementById("rows");
+    var modalBack = document.getElementById("modal-back");
+    var modal = document.getElementById("modal");
+    var filter = "all";
+
+    var prospects = [], decById = {}, thById = {};
+
+    async function load() {
+      var pRes = await db.from("event_prospects").select("*").order("id", { ascending: true });
+      if (pRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(pRes.error.message) + "</p>"; return; }
+      var dRes = await db.from("prospect_decisions").select("prospect_id,decision");
+      var tRes = await db.from("prospect_thread").select("*").order("created_at", { ascending: true });
+      prospects = pRes.data || [];
+      decById = {}; (dRes.data || []).forEach(function (d) { decById[d.prospect_id] = d.decision; });
+      thById = {}; (tRes.data || []).forEach(function (t) { (thById[t.prospect_id] = thById[t.prospect_id] || []).push(t); });
+      render();
+    }
+
+    function matches(p) {
+      var dec = decById[p.id] || null;
+      switch (filter) {
+        case "all": return true;
+        case "researching": return p.stage === "researching";
+        case "ready": return p.stage === "ready";
+        case "booked": return !!p.booked;
+        case "undecided": return !dec && !p.booked;
+        default: return dec === filter;   // yes / maybe / no
+      }
+    }
+
+    function chip(cls, text) { return '<span class="chip chip--' + cls + '">' + text + "</span>"; }
+
+    function render() {
+      var list = prospects.filter(matches);
+      if (!list.length) { rowsEl.innerHTML = '<p class="empty">Nothing here.</p>'; return; }
+      rowsEl.innerHTML = list.map(function (p) {
+        var dec = decById[p.id] || null;
+        var thread = thById[p.id] || [];
+        var lastTrint = null;
+        thread.forEach(function (t) { if (t.author === "trint") lastTrint = t; });
+        var lanceAnswered = thread.some(function (t) { return t.author === "lance"; });
+
+        var chips = chip(p.stage, p.stage);
+        if (p.source === "inbound") chips += " " + chip("inbound", "inbound");
+        chips += " " + (dec ? chip(dec, dec) : chip("none", "undecided"));
+        if (p.booked) chips += " " + chip("booked", "booked ✓");
+
+        var meta = [p.city, (p.event_type || "").replace(/_/g, " "),
+                    p.distance_mi != null ? p.distance_mi + " mi" : null,
+                    p.date_text].filter(Boolean).join(" · ");
+
+        var q = lastTrint
+          ? '<div class="row__q">❓ ' + esc(lastTrint.body) + (lanceAnswered ? "  ✅ answered" : "  — needs a reply") + "</div>"
+          : "";
+
+        var actions = "";
+        if (p.stage === "researching") actions += '<button class="btn btn--gold" data-act="ready" data-id="' + p.id + '">Ready → Trint</button>';
+        actions += '<button class="btn btn--ghost" data-act="edit" data-id="' + p.id + '">Edit</button>';
+        actions += '<button class="btn btn--ghost" data-act="answer" data-id="' + p.id + '">Answer' + (thread.length ? " (" + thread.length + ")" : "") + '</button>';
+        if (!p.booked) actions += '<button class="btn btn--ghost" data-act="book" data-id="' + p.id + '">Mark booked</button>';
+
+        return '<div class="row">' +
+          '<div class="row__top"><span class="row__name">' + esc(p.name) + '</span><span>' + chips + "</span></div>" +
+          '<div class="row__meta">' + esc(meta) + "</div>" +
+          q +
+          '<div class="row__actions">' + actions + "</div>" +
+        "</div>";
+      }).join("");
+    }
+
+    // ---- modal helpers ----
+    function openModal(html) { modal.innerHTML = html; modalBack.classList.add("is-open"); }
+    function closeModal() { modalBack.classList.remove("is-open"); modal.innerHTML = ""; }
+    modalBack.addEventListener("click", function (e) { if (e.target === modalBack) closeModal(); });
+
+    function field(label, id, val, type) {
+      return '<label class="field"><span>' + label + '</span><input class="input" id="' + id + '" type="' + (type || "text") + '" value="' + esc(val == null ? "" : val) + '" /></label>';
+    }
+    function area(label, id, val) {
+      return '<label class="field"><span>' + label + '</span><textarea class="textarea" id="' + id + '">' + esc(val == null ? "" : val) + "</textarea></label>";
+    }
+    function foodSelect(val) {
+      var opts = ["unknown", "open", "competing"].map(function (o) {
+        return '<option value="' + o + '"' + (val === o ? " selected" : "") + ">" + o + "</option>";
+      }).join("");
+      return '<label class="field"><span>Food policy</span><select class="select" id="f-food">' + opts + "</select></label>";
+    }
+
+    // ---- Add lead ----
+    document.getElementById("add-lead").addEventListener("click", function () {
+      openModal(
+        "<h2>Add a lead</h2>" +
+        '<p class="muted" style="margin-top:-8px;margin-bottom:14px;font-size:13px">An inbound vend request. Lands as <b>researching</b> — enrich it, then send to Trint.</p>' +
+        field("Name *", "f-name", "") +
+        '<div class="grid-2">' + field("City", "f-city", "") + field("Event type", "f-type", "") + "</div>" +
+        '<div class="grid-2">' + field("Distance (mi)", "f-dist", "", "number") + field("Dates", "f-date", "") + "</div>" +
+        '<div class="grid-2">' + field("Fee", "f-fee", "") + field("Crowd", "f-crowd", "") + "</div>" +
+        area("Notes", "f-notes", "") +
+        '<p class="msg msg--err" id="m-msg"></p>' +
+        '<div class="modal__actions"><button class="btn btn--gold btn--block" id="m-save" type="button">Add lead</button>' +
+        '<button class="btn btn--ghost" id="m-cancel" type="button">Cancel</button></div>'
+      );
+      document.getElementById("m-cancel").onclick = closeModal;
+      document.getElementById("m-save").onclick = async function () {
+        var name = document.getElementById("f-name").value.trim();
+        var msg = document.getElementById("m-msg");
+        if (!name) { msg.textContent = "Name is required."; return; }
+        var dist = document.getElementById("f-dist").value.trim();
+        var row = {
+          source: "inbound", stage: "researching", name: name,
+          city: v("f-city"), event_type: v("f-type"), date_text: v("f-date"),
+          fee_text: v("f-fee"), crowd_text: v("f-crowd"), notes: v("f-notes"),
+          distance_mi: dist ? parseInt(dist, 10) : null,
+          drive_time_min: dist ? Math.round(parseInt(dist, 10) / 50 * 60) : null
+        };
+        var res = await db.from("event_prospects").insert(row);
+        if (res.error) { msg.textContent = res.error.message; return; }
+        closeModal(); load();
+      };
+    });
+
+    function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+
+    // ---- row actions (event delegation) ----
+    rowsEl.addEventListener("click", function (e) {
+      var btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      var id = parseInt(btn.getAttribute("data-id"), 10);
+      var p = prospects.filter(function (x) { return x.id === id; })[0];
+      if (!p) return;
+      var act = btn.getAttribute("data-act");
+      if (act === "ready") return markReady(p);
+      if (act === "book") return markBooked(p);
+      if (act === "edit") return editModal(p);
+      if (act === "answer") return answerModal(p);
+    });
+
+    async function markReady(p) {
+      var res = await db.from("event_prospects").update({ stage: "ready", updated_at: new Date().toISOString() }).eq("id", p.id);
+      if (res.error) { alert(res.error.message); return; }
+      p.stage = "ready"; render();
+    }
+    async function markBooked(p) {
+      if (!confirm("Mark \"" + p.name + "\" as booked?")) return;
+      var res = await db.from("event_prospects").update({ booked: true, booked_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", p.id);
+      if (res.error) { alert(res.error.message); return; }
+      p.booked = true; render();
+    }
+
+    function editModal(p) {
+      openModal(
+        "<h2>Edit — " + esc(p.name) + "</h2>" +
+        field("Name", "f-name", p.name) +
+        '<div class="grid-2">' + field("City", "f-city", p.city) + field("Event type", "f-type", p.event_type) + "</div>" +
+        '<div class="grid-2">' + field("Distance (mi)", "f-dist", p.distance_mi, "number") + field("Month (1-12)", "f-month", p.month, "number") + "</div>" +
+        field("Dates", "f-date", p.date_text) +
+        '<div class="grid-2">' + field("Crowd", "f-crowd", p.crowd_text) + field("Suggested crew", "f-crew", p.suggested_crew) + "</div>" +
+        '<div class="grid-2">' + field("Fee", "f-fee", p.fee_text) + field("Apply by", "f-deadline", p.application_deadline) + "</div>" +
+        field("Application method", "f-appmethod", p.application_method) +
+        foodSelect(p.food_policy) +
+        area("Notes", "f-notes", p.notes) +
+        area("Research note (private)", "f-rnote", p.research_note) +
+        '<p class="msg msg--err" id="m-msg"></p>' +
+        '<div class="modal__actions"><button class="btn btn--gold btn--block" id="m-save" type="button">Save</button>' +
+        '<button class="btn btn--ghost" id="m-cancel" type="button">Cancel</button></div>'
+      );
+      document.getElementById("m-cancel").onclick = closeModal;
+      document.getElementById("m-save").onclick = async function () {
+        var dist = v("f-dist"), month = v("f-month");
+        var patch = {
+          name: v("f-name"), city: v("f-city"), event_type: v("f-type"),
+          distance_mi: dist ? parseInt(dist, 10) : null,
+          drive_time_min: dist ? Math.round(parseInt(dist, 10) / 50 * 60) : null,
+          month: month ? parseInt(month, 10) : null,
+          date_text: v("f-date"), crowd_text: v("f-crowd"), suggested_crew: v("f-crew"),
+          fee_text: v("f-fee"), application_deadline: v("f-deadline"), application_method: v("f-appmethod"),
+          food_policy: document.getElementById("f-food").value,
+          notes: v("f-notes"), research_note: v("f-rnote"),
+          updated_at: new Date().toISOString()
+        };
+        var msg = document.getElementById("m-msg");
+        var res = await db.from("event_prospects").update(patch).eq("id", p.id);
+        if (res.error) { msg.textContent = res.error.message; return; }
+        Object.keys(patch).forEach(function (k) { p[k] = patch[k]; });
+        closeModal(); render();
+      };
+    }
+
+    function answerModal(p) {
+      var thread = thById[p.id] || [];
+      var bubbles = thread.map(function (t) {
+        var cls = t.author === "lance" ? "bubble--lance" : "bubble--trint";
+        var label = t.author === "lance" ? "Lance" : (t.author === "trint" ? "Trint" : esc(t.author));
+        return '<div class="bubble ' + cls + '"><span class="who">' + label + "</span>" + esc(t.body) + "</div>";
+      }).join("");
+      openModal(
+        "<h2>Q&amp;A — " + esc(p.name) + "</h2>" +
+        (bubbles ? '<div class="thread" style="margin-bottom:14px">' + bubbles + "</div>" : '<p class="muted" style="margin-bottom:12px">No questions yet. You can still leave a note for Trint.</p>') +
+        area("Your answer / note to Trint", "f-ans", "") +
+        '<p class="msg msg--err" id="m-msg"></p>' +
+        '<div class="modal__actions"><button class="btn btn--gold btn--block" id="m-save" type="button">Send to Trint</button>' +
+        '<button class="btn btn--ghost" id="m-cancel" type="button">Close</button></div>'
+      );
+      document.getElementById("m-cancel").onclick = closeModal;
+      document.getElementById("m-save").onclick = async function () {
+        var body = v("f-ans");
+        var msg = document.getElementById("m-msg");
+        if (!body) { msg.textContent = "Write an answer first."; return; }
+        var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: "lance", body: body });
+        if (res.error) { msg.textContent = res.error.message; return; }
+        (thById[p.id] = thById[p.id] || []).push({ prospect_id: p.id, author: "lance", body: body, created_at: new Date().toISOString() });
+        closeModal(); render();
+      };
+    }
+
+    // ---- filters ----
+    document.getElementById("filters").addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-f]");
+      if (!b) return;
+      filter = b.getAttribute("data-f");
+      [].forEach.call(this.querySelectorAll("button"), function (x) { x.classList.toggle("is-active", x === b); });
+      render();
+    });
+
+    (async function () {
+      session = await Scout.requireSession();
+      if (!session) return;
+      Scout.wireLogout();
+      db = Scout.client();
+      load();
+    })();
+  })();
+  </script>
+</body>
+</html>

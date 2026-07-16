@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Private admin tool — not for indexing (also gated by login + RLS).
+Disallow: /hub
+Disallow: /scout
+
 Sitemap: https://glizzness.com/sitemap.xml

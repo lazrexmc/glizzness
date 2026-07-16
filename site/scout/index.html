@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Glizzness — Scout Board</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%A7%AD</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/scout.css" />
+</head>
+<body class="scout-body">
+  <header class="scout-top">
+    <div class="scout-top__brand">🧭 Scout Board</div>
+    <div class="scout-top__links">
+      <a href="/hub/">Hub</a>
+      <a href="#" id="logout">Log out</a>
+    </div>
+  </header>
+
+  <main class="scout-shell">
+    <div class="stage-head">
+      <label class="toggle"><input type="checkbox" id="undecided" checked /> Undecided only</label>
+      <span class="muted" id="count"></span>
+    </div>
+    <div id="stage" aria-live="polite">
+      <p class="empty"><span class="big">⏳</span><br />Loading your events…</p>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/config.js"></script>
+  <script src="/assets/scout.js"></script>
+  <script>
+  (function () {
+    var sb, session, db;
+    var stageEl = document.getElementById("stage");
+    var countEl = document.getElementById("count");
+    var undecidedEl = document.getElementById("undecided");
+    var esc = Scout.esc;
+
+    var TYPE_EMOJI = {
+      dirt_track: "🏁", festival: "🎪", winery: "🍷", moto_rally: "🏍️", county_fair: "🎡",
+      mtb_gravel: "🚵", sports_tournament: "🏟️", air_show: "✈️", bbq_fest: "🍖",
+      car_show: "🚗", rodeo: "🤠"
+    };
+    function pretty(t) { return (t || "").replace(/_/g, " "); }
+
+    var cards = [];   // all ready prospects, each with .decision + .thread attached
+    var view = [];    // current filtered/ordered list
+    var idx = 0;
+
+    async function load() {
+      var pRes = await db.from("event_prospects")
+        .select("*").eq("stage", "ready").eq("booked", false);
+      if (pRes.error) { return fail(pRes.error.message); }
+      var dRes = await db.from("prospect_decisions").select("prospect_id,decision");
+      var tRes = await db.from("prospect_thread").select("*").order("created_at", { ascending: true });
+
+      var decById = {};
+      (dRes.data || []).forEach(function (d) { decById[d.prospect_id] = d.decision; });
+      var thById = {};
+      (tRes.data || []).forEach(function (t) { (thById[t.prospect_id] = thById[t.prospect_id] || []).push(t); });
+
+      cards = (pRes.data || []).map(function (p) {
+        p.decision = decById[p.id] || null;
+        p.thread = thById[p.id] || [];
+        return p;
+      });
+      buildView();
+    }
+
+    function buildView() {
+      var list = cards.slice();
+      if (undecidedEl.checked) list = list.filter(function (p) { return !p.decision; });
+      // undecided first, then by month (nulls last), then nearest first
+      list.sort(function (a, b) {
+        var ad = a.decision ? 1 : 0, bd = b.decision ? 1 : 0;
+        if (ad !== bd) return ad - bd;
+        var am = a.month == null ? 99 : a.month, bm = b.month == null ? 99 : b.month;
+        if (am !== bm) return am - bm;
+        return (a.distance_mi == null ? 9999 : a.distance_mi) - (b.distance_mi == null ? 9999 : b.distance_mi);
+      });
+      view = list;
+      if (idx >= view.length) idx = Math.max(0, view.length - 1);
+      render();
+    }
+
+    function fact(icon, value, tbd) {
+      return '<div class="fact' + (tbd ? ' fact--tbd' : '') + '">' +
+        '<span class="fi">' + icon + '</span><span class="fv">' + value + '</span></div>';
+    }
+
+    function foodLine(policy) {
+      if (policy === "open") return fact("🌭", "Food OK", false);
+      if (policy === "competing") return fact("🌭", "They sell their own food", true);
+      return fact("🌭", "Food — needs checking", true);
+    }
+
+    function render() {
+      var total = cards.length;
+      var undecidedCount = cards.filter(function (p) { return !p.decision; }).length;
+      countEl.textContent = undecidedCount + " undecided · " + total + " total";
+
+      if (!view.length) {
+        stageEl.innerHTML = '<div class="empty"><div class="big">🎉</div>' +
+          (undecidedEl.checked
+            ? "All caught up — every event triaged.<br />Uncheck &ldquo;Undecided only&rdquo; to review your calls."
+            : "No events on the board yet.<br />Lance will send some over.") + "</div>";
+        return;
+      }
+
+      var p = view[idx];
+      var emoji = TYPE_EMOJI[p.event_type] || "📍";
+      var where = [p.city, pretty(p.event_type)].filter(Boolean).join(" · ");
+
+      var facts = "";
+      if (p.distance_mi != null) {
+        var dt = p.drive_time_min != null ? "  ·  ~" + p.drive_time_min + " min" : "";
+        facts += fact("📍", "<b>" + p.distance_mi + " mi</b>" + dt, false);
+      }
+      facts += fact("📅", p.date_text ? esc(p.date_text) : "Dates — not yet known", !p.date_text);
+      facts += fact("👥", p.crowd_text ? esc(p.crowd_text) : "Crowd — not yet known", !p.crowd_text);
+      if (p.suggested_crew) facts += fact("🧑‍🍳", "Crew: " + esc(p.suggested_crew) + " (estimate)", false);
+      facts += fact("💵", p.fee_text ? esc(p.fee_text) : "Fee — not yet known", !p.fee_text);
+      facts += foodLine(p.food_policy);
+
+      var thread = p.thread.map(function (t) {
+        var who = Scout.authorTag ? (t.author || "") : t.author;
+        var cls = (t.author === "lance") ? "bubble--lance" : "bubble--trint";
+        var label = (t.author === "lance") ? "Lance" : (t.author === "trint" ? "You" : esc(t.author));
+        return '<div class="bubble ' + cls + '"><span class="who">' + label + '</span>' + esc(t.body) + '</div>';
+      }).join("");
+
+      stageEl.innerHTML =
+        '<article class="pcard">' +
+          '<div class="pcard__date">' + (p.date_text ? esc(p.date_text) : "Date TBD") + '</div>' +
+          '<div class="pcard__body">' +
+            '<h2 class="pcard__title">' + emoji + " " + esc(p.name) + '</h2>' +
+            '<p class="pcard__where">' + esc(where) + '</p>' +
+            '<div class="facts">' + facts + '</div>' +
+            '<div class="decisions">' +
+              dbtn("yes", "✅", "YES", p.decision) +
+              dbtn("maybe", "🤔", "MAYBE", p.decision) +
+              dbtn("no", "❌", "NO", p.decision) +
+            '</div>' +
+            '<div class="ask">' +
+              '<textarea class="textarea" id="ask" placeholder="❓ Ask Lance a question about this one…"></textarea>' +
+              '<button class="btn btn--ghost btn--block" id="ask-send" type="button">Send question</button>' +
+              '<p class="msg" id="ask-msg"></p>' +
+            '</div>' +
+            (thread ? '<div class="thread">' + thread + '</div>' : "") +
+            '<div class="pager">' +
+              '<button id="prev"' + (idx === 0 ? " disabled" : "") + '>◂ back</button>' +
+              '<span>' + (idx + 1) + ' of ' + view.length + '</span>' +
+              '<button id="next"' + (idx >= view.length - 1 ? " disabled" : "") + '>next ▸</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>';
+
+      document.getElementById("prev").onclick = function () { if (idx > 0) { idx--; render(); } };
+      document.getElementById("next").onclick = function () { if (idx < view.length - 1) { idx++; render(); } };
+      ["yes", "maybe", "no"].forEach(function (d) {
+        document.getElementById("d-" + d).onclick = function () { decide(p, d); };
+      });
+      document.getElementById("ask-send").onclick = function () { ask(p); };
+    }
+
+    function dbtn(kind, em, label, current) {
+      var on = current === kind ? " is-on" : "";
+      return '<button class="dbtn dbtn--' + kind + on + '" id="d-' + kind + '" type="button">' +
+        '<span class="em">' + em + '</span>' + label + '</button>';
+    }
+
+    async function decide(p, decision) {
+      var res = await db.from("prospect_decisions").upsert(
+        { prospect_id: p.id, decision: decision, decided_by: Scout.currentEmail(session), decided_at: new Date().toISOString() },
+        { onConflict: "prospect_id" }
+      );
+      if (res.error) { alert("Couldn't save: " + res.error.message); return; }
+      p.decision = decision;
+      // advance: in "undecided only" the card drops out; otherwise step forward
+      if (undecidedEl.checked) { buildView(); }
+      else { if (idx < view.length - 1) idx++; render(); }
+    }
+
+    async function ask(p) {
+      var ta = document.getElementById("ask");
+      var msg = document.getElementById("ask-msg");
+      var body = (ta.value || "").trim();
+      if (!body) { ta.focus(); return; }
+      var btn = document.getElementById("ask-send");
+      btn.disabled = true; btn.textContent = "Sending…";
+      var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: "trint", body: body });
+      if (res.error) { msg.className = "msg msg--err"; msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Send question"; return; }
+      p.thread.push({ prospect_id: p.id, author: "trint", body: body, created_at: new Date().toISOString() });
+      ta.value = "";
+      render();
+    }
+
+    function fail(m) {
+      stageEl.innerHTML = '<div class="empty"><div class="big">⚠️</div>Couldn\'t load: ' + esc(m) + '</div>';
+    }
+
+    undecidedEl.addEventListener("change", function () { idx = 0; buildView(); });
+
+    (async function () {
+      session = await Scout.requireSession();
+      if (!session) return;              // redirected to login
+      Scout.wireLogout();
+      db = Scout.client();
+      load();
+    })();
+  })();
+  </script>
+</body>
+</html>

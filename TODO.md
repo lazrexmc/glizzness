@@ -236,6 +236,14 @@ and the vendors are already chosen.*
   - Prereq: `glizzness.com` live on Cloudflare — ✅ **DONE 2026-07-14** (domain switched; site + www live, SSL enabled).
   *(added 2026-07-13)*
 
+- [~] **Trint's event-triage app ("Scout board") — ✅ BUILT 2026-07-16 → runbook [SCOUT_BOARD.md](SCOUT_BOARD.md).**
+  Code is in the repo (schema `supabase_scout_schema.sql`, seed `scout_seed_gen_sql.py` → 23 cards,
+  pages `site/hub/` + `site/scout/`, auth `site/assets/scout.js`). Gate smoke-tested (logged-out
+  `/scout` bounces to login; 0 console errors). **REMAINING — Lance's credentialed setup** (in the
+  runbook): (1) run the schema SQL, (2) create the Trint + Lance auth users, (3) run the seed SQL,
+  (4) `git push` deploys it, (5) then the ongoing CLI loop = enrich `researching` cards with Claude →
+  **Ready → Trint**. Make→Gmail alerts are optional phase-2. *Original design below for reference.*
+
 - [ ] **Trint's event-triage app ("Scout board") — yes / no / maybe on prospect events** — the 7-run
   vending research (`VENDING_PROSPECTS.md`) produces far too many events for Trint to sort out via the map.
   Build him a dead-simple, phone-first decision tool. *(Backlog — build after the 7 research runs are

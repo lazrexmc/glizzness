@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Glizzness — Admin Hub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%94%90</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/scout.css" />
+</head>
+<body class="scout-body">
+
+  <!-- LOGGED OUT: login card -->
+  <div id="login" class="login-wrap" hidden>
+    <form id="login-form" class="login-card" autocomplete="on">
+      <h1>🌭 The Glizzness</h1>
+      <p class="tag">Private ops hub — sign in</p>
+      <label class="field">
+        <span>Email</span>
+        <input class="input" type="email" id="email" autocomplete="username" required />
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input class="input" type="password" id="password" autocomplete="current-password" required />
+      </label>
+      <button class="btn btn--gold btn--block" id="login-submit" type="submit">Sign in</button>
+      <p class="msg msg--err" id="login-msg"></p>
+    </form>
+  </div>
+
+  <!-- LOGGED IN: tiles -->
+  <div id="hub" hidden>
+    <header class="scout-top">
+      <div class="scout-top__brand">🌭 Glizzness <span class="dot">·</span> Hub</div>
+      <div class="scout-top__links">
+        <span class="muted" id="who"></span>
+        <a href="#" id="logout">Log out</a>
+      </div>
+    </header>
+    <main class="scout-shell">
+      <h1 class="scout-h1">Ops Hub</h1>
+      <p class="scout-sub">Everything private lives here. Pick a tool.</p>
+      <div class="tile-grid">
+        <a class="tile" href="/scout/">
+          <span class="ico">🧭</span>
+          <span class="t">Scout Board</span>
+          <span class="d">Triage event prospects — Yes / Maybe / No.</span>
+        </a>
+        <a class="tile" href="/hub/desk">
+          <span class="ico">🗂️</span>
+          <span class="t">My Desk</span>
+          <span class="d">Review, enrich &amp; approve cards; add leads; work the Yeses.</span>
+        </a>
+        <a class="tile" href="https://glizzness.streamlit.app" target="_blank" rel="noopener">
+          <span class="ico">📊</span>
+          <span class="t">Wave Dashboard</span>
+          <span class="d">Accounting &amp; sales.</span>
+          <span class="ext">Opens in a new tab ↗</span>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/config.js"></script>
+  <script src="/assets/scout.js"></script>
+  <script>
+    (function () {
+      var loginView = document.getElementById("login");
+      var hubView = document.getElementById("hub");
+      var form = document.getElementById("login-form");
+      var msg = document.getElementById("login-msg");
+      var submit = document.getElementById("login-submit");
+      var params = new URLSearchParams(location.search);
+      var next = params.get("next");
+
+      function showLogin() { hubView.hidden = true; loginView.hidden = false; document.getElementById("email").focus(); }
+      function showHub(session) {
+        loginView.hidden = true; hubView.hidden = false;
+        document.getElementById("who").textContent = Scout.currentEmail(session);
+        Scout.wireLogout();
+      }
+
+      function safeNext(n) {
+        // only allow same-site absolute paths, never an external URL
+        return (n && n.charAt(0) === "/" && n.charAt(1) !== "/") ? n : null;
+      }
+
+      async function init() {
+        var session = await Scout.getSession();
+        if (session) {
+          var n = safeNext(next);
+          if (n) { location.replace(n); return; }
+          showHub(session);
+        } else {
+          showLogin();
+        }
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        msg.textContent = "";
+        submit.disabled = true; submit.textContent = "Signing in…";
+        var res = await Scout.signIn(
+          document.getElementById("email").value.trim(),
+          document.getElementById("password").value
+        );
+        if (res.error) {
+          msg.textContent = res.error.message || "Sign-in failed. Check your email and password.";
+          submit.disabled = false; submit.textContent = "Sign in";
+          return;
+        }
+        var n = safeNext(next);
+        if (n) { location.replace(n); return; }
+        showHub(res.data.session);
+        submit.disabled = false; submit.textContent = "Sign in";
+      });
+
+      init();
+    })();
+  </script>
+</body>
+</html>

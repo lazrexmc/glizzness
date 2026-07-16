@@ -1,0 +1,173 @@
+/* =========================================================================
+   THE GLIZZNESS — Scout Board (private admin tool)
+   Loaded AFTER site.css, so it reuses the brand tokens (--ink, --gold, --ketchup…).
+   Priorities: mobile-first, huge tap targets, big type, one fact per line — built
+   for Trint, who reads best through clear visual layout, not dense text.
+   ========================================================================= */
+
+.scout-body { background: var(--ink); color: var(--char); min-height: 100vh; }
+
+/* ---- Top bar ---- */
+.scout-top {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px clamp(16px, 4vw, 28px);
+  background: rgba(14,13,10,.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line-d);
+}
+.scout-top__brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); letter-spacing: .5px; font-size: 20px; }
+.scout-top__brand .dot { color: var(--gold); }
+.scout-top__links { display: flex; align-items: center; gap: 8px; }
+.scout-top__links a { font-size: 14px; color: var(--muted-d); padding: 8px 12px; border-radius: var(--radius-pill); }
+.scout-top__links a:hover, .scout-top__links a.is-active { color: var(--ink); background: var(--gold); }
+
+.scout-shell { max-width: 720px; margin: 0 auto; padding: clamp(18px, 4vw, 32px) clamp(16px, 4vw, 28px) 80px; }
+.scout-shell--wide { max-width: 1040px; }
+
+.scout-h1 { font-family: var(--font-display); font-size: clamp(26px, 6vw, 40px); letter-spacing: .5px; margin-bottom: 4px; }
+.scout-sub { color: var(--muted-d); margin: 0 0 22px; }
+
+/* ---- Buttons / inputs (self-contained; the gated pages don't share the public form CSS) ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-body); font-weight: 700; font-size: 16px; line-height: 1;
+  padding: 14px 20px; border-radius: var(--radius-pill); border: 2px solid transparent;
+  cursor: pointer; text-align: center; transition: transform .06s ease, background .15s ease, border-color .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--gold { background: var(--gold); color: var(--ink); }
+.btn--gold:hover { background: var(--gold-soft); color: var(--ink); }
+.btn--ghost { background: transparent; color: var(--char); border-color: var(--line-d); }
+.btn--ghost:hover { border-color: var(--gold); color: var(--gold); }
+.btn--block { display: flex; width: 100%; }
+.btn[disabled] { opacity: .55; cursor: default; }
+
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-size: 13px; color: var(--muted-d); margin-bottom: 6px; letter-spacing: .3px; }
+.input, .select, .textarea {
+  width: 100%; font: inherit; color: var(--char); background: var(--ink-2);
+  border: 1px solid var(--line-d); border-radius: var(--radius-sm); padding: 13px 14px;
+}
+.input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--gold); }
+.textarea { min-height: 74px; resize: vertical; }
+
+.msg { margin: 12px 0 0; font-size: 14px; min-height: 20px; }
+.msg--err { color: #ff8a73; }
+.msg--ok  { color: var(--gold); }
+.muted { color: var(--muted-d); }
+
+/* ---- Login card ---- */
+.login-wrap { min-height: 78vh; display: grid; place-items: center; padding: 24px; }
+.login-card {
+  width: 100%; max-width: 380px; background: var(--ink-2);
+  border: 1px solid var(--line-d); border-radius: var(--radius); padding: 28px 24px; box-shadow: var(--shadow);
+}
+.login-card h1 { font-family: var(--font-display); font-size: 30px; letter-spacing: .5px; margin-bottom: 4px; text-align: center; }
+.login-card .tag { text-align: center; color: var(--muted-d); margin: 0 0 20px; font-size: 14px; }
+
+/* ---- Hub tiles ---- */
+.tile-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 560px) { .tile-grid { grid-template-columns: 1fr 1fr; } }
+.tile {
+  display: flex; flex-direction: column; gap: 6px; text-align: left;
+  padding: 24px; border-radius: var(--radius); background: var(--ink-2);
+  border: 1px solid var(--line-d); color: var(--char); min-height: 130px;
+}
+.tile:hover { border-color: var(--gold); color: var(--char); }
+.tile .ico { font-size: 34px; }
+.tile .t { font-family: var(--font-display); font-size: 22px; letter-spacing: .4px; }
+.tile .d { color: var(--muted-d); font-size: 14px; }
+.tile .ext { margin-top: auto; font-size: 12px; color: var(--gold); }
+
+/* ---- Trint's prospect card ---- */
+.stage-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted-d); cursor: pointer; user-select: none; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--gold); }
+
+.pcard {
+  background: var(--ink-2); border: 1px solid var(--line-d); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.pcard__date { background: var(--ink-3); color: var(--gold); font-weight: 700; font-size: 13px; letter-spacing: .5px; text-transform: uppercase; padding: 8px 20px; }
+.pcard__body { padding: 20px 20px 22px; }
+.pcard__title { font-family: var(--font-display); font-size: clamp(26px, 7vw, 38px); line-height: 1.02; letter-spacing: .5px; }
+.pcard__where { color: var(--muted-d); margin: 2px 0 16px; font-size: 15px; }
+
+.facts { display: grid; gap: 10px; margin-bottom: 20px; }
+.fact { display: flex; align-items: baseline; gap: 12px; font-size: 18px; }
+.fact .fi { font-size: 20px; width: 26px; flex: none; text-align: center; }
+.fact .fv { flex: 1; }
+.fact--tbd .fv { color: var(--muted-d); font-style: italic; }
+.fact b { color: #fff; }
+
+/* Decision buttons — the point of the card. Big, thumb-sized, color-coded. */
+.decisions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.dbtn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 18px 6px; border-radius: var(--radius-sm); border: 2px solid var(--line-d);
+  background: var(--ink); color: var(--char); font-weight: 800; font-size: 15px; cursor: pointer;
+  transition: transform .06s ease, border-color .12s, background .12s;
+}
+.dbtn .em { font-size: 26px; }
+.dbtn:active { transform: translateY(1px); }
+.dbtn--yes.is-on   { background: #1c6b34; border-color: #34c463; color: #fff; }
+.dbtn--maybe.is-on { background: var(--gold-deep); border-color: var(--gold); color: #fff; }
+.dbtn--no.is-on    { background: var(--ketchup-lo); border-color: var(--ketchup); color: #fff; }
+.dbtn--yes:hover   { border-color: #34c463; }
+.dbtn--maybe:hover { border-color: var(--gold); }
+.dbtn--no:hover    { border-color: var(--ketchup); }
+
+/* Q&A thread */
+.ask { margin-top: 6px; }
+.thread { display: grid; gap: 8px; margin-top: 14px; }
+.bubble { padding: 10px 14px; border-radius: 14px; font-size: 15px; max-width: 92%; }
+.bubble--trint { background: var(--ink-3); justify-self: end; border-bottom-right-radius: 4px; }
+.bubble--lance { background: #23324a; justify-self: start; border-bottom-left-radius: 4px; }
+.bubble .who { display: block; font-size: 11px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted-d); margin-bottom: 2px; }
+
+.pager { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; color: var(--muted-d); font-size: 14px; }
+.pager button { background: none; border: none; color: var(--gold); font: inherit; font-weight: 700; cursor: pointer; padding: 8px; }
+.pager button[disabled] { color: var(--muted-d); cursor: default; }
+
+.empty { text-align: center; color: var(--muted-d); padding: 60px 20px; }
+.empty .big { font-size: 40px; margin-bottom: 10px; }
+
+/* ---- Lance's desk ---- */
+.desk-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 16px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button {
+  font: inherit; font-size: 13px; padding: 8px 14px; border-radius: var(--radius-pill);
+  border: 1px solid var(--line-d); background: transparent; color: var(--muted-d); cursor: pointer;
+}
+.filters button.is-active { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 700; }
+
+.rows { display: grid; gap: 10px; }
+.row {
+  background: var(--ink-2); border: 1px solid var(--line-d); border-radius: var(--radius-sm);
+  padding: 14px 16px; display: grid; gap: 4px;
+}
+.row__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.row__name { font-weight: 700; font-size: 16px; }
+.row__meta { color: var(--muted-d); font-size: 13px; }
+.row__q { color: var(--gold-soft); font-size: 14px; margin-top: 4px; }
+.row__actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.row__actions .btn { padding: 8px 14px; font-size: 13px; border-radius: var(--radius-pill); }
+
+.chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 3px 10px; border-radius: var(--radius-pill); }
+.chip--yes { background: #1c6b34; color: #eafff0; }
+.chip--maybe { background: var(--gold-deep); color: #fff; }
+.chip--no { background: var(--ketchup-lo); color: #fff; }
+.chip--none { background: var(--ink-3); color: var(--muted-d); }
+.chip--researching { background: #3a2f12; color: var(--gold-soft); }
+.chip--ready { background: #143b22; color: #7ce0a0; }
+.chip--booked { background: var(--gold); color: var(--ink); }
+.chip--inbound { background: #23324a; color: #bcd; }
+
+/* Modal (add lead / edit / answer) */
+.modal-back { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; place-items: center; z-index: 40; padding: 16px; }
+.modal-back.is-open { display: grid; }
+.modal { width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; background: var(--ink-2); border: 1px solid var(--line-d); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+.modal h2 { font-family: var(--font-display); font-size: 24px; letter-spacing: .4px; margin-bottom: 14px; }
+.modal__actions { display: flex; gap: 10px; margin-top: 8px; }
+.grid-2 { display: grid; gap: 0 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 460px) { .grid-2 { grid-template-columns: 1fr; } }
