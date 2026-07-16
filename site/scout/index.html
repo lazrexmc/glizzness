@@ -31,7 +31,7 @@
     </div>
   </main>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/vendor/supabase.js"></script><!-- supabase-js 2.110.6 UMD, self-hosted -->
   <script src="/assets/config.js"></script>
   <script src="/assets/scout.js"></script>
   <script>
@@ -58,7 +58,9 @@
         .select("*").eq("stage", "ready").eq("booked", false);
       if (pRes.error) { return fail(pRes.error.message); }
       var dRes = await db.from("prospect_decisions").select("prospect_id,decision");
+      if (dRes.error) { return fail(dRes.error.message); }
       var tRes = await db.from("prospect_thread").select("*").order("created_at", { ascending: true });
+      if (tRes.error) { return fail(tRes.error.message); }
 
       var decById = {};
       (dRes.data || []).forEach(function (d) { decById[d.prospect_id] = d.decision; });
@@ -129,7 +131,6 @@
       facts += foodLine(p.food_policy);
 
       var thread = p.thread.map(function (t) {
-        var who = Scout.authorTag ? (t.author || "") : t.author;
         var cls = (t.author === "lance") ? "bubble--lance" : "bubble--trint";
         var label = (t.author === "lance") ? "Lance" : (t.author === "trint" ? "You" : esc(t.author));
         return '<div class="bubble ' + cls + '"><span class="who">' + label + '</span>' + esc(t.body) + '</div>';
@@ -194,9 +195,10 @@
       if (!body) { ta.focus(); return; }
       var btn = document.getElementById("ask-send");
       btn.disabled = true; btn.textContent = "Sending…";
-      var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: "trint", body: body });
+      var who = Scout.authorTag(session);
+      var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: who, body: body });
       if (res.error) { msg.className = "msg msg--err"; msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Send question"; return; }
-      p.thread.push({ prospect_id: p.id, author: "trint", body: body, created_at: new Date().toISOString() });
+      p.thread.push({ prospect_id: p.id, author: who, body: body, created_at: new Date().toISOString() });
       ta.value = "";
       render();
     }
@@ -208,11 +210,16 @@
     undecidedEl.addEventListener("change", function () { idx = 0; buildView(); });
 
     (async function () {
-      session = await Scout.requireSession();
-      if (!session) return;              // redirected to login
-      Scout.wireLogout();
-      db = Scout.client();
-      load();
+      try {
+        session = await Scout.requireSession();
+        if (!session) return;            // redirected to login
+        Scout.wireLogout();
+        db = Scout.client();
+        await load();
+      } catch (e) {
+        if (window.console) console.error(e);
+        fail("Couldn’t load the app — check your connection and reload.");
+      }
     })();
   })();
   </script>

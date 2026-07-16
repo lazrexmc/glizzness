@@ -45,7 +45,7 @@
     <div class="modal" id="modal"></div>
   </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/vendor/supabase.js"></script><!-- supabase-js 2.110.6 UMD, self-hosted -->
   <script src="/assets/config.js"></script>
   <script src="/assets/scout.js"></script>
   <script>
@@ -63,7 +63,9 @@
       var pRes = await db.from("event_prospects").select("*").order("id", { ascending: true });
       if (pRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(pRes.error.message) + "</p>"; return; }
       var dRes = await db.from("prospect_decisions").select("prospect_id,decision");
+      if (dRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(dRes.error.message) + "</p>"; return; }
       var tRes = await db.from("prospect_thread").select("*").order("created_at", { ascending: true });
+      if (tRes.error) { rowsEl.innerHTML = '<p class="empty">⚠️ ' + esc(tRes.error.message) + "</p>"; return; }
       prospects = pRes.data || [];
       decById = {}; (dRes.data || []).forEach(function (d) { decById[d.prospect_id] = d.decision; });
       thById = {}; (tRes.data || []).forEach(function (t) { (thById[t.prospect_id] = thById[t.prospect_id] || []).push(t); });
@@ -156,6 +158,7 @@
       );
       document.getElementById("m-cancel").onclick = closeModal;
       document.getElementById("m-save").onclick = async function () {
+        var btn = document.getElementById("m-save");
         var name = document.getElementById("f-name").value.trim();
         var msg = document.getElementById("m-msg");
         if (!name) { msg.textContent = "Name is required."; return; }
@@ -167,13 +170,16 @@
           distance_mi: dist ? parseInt(dist, 10) : null,
           drive_time_min: dist ? Math.round(parseInt(dist, 10) / 50 * 60) : null
         };
+        btn.disabled = true; btn.textContent = "Adding…";
         var res = await db.from("event_prospects").insert(row);
-        if (res.error) { msg.textContent = res.error.message; return; }
+        if (res.error) { msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Add lead"; return; }
         closeModal(); load();
       };
     });
 
-    function v(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+    // Blank input -> null (not ""), so untouched fields stay SQL NULL instead of drifting
+    // to empty string on every edit. Number guards below use truthiness, so null is safe.
+    function v(id) { var el = document.getElementById(id); var s = el ? el.value.trim() : ""; return s || null; }
 
     // ---- row actions (event delegation) ----
     rowsEl.addEventListener("click", function (e) {
@@ -233,8 +239,10 @@
           updated_at: new Date().toISOString()
         };
         var msg = document.getElementById("m-msg");
+        var btn = document.getElementById("m-save");
+        btn.disabled = true; btn.textContent = "Saving…";
         var res = await db.from("event_prospects").update(patch).eq("id", p.id);
-        if (res.error) { msg.textContent = res.error.message; return; }
+        if (res.error) { msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Save"; return; }
         Object.keys(patch).forEach(function (k) { p[k] = patch[k]; });
         closeModal(); render();
       };
@@ -260,9 +268,12 @@
         var body = v("f-ans");
         var msg = document.getElementById("m-msg");
         if (!body) { msg.textContent = "Write an answer first."; return; }
-        var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: "lance", body: body });
-        if (res.error) { msg.textContent = res.error.message; return; }
-        (thById[p.id] = thById[p.id] || []).push({ prospect_id: p.id, author: "lance", body: body, created_at: new Date().toISOString() });
+        var btn = document.getElementById("m-save");
+        var who = Scout.authorTag(session);
+        btn.disabled = true; btn.textContent = "Sending…";
+        var res = await db.from("prospect_thread").insert({ prospect_id: p.id, author: who, body: body });
+        if (res.error) { msg.textContent = res.error.message; btn.disabled = false; btn.textContent = "Send to Trint"; return; }
+        (thById[p.id] = thById[p.id] || []).push({ prospect_id: p.id, author: who, body: body, created_at: new Date().toISOString() });
         closeModal(); render();
       };
     }
@@ -277,11 +288,16 @@
     });
 
     (async function () {
-      session = await Scout.requireSession();
-      if (!session) return;
-      Scout.wireLogout();
-      db = Scout.client();
-      load();
+      try {
+        session = await Scout.requireSession();
+        if (!session) return;
+        Scout.wireLogout();
+        db = Scout.client();
+        await load();
+      } catch (e) {
+        if (window.console) console.error(e);
+        rowsEl.innerHTML = '<p class="empty">⚠️ Couldn’t load the app — check your connection and reload.</p>';
+      }
     })();
   })();
   </script>

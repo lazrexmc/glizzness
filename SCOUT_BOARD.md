@@ -118,7 +118,8 @@ Not required for v1 — the desk shows everything. Add it when checking the desk
   desk-added leads get fresh, non-colliding ids automatically.
 - **Re-seeding is safe** (`on conflict do nothing`) — it won't overwrite in-app edits, and excluded
   no-gos (Double X, Lucas Oil, Serenity Valley, Air Show) are never seeded.
-- **supabase-js** loads from unpkg (like Leaflet on the map). If a CSP is ever added to the site,
-  allow-list `unpkg.com` + the Supabase project origin, or self-host the one file.
+- **supabase-js** is **self-hosted** at `site/assets/vendor/supabase.js` (v2.110.6 UMD) — no CDN
+  runtime dependency, so a CDN outage / network filter / ad-blocker can't blank the tool. To update
+  it, re-download that one file from `unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js`.
 - **Not indexed:** each gated page carries `noindex`, and `robots.txt` disallows `/hub` + `/scout`
   (the RLS wall is the real protection; this just keeps them out of search).

@@ -87,6 +87,12 @@ alter table prospect_thread    enable row level security;
 -- Both trusted users (Trint + Lance) can do everything once logged in.
 grant select, insert, update, delete on event_prospects,    prospect_decisions, prospect_thread to authenticated;
 
+-- Defense in depth: Supabase default-grants table privileges to `anon` on new public
+-- tables, so RLS (no anon policy) is the ONLY thing blocking the public key. Revoke those
+-- grants too — then even if RLS is ever accidentally disabled, anon still gets
+-- "permission denied" instead of full read/write to private data.
+revoke all on event_prospects, prospect_decisions, prospect_thread from anon;
+
 create policy event_prospects_all on event_prospects
   for all to authenticated using (true) with check (true);
 create policy prospect_decisions_all on prospect_decisions
