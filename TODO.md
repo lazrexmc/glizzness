@@ -334,7 +334,30 @@ and the vendors are already chosen.*
   login) · internal-only (never in public nav) · **multiple events per day is a hard requirement**.
   *(added 2026-07-13)*
 
-- [ ] **Inventory + reorder-point system** — track stock IN (purchases) vs OUT (sales) so we always know
+- [~] **Inventory depletion — 🗺️ GAMEPLAN COMPLETE 2026-07-16, ⛔ NO CODE YET (owner directive).**
+  Full design → **`docs/superpowers/specs/2026-07-16-inventory-depletion-design.md`** — read THAT
+  when resuming; this is just the pointer. **The decided shape (all owner calls, 2026-07-16):**
+  - **Two-level ledger:** raw goods (commissary) → *prep converts* → prepped (coolers) → *sales
+    deplete*. Prep is the hinge: ONE tap ("cooked 60 dogs") adds to cooler AND subtracts raw.
+  - **Sales OUT = Square Orders API on an Actions cron** (1–2h, near-live) — eyes-open tradeoff:
+    `SQUARE_TOKEN` becomes an Actions secret (biggest blast radius yet; accepted).
+  - **Toppings EXCLUDED — made fresh daily** (owner): no carryover ⇒ no ledger; they're a printed
+    "daily fresh" checklist on the load-out sheet; produce = par shopping list.
+  - **Bulk units = half/full hotel PANS** (chili/cheese/pork/chicken/sloppy joe); dogs/brats/
+    links/patties = each. 48–96h shelf life ⇒ prep is a rolling buffer across stops.
+  - **Prep logging = big-button gated phone page** ("Prep"), whoever cooked, ~10 sec, Trint-design
+    language. **COUNT button resets truth** (drift is a design input); WASTE button.
+  - **Recipe maps are owner-editable DATA** (menu item → prep units; batch → raw units), reusing
+    the demand baseline's alias map. Load-out sheet = baseline's predicted need vs on-hand.
+  - **Build order when owner says GO:** ① item master + recipe maps (data session) → ② prepped
+    ledger + Prep page (standalone-useful; proves the habit) → ③ Square OUT cron → ④ raw level +
+    pars → ⑤ load-out sheet. **NOT v1:** costing, waste analytics, auto-order, receipt OCR,
+    Square-native inventory (evaluated — can't do BOM depletion).
+  - **Open at build time:** per-serving pan fractions (we draft, owner corrects), par levels,
+    cron cadence, one-page-or-two, which fixings collapse to "kits."
+
+- [ ] **Inventory + reorder-point system** *(original backlog item — SUPERSEDED by the decided
+  gameplan above; kept for the analysis notes below)* — track stock IN (purchases) vs OUT (sales) so we always know
   on-hand and when to reorder. *(Backlog — meaty; build incrementally.)*
 
   **⚑ EVALUATE FIRST — Square-native vs custom (both options stay open):** Square is the home POS and has
