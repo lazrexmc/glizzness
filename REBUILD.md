@@ -82,7 +82,7 @@ master key that bypasses RLS and must never appear in any tracked/browser file.
 
 | Secret | Public? | Lives in | How to get / regenerate |
 |---|---|---|---|
-| `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `catering/config.js`, `site/festivals/config.js` (committed) | Supabase → Project Settings → API → `anon public` |
+| `SUPABASE_ANON_KEY` | **public** | `site/assets/config.js`, `site/festivals/config.js`, `site/festivals/embed.html` (committed; the old `catering/config.js` is archived) | Supabase → Project Settings → API → `anon public` |
 | `SUPABASE_URL` | public | hardcoded in `db.py` (~line 8); the three `config.js`; env for `sync_calendar.py` | Supabase → Project Settings → API → Project URL |
 | `SUPABASE_SERVICE_KEY` | **SECRET** | `.streamlit/secrets.toml` (gitignored) + Streamlit Cloud Secrets + shell env + **GitHub Actions repo secret** (the Signal Net crawler) | Supabase → Project Settings → API → `service_role` |
 | Scout/Signals **Auth users** (Trint + Lance) | **SECRET** | Supabase Auth (email+password) — not in any file | Supabase → Authentication → Users → Add user ×2 (Auto-Confirm); emails starting `trint`/`lance` so the Q&A self-labels |
@@ -143,6 +143,14 @@ Everything reads Supabase, so build it first. Do these **in order**:
       `supabase_scout_data.sql` (23 prospects)
    8. `supabase_signals_schema.sql` (Signal Net: `event_signals`, authenticated-only + anon revoked; also
       allows `event_prospects.source='signal'`) — run **after** #7
+   9. `supabase_posts_schema.sql` (Post Cards: `post_drafts`)
+   10. `supabase_demand_schema.sql`, then regenerate + run `supabase_demand_data.sql`
+       (`python demand_baseline.py --sql`; the data file is gitignored — it carries revenue)
+   11. `supabase_lunch_prospects.sql` (17 lunch-rush/worksite prospects; idempotent)
+   12. **`supabase_hardening_2026-07-16.sql`** (auth allowlist `app_allowed` + publish-gate RLS on
+       `vending_events` + clean grant reset) — then **insert the two allowed emails** (step 5 in the
+       file) and **disable Supabase self-signup** (Dashboard → Authentication → Sign In/Providers →
+       "Allow new users to sign up" OFF). ⚠️ Skipping either re-opens the self-signup hole.
 4. **⚠ Rewire the project ref** if the new URL differs from `ikhcbncnaojrndilmnnd`: update `db.py` (~line 8)
    and all three `config.js` (`SUPABASE_URL` + `SUPABASE_ANON_KEY`). The keys are
    JWTs bound to the project ref — old keys won't work on a new project, and the app silently talks to a dead
@@ -236,7 +244,7 @@ Everything reads Supabase, so build it first. Do these **in order**:
 2. Cloudflare Pages project → Custom domains → add `glizzness.com` (+ `www`). Cloudflare shows the DNS target.
 3. At **GoDaddy** (registrar only) update the DNS record. **⚠ Preserve existing MX/email records** — do not
    blanket-replace the zone, or email to glizzness@gmail.com / the domain breaks. This is the only step that
-   touches GoDaddy. *(Still PENDING as of 2026-07-12 — site lives at glizzness.pages.dev.)*
+   touches GoDaddy. *(✅ DONE 2026-07-14 — glizzness.com + www live on Cloudflare.)*
 
 ### 5.8 Admin hub + Scout board + Signal Net (gated tools + crawler) — detail: `SCOUT_BOARD.md`, `SIGNAL_NET.md`
 1. Tables + seed already run in §5.1 (steps 3.7 + 3.8). Recreate the two **Supabase Auth users** (§3).

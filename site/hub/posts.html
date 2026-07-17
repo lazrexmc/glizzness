@@ -178,7 +178,7 @@
       return cards;
     }
 
-    var cards = [], decided = {};
+    var cards = [], decided = {}, shown = [];
 
     async function load() {
       var today = new Date(); today.setHours(0, 0, 0, 0);
@@ -221,6 +221,9 @@
         if (wk !== lastWeek) { html += '<div class="weekhd">Week of ' + esc(fmtDay(weekStart(c.send_at))) + "</div>"; lastWeek = wk; }
         html += cardHtml(c, i);
       });
+      shown = list;   // AUDIT FIX (critical): the click handler must resolve against what was
+                      // RENDERED — indexing the unfiltered `cards` with the filtered list's
+                      // index made every button act on the WRONG card once any card was decided
       rowsEl.innerHTML = html;
     }
     function weekStart(d) { var x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
@@ -261,7 +264,7 @@
     rowsEl.addEventListener("click", async function (e) {
       var btn = e.target.closest("button[data-act]");
       if (!btn) return;
-      var c = cards[parseInt(btn.getAttribute("data-i"), 10)];
+      var c = shown[parseInt(btn.getAttribute("data-i"), 10)];   // resolve against the RENDERED list
       if (!c) return;
       var act = btn.getAttribute("data-act");
 

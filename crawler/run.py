@@ -95,6 +95,13 @@ def main():
         print("  %-30s %-14s %3d" % (sid, status, n))
     print("  candidates after filter + dedup: %d" % len(rows))
 
+    # AUDIT FIX (high): a run where EVERY source failed used to exit 0 and look identical to a
+    # quiet day — the Actions cron stayed green while the feed silently dried up forever.
+    errored = sum(1 for _, status, _ in per_source if status.startswith("ERROR"))
+    if srcs and errored == len(srcs):
+        print("  ALL %d sources failed — treating as an outage, not a quiet day." % errored)
+        sys.exit(1)
+
     if args.dry_run:
         print("\n--- DRY RUN — no DB writes ---")
         for s in list(by_hash.values())[:60]:

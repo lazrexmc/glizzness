@@ -32,9 +32,9 @@ a pile of research/analysis tooling.
 | **Vending research + prospects** | 7-run deep-research → curated food-cart opportunities → onto the map | ✅ done; loads via SQL | **`VENDING_PROSPECTS.md`** | `build_prospects.py`, `data/prospects.csv`, `data/prospect_schedules.csv` |
 | **Admin hub + Scout board** | Gated cockpit (`/hub`) → Trint's phone-first event-triage card board (`/scout`, Yes/Maybe/No + ask) + Lance's review desk (`/hub/desk`) | ✅ **LIVE 2026-07-16** — audited + Phase-A-hardened, deployed, Lance logged in and verified. 23 prospects seeded. **RLS verified live:** anon key gets `42501` on all private tables | **`SCOUT_BOARD.md`**, `SCOUT_AUDIT.md`, `docs/.../2026-07-13-scout-board-design.md` | `site/hub/`, `site/scout/`, `assets/scout.js`+`scout.css`, `assets/vendor/supabase.js`, `supabase_scout_schema.sql`, `scout_seed_gen_sql.py` |
 | **Signal Net (events crawler)** | Always-on GitHub Actions aggregator polls 10 curated local sources every 4h → finds → Signals feed (`/hub/signals`); Keep = a Scout prospect | ✅ **LIVE 2026-07-16** — running in the cloud; first real run inserted **178 signals** from 10 sources (Cooper's Landing, Mizzou, Blue Note, Rose, Stephens, Bur Oak, KOMU/Missourian/Vox, r/columbiamo) | **`SIGNAL_NET.md`**, `docs/.../2026-07-16-signal-net-design.md` | `crawler/`, `.github/workflows/crawler.yml`, `supabase_signals_schema.sql`, `site/hub/signals.html` |
-| **Post Cards** | Drafts 2 social posts (night-before + morning-of) per **public** stop + a weekly roundup; Lance approves → copies → pastes into Meta Business Suite. Fixes posts going out *as the cart arrives* | 🟡 **BUILT 2026-07-16, needs 1 SQL file** (`supabase_posts_schema.sql`). No cron/secret — copy is generated client-side from `cart_schedule` | **`POST_CARDS.md`** | `site/hub/posts.html`, `supabase_posts_schema.sql` |
-| **Demand baseline (the "brain")** | 4 yrs of Square sales (15,407 orders → 639 sessions) → per-venue/per-type profiles: **crew + prep on Trint's cards** ("Crew: 1–2 · Prep: Glizzy ×18"). Headline: only 27% of sessions match the calendar; the orphan 73% carry 69% of revenue — so sales are the spine | ✅ **BUILT 2026-07-16**; needs 2 SQL runs (`supabase_demand_schema.sql` once, then the generated `supabase_demand_data.sql`) to reach the cards | **`DEMAND_BASELINE.md`** | `demand_baseline.py`, `site/assets/demand.js`, `Sales/items-*.csv` + `past_cart_events.csv` (local, gitignored) |
-| **Lunch-rush / worksite prospects** | 17 verified big-employer targets (VU ~2,800, Paris Rd 4-plant corridor run, I-70 night crews →2029…) seeded onto the Scout desk — the "post up on the curb" lane; the crawler can't find employers | 🟡 **SQL ready** (`supabase_lunch_prospects.sql`, idempotent) — Lance runs it once | `CorporateProspects.md` (the source research) | `supabase_lunch_prospects.sql` |
+| **Post Cards** | Drafts 2 social posts (night-before + morning-of) per **public** stop + a weekly roundup; Lance approves → copies → pastes into Meta Business Suite. Fixes posts going out *as the cart arrives* | ✅ **LIVE 2026-07-16** (schema run). No cron/secret — copy is generated client-side from `cart_schedule` | **`POST_CARDS.md`** | `site/hub/posts.html`, `supabase_posts_schema.sql` |
+| **Demand baseline (the "brain")** | 4 yrs of Square sales (15,407 orders → 639 sessions) → per-venue/per-type profiles: **crew + prep on Trint's cards** ("Crew: 1–2 · Prep: Glizzy ×18"). Headline: only 27% of sessions match the calendar; the orphan 73% carry 69% of revenue — so sales are the spine | ✅ **LIVE 2026-07-16** — schema + data run, owner verified 10 profiles | **`DEMAND_BASELINE.md`** | `demand_baseline.py`, `site/assets/demand.js`, `Sales/items-*.csv` + `past_cart_events.csv` (local, gitignored) |
+| **Lunch-rush / worksite prospects** | 17 verified big-employer targets (VU ~2,800, Paris Rd 4-plant corridor run, I-70 night crews →2029…) seeded onto the Scout desk — the "post up on the curb" lane; the crawler can't find employers | ✅ **SEEDED 2026-07-16** — owner verified 17 rows on the Desk | `CorporateProspects.md` (the source research) | `supabase_lunch_prospects.sql` |
 | **Accounting (Square→Wave)** | Square payouts → GAAP journal entries → Wave | ✅ LIVE via Streamlit/Supabase | **`ProjectContext.md`**, `SETUP.md` | `dashboard.py`, `sync.py`, `db.py`, `money.py`, `auth.py`, `post_sams_correction.py` |
 | **Freelance rate sheet** | Lance's own pricing collateral (not repo content) | ✅ published as a claude.ai Artifact | — | (scratchpad `rate-sheet.html`; do NOT commit to this repo) |
 
@@ -94,7 +94,8 @@ hub/scout/signals pages, one project, output dir `site/`), **GitHub Actions** (r
 crawler every 4h + the **calendar sync** every 2h — both skip cleanly until their secrets exist),
 **Streamlit Community Cloud** (accounting dashboard), **Supabase** (one
 project: accounting + `vending_*` + `catering_leads` + `cart_schedule` + `contacts` + the Scout tables
-`event_prospects`/`prospect_decisions`/`prospect_thread` + the Signal Net `event_signals`),
+`event_prospects`/`prospect_decisions`/`prospect_thread` + the Signal Net `event_signals` +
+`post_drafts` (Post Cards) + `demand_profiles` (demand baseline) + `app_allowed` (auth allowlist)),
 **Make.com** (catering email), **Square** (POS→DoorDash), **Wave** (books), **GoDaddy** (domain
 registrar). **Netlify is retired** — the vending map moved off it into `site/festivals/`.
 
@@ -147,11 +148,12 @@ abstract backgrounds only — an AI hot dog on a real food brand reads as fake a
 - **The loop is closed:** crawler finds → Lance Keeps → enriches → **Ready → Trint** → Trint decides on
   his phone → Lance books. *(Demo gotcha: Trint's board looks empty until cards are marked Ready.)*
 
-**Next up (not built):** the **demand baseline** — the "brain" that turns the Scout card's empty
-`suggested_crew` slot into real math (orders/hr ÷ sustainable pace). Both inputs already exist on disk:
-`past_cart_events.csv` (294 events) + `Sales/items-*.csv` (~25,200 line items). Staffing needs only the
-sales half — **recipes/BOM are for inventory, a separate + heavier track.** Order: baseline → staffing →
-inventory. See `OPS_PLATFORM.md`.
+**Also LIVE (built + SQL run 2026-07-16, later the same day):** the **demand baseline** — the "brain."
+`demand_baseline.py` → `demand_profiles` (10 rows) → crew + prep on the Scout cards; plus the
+**17 lunch-rush/worksite prospects** seeded to the Desk, and **Post Cards** (`post_drafts` table run).
+Owner verified counts (10 profiles / 17 prospects). See `DEMAND_BASELINE.md`.
+**Still backlog:** scheduling (who works it), **inventory depletion/reorder** (gameplan session
+pending — owner directive: design first, NO code yet), rush-curve peak staffing.
 
 Backlog gameplans (each spec'd in `TODO.md`; **most say "evaluate Square-native first"**):
 - **Signal Net → Event Finder promote (v1.1)** — one-click curated promote of an approved signal to the

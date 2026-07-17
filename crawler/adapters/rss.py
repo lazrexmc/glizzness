@@ -9,6 +9,15 @@ from ..normalize import Signal, make_hash, clean
 
 def fetch(source):
     d = feedparser.parse(source["url"], agent=config.USER_AGENT)
+    # AUDIT FIX (high): feedparser never raises — a 403/404/DNS failure comes back as
+    # bozo=1 / status>=400 with zero entries, which the run summary showed as "ok 0".
+    # Surface real failures so a dead source reads ERROR, not "quiet day".
+    status = getattr(d, "status", 200)
+    if status >= 400:
+        raise RuntimeError("HTTP %s from %s" % (status, source["url"]))
+    if getattr(d, "bozo", 0) and not d.entries:
+        raise RuntimeError("unparseable feed (%s): %s" % (
+            type(getattr(d, "bozo_exception", None)).__name__, source["url"]))
     out = []
     for e in d.entries:
         title = clean(getattr(e, "title", "") or "")

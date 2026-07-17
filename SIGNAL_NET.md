@@ -26,7 +26,7 @@ prospect (→ enrich → send to Trint). It's the automated intake for the Scout
 | `supabase_signals_schema.sql` | `event_signals` table + RLS (authenticated-only, anon revoked) + allows `event_prospects.source='signal'`. Run once. |
 | `crawler/run.py` | Orchestrator: fetch → filter (event-like + local) → dedup → write. `--dry-run` prints without writing. |
 | `crawler/sources.py` | The curated source list (data, not logic). Add a source = one line. |
-| `crawler/adapters/` | `rss.py` (RSS/Atom — the workhorse), `reddit.py` (JSON, unused in v1), `venue_watch.py` (best-effort HTML). |
+| `crawler/adapters/` | `rss.py` (RSS/Atom), `tribe.py` (WordPress Events Calendar API — Cooper's/Stephens/Bur Oak, real event dates), `reddit.py` (JSON, unused in v1), `venue_watch.py` (best-effort HTML). |
 | `crawler/{config,normalize,store}.py` | Term lists + Supabase URL; the Signal type + filters; the Supabase writer. |
 | `crawler/requirements.txt` | `feedparser`. |
 | `.github/workflows/crawler.yml` | GitHub Actions: cron every 4h + manual "Run workflow". |

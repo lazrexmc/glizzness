@@ -29,7 +29,7 @@ Trint's phone-first event-triage tool + Lance's review desk, behind a login gate
 | `supabase_scout_data.sql` | Generated seed INSERTs. Run once, after the schema. |
 | `site/assets/scout.js` | Shared supabase-js auth (login session, gate/redirect, helpers). |
 | `site/assets/scout.css` | Scout styling (reuses the brand tokens from `site.css`). |
-| `site/hub/index.html` | Login gate + tiles (Scout Board · My Desk · Wave Dashboard). |
+| `site/hub/index.html` | Login gate + tiles (Signals · Post Cards · Scout Board · My Desk · Wave Dashboard). |
 | `site/scout/index.html` | Trint's card board. |
 | `site/hub/desk.html` | Lance's review desk. |
 

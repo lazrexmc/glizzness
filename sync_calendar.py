@@ -113,14 +113,19 @@ def push(rows, dry):
         print(f"[dry-run] would replace rows with starts_at >= {today} using {len(rows)} events")
         return
 
-    # Replace the managed window: delete future rows, then insert the fresh set.
+    # Replace the managed window: delete future rows, then UPSERT the fresh set.
     # Idempotent — cleanly handles cancellations, moves, and re-colors on every run.
+    # AUDIT FIX (high): this must be an upsert, not a plain insert. An ongoing event that
+    # STARTED before today survives the delete (its starts_at < today) but is still returned
+    # by the Google fetch (timeMin = now returns in-progress events) — a plain insert then
+    # 409s on the unique gcal_event_id AFTER the delete already ran, leaving the public
+    # "Where We Vend" page EMPTY until a later run happens to succeed.
     d = requests.delete(f"{U}/rest/v1/cart_schedule?starts_at=gte.{today}", headers=H)
     d.raise_for_status()
     if rows:
         ins = requests.post(
-            f"{U}/rest/v1/cart_schedule",
-            headers={**H, "Prefer": "return=minimal"}, json=rows,
+            f"{U}/rest/v1/cart_schedule?on_conflict=gcal_event_id",
+            headers={**H, "Prefer": "return=minimal,resolution=merge-duplicates"}, json=rows,
         )
         ins.raise_for_status()
     print(f"synced {len(rows)} event(s) to cart_schedule")
