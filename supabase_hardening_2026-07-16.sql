@@ -120,6 +120,8 @@ commit;
 --     ('YOUR-TRINT-LOGIN-EMAIL',  'Trint');
 --
 -- Use the EXACT emails of the two Supabase Auth users. Until this runs, the hub shows no data.
+-- (✅ EXECUTED with the real emails 2026-07-16 — the live allowlist is in the DB; the repo copy
+--  keeps placeholders on purpose so personal emails stay out of git.)
 -- ---------------------------------------------------------------------------
 
 -- VERIFY (all should hold):
