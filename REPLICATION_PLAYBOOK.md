@@ -9,6 +9,12 @@ the traps cost real days. Read §7 and §8 before you write anything.
 **Companion docs:** `SYSTEM_PLAIN_ENGLISH.md` (hand to the client), `REBUILD.md` (Glizzness-specific
 disaster recovery), `OPS_PLATFORM.md` (how the parts interlock).
 
+> **First replication shipped:** LinkedUmp (2026-07-20, concept -> live in one day —
+> `..\..\LinkedUmp\`). Its **`PLAYBOOK_DELTA.md`** documents the NEW traps that build hit
+> (generated-column immutability, auth.users-FK self-tests, deletion-cascade triggers,
+> open-signup RLS posture, Supabase Auth/mailer traps, dual-role users, registrar DNS
+> cruft). Future replications read this playbook AND that delta.
+
 ---
 
 ## 1. The pattern in one sentence
